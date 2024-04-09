@@ -1,4 +1,4 @@
-# awakningjewelry
+# Awakningjewelry.com
 
 This website offers for sale a range of categories of Buddhist jewelry and other related philosophies designed to express our philosophical values in all the activities of our modern lives.
 
