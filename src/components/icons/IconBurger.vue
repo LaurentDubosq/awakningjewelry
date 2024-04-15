@@ -1,12 +1,16 @@
 <template>
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="100%"
-    height="100%"
-    viewBox="0 -960 960 960"
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
     <path
-      d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"
+      fill-rule="evenodd"
+      d="M3 4.75a.75.75 0 0 1 .75-.75h12.5a.75.75 0 0 1 0 1.5h-12.5a.75.75 0 0 1-.75-.75Z"
+    />
+    <path
+      fill-rule="evenodd"
+      d="M3 10a.75.75 0 0 1 .75-.75h12.5a.75.75 0 0 1 0 1.5h-12.5a.75.75 0 0 1-.75-.75Z"
+    />
+    <path
+      fill-rule="evenodd"
+      d="M3 15.25a.75.75 0 0 1 .75-.75h12.5a.75.75 0 0 1 0 1.5h-12.5a.75.75 0 0 1-.75-.75Z"
     />
   </svg>
 </template>
