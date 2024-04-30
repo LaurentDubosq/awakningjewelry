@@ -1,1 +1,45 @@
-@use './reset.scss'
+@use './reset';
+@use './constants' as *;
+
+body {
+    color: $AwakningBlack;
+    font-family: $Arapey;
+    font-size: 16px;
+  }
+
+a:hover {
+    opacity: 0.75;
+}
+
+.wrapper {
+    max-width: 1050px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.hidden-mobile {
+    @media screen and (max-width: $mobile-max-width) {
+        display: none;
+    }
+}
+.hidden-desktop {
+    @media screen and (min-width: $desktop-min-width) {
+        display: none;
+    }
+}
+
+.no-shrink {
+    flex-shrink: 0;
+}
+
+.flex {
+    display: flex;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.no-wrap {
+    white-space: nowrap;
+}
