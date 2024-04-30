@@ -1,0 +1,54 @@
+{
+    "site-menu-items": [
+        {
+            "id": 1,
+            "title": "About",
+            "url": "/pages/about-us",
+            "type": "text"
+        },
+        {
+            "id": 2,
+            "title": "Shop",
+            "url": "",
+            "type": "text",
+            "subSiteMenuItems" : [
+                {
+                    "id": 1,
+                    "title": "Charm Bracelets",
+                    "url": "/collections/charm-bracelets",
+                    "type": "text"
+                },
+                {
+                    "id": 2,
+                    "title": "Elegance Bracelets",
+                    "url": "/collections/elegance-bracelets",
+                    "type": "text"
+                },
+                {
+                    "id": 3,
+                    "title": "108 Mala Beads",
+                    "url": "/collections/108-unisex-mala-beads",
+                    "type": "text"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "title": "Promotions",
+            "url": "/collections/private-promotions",
+            "type": "text"
+        },
+        {
+            "id": 4,
+            "title": "Faqs & Contact",
+            "url": "/pages/faq-and-contact",
+            "type": "text"
+        },
+        {
+            "id": 5,
+            "title": "Account",
+            "url": "/account",
+            "type": "icon"
+        }
+    ]
+}

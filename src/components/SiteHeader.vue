@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useElementClientWidth } from "@/composables/element";
+import SiteNav from "./SiteNav.vue";
 import BurgerMenuIcon from "./icons/IconBurger.vue";
 import PersonIcon from "./icons/IconPerson.vue";
 import CartIcon from "./icons/IconCart.vue";
@@ -37,7 +38,9 @@ onMounted(() => {
         </RouterLink>
       </div>
       <div class="site-header__right-container" ref="rightContainerElement">
-        <div class="site-header__site-nav-wrapper hidden-mobile"></div>
+        <div class="site-header__site-nav-wrapper hidden-mobile">
+          <SiteNav />
+        </div>
         <div class="site-header__account-icon-wrapper hidden-desktop">
           <SiteHeaderIconLink url="/account">
             <PersonIcon />
