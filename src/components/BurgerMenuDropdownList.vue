@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { SiteSubMenuItem } from "@/data/menus";
 import { inject, type Ref, type PropType } from "vue";
-import BurgerMenuLink from "./BurgerMenuLink.vue";
 import { RouterLink } from "vue-router";
 
 const toggleBurgerMenu: Ref<Function> | undefined = inject("toggleBurgerMenu");

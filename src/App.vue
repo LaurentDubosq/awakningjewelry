@@ -12,7 +12,7 @@ import { siteMenuItemsUrl } from "./data/menus";
 const siteMenuItems: Ref<SiteMenuItem[] | undefined> = ref([]);
 
 /**
- * Send Menu Items List to both SiteNavList and BurgerMenuList components
+ * Send Menu Items List to both SiteNav and BurgerMenu components
  */
 provide("siteMenuItems", siteMenuItems);
 
