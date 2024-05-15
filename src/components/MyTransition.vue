@@ -8,7 +8,7 @@ const { name } = defineProps({ name: { type: String, required: true } });
   </Transition>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 .translateY-enter-active {
   transition: all 0.3s ease;
 }
