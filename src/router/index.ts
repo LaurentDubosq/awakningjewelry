@@ -1,5 +1,23 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import { useFetch } from "@/composables/fetch";
+import { pagesMetaDataUrl } from "@/data/seo";
+import type { PageMetaData } from "@/data/seo";
+import type { Routes } from "./index.d";
+
+const pagesMetaData: PageMetaData[] | undefined = await useFetch(
+  pagesMetaDataUrl
+);
+const routes: Routes = {};
+if (pagesMetaData) {
+  for (const page of pagesMetaData) {
+    routes[page.name] = {
+      title: page.title,
+      description: page.description,
+    };
+  }
+}
+export { pagesMetaData }; // exports the variable to the Vue application (site logo component for instance)
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,9 +27,8 @@ const router = createRouter({
       name: "home",
       component: HomeView,
       meta: {
-        title: "Innovante Buddhist Jewelry Brand - AwakningJewelry.com",
-        description:
-          "Draw energy from your Eastern values to live your spirituality and find well-being in our Western world by wearing our Bracelets tailored to your dress codes &amp; 108 Malas Beads adapted to your Meditation &amp; Yoga sessions.",
+        title: routes.home.title,
+        description: routes.home.description,
       },
     },
   ],

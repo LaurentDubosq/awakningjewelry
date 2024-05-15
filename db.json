@@ -11,7 +11,7 @@
             "title": "Shop",
             "url": "",
             "type": "text",
-            "subSiteMenuItems" : [
+            "subMenuItems" : [
                 {
                     "id": 1,
                     "title": "Charm Bracelets",
@@ -49,6 +49,13 @@
             "title": "Account",
             "url": "/account",
             "type": "icon"
+        }
+    ],
+    "pages-meta-data": [
+        {
+            "name" : "home",
+            "title" : "Innovante Buddhist Jewelry Brand - AwakningJewelry.com",
+            "description": "Draw energy from your Eastern values to live your spirituality and find well-being in our Western world by wearing our Bracelets tailored to your dress codes &amp; 108 Malas Beads adapted to your Meditation &amp; Yoga sessions."
         }
     ]
 }
