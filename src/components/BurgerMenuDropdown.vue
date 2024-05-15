@@ -1,0 +1,25 @@
+<script setup lang="ts">
+import type { SiteMenuItem } from "@/data/menus";
+import { ref, type Ref, type PropType } from "vue";
+import BurgerMenuDropdownHeader from "./BurgerMenuDropdownHeader.vue";
+import BurgerMenuDropdownList from "./BurgerMenuDropdownList.vue";
+
+const { item } = defineProps({
+  item: { type: Object as PropType<SiteMenuItem>, required: true },
+});
+const isTextDropdownOpen: Ref<boolean> = ref(true);
+</script>
+
+<template>
+  <div class="burger-menu__dropdown">
+    <BurgerMenuDropdownHeader
+      :title="item.title"
+      :isTextDropdownOpen="isTextDropdownOpen"
+      @toggle-dropdown="isTextDropdownOpen = !isTextDropdownOpen"
+    />
+    <BurgerMenuDropdownList
+      :list="item.subMenuItems"
+      v-if="isTextDropdownOpen"
+    />
+  </div>
+</template>

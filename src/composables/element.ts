@@ -1,3 +1,3 @@
-export const useElementClientWidth = (element: HTMLElement): number => {
+export const useGetElementClientWidth = (element: HTMLElement): number => {
   return element.clientWidth;
 };

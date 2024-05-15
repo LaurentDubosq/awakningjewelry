@@ -1,16 +1,16 @@
-export interface siteMenuItem {
+export interface SiteMenuItem {
   id: number;
   title: string;
   url: string;
   type: string;
-  subSiteMenuItems: Array<subSiteMenuItemsItem>;
+  subMenuItems: Array<SiteSubMenuItem>;
 }
 
-export interface subSiteMenuItemsItem {
+export interface SiteSubMenuItem {
   id: number;
   title: string;
   url: string;
   type: string;
 }
 
-export const siteMenuItemsUrl = "http://localhost:3001/site-menu-items";
+export const siteMenuItemsUrl: string = "http://localhost:3001/site-menu-items";

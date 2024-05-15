@@ -1,22 +1,22 @@
 /* Media Queries */
-$desktop-min-width: 950px;
-$mobile-max-width: 949px;
+$AwakningMediaQueryDesktopMinWidth: 950px;
+$AwakningMediaQueryMobileMaxWidth: 950px;
 
 /* Colors */
-$AwakningBlack: #1F2021;
-// $AwakningBlackHover: #3d3f41;
-$AwakningDarkRed: #A92424;
-$BrightRed: #CC2B2B;
-$VeryLightGray: #F6F6F6;
-$White: #FFFFFF;
+$AwakningColorBlack: #1F2021;
+$AwakningColorBlackHover: #3d3f41;
+$AwakningColorDarkRed: #A92424;
+$AwakningColorBrightRed: #CC2B2B;
+$AwakningColorVeryLightGray: #F6F6F6;
+$AwakningColorWhite: #FFFFFF;
 
 /* Fonts */
-$Montserrat: "Montserrat", sans-serif;
-$Arapey: "Arapey", serif;
-$OldStandardTT: "Old Standard TT", serif;
+$AwakningFontMontserrat: "Montserrat", sans-serif;
+$AwakningFontArapey: "Arapey", serif;
+$AwakningFontOldStandardTT: "Old Standard TT", serif;
 
 /* Shadow */
-$BoxShadowStandard: 0 10px 20px #00000017;
+$AwakningBoxShadow: 0 10px 20px #00000017;
 
 /* Site Nav */
-$siteNavListItemTitlePaddingX: 15px;
+$siteNavLinkPaddingX: 15px;
