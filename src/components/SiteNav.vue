@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import type { SiteMenuItem } from "@/data/menus";
 import { inject, type Ref } from "vue";
+import { siteMenuItemsKey } from "@/utils/injectionkeys";
 import SiteHeaderIcon from "./SiteHeaderIcon.vue";
 import PersonIcon from "./icons/IconPerson.vue";
 import SiteNavLink from "./SiteNavLink.vue";
 import SiteNavDropdown from "./SiteNavDropdown.vue";
 
 const siteMenuItems: Ref<SiteMenuItem[] | undefined> | undefined =
-  inject("siteMenuItems");
+  inject(siteMenuItemsKey);
 </script>
 
 <template>

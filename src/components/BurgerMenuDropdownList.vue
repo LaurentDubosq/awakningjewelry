@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { SiteSubMenuItem } from "@/data/menus";
-import { inject, type Ref, type PropType } from "vue";
+import { toggleBurgerMenuKey } from "@/utils/injectionkeys";
+import { inject, type PropType } from "vue";
 import { RouterLink } from "vue-router";
 
-const toggleBurgerMenu: Ref<Function> | undefined = inject("toggleBurgerMenu");
+const toggleBurgerMenu: Function | undefined = inject(toggleBurgerMenuKey);
 
 const { list } = defineProps({
   list: { type: Object as PropType<SiteSubMenuItem[]>, required: true },

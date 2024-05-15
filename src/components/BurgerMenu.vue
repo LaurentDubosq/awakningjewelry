@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import type { SiteMenuItem } from "@/data/menus";
 import { inject, type Ref } from "vue";
+import { siteMenuItemsKey } from "@/utils/injectionkeys";
 import BurgerMenuLink from "./BurgerMenuLink.vue";
 import BurgerMenuDropdown from "./BurgerMenuDropdown.vue";
 
 const siteMenuItems: Ref<SiteMenuItem[] | undefined> | undefined =
-  inject("siteMenuItems");
+  inject(siteMenuItemsKey);
 </script>
 
 <template>

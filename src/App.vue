@@ -8,13 +8,18 @@ import BurgerMenu from "./components/BurgerMenu.vue";
 import type { SiteMenuItem } from "./data/menus";
 import { useFetch } from "./composables/fetch";
 import { siteMenuItemsUrl } from "./data/menus";
+import {
+  siteMenuItemsKey,
+  toggleBurgerMenuKey,
+  isBurgerMenuOpenKey,
+} from "./utils/injectionkeys";
 
 const siteMenuItems: Ref<SiteMenuItem[] | undefined> = ref([]);
 
 /**
  * Send Menu Items List to both SiteNav and BurgerMenu components
  */
-provide("siteMenuItems", siteMenuItems);
+provide(siteMenuItemsKey, siteMenuItems);
 
 onMounted(async () => {
   siteMenuItems.value = await useFetch(siteMenuItemsUrl);
@@ -43,8 +48,8 @@ function closeBurgerMenuOnDesktop() {
   }
 }
 
-provide("toggleBurgerMenu", toggleBurgerMenu); // Send the open/close burger menu handle function to BurgerMenuLink component
-provide("isBurgerMenuOpen", isBurgerMenuOpen); // Send the open/close burger menu status to SiteHeader component to toggle the burger menu icon
+provide(toggleBurgerMenuKey, toggleBurgerMenu); // Send the open/close burger menu handle function to BurgerMenuLink component
+provide(isBurgerMenuOpenKey, isBurgerMenuOpen); // Send the open/close burger menu status to SiteHeader component to toggle the burger menu icon
 
 onMounted(() => {
   /**

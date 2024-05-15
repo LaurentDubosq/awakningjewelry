@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, inject, type Ref } from "vue";
 import { useGetElementClientWidth } from "@/composables/element";
+import { isBurgerMenuOpenKey } from "@/utils/injectionkeys";
 import SiteNav from "./SiteNav.vue";
 import BurgerIcon from "./icons/IconBurger.vue";
 import CrossIcon from "./icons/IconCross.vue";
@@ -10,7 +11,7 @@ import SiteHeaderIcon from "./SiteHeaderIcon.vue";
 import SiteLogo from "./SiteLogo.vue";
 
 // Burger Icon Logic - Get the Burger Menu Status and display the appropriate icon
-const isBurgerMenuOpen: Ref<string> | undefined = inject("isBurgerMenuOpen");
+const isBurgerMenuOpen: Ref<Boolean> | undefined = inject(isBurgerMenuOpenKey);
 // end Burger Icon Logic
 
 // Right Container Element - Get the width of the element to apply it to the burger menu icon container and perfectly align the logo in the middle.

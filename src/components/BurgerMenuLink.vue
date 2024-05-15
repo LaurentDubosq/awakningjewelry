@@ -2,10 +2,11 @@
 Dropdown Title & Links */
 
 <script setup lang="ts">
-import { inject, type Ref } from "vue";
+import { toggleBurgerMenuKey } from "@/utils/injectionkeys";
+import { inject } from "vue";
 import { RouterLink } from "vue-router";
 
-const toggleBurgerMenu: Ref<Function> | undefined = inject("toggleBurgerMenu");
+const toggleBurgerMenu: Function | undefined = inject(toggleBurgerMenuKey);
 
 const { url, behavior } = defineProps({
   behavior: { type: String, required: true },
