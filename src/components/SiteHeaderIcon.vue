@@ -10,7 +10,7 @@ const { behavior, url } = defineProps({
 <template>
   <template v-if="behavior === 'button'">
     <button type="button" class="site-header__icon-area">
-      <div ref="divIconSizerElement" class="site-header__icon-size">
+      <div class="site-header__icon-size">
         <slot />
       </div>
     </button>
