@@ -8,31 +8,33 @@ import MyTransition from "./MyTransition.vue";
 const { menuItem } = defineProps({
   menuItem: { type: Object as PropType<SiteMenuItem>, required: true },
 });
-const isDropdownHovered: Ref<boolean> = ref(false);
+const isDropdownOpen: Ref<boolean> = ref(false);
 
 function openDropdown() {
-  isDropdownHovered.value = true;
+  isDropdownOpen.value = true;
 }
 function closeDropdown() {
-  isDropdownHovered.value = false;
+  isDropdownOpen.value = false;
 }
 </script>
 
 <template>
+  <!-- "mouseenter" and "mouseleave" are used for mouse navigation / "touchestart.prevent" for touch navigation -->
+  <!-- We avoid using a toggle for all events, as touchstart with the passive option triggers an unwanted mouseenter event -->
   <div
     class="site-nav__dropdown"
     @mouseenter="openDropdown"
     @mouseleave="closeDropdown"
-    @click="closeDropdown"
+    @touchstart.passive="openDropdown"
   >
-    <SiteNavDropdownHeader :isDropdownHovered="isDropdownHovered">
+    <SiteNavDropdownHeader :isDropdownOpen="isDropdownOpen">
       {{ menuItem.title }}
     </SiteNavDropdownHeader>
     <MyTransition name="translateY">
       <SiteNavDropdownList
         :menuItem="menuItem"
         @close-dropdown="closeDropdown"
-        v-if="isDropdownHovered"
+        v-if="isDropdownOpen"
       />
     </MyTransition>
   </div>

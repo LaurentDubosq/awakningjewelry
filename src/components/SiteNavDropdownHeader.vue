@@ -1,6 +1,6 @@
 <script setup lang="ts">
-const { isDropdownHovered } = defineProps({
-  isDropdownHovered: { type: Boolean, required: true },
+const { isDropdownOpen } = defineProps({
+  isDropdownOpen: { type: Boolean, required: true },
 });
 </script>
 
@@ -8,11 +8,11 @@ const { isDropdownHovered } = defineProps({
   <header class="site-nav__dropdown-header">
     <div
       class="site-nav__dropdown-title site-nav__link"
-      :class="{ 'site-nav__dropdown-title--hover': isDropdownHovered }"
+      :class="{ 'site-nav__dropdown-title--hover': isDropdownOpen }"
     >
       <slot />
       <span class="site-nav__dropdown-title-icon">
-        <template v-if="isDropdownHovered">▲</template>
+        <template v-if="isDropdownOpen">▲</template>
         <template v-else>▼</template></span
       >
     </div>
