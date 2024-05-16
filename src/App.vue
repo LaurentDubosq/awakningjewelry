@@ -3,6 +3,7 @@ import { onMounted, onUnmounted, ref, provide, type Ref } from "vue";
 import { RouterView } from "vue-router";
 import SiteHeader from "./components/SiteHeader.vue";
 import BurgerMenu from "./components/BurgerMenu.vue";
+import MyTransition from "./components/MyTransition.vue";
 
 // Site Menu Items - Get Data & Send it to components
 import type { SiteMenuItem } from "./data/menus";
@@ -72,15 +73,11 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div
-    class="site-container"
-    :class="{ 'site-container--burger-menu-opened': isBurgerMenuOpen }"
-  >
-    <BurgerMenu v-if="isBurgerMenuOpen" />
-    <div
-      class="site-content"
-      :class="{ 'site-content--burger-menu-opened': isBurgerMenuOpen }"
-    >
+  <div class="site-container">
+    <MyTransition name="marginLeftMinus300px">
+      <BurgerMenu v-if="isBurgerMenuOpen" />
+    </MyTransition>
+    <div class="site-content">
       <SiteHeader @toggle-burger-menu="toggleBurgerMenu" />
       <RouterView />
     </div>
@@ -88,11 +85,15 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
-.site-container--burger-menu-opened {
-  display: flex;
-}
-.site-content--burger-menu-opened {
-  flex: 1;
-  overflow: hidden;
+@use "@/assets/styles/_constants.scss" as *;
+
+@media screen and (max-width: $AwakningMediaQueryMobileMaxWidth) {
+  .site-container {
+    display: flex;
+  }
+  .site-content {
+    flex: 1;
+    overflow: hidden;
+  }
 }
 </style>
