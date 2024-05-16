@@ -12,20 +12,25 @@ const { list } = defineProps({
 </script>
 
 <template>
-  <menu class="burger-menu__dropdown-list">
-    <li class="burger-menu__dropdown-list-item" v-for="item in list">
-      <RouterLink
-        :to="item.url"
-        class="burger-menu__dropdown-list-item-link burger-menu__link"
-        @click="toggleBurgerMenu"
-      >
-        {{ item.title }}
-      </RouterLink>
-    </li>
-  </menu>
+  <div class="burger-menu__dropdown-list-wrapper">
+    <menu class="burger-menu__dropdown-list transition">
+      <li class="burger-menu__dropdown-list-item" v-for="item in list">
+        <RouterLink
+          :to="item.url"
+          class="burger-menu__dropdown-list-item-link burger-menu__link"
+          @click="toggleBurgerMenu"
+        >
+          {{ item.title }}
+        </RouterLink>
+      </li>
+    </menu>
+  </div>
 </template>
 
 <style scoped lang="scss">
+.burger-menu__dropdown-list-wrapper {
+  overflow: hidden; // Necessary for the transition
+}
 .burger-menu__dropdown-list-item-link {
   padding-left: 30px;
 }

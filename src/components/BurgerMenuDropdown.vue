@@ -3,6 +3,7 @@ import type { SiteMenuItem } from "@/data/menus";
 import { ref, type Ref, type PropType } from "vue";
 import BurgerMenuDropdownHeader from "./BurgerMenuDropdownHeader.vue";
 import BurgerMenuDropdownList from "./BurgerMenuDropdownList.vue";
+import MyTransition from "./MyTransition.vue";
 
 const { item } = defineProps({
   item: { type: Object as PropType<SiteMenuItem>, required: true },
@@ -17,9 +18,11 @@ const isTextDropdownOpen: Ref<boolean> = ref(true);
       :isTextDropdownOpen="isTextDropdownOpen"
       @toggle-dropdown="isTextDropdownOpen = !isTextDropdownOpen"
     />
-    <BurgerMenuDropdownList
-      :list="item.subMenuItems"
-      v-if="isTextDropdownOpen"
-    />
+    <MyTransition :duration="300" name="margintopMinus100PerCentWithInner">
+      <BurgerMenuDropdownList
+        :list="item.subMenuItems"
+        v-if="isTextDropdownOpen"
+      />
+    </MyTransition>
   </div>
 </template>
