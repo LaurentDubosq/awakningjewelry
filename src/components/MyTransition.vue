@@ -12,13 +12,20 @@ const { name } = defineProps({ name: { type: String, required: true } });
 .translateY-enter-active {
   transition: all 0.3s ease;
 }
-
 .translateY-leave-active {
   transition: all;
 }
-
 .translateY-enter-from,
 .translateY-leave-to {
   transform: translateY(-15px);
+}
+
+.marginLeftMinus300px-enter-active,
+.marginLeftMinus300px-leave-active {
+  transition: all 0.3s ease;
+}
+.marginLeftMinus300px-enter-from,
+.marginLeftMinus300px-leave-to {
+  margin-left: -300px;
 }
 </style>
