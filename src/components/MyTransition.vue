@@ -8,7 +8,7 @@ const { name } = defineProps({ name: { type: String, required: true } });
   </Transition>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .translateY-enter-active {
   transition: all 0.3s ease;
 }
@@ -27,5 +27,14 @@ const { name } = defineProps({ name: { type: String, required: true } });
 .marginLeftMinus300px-enter-from,
 .marginLeftMinus300px-leave-to {
   margin-left: -300px;
+}
+
+.margintopMinus100PerCentWithInner-enter-active .transition,
+.margintopMinus100PerCentWithInner-leave-active .transition {
+  transition: all 0.3s ease;
+}
+.margintopMinus100PerCentWithInner-enter-from .transition,
+.margintopMinus100PerCentWithInner-leave-to .transition {
+  margin-top: -100%;
 }
 </style>
