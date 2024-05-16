@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, inject, type Ref } from "vue";
+import { ref, onMounted, inject, type Ref, onUnmounted } from "vue";
 import { useGetElementClientWidth } from "@/composables/element";
 import { isBurgerMenuOpenKey } from "@/utils/injectionkeys";
 import SiteNav from "./SiteNav.vue";
@@ -9,6 +9,7 @@ import PersonIcon from "./icons/IconPerson.vue";
 import CartIcon from "./icons/IconCart.vue";
 import SiteHeaderIcon from "./SiteHeaderIcon.vue";
 import SiteLogo from "./SiteLogo.vue";
+import { addResizeListener, removeResizeListener } from "@/composables/event";
 
 // Burger Icon Logic - Get the Burger Menu Status and display the appropriate icon
 const isBurgerMenuOpen: Ref<Boolean> | undefined = inject(isBurgerMenuOpenKey);
@@ -28,6 +29,20 @@ function resizeBurgerMenuIconWrapperWidth() {
 
 onMounted(() => {
   resizeBurgerMenuIconWrapperWidth();
+  /**
+   * Addition of an Event Listener to recalculate the burger menu icon wrapper width when switching tablet orientation from desktop to mobile
+   * @param {EventListenerOrEventListenerObject} callback
+   * @param {Window | HTMLElement} element
+   */
+  addResizeListener(resizeBurgerMenuIconWrapperWidth, window);
+});
+onUnmounted(() => {
+  /**
+   * Addition of an Event Listener to recalculate the burger menu icon wrapper width when switching tablet orientation from desktop to mobile
+   * @param {EventListenerOrEventListenerObject} callback
+   * @param {Window | HTMLElement} element
+   */
+  removeResizeListener(resizeBurgerMenuIconWrapperWidth, window);
 });
 // end Right Container Element
 </script>
