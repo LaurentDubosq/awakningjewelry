@@ -10,22 +10,16 @@ const { menuItem } = defineProps({
 });
 const isDropdownOpen: Ref<boolean> = ref(false);
 
-function openDropdown() {
-  isDropdownOpen.value = true;
-}
-function closeDropdown() {
-  isDropdownOpen.value = false;
+function toggleDropdown() {
+  isDropdownOpen.value = !isDropdownOpen.value;
 }
 </script>
 
 <template>
-  <!-- "mouseenter" and "mouseleave" are used for mouse navigation / "touchestart.prevent" for touch navigation -->
-  <!-- We avoid using a toggle for all events, as touchstart with the passive option triggers an unwanted mouseenter event -->
   <div
     class="site-nav__dropdown"
-    @mouseenter="openDropdown"
-    @mouseleave="closeDropdown"
-    @touchstart.passive="openDropdown"
+    @mouseenter="toggleDropdown"
+    @mouseleave="toggleDropdown"
   >
     <SiteNavDropdownHeader :isDropdownOpen="isDropdownOpen">
       {{ menuItem.title }}
@@ -33,7 +27,7 @@ function closeDropdown() {
     <MyTransition name="translateY">
       <SiteNavDropdownList
         :menuItem="menuItem"
-        @close-dropdown="closeDropdown"
+        @close-dropdown="toggleDropdown"
         v-if="isDropdownOpen"
       />
     </MyTransition>
