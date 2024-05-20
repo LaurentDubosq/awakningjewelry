@@ -23,7 +23,11 @@ cd awakningjewelry
 npm install
 ```
 
-## Compile and Hot-Reload for Development
+## Launch of the development environment
+
+```sh
+npm run mock-api
+```
 
 ```sh
 npm run dev
@@ -33,7 +37,7 @@ npm run dev
 http://localhost:5173/
 ```
 
-## Type-Check, Compile and Minify for Production
+## Command for the build process
 
 ```sh
 npm run build
@@ -42,7 +46,7 @@ npm run build
 ## Run Unit Tests with [Vitest](https://vitest.dev/)
 
 ```sh
-npm run test:unit
+npm run test
 ```
 
 ## Process to follow for your Commits
