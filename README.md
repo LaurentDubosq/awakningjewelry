@@ -9,6 +9,10 @@ This website offers for sale a range of categories of Buddhist jewelry and other
 [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 
+## Development Principles
+
+DRY, KISS, YAGNI, SOLID, Clean Code.
+
 ## Project Setup
 
 ```sh
