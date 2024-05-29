@@ -25,7 +25,7 @@ const siteMenuItems: Ref<SiteMenuItem[] | undefined> | undefined =
           />
         </template>
         <template v-else-if="menuItem.type === 'icon'">
-          <SiteHeaderIcon behavior="link" url="/account">
+          <SiteHeaderIcon behavior="link" :url="menuItem.url">
             <PersonIcon />
           </SiteHeaderIcon>
         </template>
