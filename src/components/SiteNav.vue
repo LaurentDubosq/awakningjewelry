@@ -4,7 +4,7 @@ import { inject, type Ref } from "vue";
 import { siteMenuItemsKey } from "@/utils/injectionkeys";
 import SiteHeaderIcon from "./SiteHeaderIcon.vue";
 import PersonIcon from "./icons/IconPerson.vue";
-import SiteNavLink from "./SiteNavLink.vue";
+import SiteNavItem from "./SiteNavItem.vue";
 import SiteNavDropdown from "./SiteNavDropdown.vue";
 
 const siteMenuItems: Ref<SiteMenuItem[] | undefined> | undefined =
@@ -16,18 +16,22 @@ const siteMenuItems: Ref<SiteMenuItem[] | undefined> | undefined =
     <menu class="site-nav__list">
       <li class="site-nav__list-item" v-for="menuItem in siteMenuItems">
         <template v-if="menuItem.type === 'text'">
-          <SiteNavLink :url="menuItem.url" v-if="!menuItem.subMenuItems">{{
-            menuItem.title
-          }}</SiteNavLink>
+          <RouterLink :to="`${menuItem.url}`" v-if="!menuItem.subMenuItems">
+            <SiteNavItem>
+              {{ menuItem.title }}
+            </SiteNavItem>
+          </RouterLink>
           <SiteNavDropdown
             :menuItem="menuItem"
             v-else-if="menuItem.subMenuItems"
           />
         </template>
         <template v-else-if="menuItem.type === 'icon'">
-          <SiteHeaderIcon behavior="link" :url="menuItem.url">
-            <PersonIcon />
-          </SiteHeaderIcon>
+          <RouterLink :to="menuItem.url">
+            <SiteHeaderIcon>
+              <PersonIcon />
+            </SiteHeaderIcon>
+          </RouterLink>
         </template>
       </li>
     </menu>

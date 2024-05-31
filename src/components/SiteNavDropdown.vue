@@ -26,7 +26,7 @@ function toggleDropdown() {
     </SiteNavDropdownHeader>
     <MyTransition name="translateY">
       <SiteNavDropdownList
-        :menuItem="menuItem"
+        :items="menuItem.subMenuItems"
         @close-dropdown="toggleDropdown"
         v-if="isDropdownOpen"
       />

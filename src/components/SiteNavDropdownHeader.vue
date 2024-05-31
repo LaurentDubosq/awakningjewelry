@@ -5,24 +5,22 @@ const { isDropdownOpen } = defineProps({
 </script>
 
 <template>
-  <header class="site-nav__dropdown-header">
-    <div
-      class="site-nav__dropdown-title site-nav__link"
-      :class="{ 'site-nav__dropdown-title--hover': isDropdownOpen }"
+  <header
+    class="site-nav__dropdown-header site-nav__item"
+    :class="{ 'site-nav__dropdown-header--hover': isDropdownOpen }"
+  >
+    <slot />
+    <span class="site-nav__dropdown-header-icon">
+      <template v-if="isDropdownOpen">▲</template>
+      <template v-else>▼</template></span
     >
-      <slot />
-      <span class="site-nav__dropdown-title-icon">
-        <template v-if="isDropdownOpen">▲</template>
-        <template v-else>▼</template></span
-      >
-    </div>
   </header>
 </template>
 
 <style scoped lang="scss">
 @use "@/assets/styles/_constants.scss" as *;
 
-.site-nav__dropdown-title {
+.site-nav__dropdown-header {
   display: flex;
   align-items: center;
 
@@ -33,7 +31,7 @@ const { isDropdownOpen } = defineProps({
     &::after {
       content: "";
       position: absolute;
-      width: calc(100% - ($siteNavLinkPaddingX * 2));
+      width: calc(100% - ($siteNavItemPaddingX * 2));
       height: 1px;
       background-color: $AwakningColorBlack;
       bottom: 0;

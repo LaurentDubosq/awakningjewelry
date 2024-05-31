@@ -54,31 +54,35 @@ onUnmounted(() => {
         class="site-header__burger-menu-icon-wrapper hidden-desktop"
         :style="{ 'flex-basis': rightContainerElementWidth + 'px' }"
       >
-        <SiteHeaderIcon
-          behavior="button"
-          url=""
-          @click="$emit('toggle-burger-menu')"
-        >
-          <CrossIcon width="32" v-if="isBurgerMenuOpen" />
-          <BurgerIcon v-else />
-        </SiteHeaderIcon>
+        <button type="button" @click="$emit('toggle-burger-menu')">
+          <SiteHeaderIcon>
+            <CrossIcon width="32" v-if="isBurgerMenuOpen" />
+            <BurgerIcon v-else />
+          </SiteHeaderIcon>
+        </button>
       </div>
       <div class="site-header__logo-wrapper">
-        <SiteLogo />
+        <RouterLink to="/">
+          <SiteLogo />
+        </RouterLink>
       </div>
       <div class="site-header__right-container" ref="rightContainerElement">
         <div class="site-header__site-nav-wrapper hidden-mobile">
           <SiteNav />
         </div>
         <div class="site-header__account-icon-wrapper hidden-desktop">
-          <SiteHeaderIcon behavior="link" url="/account">
-            <PersonIcon />
-          </SiteHeaderIcon>
+          <RouterLink to="/account">
+            <SiteHeaderIcon>
+              <PersonIcon />
+            </SiteHeaderIcon>
+          </RouterLink>
         </div>
         <div class="site-header__cart-icon-wrapper">
-          <SiteHeaderIcon behavior="link" url="/cart">
-            <CartIcon />
-          </SiteHeaderIcon>
+          <RouterLink to="/cart">
+            <SiteHeaderIcon>
+              <CartIcon />
+            </SiteHeaderIcon>
+          </RouterLink>
         </div>
       </div>
     </header>
