@@ -13,4 +13,4 @@ export interface SiteSubMenuItem {
   type: string;
 }
 
-export const siteMenuItemsUrl: string = "http://localhost:3001/site-menu-items";
+export const siteMenuItemsUrl: string = "http://localhost:3001/siteMenuItems";

@@ -1,5 +1,5 @@
 {
-    "site-menu-items": [
+    "siteMenuItems": [
         {
             "id": 1,
             "title": "About",
@@ -51,7 +51,7 @@
             "type": "icon"
         }
     ],
-    "pages-meta-data": [
+    "pagesMetaData": [
         {
             "name" : "home",
             "title" : "Innovante Buddhist Jewelry Brand - AwakningJewelry.com",

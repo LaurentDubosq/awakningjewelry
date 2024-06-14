@@ -4,4 +4,4 @@ export interface PageMetaData {
   description: string;
 }
 
-export const pagesMetaDataUrl = "http://localhost:3001/pages-meta-data";
+export const pagesMetaDataUrl = "http://localhost:3001/pagesMetaData";
