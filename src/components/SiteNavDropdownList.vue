@@ -15,7 +15,10 @@ const { items } = defineProps({
       v-for="item in items"
       @click="$emit('close-dropdown')"
     >
-      <RouterLink :to="`${item.url}`">
+      <RouterLink
+        data-testclass="site-nav__dropdown-list-item-link"
+        :to="`${item.url}`"
+      >
         <SiteNavDropdownItem>
           {{ item.title }}
         </SiteNavDropdownItem>

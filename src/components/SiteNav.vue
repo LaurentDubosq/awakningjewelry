@@ -16,7 +16,11 @@ const siteMenuItems: Ref<SiteMenuItem[] | undefined> | undefined =
     <menu class="site-nav__list">
       <li class="site-nav__list-item" v-for="menuItem in siteMenuItems">
         <template v-if="menuItem.type === 'text'">
-          <RouterLink :to="`${menuItem.url}`" v-if="!menuItem.subMenuItems">
+          <RouterLink
+            :to="`${menuItem.url}`"
+            v-if="!menuItem.subMenuItems"
+            data-testclass="site-nav__list-item-link"
+          >
             <SiteNavItem>
               {{ menuItem.title }}
             </SiteNavItem>
@@ -27,9 +31,14 @@ const siteMenuItems: Ref<SiteMenuItem[] | undefined> | undefined =
           />
         </template>
         <template v-else-if="menuItem.type === 'icon'">
-          <RouterLink :to="menuItem.url">
+          <RouterLink
+            :to="menuItem.url"
+            data-testclass="site-nav__list-item-link"
+          >
             <SiteHeaderIcon>
-              <PersonIcon />
+              <template v-if="menuItem.title === 'Account'">
+                <PersonIcon />
+              </template>
             </SiteHeaderIcon>
           </RouterLink>
         </template>
