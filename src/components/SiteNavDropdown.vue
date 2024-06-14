@@ -5,8 +5,8 @@ import SiteNavDropdownHeader from "./SiteNavDropdownHeader.vue";
 import SiteNavDropdownList from "./SiteNavDropdownList.vue";
 import MyTransition from "./MyTransition.vue";
 
-const { menuItem } = defineProps({
-  menuItem: { type: Object as PropType<SiteMenuItem>, required: true },
+const { dropdown } = defineProps({
+  dropdown: { type: Object as PropType<SiteMenuItem>, required: true },
 });
 const isDropdownOpen: Ref<boolean> = ref(false);
 
@@ -22,11 +22,11 @@ function toggleDropdown() {
     @mouseleave="toggleDropdown"
   >
     <SiteNavDropdownHeader :isDropdownOpen="isDropdownOpen">
-      {{ menuItem.title }}
+      {{ dropdown.title }}
     </SiteNavDropdownHeader>
     <MyTransition name="translateY">
       <SiteNavDropdownList
-        :items="menuItem.subMenuItems"
+        :items="dropdown.subMenuItems"
         @close-dropdown="toggleDropdown"
         v-if="isDropdownOpen"
       />

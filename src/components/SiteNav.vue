@@ -22,7 +22,7 @@ const siteMenuItems: Ref<SiteMenuItem[] | undefined> | undefined =
             </SiteNavItem>
           </RouterLink>
           <SiteNavDropdown
-            :menuItem="menuItem"
+            :dropdown="menuItem"
             v-else-if="menuItem.subMenuItems"
           />
         </template>
