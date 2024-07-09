@@ -27,8 +27,8 @@ const router = createRouter({
       name: "home",
       component: HomeView,
       meta: {
-        title: routes.home.title,
-        description: routes.home.description,
+        title: routes.home?.title,
+        description: routes.home?.description,
       },
     },
   ],
