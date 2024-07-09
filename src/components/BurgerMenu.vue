@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import type { SiteMenuItem } from "@/data/menus";
-import { inject, type Ref } from "vue";
-import { siteMenuItemsKey } from "@/utils/injectionkeys";
-import BurgerMenuLink from "./BurgerMenuLink.vue";
+import { type PropType } from "vue";
+import BurgerMenuItem from "./BurgerMenuItem.vue";
 import BurgerMenuDropdown from "./BurgerMenuDropdown.vue";
 
-const siteMenuItems: Ref<SiteMenuItem[] | undefined> | undefined =
-  inject(siteMenuItemsKey);
+const { siteMenuItems } = defineProps({
+  siteMenuItems: { type: Array as PropType<SiteMenuItem[] | undefined> },
+});
 </script>
 
 <template>
@@ -14,9 +14,16 @@ const siteMenuItems: Ref<SiteMenuItem[] | undefined> | undefined =
     <menu class="burger-menu__list">
       <li class="burger-menu__list-item" v-for="item of siteMenuItems">
         <BurgerMenuDropdown :item="item" v-if="item.subMenuItems" />
-        <BurgerMenuLink behavior="link" :url="item.url" v-else>{{
-          item.title
-        }}</BurgerMenuLink>
+        <RouterLink
+          :to="item.url"
+          class="burger-menu__link"
+          @click="$emit('toggle-burger-menu')"
+          v-else
+        >
+          <BurgerMenuItem>
+            {{ item.title }}
+          </BurgerMenuItem>
+        </RouterLink>
       </li>
     </menu>
   </nav>
