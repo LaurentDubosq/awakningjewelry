@@ -12,11 +12,16 @@ const { siteMenuItems } = defineProps({
 <template>
   <nav class="burger-menu">
     <menu class="burger-menu__list">
-      <li class="burger-menu__list-item" v-for="item of siteMenuItems">
+      <li
+        class="burger-menu__list-item"
+        data-testid="burger-menu__list-item"
+        v-for="item of siteMenuItems"
+      >
         <BurgerMenuDropdown :item="item" v-if="item.subMenuItems" />
         <RouterLink
           :to="item.url"
           class="burger-menu__link"
+          data-testid="burger-menu__link"
           @click="$emit('toggle-burger-menu')"
           v-else
         >

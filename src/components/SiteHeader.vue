@@ -36,6 +36,7 @@ onMounted(() => {
    */
   addResizeListener(resizeBurgerMenuIconWrapperWidth, window);
 });
+
 onUnmounted(() => {
   /**
    * Addition of an Event Listener to recalculate the burger menu icon wrapper width when switching tablet orientation from desktop to mobile
@@ -66,7 +67,7 @@ onUnmounted(() => {
         </button>
       </div>
       <div class="site-header__logo-wrapper">
-        <RouterLink to="/" data-testid="site-header__logo-link">
+        <RouterLink to="/">
           <SiteLogo />
         </RouterLink>
       </div>
@@ -75,17 +76,14 @@ onUnmounted(() => {
           <SiteNav />
         </div>
         <div class="site-header__account-icon-wrapper hidden-desktop">
-          <RouterLink
-            to="/account"
-            data-testid="site-header__account-icon-link"
-          >
+          <RouterLink to="/account">
             <SiteHeaderIcon>
               <PersonIcon />
             </SiteHeaderIcon>
           </RouterLink>
         </div>
         <div class="site-header__cart-icon-wrapper">
-          <RouterLink to="/cart" data-testid="site-header__cart-icon-link">
+          <RouterLink to="/cart">
             <SiteHeaderIcon>
               <CartIcon />
             </SiteHeaderIcon>

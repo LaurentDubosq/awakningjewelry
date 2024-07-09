@@ -17,6 +17,7 @@ const COLORWHITE: string = SASSCONSTANTS.AwakningColorWhite; // To set the color
     <button
       class="burger-menu__dropdown-header-button burger-menu__dropdown-header-icon-area"
       @click="$emit('toggle-dropdown')"
+      data-testid="burger-menu__dropdown-header-button"
     >
       <div class="burger-menu__dropdown-header-icon-size">
         <IconSignMinus :color="COLORWHITE" v-if="isDropdownOpen" />

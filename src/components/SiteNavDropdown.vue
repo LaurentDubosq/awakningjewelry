@@ -18,6 +18,7 @@ function toggleDropdown() {
 <template>
   <div
     class="site-nav__dropdown"
+    data-testid="site-nav__dropdown"
     @mouseenter="toggleDropdown"
     @mouseleave="toggleDropdown"
   >

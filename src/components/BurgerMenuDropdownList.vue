@@ -14,8 +14,16 @@ const { list } = defineProps({
 <template>
   <div class="burger-menu__dropdown-list-wrapper">
     <menu class="burger-menu__dropdown-list transition">
-      <li class="burger-menu__dropdown-list-item" v-for="item in list">
-        <RouterLink :to="item.url" @click="toggleBurgerMenu">
+      <li
+        class="burger-menu__dropdown-list-item"
+        data-testid="burger-menu__dropdown-list-item"
+        v-for="item in list"
+      >
+        <RouterLink
+          :to="item.url"
+          @click="toggleBurgerMenu"
+          data-testid="burger-menu__dropdown-list-item-link"
+        >
           <BurgerMenuDropdownItem>
             {{ item.title }}
           </BurgerMenuDropdownItem>

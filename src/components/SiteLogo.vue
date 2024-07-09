@@ -20,6 +20,7 @@ onMounted(async () => {
     alt="AwakningJewelry's logo - Illustration of a person medidating above the AwakningJewelry brand name"
     :title="homeMetaData?.title"
     class="site-logo"
+    data-testid="site-logo"
   />
 </template>
 

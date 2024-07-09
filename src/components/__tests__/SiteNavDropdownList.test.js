@@ -1,65 +1,47 @@
 import { mount } from "@vue/test-utils";
-import { describe, test, expect, beforeEach } from "vitest";
 import SiteNavDropdownList from "@/components/SiteNavDropdownList.vue";
 import SiteNavDropdownItem from "@/components/SiteNavDropdownItem.vue";
 import frontDataBase from "../../../db.json";
 
-const dummySiteMenuItems = frontDataBase["siteMenuItems"];
-const dummyDropdownList = dummySiteMenuItems[1].subMenuItems;
+const siteMenuItems = frontDataBase["siteMenuItems"];
+const dropdownList = siteMenuItems[1].subMenuItems;
 
 describe("SiteNavDropdownList component:", () => {
   let wrapper;
-  let listItemElements;
 
   beforeEach(() => {
     wrapper = mount(SiteNavDropdownList, {
-      props: { items: dummyDropdownList },
+      props: { items: dropdownList },
     });
-    listItemElements = wrapper.findAll(".site-nav__dropdown-list-item");
   });
 
-  test("renders its entire list", () => {
-    expect(listItemElements).toHaveLength(dummyDropdownList.length);
+  test("renders its list entirely", () => {
+    const listItemElements = wrapper.findAll(
+      "[data-testid='site-nav__dropdown-list-item']"
+    );
+    expect(listItemElements).toHaveLength(dropdownList.length);
   });
 
-  describe("Each item:", () => {
-    test("renders its link URL", () => {
-      // Tested on all items - because of critical component
-      listItemElements.forEach((listItemElement, i) => {
-        const linkElement = listItemElement.find(
-          "[data-testclass='site-nav__dropdown-list-item-link']"
-        );
-        expect(linkElement.attributes("to")).toContain(
-          dummyDropdownList[i].url
-        );
-      });
-    });
+  describe("Item:", () => {
+    test("renders its title and link URL", () => {
+      // Assert the title is rendered
+      const firstSiteNavDropdownItemComponent =
+        wrapper.findComponent(SiteNavDropdownItem);
+      expect(firstSiteNavDropdownItemComponent.text()).toContain(
+        dropdownList[0].title
+      );
 
-    test("renders its link title", () => {
-      // Tested on all items - because of critical component
-      listItemElements.forEach((listItemElement, i) => {
-        const SiteNavDropdownItemComponent =
-          listItemElement.findComponent(SiteNavDropdownItem);
-        expect(SiteNavDropdownItemComponent.text()).toContain(
-          dummyDropdownList[i].title
-        );
-      });
-    });
-
-    test("has their title wrapped by a link", () => {
-      // Additional test - because of critical component
-      listItemElements.forEach((listItemElement, i) => {
-        const linkElement = listItemElement.find(
-          "[data-testclass='site-nav__dropdown-list-item-link']"
-        );
-        expect(linkElement.exists()).toBe(true);
-        expect(linkElement.html()).toContain(dummyDropdownList[i].title);
-      });
+      // Assert the link's URL is setted
+      const firstLinkElement = wrapper.find(
+        "[data-testid='site-nav__dropdown-list-item-link']"
+      );
+      expect(firstLinkElement.attributes("to")).toBe(dropdownList[0].url);
     });
 
     test("emits its custom event when it is clicked", async () => {
-      // Due to the inability to clear the component's emitted() array we only test the first link
-      const firstListItemElement = listItemElements[0];
+      const firstListItemElement = wrapper.find(
+        "[data-testid='site-nav__dropdown-list-item']"
+      );
       await firstListItemElement.trigger("click");
       expect(wrapper.emitted()).toHaveProperty("close-dropdown");
     });

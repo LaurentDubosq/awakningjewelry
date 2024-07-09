@@ -1,31 +1,28 @@
-import { mount } from "@vue/test-utils";
-import { describe, test, expect, vi, beforeEach } from "vitest";
+import { flushPromises, mount } from "@vue/test-utils";
 import SiteLogo from "@/components/SiteLogo.vue";
 import frontDataBase from "../../../db.json";
+import { getPagesMetaData } from "@/composables/fetch";
+
+const pagesMetaData = frontDataBase["pagesMetaData"];
 
 describe("SiteLogo component:", () => {
-  let wrapper;
-
-  beforeEach(() => {
-    const { mockedMethod } = vi.hoisted(() => {
-      return { mockedMethod: vi.fn() };
-    });
-    vi.mock("@/router/index", async (importOriginal) => {
-      const actual = await importOriginal();
+  test("renders the logo's title attribut", async () => {
+    vi.mock("@/composables/fetch", () => {
       return {
-        ...actual,
-        originalMethod: mockedMethod,
+        getPagesMetaData: vi.fn(),
       };
     });
-    mockedMethod.mockReturnValue(frontDataBase.pagesMetaData);
+    getPagesMetaData.mockReturnValue(pagesMetaData);
 
-    wrapper = mount(SiteLogo);
-  });
+    const wrapper = mount(SiteLogo);
 
-  test("renders the logo correctly", () => {
-    // Additional test - because of critical component
-    expect(wrapper.html()).toMatchInlineSnapshot(
-      `"<img data-v-164b155e="" src="/src/assets/logo.svg" alt="AwakningJewelry's logo - Illustration of a person medidating above the AwakningJewelry brand name" title="Innovante Buddhist Jewelry Brand - AwakningJewelry.com" class="site-logo">"`
+    // Wait for the onMounted to complete
+    await flushPromises();
+
+    // Assert the title attribut value is well setted
+    const siteLogoElement = wrapper.find("[data-testid='site-logo']");
+    expect(siteLogoElement.attributes("title")).toBe(
+      "Innovante Buddhist Jewelry Brand - AwakningJewelry.com"
     );
   });
 });

@@ -12,11 +12,12 @@ const { items } = defineProps({
   <menu class="site-nav__dropdown-list">
     <li
       class="site-nav__dropdown-list-item"
-      v-for="item in items"
+      data-testid="site-nav__dropdown-list-item"
       @click="$emit('close-dropdown')"
+      v-for="item in items"
     >
       <RouterLink
-        data-testclass="site-nav__dropdown-list-item-link"
+        data-testid="site-nav__dropdown-list-item-link"
         :to="`${item.url}`"
       >
         <SiteNavDropdownItem>

@@ -1,24 +1,30 @@
 import { mount } from "@vue/test-utils";
-import { describe, test, expect, beforeEach } from "vitest";
 import SiteNavDropdown from "@/components/SiteNavDropdown.vue";
 import SiteNavDropdownHeader from "@/components/SiteNavDropdownHeader.vue";
 import SiteNavDropdownList from "@/components/SiteNavDropdownList.vue";
 import frontDataBase from "../../../db.json";
 
-const dummySiteMenuItems = frontDataBase["siteMenuItems"];
-const dummyDropdown = dummySiteMenuItems[1];
+const siteMenuItems = frontDataBase["siteMenuItems"];
+const dropdown = siteMenuItems[1];
 
 describe("SiteNavDropdown component:", () => {
   let wrapper;
 
   beforeEach(() => {
     wrapper = mount(SiteNavDropdown, {
-      props: { dropdown: dummyDropdown },
+      props: { dropdown: dropdown },
     });
   });
 
   describe("SiteNavDropdownHeader component:", () => {
-    test("receives the 'isDropdownOpen' prop value", () => {
+    test("renders its title", () => {
+      const SiteNavDropdownHeaderComponent = wrapper.findComponent(
+        SiteNavDropdownHeader
+      );
+      expect(SiteNavDropdownHeaderComponent.text()).toContain(dropdown.title);
+    });
+
+    test("receives the expected value for the 'isDropdownOpen' prop", () => {
       const SiteNavDropdownHeaderComponent = wrapper.findComponent(
         SiteNavDropdownHeader
       );
@@ -26,55 +32,57 @@ describe("SiteNavDropdown component:", () => {
         false
       );
     });
-
-    test("renders the dropdown title through the slot outlet", () => {
-      const SiteNavDropdownHeaderComponent = wrapper.findComponent(
-        SiteNavDropdownHeader
-      );
-      expect(SiteNavDropdownHeaderComponent.text()).toContain(
-        dummyDropdown.title
-      );
-    });
   });
 
   describe("SiteNavDropdownList component:", () => {
-    test("receives the 'items' prop value when rendered", async () => {
-      await wrapper.trigger("mouseenter");
-
+    test("don't renders at initial render", () => {
       const SiteNavDropdownListComponent =
         wrapper.findComponent(SiteNavDropdownList);
-
-      expect(SiteNavDropdownListComponent.props("items")).toEqual(
-        dummyDropdown.subMenuItems
-      );
+      expect(SiteNavDropdownListComponent.exists()).toBe(false);
     });
 
-    test("don't renders when the component receive a 'close-dropdown' emit", async () => {
+    test("renders with its 'items' prop when the mouse enter the header", async () => {
+      // Open the dropdown
       await wrapper.trigger("mouseenter");
 
-      const firstListItemLinkElement = wrapper.find(
-        "[data-testclass='site-nav__dropdown-list-item-link']"
-      );
-
-      await firstListItemLinkElement.trigger("click");
-
+      // Assert the dropdown list component is rendered
       const SiteNavDropdownListComponent =
         wrapper.findComponent(SiteNavDropdownList);
+      expect(SiteNavDropdownListComponent.exists()).toBe(true);
 
-      expect(SiteNavDropdownListComponent.exists()).toBeFalsy();
+      // Assert the dropdown list component contains the "items" prop with the expected value
+      expect(SiteNavDropdownListComponent.props("items")).toMatchObject(
+        dropdown.subMenuItems
+      );
     });
 
     test("don't renders when the mouse leaves the dropdown", async () => {
+      // Open the dropdown
       await wrapper.trigger("mouseenter");
 
-      // We don't have to check that the dropdown list is rendered because we already verified the correct execution of this behavior in the previous test
-
+      // Close the dropdown
       await wrapper.trigger("mouseleave");
 
+      // Assert the dropdown list is not rendered
       const SiteNavDropdownListComponent =
         wrapper.findComponent(SiteNavDropdownList);
+      expect(SiteNavDropdownListComponent.exists()).toBe(false);
+    });
 
-      expect(SiteNavDropdownListComponent.exists()).toBeFalsy();
+    test("don't renders when a dropdown item has been clicked", async () => {
+      // Open the dropdown
+      await wrapper.trigger("mouseenter");
+
+      // Click on dropdown item
+      const firstListItemLinkElement = wrapper.find(
+        "[data-testid='site-nav__dropdown-list-item-link']"
+      );
+      await firstListItemLinkElement.trigger("click");
+
+      // Assert the dropdown list is not rendered
+      const SiteNavDropdownListComponent =
+        wrapper.findComponent(SiteNavDropdownList);
+      expect(SiteNavDropdownListComponent.exists()).toBe(false);
     });
   });
 });

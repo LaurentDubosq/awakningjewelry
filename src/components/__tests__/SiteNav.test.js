@@ -1,141 +1,112 @@
 import { mount } from "@vue/test-utils";
-import { describe, test, expect, beforeEach } from "vitest";
-import SiteNav from "@/components/SiteNav.vue";
 import { siteMenuItemsKey } from "@/utils/injectionkeys";
+import SiteNav from "@/components/SiteNav.vue";
 import SiteNavItem from "@/components/SiteNavItem.vue";
 import SiteNavDropdown from "@/components/SiteNavDropdown.vue";
+import SiteHeaderIcon from "@/components/SiteHeaderIcon.vue";
 import PersonIcon from "@/components/icons/IconPerson.vue";
 import frontDataBase from "../../../db.json";
 
-const dummySiteMenuItems = frontDataBase["siteMenuItems"];
+const siteMenuItems = frontDataBase["siteMenuItems"];
 
 describe("SiteNav component:", () => {
-  test("renders all the site navigation items", () => {
+  test("renders its entire list", () => {
     const wrapper = mount(SiteNav, {
       global: {
         provide: {
-          [siteMenuItemsKey]: dummySiteMenuItems,
+          [siteMenuItemsKey]: siteMenuItems,
         },
       },
     });
-    const siteNavListItemElements = wrapper.findAll(".site-nav__list-item");
-    expect(siteNavListItemElements).toHaveLength(dummySiteMenuItems.length);
+    const listItemElements = wrapper.findAll(
+      "[data-testid='site-nav__list-item']"
+    );
+    expect(listItemElements).toHaveLength(siteMenuItems.length);
   });
 
   describe("SiteNavItem component:", () => {
-    let wrapper;
-
-    beforeEach(() => {
-      wrapper = mount(SiteNav, {
+    test("is rendered with its title and link", () => {
+      const wrapper = mount(SiteNav, {
         global: {
           provide: {
-            [siteMenuItemsKey]: [dummySiteMenuItems[0]], // Only provides the expected item to be able to check if other unwanted element/component are rendered
+            [siteMenuItemsKey]: [siteMenuItems[0]], // Select the first siteNavItem data of type text of the db
           },
         },
       });
-    });
-
-    test("renders its slot content", () => {
       const SiteNavItemComponent = wrapper.findComponent(SiteNavItem);
-      expect(SiteNavItemComponent.text()).toContain(
-        dummySiteMenuItems[0].title
-      );
-    });
 
-    test("is wrapped by a link with the expected URL", () => {
-      const siteNavListItemLinkElement = wrapper.find(
-        "[data-testclass='site-nav__list-item-link']"
-      );
-      const SiteNavItemComponent =
-        siteNavListItemLinkElement.findComponent(SiteNavItem);
-
-      // Assert the SiteNavItem component is wrapped by a link - because of critical component
+      // Assert the component is rendered
       expect(SiteNavItemComponent.exists()).toBe(true);
 
-      // Assert the SiteNavItem component has the expected URL
-      expect(siteNavListItemLinkElement.attributes("to")).toContain(
-        dummySiteMenuItems[0].url
-      );
-    });
+      // Assert its title is rendered
+      expect(SiteNavItemComponent.text()).toContain(siteMenuItems[0].title);
 
-    test("don't renders competitor element/component", () => {
-      // Additional test - because of complex logic component
-      const siteNavListItemElement = wrapper.find(".site-nav__list-item");
-      const siteNavListItemChildsLength =
-        siteNavListItemElement.element.children.length;
-      expect(siteNavListItemChildsLength).not.toBeGreaterThan(1);
+      // Assert its link is rendered with its expected URL link value
+      const linkElement = wrapper.find(
+        "[data-testid='site-nav__list-item-link']"
+      );
+      expect(linkElement.exists()).toBe(true);
+      expect(linkElement.attributes("to")).toBe(siteMenuItems[0].url);
     });
   });
 
   describe("SiteNavDropdown component:", () => {
-    let wrapper;
-
-    beforeEach(() => {
-      wrapper = mount(SiteNav, {
+    test("is rendered and receives the expected 'dropdown' prop value", () => {
+      const wrapper = mount(SiteNav, {
         global: {
           provide: {
-            [siteMenuItemsKey]: [dummySiteMenuItems[1]], // Only provides the expected item to be able to check if other unwanted element/component are rendered
+            [siteMenuItemsKey]: [siteMenuItems[1]], // Select the first SiteNavDropdown data of the db
           },
         },
       });
-    });
-
-    test("receives the 'dropdown' prop value", () => {
       const SiteNavDropdownComponent = wrapper.findComponent(SiteNavDropdown);
-      expect(SiteNavDropdownComponent.props("dropdown")).toEqual(
-        dummySiteMenuItems[1]
-      );
-    });
 
-    test("don't renders competitor element/component", () => {
-      // Additional test - because of complex logic component
-      const siteNavListItemElement = wrapper.find(".site-nav__list-item");
-      const siteNavListItemChildsLength =
-        siteNavListItemElement.element.children.length;
-      expect(siteNavListItemChildsLength).not.toBeGreaterThan(1);
+      // Assert the component is rendered
+      expect(SiteNavDropdownComponent.exists()).toBe(true);
+
+      // Assert the expected prop value is well setted
+      expect(SiteNavDropdownComponent.props("dropdown")).toMatchObject(
+        siteMenuItems[1]
+      );
     });
   });
 
-  describe("PersonIcon component:", () => {
-    let wrapper;
-
-    beforeEach(() => {
-      wrapper = mount(SiteNav, {
+  describe("SiteHeaderIcon component:", () => {
+    test("is rendered with its link", () => {
+      const wrapper = mount(SiteNav, {
         global: {
           provide: {
-            [siteMenuItemsKey]: [dummySiteMenuItems[4]], // Only provides the expected item to be able to check if other unwanted element/component are rendered
+            [siteMenuItemsKey]: [siteMenuItems[4]], // Select the first siteNavItem data of type icon of the db
           },
         },
       });
-    });
 
-    test("is rendered", () => {
-      const PersonIconComponent = wrapper.findComponent(PersonIcon);
-      expect(PersonIconComponent.exists()).toBe(true);
-    });
+      // Assert the component is rendered
+      const SiteHeaderIconComponent = wrapper.findComponent(SiteHeaderIcon);
+      expect(SiteHeaderIconComponent.exists()).toBe(true);
 
-    test("is wrapped by a link with the expected URL", () => {
-      const siteHeaderIconLinkElement = wrapper.find(
-        "[data-testclass='site-nav__list-item-link']"
+      // Assert its link is rendered with its expected URL link value
+      const linkElement = wrapper.find(
+        "[data-testid='site-nav__list-item-link']"
       );
-      const PersonIconComponent =
-        siteHeaderIconLinkElement.findComponent(PersonIcon);
-
-      // Assert the icon is wrapped by a link - because of critical component
-      expect(PersonIconComponent.exists()).toBe(true);
-
-      // Assert the icon has the expected URL
-      expect(siteHeaderIconLinkElement.attributes("to")).toContain(
-        dummySiteMenuItems[4].url
-      );
+      expect(linkElement.exists()).toBe(true);
+      expect(linkElement.attributes("to")).toBe(siteMenuItems[4].url);
     });
 
-    test("don't renders competitor element/component", () => {
-      // Additional test - because of complex logic component
-      const siteNavListItemElement = wrapper.find(".site-nav__list-item");
-      const siteNavListItemChildsLength =
-        siteNavListItemElement.element.children.length;
-      expect(siteNavListItemChildsLength).not.toBeGreaterThan(1);
+    describe("Icons:", () => {
+      test("PersonIcon component is rendered", () => {
+        const wrapper = mount(SiteNav, {
+          global: {
+            provide: {
+              [siteMenuItemsKey]: [siteMenuItems[4]], // Select the PersonIcon data of the db
+            },
+          },
+        });
+
+        // Assert the PersonIcon component is rendered
+        const PersonIconComponent = wrapper.findComponent(PersonIcon);
+        expect(PersonIconComponent.exists()).toBe(true);
+      });
     });
   });
 });

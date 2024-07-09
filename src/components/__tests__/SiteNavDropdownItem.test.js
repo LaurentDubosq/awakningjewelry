@@ -1,17 +1,15 @@
 import { mount } from "@vue/test-utils";
-import { describe, test, expect } from "vitest";
 import SiteNavDropdownItem from "@/components/SiteNavDropdownItem.vue";
 import frontDataBase from "../../../db.json";
 
-const dummySiteMenuItems = frontDataBase["siteMenuItems"];
-const dummyDropdownItemTitle = dummySiteMenuItems[1].subMenuItems[0].title;
+const siteMenuItems = frontDataBase["siteMenuItems"];
+const title = siteMenuItems[1].subMenuItems[0].title;
 
 describe("SiteNavDropdownItem component:", () => {
-  test("renders link's title in place of the slot outlet", () => {
+  test("renders its title", () => {
     const wrapper = mount(SiteNavDropdownItem, {
-      slots: { default: dummyDropdownItemTitle },
+      slots: { default: title },
     });
-
-    expect(wrapper.text()).toContain(dummyDropdownItemTitle);
+    expect(wrapper.text()).toContain(title);
   });
 });
