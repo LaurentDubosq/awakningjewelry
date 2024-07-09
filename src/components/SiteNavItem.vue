@@ -1,7 +1,7 @@
 <template>
-  <div class="site-nav__item">
+  <span class="site-nav__item">
     <slot />
-  </div>
+  </span>
 </template>
 
 <style lang="scss">
