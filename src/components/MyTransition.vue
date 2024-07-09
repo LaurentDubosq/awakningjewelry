@@ -3,7 +3,7 @@ const { name } = defineProps({ name: { type: String, required: true } });
 </script>
 
 <template>
-  <Transition :name="name" data-testid="transition">
+  <Transition :name data-testid="transition">
     <slot />
   </Transition>
 </template>

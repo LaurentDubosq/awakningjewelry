@@ -17,7 +17,7 @@ const { siteMenuItems } = defineProps({
         data-testid="burger-menu__list-item"
         v-for="item of siteMenuItems"
       >
-        <BurgerMenuDropdown :item="item" v-if="item.subMenuItems" />
+        <BurgerMenuDropdown :item v-if="item.subMenuItems" />
         <RouterLink
           :to="item.url"
           class="burger-menu__link"

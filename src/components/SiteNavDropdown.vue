@@ -22,7 +22,7 @@ function toggleDropdown() {
     @mouseenter="toggleDropdown"
     @mouseleave="toggleDropdown"
   >
-    <SiteNavDropdownHeader :isDropdownOpen="isDropdownOpen">
+    <SiteNavDropdownHeader :isDropdownOpen>
       {{ dropdown.title }}
     </SiteNavDropdownHeader>
     <MyTransition name="translateY">
