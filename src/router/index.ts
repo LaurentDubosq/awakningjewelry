@@ -1,13 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import { useFetch } from "@/composables/fetch";
-import { pagesMetaDataUrl } from "@/data/seo";
+import { getPagesMetaData } from "@/composables/fetch";
 import type { PageMetaData } from "@/data/seo";
 import type { Routes } from "./index.d";
 
-const pagesMetaData: PageMetaData[] | undefined = await useFetch(
-  pagesMetaDataUrl
-);
+const pagesMetaData: PageMetaData[] | undefined = await getPagesMetaData();
 const routes: Routes = {};
 if (pagesMetaData) {
   for (const page of pagesMetaData) {
@@ -17,7 +14,6 @@ if (pagesMetaData) {
     };
   }
 }
-export { pagesMetaData }; // exports the variable to the Vue application (site logo component for instance)
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

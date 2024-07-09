@@ -1,9 +1,17 @@
 <script setup lang="ts">
-import { pagesMetaData } from "@/router/index";
 import type { PageMetaData } from "@/data/seo";
-const homeMetaData: PageMetaData | undefined = pagesMetaData?.find(
-  () => "home"
-);
+import { getPagesMetaData } from "@/composables/fetch";
+import { computed, onMounted, ref, type Ref, type ComputedRef } from "vue";
+
+const pagesMetaData: Ref<PageMetaData[] | undefined> = ref();
+
+const homeMetaData: ComputedRef<PageMetaData | undefined> = computed(() => {
+  return pagesMetaData.value?.find(() => "home");
+});
+
+onMounted(async () => {
+  pagesMetaData.value = await getPagesMetaData();
+});
 </script>
 
 <template>

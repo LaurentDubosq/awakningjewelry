@@ -1,3 +1,6 @@
+import { pagesMetaDataUrl, type PageMetaData } from "@/data/seo";
+import { siteMenuItemsUrl, type SiteMenuItem } from "@/data/menus";
+
 export const useFetch = async <T>(
   url: string,
   options?: RequestInit
@@ -20,4 +23,18 @@ export const useFetch = async <T>(
       console.log("Error encountered after the Fetch execution :", error);
     }
   }
+};
+
+export const getPagesMetaData = async (): Promise<
+  PageMetaData[] | undefined
+> => {
+  const data: PageMetaData[] | undefined = await useFetch(pagesMetaDataUrl);
+  return data;
+};
+
+export const getSiteMenuItems = async (): Promise<
+  SiteMenuItem[] | undefined
+> => {
+  const data: SiteMenuItem[] | undefined = await useFetch(siteMenuItemsUrl);
+  return data;
 };

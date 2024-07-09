@@ -7,13 +7,8 @@ import MyTransition from "./components/MyTransition.vue";
 
 // Site Menu Items - Get Data & Send it to components
 import type { SiteMenuItem } from "./data/menus";
-import { useFetch } from "./composables/fetch";
-import { siteMenuItemsUrl } from "./data/menus";
-import {
-  siteMenuItemsKey,
-  toggleBurgerMenuKey,
-  isBurgerMenuOpenKey,
-} from "./utils/injectionkeys";
+import { getSiteMenuItems } from "./composables/fetch";
+import { siteMenuItemsKey } from "./utils/injectionkeys";
 
 const siteMenuItems: Ref<SiteMenuItem[] | undefined> = ref([]);
 
@@ -23,17 +18,21 @@ const siteMenuItems: Ref<SiteMenuItem[] | undefined> = ref([]);
 provide(siteMenuItemsKey, siteMenuItems);
 
 onMounted(async () => {
-  siteMenuItems.value = await useFetch(siteMenuItemsUrl);
+  siteMenuItems.value = await getSiteMenuItems();
 });
-// end Site Menu Items - Get Data & Send it to components
+// end Site Menu Items - Get Data & Send it to component
 
 // Burger Menu - Open/Close Logic & Send handler and status
 import SASSCONSTANTS from "@/assets/styles/_constants.module.scss"; /* Get the SASS Constants to use it in Javascript */
 import { addResizeListener, removeResizeListener } from "@/composables/event";
+import {
+  toggleBurgerMenuKey,
+  isBurgerMenuOpenKey,
+} from "./utils/injectionkeys";
 
 const DESKTOPMINWIDTH: number = Number(
   SASSCONSTANTS.AwakningMediaQueryDesktopMinWidth.slice(0, -2)
-); /* Get the minimal desktop width defined in SASS */
+); // Get the minimal desktop width defined in SASS
 const isBurgerMenuOpen: Ref<Boolean> = ref(false);
 
 function toggleBurgerMenu() {
