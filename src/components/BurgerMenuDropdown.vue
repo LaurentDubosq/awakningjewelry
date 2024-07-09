@@ -8,21 +8,19 @@ import MyTransition from "./MyTransition.vue";
 const { item } = defineProps({
   item: { type: Object as PropType<SiteMenuItem>, required: true },
 });
-const isTextDropdownOpen: Ref<boolean> = ref(true);
+const isDropdownOpen: Ref<boolean> = ref(true);
 </script>
 
 <template>
   <div class="burger-menu__dropdown">
     <BurgerMenuDropdownHeader
-      :title="item.title"
-      :isTextDropdownOpen="isTextDropdownOpen"
-      @toggle-dropdown="isTextDropdownOpen = !isTextDropdownOpen"
-    />
-    <MyTransition :duration="300" name="margintopMinus100PerCentWithInner">
-      <BurgerMenuDropdownList
-        :list="item.subMenuItems"
-        v-if="isTextDropdownOpen"
-      />
+      :isDropdownOpen
+      @toggle-dropdown="isDropdownOpen = !isDropdownOpen"
+    >
+      {{ item.title }}
+    </BurgerMenuDropdownHeader>
+    <MyTransition duration="300" name="margintopMinus100PerCentWithInner">
+      <BurgerMenuDropdownList :list="item.subMenuItems" v-if="isDropdownOpen" />
     </MyTransition>
   </div>
 </template>
