@@ -87,13 +87,17 @@ onUnmounted(() => {
 <style scoped lang="scss">
 @use "@/assets/styles/_constants.scss" as *;
 
-@media screen and (max-width: $AwakningMediaQueryMobileMaxWidth) {
-  .site-container {
-    display: flex;
-  }
+.site-container {
+  display: flex;
+}
+.site-content {
+  flex: 1;
+  overflow: hidden;
+}
+
+@media screen and (min-width: $AwakningMediaQueryDesktopMinWidth) {
   .site-content {
-    flex: 1;
-    overflow: hidden;
+    overflow: visible;
   }
 }
 </style>
