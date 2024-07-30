@@ -80,7 +80,9 @@ onUnmounted(() => {
     <div class="site-content">
       <div class="site-content-container">
         <SiteHeader @toggle-burger-menu="toggleBurgerMenu" />
-        <RouterView />
+        <main>
+          <RouterView />
+        </main>
       </div>
     </div>
   </div>
