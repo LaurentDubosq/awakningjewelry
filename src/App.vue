@@ -78,8 +78,10 @@ onUnmounted(() => {
       />
     </MyTransition>
     <div class="site-content">
-      <SiteHeader @toggle-burger-menu="toggleBurgerMenu" />
-      <RouterView />
+      <div class="site-content-container">
+        <SiteHeader @toggle-burger-menu="toggleBurgerMenu" />
+        <RouterView />
+      </div>
     </div>
   </div>
 </template>
@@ -93,6 +95,10 @@ onUnmounted(() => {
 .site-content {
   flex: 1;
   overflow: hidden;
+
+  &-container {
+    min-width: $AwakningBreakpointMobileMinWidth;
+  }
 }
 
 @media screen and (min-width: $AwakningMediaQueryDesktopMinWidth) {

@@ -101,10 +101,6 @@ onUnmounted(() => {
   align-items: center;
   padding: 15px 7px;
 
-  &__logo-wrapper {
-    flex-shrink: 0;
-  }
-
   &__right-container {
     display: flex;
     justify-content: flex-end;
