@@ -17,18 +17,18 @@ a:hover {
 }
 
 .hidden-mobile {
-    @media screen and (max-width: $AwakningMediaQueryMobileMaxWidth) {
+    @media screen and (max-width: $AwakningBreakpointDesktop) {
         display: none;
     }
 }
 .hidden-desktop {
-    @media screen and (min-width: $AwakningMediaQueryDesktopMinWidth) {
+    @media screen and (min-width: $AwakningBreakpointDesktop) {
         display: none;
     }
 }
 
 /* CSS Only for "desktop" */
-@media screen and (min-width: $AwakningMediaQueryDesktopMinWidth) {
+@media screen and (min-width: $AwakningBreakpointDesktop) {
     .wrapper {
         max-width: 1050px;
         margin: 0 auto;

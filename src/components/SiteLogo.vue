@@ -32,7 +32,7 @@ onMounted(async () => {
   width: 81px;
 }
 
-@media screen and (min-width: $AwakningMediaQueryDesktopMinWidth) {
+@media screen and (min-width: $AwakningBreakpointDesktop) {
   .site-logo {
     width: 115px;
   }

@@ -28,7 +28,7 @@ import {
 } from "./utils/injectionkeys";
 
 const DESKTOPMINWIDTH: number = Number(
-  SASSCONSTANTS.AwakningMediaQueryDesktopMinWidth.slice(0, -2)
+  SASSCONSTANTS.AwakningBreakpointDesktop.slice(0, -2)
 ); // Get the minimal desktop width defined in SASS
 const isBurgerMenuOpen: Ref<Boolean> = ref(false);
 
@@ -103,7 +103,7 @@ onUnmounted(() => {
   }
 }
 
-@media screen and (min-width: $AwakningMediaQueryDesktopMinWidth) {
+@media screen and (min-width: $AwakningBreakpointDesktop) {
   .site-content {
     overflow: visible;
   }
