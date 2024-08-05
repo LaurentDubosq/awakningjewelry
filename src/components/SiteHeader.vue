@@ -49,61 +49,78 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="wrapper">
-    <header class="site-header">
-      <div
-        class="site-header__burger-menu-icon-wrapper hidden-desktop"
-        :style="{ 'flex-basis': rightContainerElementWidth + 'px' }"
-      >
-        <button
-          type="button"
-          @click="$emit('toggle-burger-menu')"
-          data-testid="site-header__burger-menu-icon-button"
+  <header class="site-header">
+    <div class="wrapper">
+      <div class="site-header-inner">
+        <div
+          class="site-header__burger-menu-icon-wrapper hidden-desktop"
+          :style="{ 'flex-basis': rightContainerElementWidth + 'px' }"
         >
-          <SiteHeaderIcon>
-            <CrossIcon width="32" v-if="isBurgerMenuOpen" />
-            <BurgerIcon v-else />
-          </SiteHeaderIcon>
-        </button>
-      </div>
-      <div class="site-header__logo-wrapper">
-        <RouterLink to="/">
-          <SiteLogo />
-        </RouterLink>
-      </div>
-      <div class="site-header__right-container" ref="rightContainerElement">
-        <div class="site-header__site-nav-wrapper hidden-mobile">
-          <SiteNav />
-        </div>
-        <div class="site-header__account-icon-wrapper hidden-desktop">
-          <RouterLink to="/account">
+          <button
+            type="button"
+            @click="$emit('toggle-burger-menu')"
+            data-testid="site-header__burger-menu-icon-button"
+          >
             <SiteHeaderIcon>
-              <PersonIcon />
+              <CrossIcon width="32" v-if="isBurgerMenuOpen" />
+              <BurgerIcon v-else />
             </SiteHeaderIcon>
+          </button>
+        </div>
+        <div class="site-header__logo-wrapper">
+          <RouterLink to="/">
+            <SiteLogo />
           </RouterLink>
         </div>
-        <div class="site-header__cart-icon-wrapper">
-          <RouterLink to="/cart">
-            <SiteHeaderIcon>
-              <CartIcon />
-            </SiteHeaderIcon>
-          </RouterLink>
+        <div class="site-header__right-container" ref="rightContainerElement">
+          <div class="site-header__site-nav-wrapper hidden-mobile">
+            <SiteNav />
+          </div>
+          <div class="site-header__account-icon-wrapper hidden-desktop">
+            <RouterLink to="/account">
+              <SiteHeaderIcon>
+                <PersonIcon />
+              </SiteHeaderIcon>
+            </RouterLink>
+          </div>
+          <div class="site-header__cart-icon-wrapper">
+            <RouterLink to="/cart">
+              <SiteHeaderIcon>
+                <CartIcon />
+              </SiteHeaderIcon>
+            </RouterLink>
+          </div>
         </div>
       </div>
-    </header>
-  </div>
+    </div>
+  </header>
 </template>
 
 <style scoped lang="scss">
+@use "@/assets/styles/_constants" as *;
+
 .site-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 7px;
+  @media screen and (min-width: $AwakningBreakpointDesktop) {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+  }
+
+  &-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 7px;
+  }
+
+  &__burger-menu-icon-wrapper {
+    margin-left: -15px;
+  }
 
   &__right-container {
     display: flex;
     justify-content: flex-end;
+    margin-right: -15px;
   }
 }
 </style>

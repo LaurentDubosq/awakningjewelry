@@ -28,10 +28,8 @@ a:hover {
 }
 
 /* CSS Only for "desktop" */
-@media screen and (min-width: $AwakningBreakpointDesktop) {
-    .wrapper {
-        max-width: 1050px;
-        margin: 0 auto;
-        padding: 0 15px;
-    }
+.wrapper {
+    max-width: 1050px;
+    margin: 0 auto;
+    padding: 0 15px;
 }
