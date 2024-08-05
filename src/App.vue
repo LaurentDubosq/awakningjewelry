@@ -27,9 +27,9 @@ import {
   isBurgerMenuOpenKey,
 } from "./utils/injectionkeys";
 
-const DESKTOPMINWIDTH: number = Number(
+const DESKTOPBREAKPOINT: number = Number(
   SASSCONSTANTS.AwakningBreakpointDesktop.slice(0, -2)
-); // Get the minimal desktop width defined in SASS
+); // Get the desktop breakpoint defined in SASS
 const isBurgerMenuOpen: Ref<Boolean> = ref(false);
 
 function toggleBurgerMenu() {
@@ -38,7 +38,7 @@ function toggleBurgerMenu() {
 
 function closeBurgerMenuOnDesktop() {
   if (
-    document.documentElement.clientWidth >= DESKTOPMINWIDTH &&
+    document.documentElement.clientWidth >= DESKTOPBREAKPOINT &&
     isBurgerMenuOpen.value !== false
   ) {
     isBurgerMenuOpen.value = false;
