@@ -99,7 +99,7 @@ onUnmounted(() => {
   overflow: hidden;
 
   &-container {
-    min-width: $AwakningBreakpointMobileMinWidth;
+    min-width: $AwakningBreakpointMobileMinWidth; // Allow the content to be overflowing on mobile when burger menu is open
   }
 }
 
