@@ -8,6 +8,14 @@ body {
     line-height: 1.563;
 }
 
+h2 {
+    font-family: $AwakningFontOldStandardTT;
+}
+
+h3 {
+    font-family: $AwakningFontMontserrat;
+}
+
 svg {
     display: block;
 }
@@ -16,6 +24,22 @@ a:hover {
     opacity: 0.75;
 }
 
+.btn {
+    padding: 12px 20px;
+    font-family: $AwakningFontMontserrat;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    cursor: pointer;
+}
+
+.btn--primary {
+    background-color: $AwakningColorBlack;
+    color: $AwakningColorWhite;
+}
+
+/* Utility Classes */
 .hidden-mobile {
     @media screen and (max-width: $AwakningBreakpointDesktop) {
         display: none;
@@ -27,7 +51,6 @@ a:hover {
     }
 }
 
-/* CSS Only for "desktop" */
 .wrapper {
     max-width: 1050px;
     margin: 0 auto;
