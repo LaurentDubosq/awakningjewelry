@@ -65,7 +65,7 @@ describe("BurgerMenu component:", () => {
         "[data-testid='burger-menu__link']"
       );
       await firstBurgerMenuItemLinkElement.trigger("click");
-      expect(wrapper.emitted()).toHaveProperty("toggle-burger-menu");
+      expect(wrapper.emitted()).toHaveProperty("close-burger-menu");
     });
   });
 });
