@@ -22,7 +22,7 @@ const { siteMenuItems } = defineProps({
           :to="item.url"
           class="burger-menu__link"
           data-testid="burger-menu__link"
-          @click="$emit('toggle-burger-menu')"
+          @click="$emit('close-burger-menu')"
           v-else
         >
           <BurgerMenuItem>

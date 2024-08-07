@@ -73,7 +73,7 @@ onUnmounted(() => {
     <MyTransition name="marginLeftMinus300px">
       <BurgerMenu
         :siteMenuItems
-        @toggle-burger-menu="toggleBurgerMenu"
+        @close-burger-menu="toggleBurgerMenu"
         v-if="isBurgerMenuOpen"
       />
     </MyTransition>
