@@ -1,5 +1,6 @@
 import { pagesMetaDataUrl, type PageMetaData } from "@/data/seo";
 import { siteMenuItemsUrl, type SiteMenuItem } from "@/data/menus";
+import { heroSlidesURL, type HeroSlideType } from "@/data/components";
 
 export const useFetch = async <T>(
   url: string,
@@ -36,5 +37,10 @@ export const getSiteMenuItems = async (): Promise<
   SiteMenuItem[] | undefined
 > => {
   const data: SiteMenuItem[] | undefined = await useFetch(siteMenuItemsUrl);
+  return data;
+};
+
+export const getHeroSlides = async (): Promise<HeroSlideType[] | undefined> => {
+  const data: HeroSlideType[] | undefined = await useFetch(heroSlidesURL);
   return data;
 };

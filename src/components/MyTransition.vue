@@ -1,14 +1,39 @@
 <script setup lang="ts">
-const { name } = defineProps({ name: { type: String, required: true } });
+const { name, group } = defineProps({
+  name: { type: String, required: true },
+  group: { type: Boolean, default: false },
+});
 </script>
 
 <template>
-  <Transition :name data-testid="transition">
+  <TransitionGroup :name data-testid="transitionGroup" v-if="group">
+    <slot />
+  </TransitionGroup>
+  <Transition :name data-testid="transition" v-else>
     <slot />
   </Transition>
 </template>
 
 <style lang="scss">
+@use "@/assets/styles/_constants" as *;
+
+/* fadeHero */
+.fadeHero-enter-active,
+.fadeHero-leave-active {
+  transition: opacity 0.5s ease;
+}
+.fadeHero-leave-active {
+  position: absolute;
+  @media screen and (max-width: $AwakningBreakpointDesktop) {
+    padding: 0 15px;
+  }
+}
+.fadeHero-enter-from,
+.fadeHero-leave-to {
+  opacity: 0;
+}
+
+/* translateY */
 .translateY-enter-active {
   transition: all 0.3s ease;
 }
@@ -20,6 +45,7 @@ const { name } = defineProps({ name: { type: String, required: true } });
   transform: translateY(-15px);
 }
 
+/* marginLeftMinus300px */
 .marginLeftMinus300px-enter-active,
 .marginLeftMinus300px-leave-active {
   transition: all 0.3s ease;
@@ -29,6 +55,7 @@ const { name } = defineProps({ name: { type: String, required: true } });
   margin-left: -300px;
 }
 
+/* margintopMinus100PerCentWithInner */
 .margintopMinus100PerCentWithInner-enter-active .transition,
 .margintopMinus100PerCentWithInner-leave-active .transition {
   transition: all 0.3s ease;
