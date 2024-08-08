@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {
   computed,
+  defineAsyncComponent,
   onMounted,
   onUnmounted,
   ref,
@@ -9,8 +10,9 @@ import {
 } from "vue";
 import { getHeroSlides } from "@/composables/fetch";
 import type { HeroSlideType } from "@/data/components";
-import HeroSlide from "./HeroSlide.vue";
 import MyTransition from "./MyTransition.vue";
+
+const HeroSlide = defineAsyncComponent(() => import("./HeroSlide.vue"));
 
 const slides: Ref<HeroSlideType[] | undefined> = ref(undefined);
 const slidesLength: ComputedRef<number | undefined> = computed(
