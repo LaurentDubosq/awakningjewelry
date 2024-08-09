@@ -6,3 +6,4 @@ export const siteMenuItemsKey = Symbol() as InjectionKey<
 >;
 export const toggleBurgerMenuKey = Symbol() as InjectionKey<Function>;
 export const isBurgerMenuOpenKey = Symbol() as InjectionKey<Ref<Boolean>>;
+export const useIsOnMobileKey = Symbol() as InjectionKey<Ref<boolean>>;

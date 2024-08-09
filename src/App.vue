@@ -66,6 +66,13 @@ onUnmounted(() => {
   removeResizeListener(closeBurgerMenuOnDesktop, window);
 });
 // end Burger Menu - Open/Close Logic & Send handler and status
+
+// Global Variables
+import { useIsOnMobile } from "./composables/display";
+import { useIsOnMobileKey } from "./utils/injectionkeys";
+
+provide(useIsOnMobileKey, useIsOnMobile()); // inform if we are on mobile or desktop environment
+// end Global Variables
 </script>
 
 <template>
