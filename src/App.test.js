@@ -1,8 +1,10 @@
-import { mount } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import { createRouter, createWebHistory } from "vue-router";
 import { getSiteMenuItems, getPagesMetaData } from "./composables/fetch";
+import { useIsOnMobile } from "./composables/display";
 import App from "@/App.vue";
 import BurgerMenu from "@/components/BurgerMenu.vue";
+import SiteNav from "@/components/SiteNav.vue";
 import CrossIcon from "@/components/icons/IconCross.vue";
 import frontDataBase from "../db.json";
 
@@ -68,7 +70,28 @@ describe("App component:", () => {
   });
 
   describe("Providers:", () => {
-    test("inject 'siteMenuItems' properly in SiteNav component", () => {
+    test("inject 'siteMenuItems' properly in SiteNav component", async () => {
+      // Mock the UseIsOnMobile composable module because JSDOM doesn't support "window" global object and we need to ensure we are on desktop
+      vi.mock("./composables/display", () => {
+        return {
+          useIsOnMobile: vi.fn(),
+        };
+      });
+      useIsOnMobile.mockReturnValue(false); // ensure desktop environment
+
+      // Mock's the router during component mount
+      wrapper = mount(App, {
+        global: {
+          plugins: [router],
+          stubs: {
+            "router-view": true, // avoid a double render of the component
+            SiteNav, // import SiteNav component as Async stub
+          },
+        },
+      });
+
+      await flushPromises();
+
       // Assert the injected array has been properly received by counting the quantity of item displayed
       const siteNavItemElements = wrapper.findAll(
         "[data-testid='site-nav__list-item']"
@@ -118,6 +141,31 @@ describe("App component:", () => {
       // Assert the cross icon is rendered due to the injected boolean true value
       const CrossIconComponent = wrapper.findComponent(CrossIcon);
       expect(CrossIconComponent.exists()).toBe(true);
+    });
+
+    test("inject 'useIsOnMobile' properly in SiteHeader component", () => {
+      // Mock the UseIsOnMobile composable module because JSDOM doesn't support "window" global object and we need to ensure we are on desktop
+      vi.mock("./composables/display", () => {
+        return {
+          useIsOnMobile: vi.fn(),
+        };
+      });
+      useIsOnMobile.mockReturnValue(false); // set desktop environment
+
+      // Mock's the router during component mount
+      wrapper = mount(App, {
+        global: {
+          plugins: [router],
+          stubs: ["router-view"], // avoid a double render of the component
+        },
+      });
+
+      const siteNavWrapperDivElement = wrapper.find(
+        "[data-testid='site-header__site-nav-wrapper']"
+      );
+
+      // Assert the Account Icon Wrapper is rendered on mobile
+      expect(siteNavWrapperDivElement.exists()).toBe(true);
     });
   });
 });

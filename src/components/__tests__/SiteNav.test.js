@@ -31,6 +31,9 @@ describe("SiteNav component:", () => {
           provide: {
             [siteMenuItemsKey]: [siteMenuItems[0]], // Select the first siteNavItem data of type text of the db
           },
+          stubs: {
+            SiteNavItem,
+          },
         },
       });
       const SiteNavItemComponent = wrapper.findComponent(SiteNavItem);
@@ -56,6 +59,9 @@ describe("SiteNav component:", () => {
         global: {
           provide: {
             [siteMenuItemsKey]: [siteMenuItems[1]], // Select the first SiteNavDropdown data of the db
+          },
+          stubs: {
+            SiteNavDropdown,
           },
         },
       });

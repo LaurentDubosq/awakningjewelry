@@ -1,7 +1,6 @@
 import { mount } from "@vue/test-utils";
 import SiteNavDropdownHeader from "@/components/SiteNavDropdownHeader.vue";
 import frontDataBase from "../../../db.json";
-import { describe } from "node:test";
 
 const siteMenuItems = frontDataBase["siteMenuItems"];
 const title = siteMenuItems[1].title;

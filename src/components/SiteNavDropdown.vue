@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import type { SiteMenuItem } from "@/data/menus";
-import { ref, type PropType, type Ref } from "vue";
-import SiteNavDropdownHeader from "./SiteNavDropdownHeader.vue";
-import SiteNavDropdownList from "./SiteNavDropdownList.vue";
+import { defineAsyncComponent, ref, type PropType, type Ref } from "vue";
 import MyTransition from "./MyTransition.vue";
+const SiteNavDropdownHeader = defineAsyncComponent(
+  () => import("./SiteNavDropdownHeader.vue")
+);
+const SiteNavDropdownList = defineAsyncComponent(
+  () => import("./SiteNavDropdownList.vue")
+);
 
 const { dropdown } = defineProps({
   dropdown: { type: Object as PropType<SiteMenuItem>, required: true },

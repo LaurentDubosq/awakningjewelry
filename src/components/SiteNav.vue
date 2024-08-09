@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import type { SiteMenuItem } from "@/data/menus";
-import { inject, type Ref } from "vue";
+import { defineAsyncComponent, inject, type Ref } from "vue";
 import { siteMenuItemsKey } from "@/utils/injectionkeys";
 import SiteHeaderIcon from "./SiteHeaderIcon.vue";
 import PersonIcon from "./icons/IconPerson.vue";
-import SiteNavItem from "./SiteNavItem.vue";
-import SiteNavDropdown from "./SiteNavDropdown.vue";
+const SiteNavItem = defineAsyncComponent(() => import("./SiteNavItem.vue"));
+const SiteNavDropdown = defineAsyncComponent(
+  () => import("./SiteNavDropdown.vue")
+);
 
 const siteMenuItems: Ref<SiteMenuItem[] | undefined> | undefined =
   inject(siteMenuItemsKey);

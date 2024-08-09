@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import type { SiteSubMenuItem } from "@/data/menus";
-import type { PropType } from "vue";
-import SiteNavDropdownItem from "./SiteNavDropdownItem.vue";
+import { defineAsyncComponent, type PropType } from "vue";
+const SiteNavDropdownItem = defineAsyncComponent(
+  () => import("./SiteNavDropdownItem.vue")
+);
 
 const { items } = defineProps({
   items: { type: Array as PropType<SiteSubMenuItem[]>, required: true },

@@ -13,6 +13,12 @@ describe("SiteNavDropdown component:", () => {
   beforeEach(() => {
     wrapper = mount(SiteNavDropdown, {
       props: { dropdown: dropdown },
+      global: {
+        stubs: {
+          SiteNavDropdownHeader,
+          SiteNavDropdownList,
+        },
+      },
     });
   });
 

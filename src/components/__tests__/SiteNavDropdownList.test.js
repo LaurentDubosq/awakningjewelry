@@ -12,6 +12,9 @@ describe("SiteNavDropdownList component:", () => {
   beforeEach(() => {
     wrapper = mount(SiteNavDropdownList, {
       props: { items: dropdownList },
+      global: {
+        stubs: { SiteNavDropdownItem },
+      },
     });
   });
 

@@ -1,8 +1,15 @@
 <script setup lang="ts">
-import { ref, onMounted, inject, type Ref, onUnmounted } from "vue";
+import {
+  ref,
+  onMounted,
+  inject,
+  type Ref,
+  onUnmounted,
+  defineAsyncComponent,
+} from "vue";
 import { useGetElementClientWidth } from "@/composables/element";
 import { isBurgerMenuOpenKey } from "@/utils/injectionkeys";
-import SiteNav from "./SiteNav.vue";
+import { useIsOnMobileKey } from "@/utils/injectionkeys";
 import BurgerIcon from "./icons/IconBurger.vue";
 import CrossIcon from "./icons/IconCross.vue";
 import PersonIcon from "./icons/IconPerson.vue";
@@ -10,6 +17,11 @@ import CartIcon from "./icons/IconCart.vue";
 import SiteHeaderIcon from "./SiteHeaderIcon.vue";
 import SiteLogo from "./SiteLogo.vue";
 import { addResizeListener, removeResizeListener } from "@/composables/event";
+const SiteNav = defineAsyncComponent(() => import("./SiteNav.vue"));
+
+// Get the current display platform
+const useIsOnMobile: Ref<boolean> | undefined = inject(useIsOnMobileKey);
+// end Get the current display platform
 
 // Burger Icon Logic - Get the Burger Menu Status and display the appropriate icon
 const isBurgerMenuOpen: Ref<Boolean> | undefined = inject(isBurgerMenuOpenKey);
@@ -73,7 +85,11 @@ onUnmounted(() => {
           </RouterLink>
         </div>
         <div class="site-header__right-container" ref="rightContainerElement">
-          <div class="site-header__site-nav-wrapper hidden-mobile">
+          <div
+            class="site-header__site-nav-wrapper"
+            data-testid="site-header__site-nav-wrapper"
+            v-if="!useIsOnMobile"
+          >
             <SiteNav />
           </div>
           <div class="site-header__account-icon-wrapper hidden-desktop">

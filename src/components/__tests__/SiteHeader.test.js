@@ -1,5 +1,6 @@
 import { mount } from "@vue/test-utils";
 import { isBurgerMenuOpenKey } from "@/utils/injectionkeys";
+import { useIsOnMobileKey } from "@/utils/injectionkeys";
 import SiteHeader from "@/components/SiteHeader.vue";
 import CrossIcon from "@/components/icons/IconCross.vue";
 import BurgerIcon from "@/components/icons/IconBurger.vue";
@@ -12,6 +13,7 @@ describe("SiteHeader component:", () => {
       global: {
         provide: {
           [isBurgerMenuOpenKey]: false,
+          [useIsOnMobileKey]: true, // set environment on mobile by default
         },
       },
     });
@@ -41,6 +43,31 @@ describe("SiteHeader component:", () => {
       });
       const CrossIconComponent = wrapper.findComponent(CrossIcon);
       expect(CrossIconComponent.exists()).toBe(true);
+    });
+  });
+
+  describe("Site Navigation:", () => {
+    test("is rendered on desktop", () => {
+      wrapper = mount(SiteHeader, {
+        global: {
+          provide: {
+            [isBurgerMenuOpenKey]: false,
+            [useIsOnMobileKey]: false, // set environment on desktop
+          },
+        },
+      });
+
+      const siteNavWrapperDivElement = wrapper.find(
+        "[data-testid='site-header__site-nav-wrapper']"
+      );
+      expect(siteNavWrapperDivElement.exists()).toBe(true);
+    });
+
+    test("is not rendered on mobile", () => {
+      const siteNavWrapperDivElement = wrapper.find(
+        "[data-testid='site-header__site-nav-wrapper']"
+      );
+      expect(siteNavWrapperDivElement.exists()).toBe(false);
     });
   });
 });
