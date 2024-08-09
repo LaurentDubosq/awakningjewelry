@@ -3,7 +3,6 @@ import Hero from "@/components/Hero.vue";
 import HeroSlide from "@/components/HeroSlide.vue";
 import { getHeroSlides } from "@/composables/fetch";
 import frontDataBase from "../../../db.json";
-import { describe } from "node:test";
 import { expect } from "vitest";
 
 const componentHeroSlides = frontDataBase.componentHeroSlides;
