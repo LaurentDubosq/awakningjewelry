@@ -30,7 +30,7 @@ import {
 const DESKTOPBREAKPOINT: number = Number(
   SASSCONSTANTS.AwakningBreakpointDesktop.slice(0, -2)
 ); // Get the desktop breakpoint defined in SASS
-const isBurgerMenuOpen: Ref<Boolean> = ref(false);
+const isBurgerMenuOpen: Ref<boolean> = ref(false);
 
 function toggleBurgerMenu() {
   isBurgerMenuOpen.value = !isBurgerMenuOpen.value;

@@ -24,7 +24,7 @@ const useIsOnMobile: Ref<boolean> | undefined = inject(useIsOnMobileKey);
 // end Get the current display platform
 
 // Burger Icon Logic - Get the Burger Menu Status and display the appropriate icon
-const isBurgerMenuOpen: Ref<Boolean> | undefined = inject(isBurgerMenuOpenKey);
+const isBurgerMenuOpen: Ref<boolean> | undefined = inject(isBurgerMenuOpenKey);
 // end Burger Icon Logic
 
 // Right Container Element - Get the width of the element to apply it to the burger menu icon container and perfectly align the logo in the middle.
