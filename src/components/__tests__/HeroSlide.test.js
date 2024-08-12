@@ -1,8 +1,6 @@
 import { beforeEach } from "vitest";
 import { mount } from "@vue/test-utils";
-import { createRouter, createWebHistory } from "vue-router";
 import HeroSlide from "@/components/HeroSlide.vue";
-import App from "@/App.vue";
 import frontDataBase from "../../../db.json";
 import SASSCONSTANTS from "@/assets/styles/_constants.module.scss";
 
@@ -10,22 +8,6 @@ const componentHeroSlides = frontDataBase.componentHeroSlides;
 const AwakningBreakpointDesktop = SASSCONSTANTS.AwakningBreakpointDesktop;
 
 describe("HeroSlide component:", () => {
-  // Router's mock initialization
-  const routes = [
-    {
-      path: "/",
-      component: App,
-    },
-    {
-      path: componentHeroSlides[0].url,
-      component: App, // App component serve as arbitrary value
-    },
-  ];
-  const router = createRouter({
-    history: createWebHistory(),
-    routes,
-  });
-
   // Wrapper declaration
   let wrapper;
 
@@ -35,9 +17,6 @@ describe("HeroSlide component:", () => {
         slide: componentHeroSlides[0],
         displayedSlideIndex: 0,
         slidesLength: 3,
-      },
-      global: {
-        plugins: [router],
       },
     });
   });
@@ -132,10 +111,12 @@ describe("HeroSlide component:", () => {
 
   describe("link:", () => {
     test("URL value is well set", () => {
-      const RouterLinkComponent = wrapper.findComponent(
+      const HeroSlideLinkElement = wrapper.find(
         "[data-testid='hero__slide-link']"
       );
-      expect(RouterLinkComponent.props("to")).toBe(componentHeroSlides[0].url);
+      expect(HeroSlideLinkElement.attributes("to")).toBe(
+        componentHeroSlides[0].url
+      );
     });
   });
 });
