@@ -65,7 +65,7 @@ onUnmounted(() => {
     <div class="wrapper">
       <div class="site-header-inner">
         <div
-          class="site-header__burger-menu-icon-wrapper hidden-desktop"
+          class="site-header__burger-menu-icon-wrapper"
           :style="{ 'flex-basis': rightContainerElementWidth + 'px' }"
         >
           <button
@@ -92,7 +92,7 @@ onUnmounted(() => {
           >
             <SiteNav />
           </div>
-          <div class="site-header__account-icon-wrapper hidden-desktop">
+          <div class="site-header__account-icon-wrapper">
             <RouterLink to="/account">
               <SiteHeaderIcon>
                 <PersonIcon />
@@ -131,12 +131,21 @@ onUnmounted(() => {
 
   &__burger-menu-icon-wrapper {
     margin-left: -15px;
+    @media screen and (min-width: $AwakningBreakpointDesktop) {
+      display: none;
+    }
   }
 
   &__right-container {
     display: flex;
     justify-content: flex-end;
     margin-right: -15px;
+  }
+
+  &__account-icon-wrapper {
+    @media screen and (min-width: $AwakningBreakpointDesktop) {
+      display: none;
+    }
   }
 }
 </style>

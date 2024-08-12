@@ -40,17 +40,6 @@ a:hover {
 }
 
 /* Utility Classes */
-.hidden-mobile {
-    @media screen and (max-width: $AwakningBreakpointDesktop) {
-        display: none;
-    }
-}
-.hidden-desktop {
-    @media screen and (min-width: $AwakningBreakpointDesktop) {
-        display: none;
-    }
-}
-
 .wrapper {
     max-width: 1050px;
     margin: 0 auto;
