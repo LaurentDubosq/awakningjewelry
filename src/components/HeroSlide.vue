@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import SASSCONSTANTS from "@/assets/styles/_constants.module.scss";
+import { useIsOnMobile } from "@/composables/display";
 import type { HeroSlideType } from "@/data/components";
-import type { PropType } from "vue";
+import {
+  computed,
+  onMounted,
+  ref,
+  type ComputedRef,
+  type PropType,
+  type Ref,
+} from "vue";
 
 const { displayedSlideIndex, slide, slidesLength } = defineProps({
   displayedSlideIndex: { type: Number, required: true },
@@ -12,10 +20,37 @@ const { displayedSlideIndex, slide, slidesLength } = defineProps({
   },
 });
 const DESKTOPBREAKPOINT: string = SASSCONSTANTS.AwakningBreakpointDesktop;
+
+// Fix Hero Slide inner content element's vertical alignment during image downloading on desktop only
+const viewportWidth: number = window.innerWidth;
+const heroSlideElement: Ref<HTMLDivElement | null> = ref(null);
+
+const heroSlidePlaceHolderHeight: ComputedRef<string> = computed(() => {
+  return Math.round(viewportWidth / (16 / 9)) + "px";
+});
+
+const setHeroSlideElementHeight = (value: string) => {
+  if (heroSlideElement.value) {
+    heroSlideElement.value.style.height = value;
+  }
+};
+
+const handlerHeroSlideImage = () => {
+  if (!useIsOnMobile().value) {
+    setHeroSlideElementHeight("auto");
+  }
+};
+
+onMounted(() => {
+  if (!useIsOnMobile().value) {
+    setHeroSlideElementHeight(heroSlidePlaceHolderHeight.value);
+  }
+});
+// end Fix Hero Slide inner content element's vertical alignment during image downloading on desktop only
 </script>
 
 <template>
-  <div class="hero__slide">
+  <div class="hero__slide" ref="heroSlideElement">
     <picture class="hero__slide-picture">
       <source
         :media="`(min-width: ${DESKTOPBREAKPOINT})`"
@@ -27,6 +62,7 @@ const DESKTOPBREAKPOINT: string = SASSCONSTANTS.AwakningBreakpointDesktop;
         :alt="slide.images.alt"
         class="hero__slide-image"
         data-testid="hero__slide-image"
+        @load="handlerHeroSlideImage"
       />
     </picture>
     <div class="hero__slide-slick-slider">
