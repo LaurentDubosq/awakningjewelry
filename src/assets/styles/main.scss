@@ -20,6 +20,13 @@ svg {
     display: block;
 }
 
+hr {
+    width: 50px;
+    height: 1px;
+    background-color: $AwakningColorBlack;
+    margin: 20px auto;
+}
+
 a:hover {
     opacity: 0.75;
 }

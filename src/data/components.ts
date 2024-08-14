@@ -32,3 +32,19 @@ export interface CommentBarImage {
 
 export const commentBarURL: string =
   "http://localhost:3001/componentCommentBar";
+
+// CollectionListing
+
+export interface CollectionListing {
+  title: string;
+  collections: Collection[];
+}
+
+export interface Collection {
+  image: string;
+  title: string;
+  url: string;
+}
+
+export const collectionListURL: string =
+  "http://localhost:3001/componentCollectionListing";

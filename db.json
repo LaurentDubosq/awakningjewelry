@@ -100,5 +100,20 @@
             "url" : "./favicon-white-transparent.png",
             "alt" : "Icon containing Illustration of a person medidating above the floor"
         }
-     }
+     },
+     "componentCollectionListing" : {
+         "title" : "By Gender",
+         "collections" : [
+            {
+                "image" : "https://cdn.shopify.com/s/files/1/2275/5667/files/woman-model-urban-adventurer.avif",
+                "title" : "Women",
+                "url" : "/collections/women" 
+            },
+            {
+                "image" : "https://cdn.shopify.com/s/files/1/2275/5667/files/man-model-urban.avif",
+                "title" : "Men",
+                "url" : "/collections/men" 
+            }
+        ]
+    }
 }
