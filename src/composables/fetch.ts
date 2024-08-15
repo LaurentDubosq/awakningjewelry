@@ -4,9 +4,11 @@ import {
   collectionListURL,
   commentBarURL,
   heroSlidesURL,
+  productListingPromotionsURL,
   type CollectionListing,
   type CommentBar,
   type HeroSlideType,
+  type ProductListing,
 } from "@/data/components";
 
 export const useFetch = async <T>(
@@ -61,5 +63,14 @@ export const getCollectionListing = async (): Promise<
   CollectionListing | undefined
 > => {
   const data: CollectionListing | undefined = await useFetch(collectionListURL);
+  return data;
+};
+
+export const getProductListingPromotions = async (): Promise<
+  ProductListing | undefined
+> => {
+  const data: ProductListing | undefined = await useFetch(
+    productListingPromotionsURL
+  );
   return data;
 };

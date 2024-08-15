@@ -115,5 +115,40 @@
                 "url" : "/collections/men" 
             }
         ]
+    },
+    "productListingPromotions" : {
+        "title" : "Promotions",
+        "products" : [
+            {
+                "title" : "Infinite Wisdom of the Tree of Life Charm Bracelet",
+                "image" : {
+                    "url" : "https://cdn.shopify.com/s/files/1/2275/5667/files/infinite-wisdom-of-tree-of-life-charm-bracelet-of-awakning-buddhist-jewelry.avif",
+                    "alt" : "Infinite Wisdom of Tree of Life Charm Bracelet from above showcasing brilliant charms on the theme of nature and the tree of life"
+                },
+                "price" : "$28.99",
+                "promotionalPrice" : "$23.19",
+                "url" : "/collections/women-buddhist-charm-bracelets/products/infinite-wisdom-of-the-tree-of-life-silver-plated-charm-bracelet"
+            },
+            {
+                "title" : "Eternal True Love Elegance Bracelet",
+                "image" : {
+                    "url" : "https://cdn.shopify.com/s/files/1/2275/5667/files/eternal-true-love-elegance-bracelet-of-awakning-buddhist-jewelry.avif",
+                    "alt" : "Eternal True Love Elegance Bracelet showcasing from front an elegent hearts and eternal decorative links on a thin chain"
+                },
+                "price" : "$31.99",
+                "promotionalPrice" : "$28.99",
+                "url" : "/collections/women-buddhist-elegance-bracelets/products/eternal-true-love-925-silver-plated-elegance-bracelet"
+            },
+            {
+                "title" : "Clarity of Mind of Life Tree 108 Unisex Mala Beads",
+                "image" : {
+                    "url" : "https://cdn.shopify.com/s/files/1/2275/5667/files/clarity-of-mind-of-life-tree-108-beads-mala-of-awakning-buddhist-jewelry.avif",
+                    "alt" : "Clarity of Mind of Life Tree 108 Beads Mala showcasing from front a well-strung bracelet with various beads colors reminiscent of the different colours of wood and nature adorned with a tree of life pendant"
+                },
+                "price" : "$37.99",
+                "promotionalPrice" : "$30.39",
+                "url" : "/collections/108-unisex-mala-beads/products/unisex-mala-clarity-of-mind-of-life-tree-108-natural-picasso-marble-beads"
+            }
+        ]
     }
 }
