@@ -59,7 +59,7 @@ export const getCommentBar = async (): Promise<CommentBar | undefined> => {
   return data;
 };
 
-export const getCollectionListing = async (): Promise<
+export const getCollectionListingGender = async (): Promise<
   CollectionListing | undefined
 > => {
   const data: CollectionListing | undefined = await useFetch(collectionListURL);

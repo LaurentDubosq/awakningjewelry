@@ -1,30 +1,24 @@
-import { getCollectionListing } from "@/composables/fetch";
-import frontDatabase from "../../../db.json";
 import { mount } from "@vue/test-utils";
 import CollectionListing from "@/components/CollectionListing.vue";
 import CollectionListingItem from "@/components/CollectionListingItem.vue";
+import frontDatabase from "../../../db.json";
 
-const componentCollectionListing = frontDatabase.componentCollectionListing;
+const collectionListingGender = frontDatabase.collectionListingGender;
 
 describe("CollectionListing component:", () => {
   let wrapper;
 
   beforeEach(() => {
-    vi.mock("@/composables/fetch", () => {
-      return {
-        getCollectionListing: vi.fn(),
-      };
+    wrapper = mount(CollectionListing, {
+      props: { data: collectionListingGender },
     });
-    getCollectionListing.mockReturnValue(componentCollectionListing);
-
-    wrapper = mount(CollectionListing);
   });
 
   test("renders its title", () => {
     const titleElement = wrapper.find(
       "[data-testid='collectionListing__title']"
     );
-    expect(titleElement.text()).toContain(componentCollectionListing.title);
+    expect(titleElement.text()).toContain(collectionListingGender.title);
   });
 
   test("renders all its items with their expected props values", () => {
@@ -33,7 +27,7 @@ describe("CollectionListing component:", () => {
       CollectionListingItem
     );
     expect(CollectionListingItemComponents).toHaveLength(
-      componentCollectionListing.collections.length
+      collectionListingGender.collections.length
     );
 
     // Assert the item received the expected "collection" props value
@@ -42,6 +36,6 @@ describe("CollectionListing component:", () => {
     );
     expect(
       firstCollectionListingItemComponent.props("collection")
-    ).toMatchObject(componentCollectionListing.collections[0]);
+    ).toMatchObject(collectionListingGender.collections[0]);
   });
 });

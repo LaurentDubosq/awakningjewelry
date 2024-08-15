@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import type { Collection } from "@/data/components";
+import type { CollectionListingCollection } from "@/data/components";
 import { onMounted, onUnmounted, ref, type PropType, type Ref } from "vue";
 
 const { collection } = defineProps({
-  collection: { type: Object as PropType<Collection>, required: true },
+  collection: {
+    type: Object as PropType<CollectionListingCollection>,
+    required: true,
+  },
 });
 
 const itemElement: Ref<HTMLLIElement | null> = ref(null);

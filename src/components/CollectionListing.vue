@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { getCollectionListing } from "@/composables/fetch";
-import type { CollectionListing } from "@/data/components";
-import { onMounted, ref, type Ref } from "vue";
+import { type PropType } from "vue";
+import { type CollectionListing } from "@/data/components";
 import CollectionListingItem from "./CollectionListingItem.vue";
 
-const collectionListing: Ref<CollectionListing | undefined> = ref(undefined);
-
-onMounted(async () => {
-  collectionListing.value = await getCollectionListing();
+const { data } = defineProps({
+  data: {
+    type: Object as PropType<CollectionListing | undefined>,
+    required: true,
+  },
 });
 </script>
 
@@ -18,12 +18,12 @@ onMounted(async () => {
         class="collectionListing__title"
         data-testid="collectionListing__title"
       >
-        {{ collectionListing?.title }}
+        {{ data?.title }}
       </h2>
       <hr class="collectionListing__separator" />
       <ul class="collectionListing__list">
         <CollectionListingItem
-          v-for="collection in collectionListing?.collections"
+          v-for="collection in data?.collections"
           :collection
         />
       </ul>

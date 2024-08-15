@@ -37,17 +37,17 @@ export const commentBarURL: string =
 
 export interface CollectionListing {
   title: string;
-  collections: Collection[];
+  collections: CollectionListingCollection[];
 }
 
-export interface Collection {
+export interface CollectionListingCollection {
   image: string;
   title: string;
   url: string;
 }
 
 export const collectionListURL: string =
-  "http://localhost:3001/componentCollectionListing";
+  "http://localhost:3001/collectionListingGender";
 
 // ProductListing
 

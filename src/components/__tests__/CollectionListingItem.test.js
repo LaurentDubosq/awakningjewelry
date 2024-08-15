@@ -2,7 +2,7 @@ import { mount } from "@vue/test-utils";
 import CollectionListingItem from "@/components/CollectionListingItem.vue";
 import frontDataBase from "../../../db.json";
 
-const collection = frontDataBase.componentCollectionListing.collections[0];
+const collection = frontDataBase.collectionListingGender.collections[0];
 
 describe("CollectionListingItem component:", () => {
   let wrapper;
@@ -15,9 +15,8 @@ describe("CollectionListingItem component:", () => {
     });
   });
 
-  test("renders its background image", () => {
+  it("has its background image url well setted", () => {
     const itemElement = wrapper.find("[data-testid='collectionListing__item']");
-
     expect(itemElement.attributes("style")).toContain(collection.image);
   });
 
@@ -30,7 +29,6 @@ describe("CollectionListingItem component:", () => {
     const titleElement = wrapper.find(
       "[data-testid='collectionListing__item-title']"
     );
-
     expect(titleElement.text()).toContain(collection.title);
   });
 });
