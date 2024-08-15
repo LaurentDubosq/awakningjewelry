@@ -64,7 +64,6 @@ const swipeSlide = () => {
 
 /* Handlers */
 const handleTouchStart = (e: TouchEvent) => {
-  console.log(e);
   stopSlide();
   touchStartX = e.changedTouches[0].screenX;
 };
