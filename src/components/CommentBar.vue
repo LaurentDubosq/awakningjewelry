@@ -27,7 +27,7 @@ onMounted(async () => {
   </section>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 @use "@/assets/styles/_constants.scss" as *;
 
 .commentBar {

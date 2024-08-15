@@ -91,7 +91,7 @@ onMounted(() => {
   </div>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 @use "@/assets/styles/_constants" as *;
 
 .hero__slide {

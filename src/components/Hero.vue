@@ -105,7 +105,7 @@ onUnmounted(() => {
   </section>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 @use "@/assets/styles/_constants" as *;
 
 .hero {
