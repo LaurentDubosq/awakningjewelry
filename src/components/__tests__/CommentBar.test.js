@@ -1,25 +1,17 @@
-import { flushPromises, mount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import CommentBar from "@/components/CommentBar.vue";
-import { getCommentBar } from "@/composables/fetch";
 import { beforeEach } from "vitest";
 import frontDataBase from "../../../db.json";
 
-const comment = frontDataBase.componentCommentBar;
+const comment = frontDataBase.commentBarData;
 
 describe("CommentBar component:", () => {
   let wrapper;
 
-  // Mock the comment getter function
-  vi.mock("@/composables/fetch", () => {
-    return {
-      getCommentBar: vi.fn(),
-    };
-  });
-  getCommentBar.mockReturnValue(comment);
-
-  beforeEach(async () => {
-    wrapper = mount(CommentBar);
-    await flushPromises();
+  beforeEach(() => {
+    wrapper = mount(CommentBar, {
+      props: { data: comment },
+    });
   });
 
   test("renders its title", () => {

@@ -2,8 +2,13 @@
 import {
   getProductListingPromotions,
   getCollectionListingGender,
+  getCommentBarData,
 } from "@/composables/fetch";
-import type { ProductListing, CollectionListing } from "@/data/components";
+import type {
+  ProductListing,
+  CollectionListing,
+  CommentBarData,
+} from "@/data/components";
 import { defineAsyncComponent, onMounted, ref, type Ref } from "vue";
 
 const Hero = defineAsyncComponent(() => import("@/components/Hero.vue"));
@@ -16,6 +21,14 @@ const CollectionListing = defineAsyncComponent(
 const ProductListing = defineAsyncComponent(
   () => import("@/components/ProductListing.vue")
 );
+
+// CommentBar
+const commentBarData: Ref<CommentBarData | undefined> = ref(undefined);
+
+onMounted(async () => {
+  commentBarData.value = await getCommentBarData();
+});
+// end CommentBar
 
 // CollectionListing
 const collectionListingGender: Ref<CollectionListing | undefined> =
@@ -38,7 +51,7 @@ onMounted(async () => {
 
 <template>
   <Hero />
-  <CommentBar />
+  <CommentBar :data="commentBarData" />
   <CollectionListing :data="collectionListingGender" />
   <ProductListing :data="productListingPromotions" />
 </template>

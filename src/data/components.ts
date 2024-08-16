@@ -19,7 +19,7 @@ export const heroSlidesURL: string =
 
 // CommentBar
 
-export interface CommentBar {
+export interface CommentBarData {
   title: string;
   text: string;
   image: CommentBarImage;
@@ -30,8 +30,7 @@ export interface CommentBarImage {
   alt: string;
 }
 
-export const commentBarURL: string =
-  "http://localhost:3001/componentCommentBar";
+export const commentBarDataURL: string = "http://localhost:3001/commentBarData";
 
 // CollectionListing
 

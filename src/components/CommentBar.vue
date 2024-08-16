@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import { getCommentBar } from "@/composables/fetch";
-import { type CommentBar } from "@/data/components";
-import { onMounted, ref, type Ref } from "vue";
+import { type CommentBarData } from "@/data/components";
+import { type PropType } from "vue";
 
-const comment: Ref<CommentBar | undefined> = ref(undefined);
-
-onMounted(async () => {
-  comment.value = await getCommentBar();
+const { data } = defineProps({
+  data: {
+    type: Object as PropType<CommentBarData | undefined>,
+    required: true,
+  },
 });
 </script>
 
 <template>
   <section class="commentBar">
     <h2 class="commentBar__title" data-testid="commentBar__title">
-      {{ comment?.title }}
+      {{ data?.title }}
     </h2>
     <p class="commentBar__text" data-testid="commentBar__text">
-      {{ comment?.text }}
+      {{ data?.text }}
     </p>
     <img
-      :src="comment?.image.url"
-      :alt="comment?.image.alt"
+      :src="data?.image.url"
+      :alt="data?.image.alt"
       class="commentBar__image"
       data-testid="commentBar__image"
     />

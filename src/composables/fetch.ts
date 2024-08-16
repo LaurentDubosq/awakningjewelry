@@ -2,11 +2,11 @@ import { pagesMetaDataUrl, type PageMetaData } from "@/data/seo";
 import { siteMenuItemsUrl, type SiteMenuItem } from "@/data/menus";
 import {
   collectionListingURL,
-  commentBarURL,
+  commentBarDataURL,
   heroSlidesURL,
   productListingPromotionsURL,
   type CollectionListing,
-  type CommentBar,
+  type CommentBarData,
   type HeroSlideType,
   type ProductListing,
 } from "@/data/components";
@@ -54,8 +54,10 @@ export const getHeroSlides = async (): Promise<HeroSlideType[] | undefined> => {
   return data;
 };
 
-export const getCommentBar = async (): Promise<CommentBar | undefined> => {
-  const data: CommentBar | undefined = await useFetch(commentBarURL);
+export const getCommentBarData = async (): Promise<
+  CommentBarData | undefined
+> => {
+  const data: CommentBarData | undefined = await useFetch(commentBarDataURL);
   return data;
 };
 
