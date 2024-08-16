@@ -1,3 +1,5 @@
+import type { Collection } from "./global.d.ts";
+
 // Hero
 
 export interface HeroSlideType {
@@ -34,19 +36,13 @@ export const commentBarDataURL: string = "http://localhost:3001/commentBarData";
 
 // CollectionListing
 
-export interface CollectionListing {
+export interface CollectionListingData {
   title: string;
-  collections: CollectionListingCollection[];
+  collections: Collection[];
 }
 
-export interface CollectionListingCollection {
-  image: string;
-  title: string;
-  url: string;
-}
-
-export const collectionListingURL: string =
-  "http://localhost:3001/collectionListingGender";
+export const collectionListingGenderDataURL: string =
+  "http://localhost:3001/collectionListingGenderData";
 
 // ProductListing
 

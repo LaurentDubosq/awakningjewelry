@@ -2,7 +2,7 @@ import { mount } from "@vue/test-utils";
 import CollectionListingItem from "@/components/CollectionListingItem.vue";
 import frontDataBase from "../../../db.json";
 
-const collection = frontDataBase.collectionListingGender.collections[0];
+const collection = frontDataBase.collectionListingGenderData.collections[0];
 
 describe("CollectionListingItem component:", () => {
   let wrapper;

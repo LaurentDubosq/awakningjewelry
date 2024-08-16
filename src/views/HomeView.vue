@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import {
   getProductListingPromotions,
-  getCollectionListingGender,
+  getCollectionListingGenderData,
   getCommentBarData,
 } from "@/composables/fetch";
 import type {
   ProductListing,
-  CollectionListing,
+  CollectionListingData,
   CommentBarData,
 } from "@/data/components";
 import { defineAsyncComponent, onMounted, ref, type Ref } from "vue";
@@ -31,11 +31,11 @@ onMounted(async () => {
 // end CommentBar
 
 // CollectionListing
-const collectionListingGender: Ref<CollectionListing | undefined> =
+const collectionListingGenderData: Ref<CollectionListingData | undefined> =
   ref(undefined);
 
 onMounted(async () => {
-  collectionListingGender.value = await getCollectionListingGender();
+  collectionListingGenderData.value = await getCollectionListingGenderData();
 });
 // end CollectionListing
 
@@ -52,6 +52,6 @@ onMounted(async () => {
 <template>
   <Hero />
   <CommentBar :data="commentBarData" />
-  <CollectionListing :data="collectionListingGender" />
+  <CollectionListing :data="collectionListingGenderData" />
   <ProductListing :data="productListingPromotions" />
 </template>

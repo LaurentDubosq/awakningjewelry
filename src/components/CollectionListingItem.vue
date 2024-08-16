@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { CollectionListingCollection } from "@/data/components";
+import type { Collection } from "@/data/global";
 import { onMounted, onUnmounted, ref, type PropType, type Ref } from "vue";
 
 const { collection } = defineProps({
   collection: {
-    type: Object as PropType<CollectionListingCollection>,
+    type: Object as PropType<Collection>,
     required: true,
   },
 });

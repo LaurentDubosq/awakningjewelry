@@ -1,11 +1,11 @@
 import { pagesMetaDataUrl, type PageMetaData } from "@/data/seo";
 import { siteMenuItemsUrl, type SiteMenuItem } from "@/data/menus";
 import {
-  collectionListingURL,
+  collectionListingGenderDataURL,
   commentBarDataURL,
   heroSlidesURL,
   productListingPromotionsURL,
-  type CollectionListing,
+  type CollectionListingData,
   type CommentBarData,
   type HeroSlideType,
   type ProductListing,
@@ -61,11 +61,11 @@ export const getCommentBarData = async (): Promise<
   return data;
 };
 
-export const getCollectionListingGender = async (): Promise<
-  CollectionListing | undefined
+export const getCollectionListingGenderData = async (): Promise<
+  CollectionListingData | undefined
 > => {
-  const data: CollectionListing | undefined = await useFetch(
-    collectionListingURL
+  const data: CollectionListingData | undefined = await useFetch(
+    collectionListingGenderDataURL
   );
   return data;
 };

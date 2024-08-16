@@ -3,14 +3,14 @@ import CollectionListing from "@/components/CollectionListing.vue";
 import CollectionListingItem from "@/components/CollectionListingItem.vue";
 import frontDatabase from "../../../db.json";
 
-const collectionListingGender = frontDatabase.collectionListingGender;
+const collectionListingGenderData = frontDatabase.collectionListingGenderData;
 
 describe("CollectionListing component:", () => {
   let wrapper;
 
   beforeEach(() => {
     wrapper = mount(CollectionListing, {
-      props: { data: collectionListingGender },
+      props: { data: collectionListingGenderData },
     });
   });
 
@@ -18,7 +18,7 @@ describe("CollectionListing component:", () => {
     const titleElement = wrapper.find(
       "[data-testid='collectionListing__title']"
     );
-    expect(titleElement.text()).toContain(collectionListingGender.title);
+    expect(titleElement.text()).toContain(collectionListingGenderData.title);
   });
 
   test("renders all its items with their expected props values", () => {
@@ -27,7 +27,7 @@ describe("CollectionListing component:", () => {
       CollectionListingItem
     );
     expect(CollectionListingItemComponents).toHaveLength(
-      collectionListingGender.collections.length
+      collectionListingGenderData.collections.length
     );
 
     // Assert the item received the expected "collection" props value
@@ -36,6 +36,6 @@ describe("CollectionListing component:", () => {
     );
     expect(
       firstCollectionListingItemComponent.props("collection")
-    ).toMatchObject(collectionListingGender.collections[0]);
+    ).toMatchObject(collectionListingGenderData.collections[0]);
   });
 });
