@@ -4,11 +4,11 @@ import {
   collectionListingGenderDataURL,
   commentBarDataURL,
   heroSlidesURL,
-  productListingPromotionsURL,
+  productListingPromotionsDataURL,
   type CollectionListingData,
   type CommentBarData,
   type HeroSlideType,
-  type ProductListing,
+  type ProductListingData,
 } from "@/data/components";
 
 export const useFetch = async <T>(
@@ -70,11 +70,11 @@ export const getCollectionListingGenderData = async (): Promise<
   return data;
 };
 
-export const getProductListingPromotions = async (): Promise<
-  ProductListing | undefined
+export const getProductListingPromotionsData = async (): Promise<
+  ProductListingData | undefined
 > => {
-  const data: ProductListing | undefined = await useFetch(
-    productListingPromotionsURL
+  const data: ProductListingData | undefined = await useFetch(
+    productListingPromotionsDataURL
   );
   return data;
 };

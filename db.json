@@ -116,7 +116,7 @@
             }
         ]
     },
-    "productListingPromotions" : {
+    "productListingPromotionsData" : {
         "title" : "Promotions",
         "products" : [
             {

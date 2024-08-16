@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { ProductListingProduct } from "@/data/components";
+import type { Product } from "@/data/global.d.ts";
 import type { PropType } from "vue";
 
 const { product } = defineProps({
-  product: { type: Object as PropType<ProductListingProduct>, required: true },
+  product: { type: Object as PropType<Product>, required: true },
 });
 </script>
 

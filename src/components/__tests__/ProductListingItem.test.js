@@ -2,7 +2,7 @@ import { mount } from "@vue/test-utils";
 import ProductListingItem from "@/components/ProductListingItem.vue";
 import frontDataBase from "../../../db.json";
 
-const product = frontDataBase.productListingPromotions.products[0];
+const product = frontDataBase.productListingPromotionsData.products[0];
 
 describe("ProductListingItem component:", () => {
   let wrapper;

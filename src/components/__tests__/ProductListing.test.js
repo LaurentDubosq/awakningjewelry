@@ -3,7 +3,7 @@ import ProductListing from "@/components/ProductListing.vue";
 import ProductListingItem from "@/components/ProductListingItem.vue";
 import FrontDataBase from "../../../db.json";
 
-const productListingPromotionsData = FrontDataBase.productListingPromotions;
+const productListingPromotionsData = FrontDataBase.productListingPromotionsData;
 
 describe("ProductListing component:", () => {
   let wrapper;

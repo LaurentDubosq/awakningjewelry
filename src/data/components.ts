@@ -1,4 +1,4 @@
-import type { Collection } from "./global.d.ts";
+import type { Collection, Product } from "./global.d.ts";
 
 // Hero
 
@@ -46,23 +46,10 @@ export const collectionListingGenderDataURL: string =
 
 // ProductListing
 
-export interface ProductListing {
+export interface ProductListingData {
   title: string;
-  products: ProductListingProduct[];
+  products: Product[];
 }
 
-export interface ProductListingProduct {
-  title: string;
-  image: ProductListingProductImage;
-  price: string;
-  promotionalPrice: string;
-  url: string;
-}
-
-export interface ProductListingProductImage {
-  url: string;
-  alt: string;
-}
-
-export const productListingPromotionsURL: string =
-  "http://localhost:3001/productListingPromotions";
+export const productListingPromotionsDataURL: string =
+  "http://localhost:3001/productListingPromotionsData";

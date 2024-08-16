@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import {
-  getProductListingPromotions,
+  getProductListingPromotionsData,
   getCollectionListingGenderData,
   getCommentBarData,
 } from "@/composables/fetch";
 import type {
-  ProductListing,
+  ProductListingData,
   CollectionListingData,
   CommentBarData,
 } from "@/data/components";
@@ -40,11 +40,11 @@ onMounted(async () => {
 // end CollectionListing
 
 // ProductListing
-const productListingPromotions: Ref<ProductListing | undefined> =
+const productListingPromotionsData: Ref<ProductListingData | undefined> =
   ref(undefined);
 
 onMounted(async () => {
-  productListingPromotions.value = await getProductListingPromotions();
+  productListingPromotionsData.value = await getProductListingPromotionsData();
 });
 // end ProductListing
 </script>
@@ -53,5 +53,5 @@ onMounted(async () => {
   <Hero />
   <CommentBar :data="commentBarData" />
   <CollectionListing :data="collectionListingGenderData" />
-  <ProductListing :data="productListingPromotions" />
+  <ProductListing :data="productListingPromotionsData" />
 </template>

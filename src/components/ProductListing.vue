@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { type PropType } from "vue";
-import { type ProductListing } from "@/data/components";
+import { type ProductListingData } from "@/data/components";
 import ProductListingItem from "./ProductListingItem.vue";
 
 const { data } = defineProps({
   data: {
-    type: Object as PropType<ProductListing | undefined>,
+    type: Object as PropType<ProductListingData | undefined>,
     required: true,
   },
 });
