@@ -46,7 +46,7 @@ export interface CollectionListingCollection {
   url: string;
 }
 
-export const collectionListURL: string =
+export const collectionListingURL: string =
   "http://localhost:3001/collectionListingGender";
 
 // ProductListing

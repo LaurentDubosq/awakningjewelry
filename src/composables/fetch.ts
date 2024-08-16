@@ -1,7 +1,7 @@
 import { pagesMetaDataUrl, type PageMetaData } from "@/data/seo";
 import { siteMenuItemsUrl, type SiteMenuItem } from "@/data/menus";
 import {
-  collectionListURL,
+  collectionListingURL,
   commentBarURL,
   heroSlidesURL,
   productListingPromotionsURL,
@@ -62,7 +62,9 @@ export const getCommentBar = async (): Promise<CommentBar | undefined> => {
 export const getCollectionListingGender = async (): Promise<
   CollectionListing | undefined
 > => {
-  const data: CollectionListing | undefined = await useFetch(collectionListURL);
+  const data: CollectionListing | undefined = await useFetch(
+    collectionListingURL
+  );
   return data;
 };
 
