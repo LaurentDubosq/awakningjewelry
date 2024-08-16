@@ -19,12 +19,14 @@ const slidesLength: ComputedRef<number | undefined> = computed(
   () => slides.value?.length
 );
 const displayedSlideIndex: Ref<number> = ref(0);
+const duration = 3500;
 let timer: number;
 let touchStartX: number;
 let touchEndX: number;
 
 /* Slide Control */
-const startSlide = () => (timer = setInterval(() => displayNextSlide(), 3500));
+const startSlide = () =>
+  (timer = setInterval(() => displayNextSlide(), duration));
 const stopSlide = () => clearInterval(timer);
 
 /* Display Logic */
@@ -90,7 +92,7 @@ onUnmounted(() => {
     @touchend="handleTouchEnd"
     data-testid="hero"
   >
-    <MyTransition :group="true" name="fadeHero">
+    <MyTransition :duration :group="true" name="fadeHero">
       <template v-for="(slide, index) in slides" :key="slide.id">
         <HeroSlide
           :displayedSlideIndex="index"

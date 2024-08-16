@@ -2,11 +2,12 @@
 const { name, group } = defineProps({
   name: { type: String, required: true },
   group: { type: Boolean, default: false },
+  duration: { type: Number },
 });
 </script>
 
 <template>
-  <TransitionGroup :name data-testid="transitionGroup" v-if="group">
+  <TransitionGroup :name :duration data-testid="transitionGroup" v-if="group">
     <slot />
   </TransitionGroup>
   <Transition :name data-testid="transition" v-else>
