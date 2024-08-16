@@ -2,7 +2,7 @@
 import {
   getProductListingPromotionsData,
   getCollectionListingGenderData,
-  getCommentBarData,
+  getCommentBarMissionData,
 } from "@/composables/fetch";
 import type {
   ProductListingData,
@@ -23,10 +23,10 @@ const ProductListing = defineAsyncComponent(
 );
 
 // CommentBar
-const commentBarData: Ref<CommentBarData | undefined> = ref(undefined);
+const commentBarMissionData: Ref<CommentBarData | undefined> = ref(undefined);
 
 onMounted(async () => {
-  commentBarData.value = await getCommentBarData();
+  commentBarMissionData.value = await getCommentBarMissionData();
 });
 // end CommentBar
 
@@ -51,7 +51,7 @@ onMounted(async () => {
 
 <template>
   <Hero />
-  <CommentBar :data="commentBarData" />
+  <CommentBar :data="commentBarMissionData" />
   <CollectionListing :data="collectionListingGenderData" />
   <ProductListing :data="productListingPromotionsData" />
 </template>

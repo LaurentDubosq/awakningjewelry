@@ -5,7 +5,7 @@ import CollectionListing from "@/components/CollectionListing.vue";
 import ProductListing from "@/components/ProductListing.vue";
 import frontDataBase from "../../../db.json";
 import {
-  getCommentBarData,
+  getCommentBarMissionData,
   getCollectionListingGenderData,
   getProductListingPromotionsData,
 } from "@/composables/fetch";
@@ -19,12 +19,12 @@ describe("HomeView component:", () => {
 
   vi.mock("@/composables/fetch", () => {
     return {
-      getCommentBarData: vi.fn(),
+      getCommentBarMissionData: vi.fn(),
       getCollectionListingGenderData: vi.fn(),
       getProductListingPromotionsData: vi.fn(),
     };
   });
-  getCommentBarData.mockReturnValue(commentBarData);
+  getCommentBarMissionData.mockReturnValue(commentBarData);
   getCollectionListingGenderData.mockReturnValue(collectionListingGenderData);
   getProductListingPromotionsData.mockReturnValue(productListingPromotionsData);
 

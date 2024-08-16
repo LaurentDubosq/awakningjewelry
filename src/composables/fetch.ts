@@ -2,7 +2,7 @@ import { pagesMetaDataUrl, type PageMetaData } from "@/data/seo";
 import { siteMenuItemsUrl, type SiteMenuItem } from "@/data/menus";
 import {
   collectionListingGenderDataURL,
-  commentBarDataURL,
+  commentBarMissionDataURL,
   heroSlidesURL,
   productListingPromotionsDataURL,
   type CollectionListingData,
@@ -54,10 +54,12 @@ export const getHeroSlides = async (): Promise<HeroSlideType[] | undefined> => {
   return data;
 };
 
-export const getCommentBarData = async (): Promise<
+export const getCommentBarMissionData = async (): Promise<
   CommentBarData | undefined
 > => {
-  const data: CommentBarData | undefined = await useFetch(commentBarDataURL);
+  const data: CommentBarData | undefined = await useFetch(
+    commentBarMissionDataURL
+  );
   return data;
 };
 

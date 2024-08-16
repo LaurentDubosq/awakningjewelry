@@ -3,7 +3,7 @@ import CommentBar from "@/components/CommentBar.vue";
 import { beforeEach } from "vitest";
 import frontDataBase from "../../../db.json";
 
-const comment = frontDataBase.commentBarData;
+const comment = frontDataBase.commentBarMissionData;
 
 describe("CommentBar component:", () => {
   let wrapper;

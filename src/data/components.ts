@@ -32,7 +32,8 @@ export interface CommentBarImage {
   alt: string;
 }
 
-export const commentBarDataURL: string = "http://localhost:3001/commentBarData";
+export const commentBarMissionDataURL: string =
+  "http://localhost:3001/commentBarMissionData";
 
 // CollectionListing
 
