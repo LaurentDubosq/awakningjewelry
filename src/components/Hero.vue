@@ -19,14 +19,13 @@ const slidesLength: ComputedRef<number | undefined> = computed(
   () => slides.value?.length
 );
 const displayedSlideIndex: Ref<number> = ref(0);
-const duration = 3500;
+const duration = 86400000; // Setted to 1 day to avoid scroll to bottom bug caused by the transition (v-show used with v-for)
 let timer: number;
 let touchStartX: number;
 let touchEndX: number;
 
 /* Slide Control */
-const startSlide = () =>
-  (timer = setInterval(() => displayNextSlide(), duration));
+const startSlide = () => (timer = setInterval(() => displayNextSlide(), 3500));
 const stopSlide = () => clearInterval(timer);
 
 /* Display Logic */
