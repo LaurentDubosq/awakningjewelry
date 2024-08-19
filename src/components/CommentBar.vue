@@ -5,7 +5,6 @@ import { type PropType } from "vue";
 const { data } = defineProps({
   data: {
     type: Object as PropType<CommentBarData | undefined>,
-    required: true,
   },
 });
 </script>

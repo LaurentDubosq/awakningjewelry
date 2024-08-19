@@ -6,7 +6,6 @@ import ProductListingItem from "./ProductListingItem.vue";
 const { data } = defineProps({
   data: {
     type: Object as PropType<ProductListingData | undefined>,
-    required: true,
   },
 });
 </script>

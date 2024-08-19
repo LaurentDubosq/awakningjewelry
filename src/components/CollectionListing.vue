@@ -6,7 +6,6 @@ import CollectionListingItem from "./CollectionListingItem.vue";
 const { data } = defineProps({
   data: {
     type: Object as PropType<CollectionListingData | undefined>,
-    required: true,
   },
 });
 </script>
