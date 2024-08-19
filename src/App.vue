@@ -21,7 +21,6 @@ onMounted(async () => {
 
 // Burger Menu - Open/Close Logic & Send handler and status
 import SASSCONSTANTS from "@/assets/styles/_constants.module.scss"; /* Get the SASS Constants to use it in Javascript */
-import { addResizeListener, removeResizeListener } from "@/composables/event";
 import {
   toggleBurgerMenuKey,
   isBurgerMenuOpenKey,
@@ -49,21 +48,11 @@ provide(toggleBurgerMenuKey, toggleBurgerMenu); // Send the open/close burger me
 provide(isBurgerMenuOpenKey, isBurgerMenuOpen); // Send the open/close burger menu status to SiteHeader component to toggle the burger menu icon
 
 onMounted(() => {
-  /**
-   * Addition of an Event Listener to close the Burger Menu when we resize the window width from mobile to desktop.
-   * @param {EventListenerOrEventListenerObject} callback
-   * @param {Window | HTMLElement} element
-   */
-  addResizeListener(closeBurgerMenuOnDesktop, window);
+  window.addEventListener("resize", closeBurgerMenuOnDesktop); // Close the Burger Menu when we resize the window width from mobile to desktop.
 });
 
 onUnmounted(() => {
-  /**
-   * Removing of the Event Listener intended to close the Burger Menu when we resize the window width from mobile to desktop.
-   * @param {EventListenerOrEventListenerObject} callback
-   * @param {Window | HTMLElement} element
-   */
-  removeResizeListener(closeBurgerMenuOnDesktop, window);
+  window.removeEventListener("resize", closeBurgerMenuOnDesktop);
 });
 // end Burger Menu - Open/Close Logic & Send handler and status
 

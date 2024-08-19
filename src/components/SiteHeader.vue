@@ -16,7 +16,6 @@ import PersonIcon from "./icons/IconPerson.vue";
 import CartIcon from "./icons/IconCart.vue";
 import SiteHeaderIcon from "./SiteHeaderIcon.vue";
 import SiteLogo from "./SiteLogo.vue";
-import { addResizeListener, removeResizeListener } from "@/composables/event";
 const SiteNav = defineAsyncComponent(() => import("./SiteNav.vue"));
 
 // Get the current display platform
@@ -41,21 +40,11 @@ function resizeBurgerMenuIconWrapperWidth() {
 
 onMounted(() => {
   resizeBurgerMenuIconWrapperWidth();
-  /**
-   * Addition of an Event Listener to recalculate the burger menu icon wrapper width when switching tablet orientation from desktop to mobile
-   * @param {EventListenerOrEventListenerObject} callback
-   * @param {Window | HTMLElement} element
-   */
-  addResizeListener(resizeBurgerMenuIconWrapperWidth, window);
+  window.addEventListener("resize", resizeBurgerMenuIconWrapperWidth); // Recalculate the burger menu icon wrapper width when switching from desktop to mobile to center properly the website logo
 });
 
 onUnmounted(() => {
-  /**
-   * Addition of an Event Listener to recalculate the burger menu icon wrapper width when switching tablet orientation from desktop to mobile
-   * @param {EventListenerOrEventListenerObject} callback
-   * @param {Window | HTMLElement} element
-   */
-  removeResizeListener(resizeBurgerMenuIconWrapperWidth, window);
+  window.removeEventListener("resize", resizeBurgerMenuIconWrapperWidth);
 });
 // end Right Container Element
 </script>
