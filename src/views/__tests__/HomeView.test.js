@@ -10,9 +10,9 @@ import {
   getProductListingPromotionsData,
 } from "@/composables/fetch";
 
-const commentBarData = frontDataBase.commentBar;
-const collectionListingGenderData = frontDataBase.commentBar;
-const productListingPromotionsData = frontDataBase.commentBar;
+const commentBarData = frontDataBase.commentBarMissionData;
+const collectionListingGenderData = frontDataBase.collectionListingGenderData;
+const productListingPromotionsData = frontDataBase.productListingPromotionsData;
 
 describe("HomeView component:", () => {
   let wrapper;
