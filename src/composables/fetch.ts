@@ -7,7 +7,7 @@ import {
   productListingPromotionsDataURL,
   type CollectionListingData,
   type CommentBarData,
-  type HeroSlideType,
+  type Slide,
   type ProductListingData,
 } from "@/data/components";
 
@@ -49,8 +49,8 @@ export const getSiteMenuItems = async (): Promise<
   return data;
 };
 
-export const getHeroSlides = async (): Promise<HeroSlideType[] | undefined> => {
-  const data: HeroSlideType[] | undefined = await useFetch(heroSlidesURL);
+export const getHeroSlides = async (): Promise<Slide[] | undefined> => {
+  const data: Slide[] | undefined = await useFetch(heroSlidesURL);
   return data;
 };
 

@@ -1,23 +1,22 @@
 import type { Collection, Product } from "./global.d.ts";
 
-// Hero
+// SlideShow
 
-export interface HeroSlideType {
+export interface Slide {
   id: number;
-  images: HeroSlideImages;
+  images: SlideImages;
   subtitle: string;
   title: string;
   url: string;
 }
 
-export interface HeroSlideImages {
+export interface SlideImages {
   mobile: string;
   desktop: string;
   alt: string;
 }
 
-export const heroSlidesURL: string =
-  "http://localhost:3001/componentHeroSlides";
+export const heroSlidesURL: string = "http://localhost:3001/heroSlides";
 
 // CommentBar
 

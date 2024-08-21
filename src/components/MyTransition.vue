@@ -18,19 +18,19 @@ const { name, group } = defineProps({
 <style lang="scss">
 @use "@/assets/styles/_constants" as *;
 
-/* fadeHero */
-.fadeHero-enter-active,
-.fadeHero-leave-active {
+/* fadeSlideShow */
+.fadeSlideShow-enter-active,
+.fadeSlideShow-leave-active {
   transition: opacity 0.5s ease;
 }
-.fadeHero-leave-active {
+.fadeSlideShow-leave-active {
   position: absolute;
   @media screen and (max-width: $AwakningBreakpointDesktop) {
     padding: 0 15px;
   }
 }
-.fadeHero-enter-from,
-.fadeHero-leave-to {
+.fadeSlideShow-enter-from,
+.fadeSlideShow-leave-to {
   opacity: 0;
 }
 

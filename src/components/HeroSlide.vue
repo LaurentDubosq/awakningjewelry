@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import SASSCONSTANTS from "@/assets/styles/_constants.module.scss";
-import { useIsOnMobile } from "@/composables/display";
-import type { HeroSlideType } from "@/data/components";
+import type { Slide } from "@/data/components";
+import { useIsOnMobileKey } from "@/utils/injectionkeys";
 import {
   computed,
+  inject,
   onMounted,
   ref,
   type ComputedRef,
@@ -11,14 +12,15 @@ import {
   type Ref,
 } from "vue";
 
-const { displayedSlideIndex, slide, slidesLength } = defineProps({
-  displayedSlideIndex: { type: Number, required: true },
-  slide: { type: Object as PropType<HeroSlideType>, required: true },
+const { slideIndex, slide, slidesLength } = defineProps({
+  slide: { type: Object as PropType<Slide>, required: true },
+  slideIndex: { type: Number, required: true },
   slidesLength: {
     type: [Number, undefined] as PropType<number | undefined>,
     required: true,
   },
 });
+const useIsOnMobile: Ref<boolean> | undefined = inject(useIsOnMobileKey); // Get the current display platform
 const DESKTOPBREAKPOINT: string = SASSCONSTANTS.AwakningBreakpointDesktop;
 
 // Fix Hero Slide inner content element's vertical alignment during image downloading on desktop only
@@ -36,13 +38,13 @@ const setHeroSlideElementHeight = (value: string) => {
 };
 
 const handlerHeroSlideImage = () => {
-  if (!useIsOnMobile().value) {
+  if (!useIsOnMobile?.value) {
     setHeroSlideElementHeight("auto");
   }
 };
 
 onMounted(() => {
-  if (!useIsOnMobile().value) {
+  if (!useIsOnMobile?.value) {
     setHeroSlideElementHeight(heroSlidePlaceHolderHeight.value);
   }
 });
@@ -70,8 +72,7 @@ onMounted(() => {
         class="hero__slide-slick-slider-dot"
         v-for="(slide, index) in slidesLength"
         :class="{
-          'hero__slide-slick-slider-dot--selected':
-            index === displayedSlideIndex,
+          'hero__slide-slick-slider-dot--active': index === slideIndex,
         }"
         @click="$emit('display-selected-slide', index)"
         data-testid="hero__slide-slick-slider-dot"
@@ -134,7 +135,7 @@ onMounted(() => {
     cursor: pointer;
     transition: all 0.2s ease;
   }
-  &-slick-slider-dot--selected {
+  &-slick-slider-dot--active {
     background-color: black;
   }
 
