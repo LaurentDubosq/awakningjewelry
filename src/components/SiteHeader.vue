@@ -55,7 +55,9 @@ onUnmounted(() => {
       <div class="site-header-inner">
         <div
           class="site-header__burger-menu-icon-wrapper"
+          data-testid="site-header__burger-menu-icon-wrapper"
           :style="{ 'flex-basis': rightContainerElementWidth + 'px' }"
+          v-if="useIsOnMobile"
         >
           <button
             type="button"
@@ -69,7 +71,7 @@ onUnmounted(() => {
           </button>
         </div>
         <div class="site-header__logo-wrapper">
-          <RouterLink to="/">
+          <RouterLink to="/" data-testid="site-header__logo-link">
             <SiteLogo />
           </RouterLink>
         </div>
@@ -81,15 +83,25 @@ onUnmounted(() => {
           >
             <SiteNav />
           </div>
-          <div class="site-header__account-icon-wrapper">
-            <RouterLink to="/account">
+          <div
+            class="site-header__account-icon-wrapper"
+            data-testid="site-header__account-icon-wrapper"
+            v-if="useIsOnMobile"
+          >
+            <RouterLink
+              to="/account"
+              data-testid="site-header__account-icon-link"
+            >
               <SiteHeaderIcon>
                 <PersonIcon />
               </SiteHeaderIcon>
             </RouterLink>
           </div>
-          <div class="site-header__cart-icon-wrapper">
-            <RouterLink to="/cart">
+          <div
+            class="site-header__cart-icon-wrapper"
+            data-testid="site-header__cart-icon-wrapper"
+          >
+            <RouterLink to="/cart" data-testid="site-header__cart-icon-link">
               <SiteHeaderIcon>
                 <CartIcon />
               </SiteHeaderIcon>
@@ -120,21 +132,12 @@ onUnmounted(() => {
 
   &__burger-menu-icon-wrapper {
     margin-left: -15px;
-    @media screen and (min-width: $AwakningBreakpointDesktop) {
-      display: none;
-    }
   }
 
   &__right-container {
     display: flex;
     justify-content: flex-end;
     margin-right: -15px;
-  }
-
-  &__account-icon-wrapper {
-    @media screen and (min-width: $AwakningBreakpointDesktop) {
-      display: none;
-    }
   }
 }
 </style>
