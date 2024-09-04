@@ -7,89 +7,123 @@ const heroSlides = frontDataBase.heroSlides;
 
 describe("SlideShow component:", () => {
   let wrapper;
+  let HeroSlideComponents;
+  let FirstHeroSlideComponent;
+  let SecondHeroSlideComponent;
+  let ThirdHeroSlideComponent;
 
   beforeEach(async () => {
     wrapper = mount(SlideShow, {
       attachTo: document.body,
       props: {
         slides: heroSlides,
-        slidesLength: heroSlides.length,
-        selectedSlideIndexToDisplay: 0,
+      },
+      global: {
+        stubs: { HeroSlide },
       },
     });
+
+    // Wait until the onMounted hook has been executed
     await flushPromises();
+
+    HeroSlideComponents = wrapper.findAllComponents(HeroSlide);
+    FirstHeroSlideComponent = HeroSlideComponents[0];
+    SecondHeroSlideComponent = HeroSlideComponents[1];
+    ThirdHeroSlideComponent = HeroSlideComponents[2];
   });
 
   test("renders the entire slide list item", () => {
-    const HeroSlideComponents = wrapper.findAllComponents(HeroSlide);
     expect(HeroSlideComponents).toHaveLength(heroSlides.length);
   });
 
-  test("renders the initial slide at initial render", () => {
-    const firstHeroSlideComponent = wrapper.findComponent(HeroSlide);
+  describe("Each slide:", () => {
+    wrapper = mount(SlideShow, {
+      props: {
+        slides: heroSlides,
+      },
+      global: {
+        stubs: { HeroSlide },
+      },
+    });
+    const HeroSlideComponents = wrapper.findAllComponents(HeroSlide);
 
-    // Assert the initial slide is shown
-    expect(firstHeroSlideComponent.isVisible()).toBe(true);
+    heroSlides.forEach((slide, index) => {
+      describe(`at index ${index}:`, () => {
+        const HeroSlideComponent = HeroSlideComponents[index];
 
-    // Assert its props are well setted
-    expect(firstHeroSlideComponent.props("slideIndex")).toBe(0);
-    expect(firstHeroSlideComponent.props("slide")).toMatchObject(heroSlides[0]);
-    expect(firstHeroSlideComponent.props("slidesLength")).toBe(
-      heroSlides.length
-    );
+        test("exists (doesn't mean it is visible)", () => {
+          expect(HeroSlideComponent.exists()).toBe(true);
+        });
+
+        test("has its expected props values", () => {
+          expect(HeroSlideComponent.props("slide")).toMatchObject(
+            heroSlides[index]
+          );
+          expect(HeroSlideComponent.props("slideIndex")).toBe(index);
+          expect(HeroSlideComponent.props("slidesLength")).toBe(
+            heroSlides.length
+          );
+        });
+      });
+    });
   });
 
-  test("don't renders other slides at initial render", async () => {
-    const secondHeroSlideComponent = wrapper.findAllComponents(HeroSlide)[1];
-    expect(secondHeroSlideComponent.isVisible()).toBe(false);
-  });
-
-  test("renders automatically all slides during a loop", async () => {
-    const firstHeroSlideComponent = wrapper.findComponent(HeroSlide);
-    const secondHeroSlideComponent = wrapper.findAllComponents(HeroSlide)[1];
-    const thirdHeroSlideComponent = wrapper.findAllComponents(HeroSlide)[2];
+  test("renders each slide one by one automatically during a loop by hiding the others", async () => {
+    // Assert the first slide is showned at initial render
+    expect(FirstHeroSlideComponent.isVisible()).toBe(true);
+    // Assert the second slide is not rendered
+    expect(SecondHeroSlideComponent.isVisible()).toBe(false);
+    // Assert the third slide is not rendered
+    expect(ThirdHeroSlideComponent.isVisible()).toBe(false);
 
     // Wait 3.5 secondes
     await new Promise((resolve) => setTimeout(resolve, 3500));
     // Assert the second slide is rendered
-    expect(secondHeroSlideComponent.isVisible()).toBe(true);
+    expect(SecondHeroSlideComponent.isVisible()).toBe(true);
     // Assert the first slide is no longer rendered
-    expect(firstHeroSlideComponent.isVisible()).toBe(false);
+    expect(FirstHeroSlideComponent.isVisible()).toBe(false);
 
     // Wait 3.5 secondes
     await new Promise((resolve) => setTimeout(resolve, 3500));
     // Assert the third slide is rendered
-    expect(thirdHeroSlideComponent.isVisible()).toBe(true);
+    expect(ThirdHeroSlideComponent.isVisible()).toBe(true);
     // Assert the second slide is no longer rendered
-    expect(secondHeroSlideComponent.isVisible()).toBe(false);
+    expect(SecondHeroSlideComponent.isVisible()).toBe(false);
 
     // Wait 3.5 secondes
     await new Promise((resolve) => setTimeout(resolve, 3500));
     // Assert the first slide after a complete loop is rendered
-    expect(firstHeroSlideComponent.isVisible()).toBe(true);
+    expect(FirstHeroSlideComponent.isVisible()).toBe(true);
     // Assert the third slide is no longer rendered
-    expect(thirdHeroSlideComponent.isVisible()).toBe(false);
+    expect(ThirdHeroSlideComponent.isVisible()).toBe(false);
   }, 11000);
 
-  test("renders the expected slide after a clic on its corresponding slick slider dot", async () => {
+  test("renders another slide after a clic on its corresponding slick slider dot", async () => {
+    // Get the third slick slider dot and clic on it
     const thirdSlickSliderDotElement = wrapper.findAll(
       "[data-testid='hero__slide-slick-slider-dot']"
     )[2];
-
     await thirdSlickSliderDotElement.trigger("click");
 
     // Assert the third slide is rendered
-    const thirdHeroSlideComponent = wrapper.findAllComponents(HeroSlide)[2];
-    expect(thirdHeroSlideComponent.isVisible()).toBe(true);
+    expect(ThirdHeroSlideComponent.isVisible()).toBe(true);
   });
 
-  test("renders previous slide after left swipe", async () => {
-    const slideShowElement = wrapper.find("[data-testid='slideShow']");
-    const HeroSlideComponents = wrapper.findAllComponents(HeroSlide);
-    const lastHeroSlideComponent =
-      HeroSlideComponents[HeroSlideComponents.length - 1];
+  test("renders the same slide when we clic on the current slick slider dot", async () => {
+    // Get the current slick slider dot and clic on it
+    const firstSlickSliderDotElement = wrapper.find(
+      "[data-testid='hero__slide-slick-slider-dot']"
+    );
+    await firstSlickSliderDotElement.trigger("click");
 
-    // Swipe to the left
+    // Assert the first slide is  still rendered
+    expect(FirstHeroSlideComponent.isVisible()).toBe(true);
+  });
+
+  test("renders each previous slide after left swipes during a loop", async () => {
+    const slideShowElement = wrapper.find("[data-testid='slideShow']");
+
+    // Swipe left to the last slide
     await slideShowElement.trigger("touchstart", {
       changedTouches: [{ screenX: 100 }],
     });
@@ -98,14 +132,35 @@ describe("SlideShow component:", () => {
     });
 
     // Assert the last slide is rendered
-    expect(lastHeroSlideComponent.isVisible()).toBe(true);
+    expect(ThirdHeroSlideComponent.isVisible()).toBe(true);
+
+    // Swipe left to the second slide
+    await slideShowElement.trigger("touchstart", {
+      changedTouches: [{ screenX: 100 }],
+    });
+    await slideShowElement.trigger("touchend", {
+      changedTouches: [{ screenX: 10 }],
+    });
+
+    // Assert the second slide is rendered
+    expect(SecondHeroSlideComponent.isVisible()).toBe(true);
+
+    // Swipe left to the starting slide
+    await slideShowElement.trigger("touchstart", {
+      changedTouches: [{ screenX: 100 }],
+    });
+    await slideShowElement.trigger("touchend", {
+      changedTouches: [{ screenX: 10 }],
+    });
+
+    // Assert the starting slide is rendered
+    expect(FirstHeroSlideComponent.isVisible()).toBe(true);
   });
 
   test("renders next slide after right swipe", async () => {
     const slideShowElement = wrapper.find("[data-testid='slideShow']");
-    const SecondHeroSlideComponent = wrapper.findAllComponents(HeroSlide)[1];
 
-    // Swipe to the right
+    // Swipe right to the second slide
     await slideShowElement.trigger("touchstart", {
       changedTouches: [{ screenX: 10 }],
     });
@@ -115,5 +170,27 @@ describe("SlideShow component:", () => {
 
     // Assert the second slide is rendered
     expect(SecondHeroSlideComponent.isVisible()).toBe(true);
+
+    // Swipe right to the last slide
+    await slideShowElement.trigger("touchstart", {
+      changedTouches: [{ screenX: 10 }],
+    });
+    await slideShowElement.trigger("touchend", {
+      changedTouches: [{ screenX: 100 }],
+    });
+
+    // Assert the last slide is rendered
+    expect(ThirdHeroSlideComponent.isVisible()).toBe(true);
+
+    // Swipe right to the starting slide
+    await slideShowElement.trigger("touchstart", {
+      changedTouches: [{ screenX: 10 }],
+    });
+    await slideShowElement.trigger("touchend", {
+      changedTouches: [{ screenX: 100 }],
+    });
+
+    // Assert the starting slide is rendered
+    expect(FirstHeroSlideComponent.isVisible()).toBe(true);
   });
 });

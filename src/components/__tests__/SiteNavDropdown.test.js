@@ -9,6 +9,7 @@ const dropdown = siteMenuItems[1];
 
 describe("SiteNavDropdown component:", () => {
   let wrapper;
+  let SiteNavDropdownHeaderComponent;
 
   beforeEach(() => {
     wrapper = mount(SiteNavDropdown, {
@@ -20,23 +21,32 @@ describe("SiteNavDropdown component:", () => {
         },
       },
     });
+    SiteNavDropdownHeaderComponent = wrapper.findComponent(
+      SiteNavDropdownHeader
+    );
   });
 
   describe("SiteNavDropdownHeader component:", () => {
+    test("is rendered", () => {
+      expect(SiteNavDropdownHeaderComponent.exists()).toBe(true);
+    });
+
     test("renders its title", () => {
-      const SiteNavDropdownHeaderComponent = wrapper.findComponent(
-        SiteNavDropdownHeader
-      );
       expect(SiteNavDropdownHeaderComponent.text()).toContain(dropdown.title);
     });
 
-    test("receives the expected value for the 'isDropdownOpen' prop", () => {
-      const SiteNavDropdownHeaderComponent = wrapper.findComponent(
-        SiteNavDropdownHeader
-      );
+    test("receives the 'false' value for the 'isDropdownOpen' prop at initial render", () => {
       expect(SiteNavDropdownHeaderComponent.props("isDropdownOpen")).toBe(
         false
       );
+    });
+
+    test("receives the 'true' value for the 'isDropdownOpen' prop when mouse enter the header", async () => {
+      // Open the dropdown
+      await wrapper.trigger("mouseenter");
+
+      // Assert the 'isDropdownOpen' prop has been toggled to 'true'
+      expect(SiteNavDropdownHeaderComponent.props("isDropdownOpen")).toBe(true);
     });
   });
 
@@ -47,7 +57,7 @@ describe("SiteNavDropdown component:", () => {
       expect(SiteNavDropdownListComponent.exists()).toBe(false);
     });
 
-    test("renders with its 'items' prop when the mouse enter the header", async () => {
+    test("is rendered when the mouse enter the dropdown header and receives the expected value for the 'items' prop", async () => {
       // Open the dropdown
       await wrapper.trigger("mouseenter");
 

@@ -5,9 +5,10 @@ import BurgerMenuDropdownHeader from "./BurgerMenuDropdownHeader.vue";
 import BurgerMenuDropdownList from "./BurgerMenuDropdownList.vue";
 import MyTransition from "./MyTransition.vue";
 
-const { item } = defineProps({
-  item: { type: Object as PropType<SiteMenuItem>, required: true },
+const { dropdown } = defineProps({
+  dropdown: { type: Object as PropType<SiteMenuItem>, required: true },
 });
+
 const isDropdownOpen: Ref<boolean> = ref(true);
 </script>
 
@@ -17,10 +18,13 @@ const isDropdownOpen: Ref<boolean> = ref(true);
       :isDropdownOpen
       @toggle-dropdown="isDropdownOpen = !isDropdownOpen"
     >
-      {{ item.title }}
+      {{ dropdown.title }}
     </BurgerMenuDropdownHeader>
-    <MyTransition duration="300" name="margintopMinus100PerCentWithInner">
-      <BurgerMenuDropdownList :list="item.subMenuItems" v-if="isDropdownOpen" />
+    <MyTransition :duration="300" name="margintopMinus100PerCentWithInner">
+      <BurgerMenuDropdownList
+        :items="dropdown.subMenuItems"
+        v-if="isDropdownOpen"
+      />
     </MyTransition>
   </div>
 </template>

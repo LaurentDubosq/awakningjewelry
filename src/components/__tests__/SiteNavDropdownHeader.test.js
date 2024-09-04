@@ -2,8 +2,8 @@ import { mount } from "@vue/test-utils";
 import SiteNavDropdownHeader from "@/components/SiteNavDropdownHeader.vue";
 import frontDataBase from "../../../db.json";
 
-const siteMenuItems = frontDataBase["siteMenuItems"];
-const title = siteMenuItems[1].title;
+const dropdown = frontDataBase.siteMenuItems[1];
+const title = dropdown.title;
 
 describe("SiteNavDropdownHeader component:", () => {
   let wrapper;
@@ -21,8 +21,8 @@ describe("SiteNavDropdownHeader component:", () => {
     expect(wrapper.text()).toContain(title);
   });
 
-  describe("'site-nav__dropdown-header--hover' CSS:", () => {
-    test("don't renders the CSS class at initial render", () => {
+  describe("'site-nav__dropdown-header--hover' CSS class:", () => {
+    test("don't renders the CSS class when the dropdown is close/at initial render", () => {
       expect(wrapper.classes("site-nav__dropdown-header--hover")).toBe(false);
     });
 
@@ -37,7 +37,7 @@ describe("SiteNavDropdownHeader component:", () => {
   });
 
   describe("Icon:", () => {
-    test("renders the '▼' icon when the dropdown is close", () => {
+    test("renders the '▼' icon when the dropdown is close/at initial render", () => {
       expect(wrapper.text()).toContain("▼");
     });
 

@@ -3,8 +3,11 @@ import { isBurgerMenuOpenKey } from "@/utils/injectionkeys";
 import { useIsOnMobileKey } from "@/utils/injectionkeys";
 import SiteHeader from "@/components/SiteHeader.vue";
 import SiteLogo from "@/components/SiteLogo.vue";
+import SiteNav from "@/components/SiteNav.vue";
 import CrossIcon from "@/components/icons/IconCross.vue";
 import BurgerIcon from "@/components/icons/IconBurger.vue";
+import PersonIcon from "@/components/icons/IconPerson.vue";
+import CartIcon from "@/components/icons/IconCart.vue";
 
 describe("SiteHeader component:", () => {
   let wrapper;
@@ -15,6 +18,9 @@ describe("SiteHeader component:", () => {
         provide: {
           [isBurgerMenuOpenKey]: false,
           [useIsOnMobileKey]: true, // set environment on mobile by default
+        },
+        stubs: {
+          SiteNav,
         },
       },
     });
@@ -32,21 +38,28 @@ describe("SiteHeader component:", () => {
       });
       const BurgerIconWrapper = wrapper.find(
         "[data-testid='site-header__burger-menu-icon-wrapper']"
-      );
+      ); // it is easier to target the wrapper instead of a specific element because the burger icon can render two element conditionnaly
       expect(BurgerIconWrapper.exists()).toBe(false);
     });
 
-    test("renders the burger icon at initial render on mobile", () => {
+    test("renders on mobile", () => {
+      const BurgerIconWrapper = wrapper.find(
+        "[data-testid='site-header__burger-menu-icon-wrapper']"
+      ); // it is easier to target the wrapper instead of a specific element because the burger icon can render two element conditionnaly
+      expect(BurgerIconWrapper.exists()).toBe(true);
+    });
+
+    test("renders the burger icon at initial render (on mobile)", () => {
       const BurgerIconComponent = wrapper.findComponent(BurgerIcon);
       expect(BurgerIconComponent.exists()).toBe(true);
     });
 
-    test("renders the cross icon when the burger menu must be open", () => {
+    test("renders the cross icon when the burger menu must be open (on mobile)", () => {
       wrapper = mount(SiteHeader, {
         global: {
           provide: {
-            [isBurgerMenuOpenKey]: true,
-            [useIsOnMobileKey]: true, // set environment on mobile by default
+            [isBurgerMenuOpenKey]: true, // simulates that the burger menu is open
+            [useIsOnMobileKey]: true,
           },
         },
       });
@@ -54,26 +67,31 @@ describe("SiteHeader component:", () => {
       expect(CrossIconComponent.exists()).toBe(true);
     });
 
-    test("emits its custom event when its button is clicked", async () => {
-      const burgerMenuIconButtonElement = wrapper.find(
+    test("emits its 'toggle-burger-menu' custom event when its button is clicked (on mobile)", async () => {
+      const buttonElement = wrapper.find(
         '[data-testid="site-header__burger-menu-icon-button"]'
       );
-      await burgerMenuIconButtonElement.trigger("click");
-      expect(wrapper.emitted()).toHaveProperty("toggle-burger-menu");
+      await buttonElement.trigger("click");
+      expect(wrapper.emitted("toggle-burger-menu")).toHaveLength(1);
     });
   });
 
   describe("Site logo:", () => {
-    test("is rendered with its '/' expected link", () => {
-      // Assert the logo is rendered
+    test("is rendered", () => {
       const SiteLogoComponent = wrapper.findComponent(SiteLogo);
       expect(SiteLogoComponent.exists()).toBe(true);
+    });
 
-      // Assert the logo's link is well setted to "/"
-      const siteLogoLinkElement = wrapper.find(
+    it("has a link with its url value setted to '/'", () => {
+      const linkElement = wrapper.find(
         "[data-testid='site-header__logo-link']"
       );
-      expect(siteLogoLinkElement.attributes("to")).toBe("/");
+
+      // Assert the logo has a link tag
+      expect(linkElement.exists()).toBe(true);
+
+      // Assert the logo has its link value well setted
+      expect(linkElement.attributes("to")).toBe("/");
     });
   });
 
@@ -85,36 +103,38 @@ describe("SiteHeader component:", () => {
             [isBurgerMenuOpenKey]: false,
             [useIsOnMobileKey]: false, // set environment on desktop
           },
+          stubs: {
+            SiteNav,
+          },
         },
       });
 
-      const siteNavWrapperDivElement = wrapper.find(
-        "[data-testid='site-header__site-nav-wrapper']"
-      );
-      expect(siteNavWrapperDivElement.exists()).toBe(true);
+      const siteNavComponent = wrapper.findComponent(SiteNav);
+      expect(siteNavComponent.exists()).toBe(true);
     });
 
     test("is not rendered on mobile", () => {
-      const siteNavWrapperDivElement = wrapper.find(
-        "[data-testid='site-header__site-nav-wrapper']"
-      );
-      expect(siteNavWrapperDivElement.exists()).toBe(false);
+      const siteNavComponent = wrapper.findComponent(SiteNav);
+      expect(siteNavComponent.exists()).toBe(false);
     });
   });
 
   describe("Account Icon", () => {
-    test("is rendered on mobile with its '/account' link", () => {
-      // Assert the Account Icon is rendered
-      const accountIconWrapperElement = wrapper.find(
-        "[data-testid='site-header__account-icon-wrapper']"
-      );
-      expect(accountIconWrapperElement.exists()).toBe(true);
+    test("is rendered on mobile", () => {
+      const PersonIconComponent = wrapper.findComponent(PersonIcon);
+      expect(PersonIconComponent.exists()).toBe(true);
+    });
 
-      // Assert the Account Icon link is setted to "/account"
-      const accountIconLinkElement = wrapper.find(
+    it("has a link with its url value setted to '/account'", () => {
+      const linkElement = wrapper.find(
         "[data-testid='site-header__account-icon-link']"
       );
-      expect(accountIconLinkElement.attributes("to")).toBe("/account");
+
+      // Assert the icon has a link tag
+      expect(linkElement.exists()).toBe(true);
+
+      // Assert the icon has its link value well setted
+      expect(linkElement.attributes("to")).toBe("/account");
     });
 
     test("is not rendered on desktop", () => {
@@ -126,26 +146,27 @@ describe("SiteHeader component:", () => {
           },
         },
       });
-      const accountIconWrapperElement = wrapper.find(
-        "[data-testid='site-header__account-icon-wrapper']"
-      );
-      expect(accountIconWrapperElement.exists()).toBe(false);
+      const PersonIconComponent = wrapper.findComponent(PersonIcon);
+      expect(PersonIconComponent.exists()).toBe(false);
     });
   });
 
   describe("Cart Icon", () => {
-    test("is rendered with its '/cart' link", () => {
-      // Assert the Cart Icon is rendered
-      const cartIconWrapperElement = wrapper.find(
-        "[data-testid='site-header__cart-icon-wrapper']"
-      );
-      expect(cartIconWrapperElement.exists()).toBe(true);
+    test("is rendered ", () => {
+      const CartIconComponent = wrapper.findComponent(CartIcon);
+      expect(CartIconComponent.exists()).toBe(true);
+    });
 
-      // Assert the Cart Icon link is setted to "/cart"
-      const cartIconLinkElement = wrapper.find(
+    it("has a link with its url value setted to '/cart'", () => {
+      const linkElement = wrapper.find(
         "[data-testid='site-header__cart-icon-link']"
       );
-      expect(cartIconLinkElement.attributes("to")).toBe("/cart");
+
+      // Assert the icon has a link tag
+      expect(linkElement.exists()).toBe(true);
+
+      // Assert the icon has its link value well setted
+      expect(linkElement.attributes("to")).toBe("/cart");
     });
   });
 });

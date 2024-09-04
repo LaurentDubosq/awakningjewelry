@@ -15,8 +15,8 @@ describe("HeroSlide component:", () => {
   beforeEach(() => {
     wrapper = mount(HeroSlide, {
       props: {
-        slideIndex: 0,
         slide: heroSlides[0],
+        slideIndex: 0,
         slidesLength: heroSlides.length,
         currentDisplayedSlideIndex: 0,
         slidesLength: 3,
@@ -45,15 +45,18 @@ describe("HeroSlide component:", () => {
   });
 
   describe("Desktop image:", () => {
-    /* the <source> element render can't be verified simulated browser environment, so, only its attributs are tested */
+    /* the <source> element render can't be verified without a simulated browser environment, so, only its attributs are tested */
     test("has its attributes well setted", () => {
       const sourceElement = wrapper.find(
         "[data-testid='hero__slide-image-desktop']"
       );
 
+      // Assert the source tag exists
+      expect(sourceElement.exists()).toBe(true);
+
       // Assert the "media" attribute is well setted
-      expect(sourceElement.attributes("media")).toContain(
-        AwakningBreakpointDesktop
+      expect(sourceElement.attributes("media")).toBe(
+        `(min-width: ${AwakningBreakpointDesktop})`
       );
 
       // Assert the "srcset" attribute is well setted
@@ -65,24 +68,22 @@ describe("HeroSlide component:", () => {
 
   describe("Slick slider:", () => {
     test("renders all expected dots", () => {
-      const slickSliderDotSpanElements = wrapper.findAll(
+      const dotElements = wrapper.findAll(
         "[data-testid='hero__slide-slick-slider-dot']"
       );
-      expect(slickSliderDotSpanElements).toHaveLength(heroSlides.length);
+      expect(dotElements).toHaveLength(heroSlides.length);
     });
 
-    it("has the active CSS dot class enabled on the corresponding slider dot", () => {
-      const firstSliderDotSpanElement = wrapper.find(
+    it("has the dot's active CSS class on the dot corresponding to the current slide", () => {
+      const firstDotElement = wrapper.find(
         "[data-testid='hero__slide-slick-slider-dot']"
       );
       expect(
-        firstSliderDotSpanElement.classes(
-          "hero__slide-slick-slider-dot--active"
-        )
+        firstDotElement.classes("hero__slide-slick-slider-dot--active")
       ).toBe(true);
     });
 
-    it("should not have the active CSS dot class enabled on not corresponding slider dot", () => {
+    it("should not have the dot's active CSS class on dot not corresponding to the current slide", () => {
       const secondSliderDotSpanElement = wrapper.findAll(
         "[data-testid='hero__slide-slick-slider-dot']"
       )[1];
@@ -93,11 +94,10 @@ describe("HeroSlide component:", () => {
       ).toBe(false);
     });
 
-    it("emits the dot custom event with its payload", async () => {
+    it("emits the 'display-selected-slide' custom event with its payload when the slick slider dot is clicked", async () => {
       const secondSliderDotSpanElement = wrapper.findAll(
         "[data-testid='hero__slide-slick-slider-dot']"
       )[1];
-
       await secondSliderDotSpanElement.trigger("click");
 
       // Assert the custom event has been emitted properly
@@ -125,13 +125,20 @@ describe("HeroSlide component:", () => {
   });
 
   describe("Button link:", () => {
-    test("is rendered with its link value well setted", () => {
-      // Assert the button is rendered
-      const buttonElement = wrapper.find("[data-testid='hero__slide-link']");
+    test("is rendered", () => {
+      const buttonElement = wrapper.find("[data-testid='hero__slide-button']");
       expect(buttonElement.exists()).toBe(true);
+    });
+
+    it("has a link with its url value well setted", () => {
+      const linkElement = wrapper.find(
+        "[data-testid='hero__slide-button-link']"
+      );
+
+      // Assert the button has a link tag
+      expect(linkElement.exists()).toBe(true);
 
       // Assert the button's link value is well setted
-      const linkElement = wrapper.find("[data-testid='hero__slide-link']");
       expect(linkElement.attributes("to")).toBe(heroSlides[0].url);
     });
   });

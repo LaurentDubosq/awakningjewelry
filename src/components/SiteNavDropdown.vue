@@ -12,6 +12,7 @@ const SiteNavDropdownList = defineAsyncComponent(
 const { dropdown } = defineProps({
   dropdown: { type: Object as PropType<SiteMenuItem>, required: true },
 });
+
 const isDropdownOpen: Ref<boolean> = ref(false);
 
 function toggleDropdown() {

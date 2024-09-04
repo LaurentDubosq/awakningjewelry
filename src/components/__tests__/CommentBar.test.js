@@ -1,6 +1,5 @@
 import { mount } from "@vue/test-utils";
 import CommentBar from "@/components/CommentBar.vue";
-import { beforeEach } from "vitest";
 import frontDataBase from "../../../db.json";
 
 const comment = frontDataBase.commentBarMissionData;
@@ -24,9 +23,16 @@ describe("CommentBar component:", () => {
     expect(textElement.text()).toContain(comment.text);
   });
 
-  it("has its 'src' and 'alt' attributes's value well setted", () => {
+  test("renders its image with its expected 'src' and 'alt' attributes values well setted", () => {
     const imageElement = wrapper.find("[data-testid='commentBar__image']");
+
+    // Assert the image is rendered
+    expect(imageElement.exists()).toBe(true);
+
+    // Assert the "src" attribute is well setted
     expect(imageElement.attributes("src")).toBe(comment.image.url);
+
+    // Assert the "alt" attribute is well setted
     expect(imageElement.attributes("alt")).toBe(comment.image.alt);
   });
 });

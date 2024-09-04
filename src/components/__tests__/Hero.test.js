@@ -16,7 +16,13 @@ describe("Hero component:", () => {
 
   test("renders the SlideShow component with its expected props value", async () => {
     // Mount the component
-    const wrapper = mount(Hero);
+    const wrapper = mount(Hero, {
+      global: {
+        stubs: { SlideShow },
+      },
+    });
+
+    // Wait until the onMounted hook has been executed
     await flushPromises();
 
     // Assert the SlideShow component is rendered

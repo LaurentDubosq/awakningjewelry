@@ -76,17 +76,13 @@ onUnmounted(() => {
           </RouterLink>
         </div>
         <div class="site-header__right-container" ref="rightContainerElement">
-          <div
-            class="site-header__site-nav-wrapper"
-            data-testid="site-header__site-nav-wrapper"
-            v-if="!useIsOnMobile"
-          >
+          <div class="site-header__site-nav-wrapper" v-if="!useIsOnMobile">
             <SiteNav />
           </div>
           <div
             class="site-header__account-icon-wrapper"
-            data-testid="site-header__account-icon-wrapper"
             v-if="useIsOnMobile"
+            data-testid="site-header__account-icon-wrapper"
           >
             <RouterLink
               to="/account"

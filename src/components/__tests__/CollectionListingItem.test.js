@@ -15,20 +15,25 @@ describe("CollectionListingItem component:", () => {
     });
   });
 
-  it("has its background image url well setted", () => {
-    const itemElement = wrapper.find("[data-testid='collectionListing__item']");
-    expect(itemElement.attributes("style")).toContain(collection.image);
-  });
-
-  it("has its title link value well setted", () => {
-    const linkElement = wrapper.find("[data-testid='collectionListing__link']");
-    expect(linkElement.attributes("to")).toBe(collection.url);
-  });
-
   test("renders its title", () => {
     const titleElement = wrapper.find(
       "[data-testid='collectionListing__item-title']"
     );
     expect(titleElement.text()).toContain(collection.title);
+  });
+
+  it("has a link with its url value well setted", () => {
+    const linkElement = wrapper.find("[data-testid='collectionListing__link']");
+
+    // Assert the title has a link tag
+    expect(linkElement.exists()).toBe(true);
+
+    // Assert the title has its link value well setted
+    expect(linkElement.attributes("to")).toBe(collection.url);
+  });
+
+  it("has its background image url well setted", () => {
+    const itemElement = wrapper.find("[data-testid='collectionListing__item']");
+    expect(itemElement.attributes("style")).toContain(collection.image);
   });
 });

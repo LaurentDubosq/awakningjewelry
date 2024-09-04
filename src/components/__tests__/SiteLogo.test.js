@@ -5,27 +5,32 @@ import { getPagesMetaData } from "@/composables/fetch";
 
 const pagesMetaData = frontDataBase["pagesMetaData"];
 
-describe("SiteLogo component:", () => {
-  test("renders the logo with its title attribut", async () => {
-    // Data Fetcher Mock
-    vi.mock("@/composables/fetch", () => {
-      return {
-        getPagesMetaData: vi.fn(),
-      };
+describe("SiteLogo component:", async () => {
+  vi.mock("@/composables/fetch", () => {
+    return {
+      getPagesMetaData: vi.fn(),
+    };
+  });
+  getPagesMetaData.mockReturnValue(pagesMetaData);
+
+  const wrapper = mount(SiteLogo);
+
+  await flushPromises(); // Wait until the onMounted hook has been executed
+
+  const siteLogoElement = wrapper.find("[data-testid='site-logo']");
+
+  describe("Logo's image element:", () => {
+    test("is rendered", () => {
+      expect(siteLogoElement.exists()).toBe(true);
     });
-    getPagesMetaData.mockReturnValue(pagesMetaData);
 
-    // Component Mounting
-    const wrapper = mount(SiteLogo);
+    test("receives the expected title attribut value", () => {
+      expect(siteLogoElement.attributes("title")).toBe(pagesMetaData[0].title);
+    });
 
-    // Wait for the onMounted to complete
-    await flushPromises();
-
-    // Assert the logo is rendered
-    const siteLogoElement = wrapper.find("[data-testid='site-logo']");
-    expect(siteLogoElement.exists()).toBe(true);
-
-    // Assert the title attribut value is well setted
-    expect(siteLogoElement.attributes("title")).toBe(pagesMetaData[0].title);
+    test("has an alt attribut value", () => {
+      const altLength = siteLogoElement.attributes("alt").length;
+      expect(altLength).toBeGreaterThan(0);
+    });
   });
 });

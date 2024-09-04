@@ -5,7 +5,7 @@ import SiteHeader from "./components/SiteHeader.vue";
 import BurgerMenu from "./components/BurgerMenu.vue";
 import MyTransition from "./components/MyTransition.vue";
 
-// Site Menu Items - Get Data & Send it to SiteNav component
+// Site Menu Items - Get Data & Send it to SiteNav component via dependency injection and to BurgerMenu component via prop
 import type { SiteMenuItem } from "./data/menus";
 import { getSiteMenuItems } from "./composables/fetch";
 import { siteMenuItemsKey } from "./utils/injectionkeys";
@@ -17,7 +17,7 @@ provide(siteMenuItemsKey, siteMenuItems); // Send Menu Items List to SiteNav com
 onMounted(async () => {
   siteMenuItems.value = await getSiteMenuItems();
 });
-// end Site Menu Items - Get Data & Send it to component
+// end Site Menu Items - Get Data & Send it to SiteNav component via dependency injection and to BurgerMenu component via prop
 
 // Burger Menu - Open/Close Logic & Send handler and status
 import SASSCONSTANTS from "@/assets/styles/_constants.module.scss"; /* Get the SASS Constants to use it in Javascript */
@@ -45,7 +45,7 @@ function closeBurgerMenuOnDesktop() {
 }
 
 provide(toggleBurgerMenuKey, toggleBurgerMenu); // Send the open/close burger menu handle function to BurgerMenuDropdownList component
-provide(isBurgerMenuOpenKey, isBurgerMenuOpen); // Send the open/close burger menu status to SiteHeader component to toggle the burger menu icon
+provide(isBurgerMenuOpenKey, isBurgerMenuOpen); // Send the open/close burger menu status to SiteHeader component to toggle the burger menu ICON
 
 onMounted(() => {
   window.addEventListener("resize", closeBurgerMenuOnDesktop); // Close the Burger Menu when we resize the window width from mobile to desktop.
@@ -60,7 +60,7 @@ onUnmounted(() => {
 import { useIsOnMobile } from "./composables/display";
 import { useIsOnMobileKey } from "./utils/injectionkeys";
 
-provide(useIsOnMobileKey, useIsOnMobile()); // inform if we are on mobile or desktop environment
+provide(useIsOnMobileKey, useIsOnMobile()); // inform if we are in mobile or desktop environment
 // end Global Variables
 </script>
 

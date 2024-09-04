@@ -8,6 +8,8 @@ const dropdownList = siteMenuItems[1].subMenuItems;
 
 describe("SiteNavDropdownList component:", () => {
   let wrapper;
+  let SiteNavDropdownItemComponents;
+  let listItemElements;
 
   beforeEach(() => {
     wrapper = mount(SiteNavDropdownList, {
@@ -16,37 +18,50 @@ describe("SiteNavDropdownList component:", () => {
         stubs: { SiteNavDropdownItem },
       },
     });
+    SiteNavDropdownItemComponents =
+      wrapper.findAllComponents(SiteNavDropdownItem);
+    listItemElements = wrapper.findAll(
+      "[data-testid='site-nav__dropdown-list-item']"
+    );
   });
 
   test("renders its list entirely", () => {
-    const listItemElements = wrapper.findAll(
-      "[data-testid='site-nav__dropdown-list-item']"
-    );
     expect(listItemElements).toHaveLength(dropdownList.length);
   });
 
-  describe("Item:", () => {
-    test("renders its title and link URL", () => {
-      // Assert the title is rendered
-      const firstSiteNavDropdownItemComponent =
-        wrapper.findComponent(SiteNavDropdownItem);
-      expect(firstSiteNavDropdownItemComponent.text()).toContain(
-        dropdownList[0].title
-      );
+  describe("Each Item:", () => {
+    dropdownList.forEach((item, index) => {
+      describe(`Item at index ${index}:`, () => {
+        test("renders its SiteNavDropdownItem component:", () => {
+          const SiteNavDropdownItemComponent =
+            listItemElements[index].findComponent(SiteNavDropdownItem);
+          expect(SiteNavDropdownItemComponent.exists()).toBe(true);
+        });
 
-      // Assert the link's URL is setted
-      const firstLinkElement = wrapper.find(
-        "[data-testid='site-nav__dropdown-list-item-link']"
-      );
-      expect(firstLinkElement.attributes("to")).toBe(dropdownList[0].url);
-    });
+        test("renders its title", () => {
+          expect(SiteNavDropdownItemComponents[index].text()).toContain(
+            dropdownList[index].title
+          );
+        });
 
-    test("emits its custom event when it is clicked", async () => {
-      const firstListItemElement = wrapper.find(
-        "[data-testid='site-nav__dropdown-list-item']"
-      );
-      await firstListItemElement.trigger("click");
-      expect(wrapper.emitted()).toHaveProperty("close-dropdown");
+        it("has a link with its url value well setted", () => {
+          const linkElement = listItemElements[index].find(
+            "[data-testid='site-nav__dropdown-list-item-link']"
+          );
+
+          // Assert the item has a link tag
+          expect(linkElement.exists()).toBe(true);
+
+          // Assert the item has its link value well setted
+          expect(linkElement.attributes("to")).toBe(dropdownList[index].url);
+        });
+      });
     });
+  });
+
+  test("emits the 'close-dropdown' custom event when the item is clicked", async () => {
+    const firstListItemElement = listItemElements[0];
+    await firstListItemElement.trigger("click");
+    expect(wrapper.emitted("close-dropdown")).toHaveLength(1);
   });
 });

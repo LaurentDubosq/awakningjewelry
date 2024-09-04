@@ -7,10 +7,10 @@ const { name, group } = defineProps({
 </script>
 
 <template>
-  <TransitionGroup :name :duration data-testid="transitionGroup" v-if="group">
+  <TransitionGroup :name :duration v-if="group">
     <slot />
   </TransitionGroup>
-  <Transition :name data-testid="transition" v-else>
+  <Transition :name v-else>
     <slot />
   </Transition>
 </template>

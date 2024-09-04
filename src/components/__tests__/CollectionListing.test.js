@@ -4,14 +4,19 @@ import CollectionListingItem from "@/components/CollectionListingItem.vue";
 import frontDatabase from "../../../db.json";
 
 const collectionListingGenderData = frontDatabase.collectionListingGenderData;
+const collections = collectionListingGenderData.collections;
 
 describe("CollectionListing component:", () => {
   let wrapper;
+  let CollectionListingItemComponents;
 
   beforeEach(() => {
     wrapper = mount(CollectionListing, {
       props: { data: collectionListingGenderData },
     });
+    CollectionListingItemComponents = wrapper.findAllComponents(
+      CollectionListingItem
+    );
   });
 
   test("renders its title", () => {
@@ -21,21 +26,21 @@ describe("CollectionListing component:", () => {
     expect(titleElement.text()).toContain(collectionListingGenderData.title);
   });
 
-  test("renders all its items with their expected props values", () => {
-    // Assert all the expected items are rendered
-    const CollectionListingItemComponents = wrapper.findAllComponents(
-      CollectionListingItem
-    );
+  test("renders its collection list entirely", () => {
     expect(CollectionListingItemComponents).toHaveLength(
       collectionListingGenderData.collections.length
     );
+  });
 
-    // Assert the item received the expected "collection" props value
-    const firstCollectionListingItemComponent = wrapper.findComponent(
-      CollectionListingItem
-    );
-    expect(
-      firstCollectionListingItemComponent.props("collection")
-    ).toMatchObject(collectionListingGenderData.collections[0]);
+  describe("Each item:", () => {
+    collections.forEach((collection, index) => {
+      describe(`item at index ${index}:`, () => {
+        test("has its 'collection' prop value well setted", () => {
+          expect(
+            CollectionListingItemComponents[index].props("collection")
+          ).toMatchObject(collections[index]);
+        });
+      });
+    });
   });
 });

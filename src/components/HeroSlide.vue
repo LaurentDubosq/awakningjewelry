@@ -70,10 +70,10 @@ onMounted(() => {
     <div class="hero__slide-slick-slider">
       <span
         class="hero__slide-slick-slider-dot"
-        v-for="(slide, index) in slidesLength"
         :class="{
           'hero__slide-slick-slider-dot--active': index === slideIndex,
         }"
+        v-for="(slide, index) in slidesLength"
         @click="$emit('display-selected-slide', index)"
         data-testid="hero__slide-slick-slider-dot"
       />
@@ -85,8 +85,10 @@ onMounted(() => {
       <h2 class="hero__slide-title" data-testid="hero__slide-title">
         {{ slide.title }}
       </h2>
-      <RouterLink :to="slide.url" data-testid="hero__slide-link">
-        <button class="btn btn--primary">explore now</button>
+      <RouterLink :to="slide.url" data-testid="hero__slide-button-link">
+        <button class="btn btn--primary" data-testid="hero__slide-button">
+          explore now
+        </button>
       </RouterLink>
     </div>
   </div>

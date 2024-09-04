@@ -5,8 +5,8 @@ import IconSignPlus from "@/components/icons/IconSignPlus.vue";
 import frontDataBase from "../../../db.json";
 import SASSCONSTANTS from "@/assets/styles/_constants.module.scss";
 
-const siteMenuItems = frontDataBase["siteMenuItems"];
-const title = siteMenuItems[1].title;
+const dropdown = frontDataBase.siteMenuItems[1];
+const title = dropdown.title;
 const COLORWHITE = SASSCONSTANTS.AwakningColorWhite;
 
 describe("BurgerMenuDropdownHeader component:", () => {
@@ -52,7 +52,7 @@ describe("BurgerMenuDropdownHeader component:", () => {
         "[data-testid='burger-menu__dropdown-header-button']"
       );
       await buttonElement.trigger("click");
-      expect(wrapper.emitted()).toHaveProperty("toggle-dropdown");
+      expect(wrapper.emitted("toggle-dropdown")).toHaveLength(1);
     });
   });
 });

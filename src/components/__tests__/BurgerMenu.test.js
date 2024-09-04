@@ -5,67 +5,86 @@ import BurgerMenuItem from "@/components/BurgerMenuItem.vue";
 import frontDataBase from "../../../db.json";
 
 const siteMenuItems = frontDataBase["siteMenuItems"];
-const firstDropdown = siteMenuItems[1];
-const firstItem = siteMenuItems[0];
 
 describe("BurgerMenu component:", () => {
-  let wrapper;
-
-  beforeEach(() => {
-    wrapper = mount(BurgerMenu, {
+  test("renders its list entirely", () => {
+    const wrapper = mount(BurgerMenu, {
       props: { siteMenuItems },
     });
-  });
-
-  test("renders its entire list", () => {
-    const burgerMenuListItemElements = wrapper.findAll(
+    const listItemElements = wrapper.findAll(
       "[data-testid='burger-menu__list-item']"
     );
-    expect(burgerMenuListItemElements).toHaveLength(siteMenuItems.length);
+    expect(listItemElements).toHaveLength(siteMenuItems.length);
   });
 
-  describe("BurgerMenuDropdown component:", () => {
-    test("is rendered with its 'item' prop", () => {
-      const firstBurgerMenuDropdownComponent =
-        wrapper.findComponent(BurgerMenuDropdown);
+  describe("Each Item:", () => {
+    const wrapper = mount(BurgerMenu, {
+      props: { siteMenuItems },
+    });
+    const listItemElements = wrapper.findAll(
+      "[data-testid='burger-menu__list-item']"
+    );
 
-      // Assert the dropdown is rendered
-      expect(firstBurgerMenuDropdownComponent.exists()).toBe(true);
+    siteMenuItems.forEach((item, index) => {
+      // BurgerMenu Dropdown Tests
+      if (item.subMenuItems) {
+        describe(`BurgerMenu's dropdown at index ${index}:`, () => {
+          const BurgerMenuDropdownComponent =
+            listItemElements[index].findComponent(BurgerMenuDropdown);
 
-      // Assert the 'item' prop value is well setted
-      expect(firstBurgerMenuDropdownComponent.props("item")).toMatchObject(
-        firstDropdown
-      );
+          test("is rendered", () => {
+            expect(BurgerMenuDropdownComponent.exists()).toBe(true);
+          });
+
+          test("has its 'dropdown' prop value well setted", () => {
+            expect(BurgerMenuDropdownComponent.props("dropdown")).toMatchObject(
+              siteMenuItems[index]
+            );
+          });
+        });
+      }
+      // BurgerMenu Item Tests
+      else {
+        describe(`BurgerMenu's item at index ${index}:`, () => {
+          const BurgerMenuItemComponent =
+            listItemElements[index].findComponent(BurgerMenuItem);
+
+          test("is rendered", () => {
+            expect(BurgerMenuItemComponent.exists()).toBe(true);
+          });
+
+          test("renders its title", () => {
+            expect(BurgerMenuItemComponent.text()).toContain(
+              siteMenuItems[index].title
+            );
+          });
+
+          it("has a link with its url value well setted", () => {
+            const linkElement = listItemElements[index].find(
+              "[data-testid='burger-menu__link']"
+            );
+
+            // Assert the item has a link tag
+            expect(linkElement.exists()).toBe(true);
+
+            // Assert the item has its link value well setted
+            expect(linkElement.attributes("to")).toBe(siteMenuItems[index].url);
+          });
+        });
+      }
     });
   });
 
-  describe("BurgerMenuItem component:", () => {
-    test("is rendered with its title and link's URL", () => {
-      const firstBurgerMenuItemComponent =
-        wrapper.findComponent(BurgerMenuItem);
-
-      // Assert the component is rendered
-      expect(firstBurgerMenuItemComponent.exists()).toBe(true);
-
-      // Assert its title is rendered
-      expect(firstBurgerMenuItemComponent.text()).toContain(firstItem.title);
-
-      // Assert its link is rendered and well setted
-      const firstBurgerMenuItemLinkElement = wrapper.find(
-        "[data-testid='burger-menu__link']"
-      );
-      expect(firstBurgerMenuItemLinkElement.exists()).toBe(true);
-      expect(firstBurgerMenuItemLinkElement.attributes("to")).toBe(
-        firstItem.url
-      );
-    });
-
-    test("emits its custom event", async () => {
+  describe("BurgerMenuItem", () => {
+    test("emits its 'close-burger-menu' custom event when the BurgerMenuItem link is clicked", async () => {
+      const wrapper = mount(BurgerMenu, {
+        props: { siteMenuItems },
+      });
       const firstBurgerMenuItemLinkElement = wrapper.find(
         "[data-testid='burger-menu__link']"
       );
       await firstBurgerMenuItemLinkElement.trigger("click");
-      expect(wrapper.emitted()).toHaveProperty("close-burger-menu");
+      expect(wrapper.emitted("close-burger-menu")).toHaveLength(1);
     });
   });
 });

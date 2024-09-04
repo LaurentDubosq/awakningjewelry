@@ -1,6 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { toggleBurgerMenuKey } from "@/utils/injectionkeys";
 import BurgerMenuDropdownList from "@/components/BurgerMenuDropdownList.vue";
+import BurgerMenuDropdownItem from "@/components/BurgerMenuDropdownItem.vue";
 import frontDataBase from "../../../db.json";
 
 const siteMenuItems = frontDataBase["siteMenuItems"];
@@ -9,6 +10,8 @@ const dropdownList = siteMenuItems[1].subMenuItems;
 describe("BurgerMenuDropdownList component:", () => {
   let toggleBurgerMenu;
   let wrapper;
+  let listItemElements;
+  let BurgerMenuDropdownItemComponents;
 
   beforeEach(() => {
     toggleBurgerMenu = vi.fn();
@@ -19,33 +22,49 @@ describe("BurgerMenuDropdownList component:", () => {
           [toggleBurgerMenuKey]: toggleBurgerMenu,
         },
       },
-      props: { list: dropdownList },
+      props: { items: dropdownList },
     });
+
+    listItemElements = wrapper.findAll(
+      "[data-testid='burger-menu__dropdown-list-item']"
+    );
+    BurgerMenuDropdownItemComponents = wrapper.findAllComponents(
+      BurgerMenuDropdownItem
+    );
   });
 
   test("renders its list entirely", () => {
-    const listItemElements = wrapper.findAll(
-      "[data-testid='burger-menu__dropdown-list-item']"
-    );
     expect(listItemElements).toHaveLength(dropdownList.length);
   });
 
-  describe("Item:", () => {
-    test("is rendered with its title and link URL", () => {
-      // Assert the Item title is rendered
-      const firstItemElement = wrapper.find(
-        "[data-testid='burger-menu__dropdown-list-item']"
-      );
-      expect(firstItemElement.text()).toContain(dropdownList[0].title);
+  describe("Each Item:", () => {
+    dropdownList.forEach((item, index) => {
+      describe(`Item at index ${index}:`, () => {
+        test("renders its BurgerMenuDropdownItem component:", () => {
+          expect(BurgerMenuDropdownItemComponents[index].exists()).toBe(true);
+        });
 
-      // Assert the Item link value is well setted
-      const firstItemLinkElement = wrapper.find(
-        "[data-testid='burger-menu__dropdown-list-item-link']"
-      );
-      expect(firstItemLinkElement.attributes("to")).toBe(dropdownList[0].url);
+        test("renders its title", () => {
+          expect(BurgerMenuDropdownItemComponents[index].text()).toContain(
+            dropdownList[index].title
+          );
+        });
+
+        it("has a link with its url value well setted", () => {
+          const linkElement = listItemElements[index].find(
+            "[data-testid='burger-menu__dropdown-list-item-link']"
+          );
+
+          // Assert the item has a link tag
+          expect(linkElement.exists()).toBe(true);
+
+          // Assert the item has its link value well setted
+          expect(linkElement.attributes("to")).toBe(dropdownList[index].url);
+        });
+      });
     });
 
-    test("calls the 'toggleBurgerMenu' function when the link is clicked", async () => {
+    test("triggers the 'toggleBurgerMenu' function when the link is clicked", async () => {
       const firstItemLinkElement = wrapper.find(
         "[data-testid='burger-menu__dropdown-list-item-link']"
       );

@@ -6,8 +6,8 @@ import BurgerMenuDropdownItem from "./BurgerMenuDropdownItem.vue";
 
 const toggleBurgerMenu: Function | undefined = inject(toggleBurgerMenuKey);
 
-const { list } = defineProps({
-  list: { type: Object as PropType<SiteSubMenuItem[]>, required: true },
+const { items } = defineProps({
+  items: { type: Object as PropType<SiteSubMenuItem[]>, required: true },
 });
 </script>
 
@@ -17,7 +17,7 @@ const { list } = defineProps({
       <li
         class="burger-menu__dropdown-list-item"
         data-testid="burger-menu__dropdown-list-item"
-        v-for="item in list"
+        v-for="item in items"
       >
         <RouterLink
           :to="item.url"

@@ -15,18 +15,21 @@ const { siteMenuItems } = defineProps({
       <li
         class="burger-menu__list-item"
         data-testid="burger-menu__list-item"
-        v-for="item of siteMenuItems"
+        v-for="siteMenuItem of siteMenuItems"
       >
-        <BurgerMenuDropdown :item v-if="item.subMenuItems" />
+        <BurgerMenuDropdown
+          :dropdown="siteMenuItem"
+          v-if="siteMenuItem.subMenuItems"
+        />
         <RouterLink
-          :to="item.url"
+          :to="siteMenuItem.url"
           class="burger-menu__link"
           data-testid="burger-menu__link"
           @click="$emit('close-burger-menu')"
           v-else
         >
           <BurgerMenuItem>
-            {{ item.title }}
+            {{ siteMenuItem.title }}
           </BurgerMenuItem>
         </RouterLink>
       </li>

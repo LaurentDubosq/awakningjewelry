@@ -4,14 +4,18 @@ import ProductListingItem from "@/components/ProductListingItem.vue";
 import FrontDataBase from "../../../db.json";
 
 const productListingPromotionsData = FrontDataBase.productListingPromotionsData;
+const products = productListingPromotionsData.products;
 
 describe("ProductListing component:", () => {
   let wrapper;
+  let ProductListingItemComponents;
 
   beforeEach(() => {
     wrapper = mount(ProductListing, {
       props: { data: productListingPromotionsData },
     });
+    ProductListingItemComponents =
+      wrapper.findAllComponents(ProductListingItem);
   });
 
   test("renders its title", () => {
@@ -19,19 +23,19 @@ describe("ProductListing component:", () => {
     expect(titleElement.text()).toContain(productListingPromotionsData.title);
   });
 
-  test("renders its list item entirely with", () => {
-    const ProductListingItemComponents =
-      wrapper.findAllComponents(ProductListingItem);
-    expect(ProductListingItemComponents).toHaveLength(
-      productListingPromotionsData.products.length
-    );
+  test("renders its list item entirely", () => {
+    expect(ProductListingItemComponents).toHaveLength(products.length);
   });
 
-  test("renders its item with the expected 'product' value", () => {
-    const firstProductListingItemComponent =
-      wrapper.findComponent(ProductListingItem);
-    expect(firstProductListingItemComponent.props("product")).toMatchObject(
-      productListingPromotionsData.products[0]
-    );
+  describe("Each Item:", () => {
+    products.forEach((product, index) => {
+      describe(`Item at index ${index}:`, () => {
+        test("has its 'product' prop value well setted", () => {
+          expect(
+            ProductListingItemComponents[index].props("product")
+          ).toMatchObject(products[index]);
+        });
+      });
+    });
   });
 });
