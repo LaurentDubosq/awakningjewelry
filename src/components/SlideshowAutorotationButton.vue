@@ -8,43 +8,34 @@ const { isPlaying } = defineProps({
 </script>
 
 <template>
-  <div class="slideshow__autorotation-button-wrapper wrapper">
-    <button
-      class="slideshow__autorotation-button"
-      @click="isPlaying ? $emit('stop-autoplay') : $emit('start-autoplay')"
-      @touchstart.stop
-      @touchend.stop
-      @focusin.stop
-      :title="
-        isPlaying ? 'Stop automatic slide show' : 'Start automatic slide show'
-      "
-      :aria-label="
-        isPlaying ? 'Stop automatic slide show' : 'Start automatic slide show'
-      "
-      data-testid="slideshow__autorotation-button"
-    >
-      <div class="slideshow__autorotation-button-icon-background">
-        <KeepAlive>
-          <component
-            :is="isPlaying ? IconPause : IconPlay"
-            width="18"
-            color="white"
-            aria-hidden="true"
-          />
-        </KeepAlive>
-      </div>
-    </button>
-  </div>
+  <button
+    class="slideshow__autorotation-button"
+    @click="isPlaying ? $emit('stop-autoplay') : $emit('start-autoplay')"
+    @touchstart.stop
+    @touchend.stop
+    @focusin.stop
+    :title="
+      isPlaying ? 'Stop automatic slide show' : 'Start automatic slide show'
+    "
+    :aria-label="
+      isPlaying ? 'Stop automatic slide show' : 'Start automatic slide show'
+    "
+    data-testid="slideshow__autorotation-button"
+  >
+    <div class="slideshow__autorotation-button-icon-background">
+      <KeepAlive>
+        <component
+          :is="isPlaying ? IconPause : IconPlay"
+          width="18"
+          color="white"
+          aria-hidden="true"
+        />
+      </KeepAlive>
+    </div>
+  </button>
 </template>
 
 <style scoped lang="scss">
-.slideshow__autorotation-button-wrapper {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  line-height: 0;
-  z-index: 1;
-}
 .slideshow__autorotation-button {
   width: 50px;
   height: 50px;

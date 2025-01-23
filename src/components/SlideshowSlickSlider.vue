@@ -2,7 +2,6 @@
 import { ref, type Ref } from "vue";
 
 const props = defineProps({
-  slickSliderTopPosition: { type: Number },
   slidesDataLength: { type: Number, required: true },
   currentIndex: { type: Number, required: true },
 });
@@ -50,11 +49,6 @@ const handleKeydown = (event: KeyboardEvent) => {
   <div
     class="slideshow__slick-slider"
     :class="{ 'focus-visible': isSlickSliderFocused }"
-    :style="
-      typeof slickSliderTopPosition === 'number' && {
-        top: `${slickSliderTopPosition}px`,
-      }
-    "
     role="tablist"
     aria-label="Slideshow navigation"
     data-testid="slideshow__slick-slider"

@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import {
+  computed,
   inject,
   nextTick,
   onMounted,
   onUnmounted,
   ref,
   watch,
+  type ComputedRef,
   type Ref,
 } from "vue";
 import MyTransition from "./MyTransition.vue";
@@ -32,8 +34,6 @@ const useIsOnMobile: Ref<boolean> | undefined = inject(useIsOnMobileKey);
 
 // Store the index corresponding to the displayed slide
 const currentIndex: Ref<number> = ref(0);
-// Store the value used to position the slick slide from the top of its referent parent on mobile
-const slickSliderTopPosition: Ref<Ref<number> | null> = ref(null); // Nested refs necessary to have reactivity at intial render and during updates
 // Store the autorotation slideshow statut
 const isPlaying: Ref<boolean> = ref(true);
 // Stores the user's command to stop auto-rotation
@@ -190,6 +190,18 @@ const displayNextSlide = () => {
 /* Slick Slider Mobile Positioning */
 const slideshowElement: Ref<HTMLPictureElement | null> = ref(null);
 
+// Store the value used to position the slick slide from the top of its referent parent on mobile
+const slickSliderTopPosition: Ref<Ref<number> | null> = ref(null); // Nested refs necessary to have reactivity at intial render and during updates
+
+// Compute the style object to improve template readability
+const slickSliderStyle: ComputedRef<Object | undefined> = computed(() => {
+  if (slickSliderTopPosition?.value?.value) {
+    return {
+      top: `${slickSliderTopPosition.value.value}px`,
+    };
+  }
+});
+
 onMounted(() => {
   // Get the first picture tag (all images must have the same native dimensions)
   const pictureElement: HTMLPictureElement | null | undefined =
@@ -239,16 +251,18 @@ const startAutoPlayExplicitly = () => {
     :aria-live="isPlaying ? 'off' : 'polite'"
     data-testid="slideshow"
   >
-    <SlideshowAutorotationButton
-      :isPlaying
-      @stopAutoplay="handleStopAutoplay"
-      @startAutoplay="handleStartAutoplay"
-    />
+    <div class="slideshow__controls wrapper">
+      <SlideshowAutorotationButton
+        :isPlaying
+        @stopAutoplay="handleStopAutoplay"
+        @startAutoplay="handleStartAutoplay"
+      />
+    </div>
     <SlideshowSlickSlider
-      :slickSliderTopPosition="slickSliderTopPosition?.value"
       :slidesDataLength
       :currentIndex
       @displaySlide="handleDisplaySlide"
+      :style="slickSliderStyle"
     />
     <MyTransition name="fadeSlideshow" :group="true" :duration>
       <slot :currentIndex />
@@ -267,6 +281,14 @@ const startAutoPlayExplicitly = () => {
   position: relative;
   @media screen and (min-width: $AwakningBreakpointDesktop) {
     padding: 0;
+  }
+
+  &__controls {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    line-height: 0;
+    z-index: 1;
   }
 }
 </style>
