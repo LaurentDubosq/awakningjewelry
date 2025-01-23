@@ -1,62 +1,78 @@
 import { mount } from "@vue/test-utils";
 import ProductListingItem from "@/components/ProductListingItem.vue";
 import frontDataBase from "../../../db.json";
+import router from "@/router";
 
-const product = frontDataBase.productListingPromotionsData.products[0];
+const mockProduct = frontDataBase.promotions[0];
+const mockProductURL = mockProduct.url;
+const mockProductImageURL = mockProduct.image.url;
+const mockProductImageALT = mockProduct.image.alt;
+const mockProductTitle = mockProduct.title;
+const mockProductOriginalPrice = mockProduct.price;
+const mockProductDiscountedPrice = mockProduct.promotionalPrice;
 
-describe("ProductListingItem component:", () => {
+// Mock the fetcher used in the mocked router
+vi.mock("@/data/dataFetchers", () => {
+  return {
+    getPagesMetaData: vi.fn().mockReturnValue(undefined),
+  };
+});
+
+// Component Factory
+function mountProductListingItem() {
+  return mount(ProductListingItem, {
+    props: { product: mockProduct },
+    global: {
+      plugins: [router],
+    },
+  });
+}
+
+describe("ProductListingItem.vue", () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = mount(ProductListingItem, {
-      props: { product },
-    });
+    wrapper = mountProductListingItem(ProductListingItem);
   });
 
-  test("renders the product image with its props values well setted", () => {
-    const imageElement = wrapper.find(
-      "[data-testid='productListing__item-image']"
+  // Smoke test
+  test("mounts successfully", () => {
+    expect(wrapper.exists()).toBeTruthy();
+  });
+
+  test("render product with necessary information", () => {
+    const link = wrapper.find("[data-testid='product-listing__item-link']");
+    const image = wrapper.find("[data-testid='product-listing__item-image']");
+    const title = wrapper.find("[data-testid='product-listing__item-title']");
+    const originalPrice = wrapper.find(
+      "[ data-testid='product-listing__item-original-price']"
     );
+    const discountedPrice = wrapper.find(
+      "[ data-testid='product-listing__item-discounted-price']"
+    );
+
+    // Assert the link tag exists
+    expect(link.exists()).toBeTruthy();
+
+    // Assert the link tag has the correct "href" value
+    expect(link.attributes("href")).toBe(mockProductURL);
 
     // Assert the image is rendered
-    expect(imageElement.exists()).toBe(true);
+    expect(image.exists()).toBeTruthy();
 
-    // Assert the "src" props value is well setted
-    expect(imageElement.attributes("src")).toBe(product.image.url);
+    // Assert the image has the correct "src" value
+    expect(image.attributes("src")).toBe(mockProductImageURL);
 
-    // Assert the "alt" props value is well setted
-    expect(imageElement.attributes("alt")).toBe(product.image.alt);
-  });
+    // Assert the image has the correct "alt" value
+    expect(image.attributes("alt")).toBe(mockProductImageALT);
 
-  test("renders its title", () => {
-    const titleElement = wrapper.find(
-      "[data-testid='productListing__item-title']"
-    );
-    expect(titleElement.text()).toContain(product.title);
-  });
+    // Assert the title is rendered
+    expect(title.text()).toContain(mockProductTitle);
 
-  test("renders its price", () => {
-    const priceElement = wrapper.find(
-      "[data-testid='productListing__item-price']"
-    );
-    const TextContentPrice = priceElement.text();
+    // Assert the original price is rendered
+    expect(originalPrice.text()).toContain(mockProductOriginalPrice);
 
-    // Assert the base price is rendered
-    expect(TextContentPrice).toContain(product.price);
-
-    // Assert the promotional price is rendered
-    expect(TextContentPrice).toContain(product.promotionalPrice);
-  });
-
-  it("has a link with its url value well setted", () => {
-    const linkElement = wrapper.find(
-      "[data-testid='productListing__item-link']"
-    );
-
-    // Assert the item has a link tag
-    expect(linkElement.exists()).toBe(true);
-
-    // Assert the item has its link value well setted
-    expect(linkElement.attributes("to")).toBe(product.url);
+    // Assert the discounted price is rendered
+    expect(discountedPrice.text()).toContain(mockProductDiscountedPrice);
   });
 });

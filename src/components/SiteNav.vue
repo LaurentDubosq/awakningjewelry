@@ -1,49 +1,67 @@
 <script setup lang="ts">
-import type { SiteMenuItem } from "@/data/menus";
-import { defineAsyncComponent, inject, type Ref } from "vue";
-import { siteMenuItemsKey } from "@/utils/injectionkeys";
-import SiteHeaderIcon from "./SiteHeaderIcon.vue";
-import PersonIcon from "./icons/IconPerson.vue";
-const SiteNavItem = defineAsyncComponent(() => import("./SiteNavItem.vue"));
-const SiteNavDropdown = defineAsyncComponent(
-  () => import("./SiteNavDropdown.vue")
+import type { SiteMenuItem } from "@/types/components";
+import { computed, inject, type ComputedRef } from "vue";
+import { siteMenuKey } from "@/utils/injectionkeys";
+import IconPerson from "./icons/IconPerson.vue";
+import SiteNavLink from "./SiteNavLink.vue";
+import SiteNavDropdown from "./SiteNavDropdown.vue";
+import type { UseFetchWithStateReturn } from "@/types/fetch";
+import type { FetchStatus } from "@/types/fetch";
+import LoadingComponent from "./LoadingComponent.vue";
+import ErrorComponent from "./ErrorComponent.vue";
+
+const siteMenuResult: UseFetchWithStateReturn<SiteMenuItem[]> | undefined =
+  inject(siteMenuKey);
+
+const siteMenuData: ComputedRef<SiteMenuItem[] | undefined> = computed(
+  () => siteMenuResult?.data?.value
 );
 
-const siteMenuItems: Ref<SiteMenuItem[] | undefined> | undefined =
-  inject(siteMenuItemsKey);
+const siteMenuFetchStatus: ComputedRef<FetchStatus | undefined> = computed(
+  () => siteMenuResult?.status?.value
+);
+
+// Utilities
+function isLink(item: SiteMenuItem): Boolean {
+  return item.type === "icon" || item.type === "text";
+}
+function isDropdown(item: SiteMenuItem): Boolean {
+  return item.type === "dropdown";
+}
+function isAccountLink(item: SiteMenuItem): Boolean {
+  return item.name === "account";
+}
 </script>
 
 <template>
-  <nav class="site-nav">
-    <menu class="site-nav__list">
-      <li
-        class="site-nav__list-item"
-        data-testid="site-nav__list-item"
-        v-for="menuItem in siteMenuItems"
-      >
-        <template v-if="menuItem.type === 'text'">
-          <RouterLink
-            :to="`${menuItem.url}`"
-            data-testid="site-nav__list-item-link"
-            v-if="!menuItem.subMenuItems"
-          >
-            <SiteNavItem>
-              {{ menuItem.title }}
-            </SiteNavItem>
-          </RouterLink>
-          <SiteNavDropdown :dropdown="menuItem" v-else />
-        </template>
-        <template v-else-if="menuItem.type === 'icon'">
-          <RouterLink :to="menuItem.url" data-testid="site-nav__list-item-link">
-            <SiteHeaderIcon>
-              <template v-if="menuItem.title === 'Account'">
-                <PersonIcon />
-              </template>
-            </SiteHeaderIcon>
-          </RouterLink>
-        </template>
-      </li>
-    </menu>
+  <nav
+    class="site-nav"
+    aria-label="Website's desktop navigation bar"
+    data-testid="site-nav"
+  >
+    <ul class="site-nav__list" aria-label="Website's desktop navigation bar">
+      <template v-if="siteMenuFetchStatus === 'resolved'">
+        <li
+          class="site-nav__item"
+          data-testid="site-nav__item"
+          v-for="menuItem in siteMenuData"
+        >
+          <SiteNavLink :link="menuItem" v-if="isLink(menuItem)">
+            <IconPerson
+              v-if="isAccountLink(menuItem)"
+              width="27"
+              aria-hidden="true"
+            />
+          </SiteNavLink>
+          <SiteNavDropdown
+            :dropdown="menuItem"
+            v-else-if="isDropdown(menuItem)"
+          />
+        </li>
+      </template>
+      <LoadingComponent v-if="siteMenuFetchStatus === 'pending'" />
+      <ErrorComponent v-if="siteMenuFetchStatus === 'rejected'" />
+    </ul>
   </nav>
 </template>
 
@@ -53,7 +71,7 @@ const siteMenuItems: Ref<SiteMenuItem[] | undefined> | undefined =
   justify-content: space-between;
   align-items: center;
 }
-.site-nav__list-item {
+.site-nav__item {
   position: relative;
 }
 </style>

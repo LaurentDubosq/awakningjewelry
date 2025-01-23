@@ -1,83 +1,38 @@
 <script setup lang="ts">
 import SASSCONSTANTS from "@/assets/styles/_constants.module.scss";
-import type { Slide } from "@/data/components";
-import { useIsOnMobileKey } from "@/utils/injectionkeys";
-import {
-  computed,
-  inject,
-  onMounted,
-  ref,
-  type ComputedRef,
-  type PropType,
-  type Ref,
-} from "vue";
+import type { HeroSlideType } from "@/types/components";
+import { type PropType } from "vue";
 
-const { slideIndex, slide, slidesLength } = defineProps({
-  slide: { type: Object as PropType<Slide>, required: true },
+const { slide, slidesDataLength, slideIndex, isActive } = defineProps({
+  slide: { type: Object as PropType<HeroSlideType>, required: true },
+  slidesDataLength: { type: Number, required: true },
   slideIndex: { type: Number, required: true },
-  slidesLength: {
-    type: [Number, undefined] as PropType<number | undefined>,
-    required: true,
-  },
+  isActive: { type: Boolean, required: true },
 });
-const useIsOnMobile: Ref<boolean> | undefined = inject(useIsOnMobileKey); // Get the current display platform
 const DESKTOPBREAKPOINT: string = SASSCONSTANTS.AwakningBreakpointDesktop;
-
-// Fix Hero Slide inner content element's vertical alignment during image downloading on desktop only
-const viewportWidth: number = window.innerWidth;
-const heroSlideElement: Ref<HTMLDivElement | null> = ref(null);
-
-const heroSlidePlaceHolderHeight: ComputedRef<string> = computed(() => {
-  return Math.round(viewportWidth / (16 / 9)) + "px";
-});
-
-const setHeroSlideElementHeight = (value: string) => {
-  if (heroSlideElement.value) {
-    heroSlideElement.value.style.height = value;
-  }
-};
-
-const handlerHeroSlideImage = () => {
-  if (!useIsOnMobile?.value) {
-    setHeroSlideElementHeight("auto");
-  }
-};
-
-onMounted(() => {
-  if (!useIsOnMobile?.value) {
-    setHeroSlideElementHeight(heroSlidePlaceHolderHeight.value);
-  }
-});
-// end Fix Hero Slide inner content element's vertical alignment during image downloading on desktop only
 </script>
 
 <template>
-  <div class="hero__slide" ref="heroSlideElement">
+  <div
+    class="hero__slide"
+    role="tabpanel"
+    aria-roledescription="slide"
+    :aria-label="`Slide ${slideIndex + 1} of ${slidesDataLength}`"
+    :id="`slideshow-${slideIndex + 1}`"
+  >
     <picture class="hero__slide-picture">
       <source
         :media="`(min-width: ${DESKTOPBREAKPOINT})`"
-        :srcset="slide.images.desktop"
+        :srcset="slide.images.desktop.url"
         data-testid="hero__slide-image-desktop"
       />
       <img
-        :src="slide.images.mobile"
+        :src="slide.images.mobile.url"
         :alt="slide.images.alt"
         class="hero__slide-image"
         data-testid="hero__slide-image"
-        @load="handlerHeroSlideImage"
       />
     </picture>
-    <div class="hero__slide-slick-slider">
-      <span
-        class="hero__slide-slick-slider-dot"
-        :class="{
-          'hero__slide-slick-slider-dot--active': index === slideIndex,
-        }"
-        v-for="(slide, index) in slidesLength"
-        @click="$emit('display-selected-slide', index)"
-        data-testid="hero__slide-slick-slider-dot"
-      />
-    </div>
     <div class="hero__slide-inner-content">
       <h3 class="hero__slide-subtitle" data-testid="hero__slide-subtitle">
         {{ slide.subtitle }}
@@ -85,10 +40,13 @@ onMounted(() => {
       <h2 class="hero__slide-title" data-testid="hero__slide-title">
         {{ slide.title }}
       </h2>
-      <RouterLink :to="slide.url" data-testid="hero__slide-button-link">
-        <button class="btn btn--primary" data-testid="hero__slide-button">
-          explore now
-        </button>
+      <RouterLink
+        :to="slide.url"
+        class="btn btn--primary"
+        :tabindex="isActive ? undefined : -1"
+        data-testid="hero__slide-link"
+      >
+        explore now
       </RouterLink>
     </div>
   </div>
@@ -114,31 +72,6 @@ onMounted(() => {
     @media screen and (min-width: $AwakningBreakpointDesktop) {
       max-width: 100%;
     }
-  }
-
-  &-slick-slider {
-    display: flex;
-    gap: 10px;
-    @media screen and (min-width: $AwakningBreakpointDesktop) {
-      position: absolute;
-      bottom: 20px;
-    }
-  }
-  &-slick-slider-dot {
-    display: block;
-    width: 10px;
-    height: 10px;
-    border: 2px solid black;
-    border-radius: 10px;
-  }
-  &-slick-slider-dot:hover {
-    transform: scale(1.5);
-    border-width: 1.5px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  &-slick-slider-dot--active {
-    background-color: black;
   }
 
   &-inner-content {

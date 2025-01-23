@@ -1,108 +1,61 @@
 <script setup lang="ts">
-import {
-  ref,
-  onMounted,
-  inject,
-  type Ref,
-  onUnmounted,
-  defineAsyncComponent,
-} from "vue";
-import { useGetElementClientWidth } from "@/composables/element";
-import { isBurgerMenuOpenKey } from "@/utils/injectionkeys";
+import { inject, type Ref, defineAsyncComponent } from "vue";
 import { useIsOnMobileKey } from "@/utils/injectionkeys";
-import BurgerIcon from "./icons/IconBurger.vue";
-import CrossIcon from "./icons/IconCross.vue";
-import PersonIcon from "./icons/IconPerson.vue";
-import CartIcon from "./icons/IconCart.vue";
-import SiteHeaderIcon from "./SiteHeaderIcon.vue";
+import BurgerMenuToggle from "./BurgerMenuToggle.vue";
 import SiteLogo from "./SiteLogo.vue";
-const SiteNav = defineAsyncComponent(() => import("./SiteNav.vue"));
+import SiteHeaderIcon from "./SiteHeaderIcon.vue";
+import IconPerson from "./icons/IconPerson.vue";
+import IconCart from "./icons/IconCart.vue";
+import useGetAsyncComponent from "@/composables/useGetAsyncComponent";
+const SiteNav = defineAsyncComponent(useGetAsyncComponent("SiteNav")); // Async import because mobile environment doesn't need the siteNav
 
-// Get the current display platform
+/* Get the current display platform (mobile/desktop) to condition the asynchronous component imports. It also provides a more
+ readable code and the possibility of testing the renders according to environments */
 const useIsOnMobile: Ref<boolean> | undefined = inject(useIsOnMobileKey);
-// end Get the current display platform
-
-// Burger Icon Logic - Get the Burger Menu Status and display the appropriate icon
-const isBurgerMenuOpen: Ref<boolean> | undefined = inject(isBurgerMenuOpenKey);
-// end Burger Icon Logic
-
-// Right Container Element - Get the width of the element to apply it to the burger menu icon container and perfectly align the logo in the middle.
-const rightContainerElement: Ref<HTMLDivElement | null> = ref(null);
-const rightContainerElementWidth: Ref<number> = ref(0);
-
-function resizeBurgerMenuIconWrapperWidth() {
-  if (rightContainerElement.value) {
-    rightContainerElementWidth.value = useGetElementClientWidth(
-      rightContainerElement.value
-    );
-  }
-}
-
-onMounted(() => {
-  resizeBurgerMenuIconWrapperWidth();
-  window.addEventListener("resize", resizeBurgerMenuIconWrapperWidth); // Recalculate the burger menu icon wrapper width when switching from desktop to mobile to center properly the website logo
-});
-
-onUnmounted(() => {
-  window.removeEventListener("resize", resizeBurgerMenuIconWrapperWidth);
-});
-// end Right Container Element
 </script>
 
 <template>
-  <header class="site-header">
+  <header class="site-header" role="banner">
     <div class="wrapper">
       <div class="site-header-inner">
         <div
-          class="site-header__burger-menu-icon-wrapper"
-          data-testid="site-header__burger-menu-icon-wrapper"
-          :style="{ 'flex-basis': rightContainerElementWidth + 'px' }"
+          class="site-header__left-container"
+          data-testid="site-header__left-container"
           v-if="useIsOnMobile"
         >
-          <button
-            type="button"
-            @click="$emit('toggle-burger-menu')"
-            data-testid="site-header__burger-menu-icon-button"
-          >
-            <SiteHeaderIcon>
-              <CrossIcon width="32" v-if="isBurgerMenuOpen" />
-              <BurgerIcon v-else />
-            </SiteHeaderIcon>
-          </button>
+          <BurgerMenuToggle />
         </div>
-        <div class="site-header__logo-wrapper">
-          <RouterLink to="/" data-testid="site-header__logo-link">
+        <div class="site-header__center-container">
+          <RouterLink
+            class="site-header__logo-link"
+            to="/"
+            title="Return to homepage"
+            data-testid="site-header__logo-link"
+          >
             <SiteLogo />
           </RouterLink>
         </div>
-        <div class="site-header__right-container" ref="rightContainerElement">
-          <div class="site-header__site-nav-wrapper" v-if="!useIsOnMobile">
-            <SiteNav />
-          </div>
-          <div
-            class="site-header__account-icon-wrapper"
+        <div class="site-header__right-container">
+          <SiteNav v-if="!useIsOnMobile" />
+          <RouterLink
+            to="/account"
+            title="Go to my account"
+            data-testid="site-header__account-link"
             v-if="useIsOnMobile"
-            data-testid="site-header__account-icon-wrapper"
           >
-            <RouterLink
-              to="/account"
-              data-testid="site-header__account-icon-link"
-            >
-              <SiteHeaderIcon>
-                <PersonIcon />
-              </SiteHeaderIcon>
-            </RouterLink>
-          </div>
-          <div
-            class="site-header__cart-icon-wrapper"
-            data-testid="site-header__cart-icon-wrapper"
+            <SiteHeaderIcon alternativeText="Account">
+              <IconPerson width="27" aria-hidden="true" />
+            </SiteHeaderIcon>
+          </RouterLink>
+          <RouterLink
+            to="/cart"
+            title="Go to cart"
+            data-testid="site-header__cart-link"
           >
-            <RouterLink to="/cart" data-testid="site-header__cart-icon-link">
-              <SiteHeaderIcon>
-                <CartIcon />
-              </SiteHeaderIcon>
-            </RouterLink>
-          </div>
+            <SiteHeaderIcon alternativeText="Cart">
+              <IconCart width="27" aria-hidden="true" />
+            </SiteHeaderIcon>
+          </RouterLink>
         </div>
       </div>
     </div>
@@ -113,12 +66,6 @@ onUnmounted(() => {
 @use "@/assets/styles/_constants" as *;
 
 .site-header {
-  @media screen and (min-width: $AwakningBreakpointDesktop) {
-    position: absolute;
-    z-index: 1;
-    width: 100%;
-  }
-
   &-inner {
     display: flex;
     justify-content: space-between;
@@ -126,11 +73,19 @@ onUnmounted(() => {
     padding: 15px 7px;
   }
 
-  &__burger-menu-icon-wrapper {
+  &__logo-link {
+    display: inline-block;
+  }
+
+  &__left-container {
+    flex-grow: 1;
+    flex-basis: 0;
     margin-left: -15px;
   }
 
   &__right-container {
+    flex-grow: 1;
+    flex-basis: 0;
     display: flex;
     justify-content: flex-end;
     margin-right: -15px;

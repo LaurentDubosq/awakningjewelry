@@ -1,57 +1,60 @@
 <script setup lang="ts">
+import useGetAsyncComponent from "@/composables/useGetAsyncComponent";
 import {
-  getProductListingPromotionsData,
-  getCollectionListingGenderData,
-  getCommentBarMissionData,
-} from "@/composables/fetch";
-import type {
-  ProductListingData,
-  CollectionListingData,
-  CommentBarData,
-} from "@/data/components";
-import { defineAsyncComponent, onMounted, ref, type Ref } from "vue";
+  getPromotions,
+  getCollectionsByGender,
+  getStatementMission,
+} from "@/data/dataFetchers";
+import type { StatementBanner as StatementBannerInterface } from "@/types/components";
+import type { Collection, ProductSummary } from "@/types/global.d.ts";
+import type { UseFetchWithStateReturn } from "@/types/fetch";
+import { defineAsyncComponent } from "vue";
 
-const Hero = defineAsyncComponent(() => import("@/components/Hero.vue"));
-const CommentBar = defineAsyncComponent(
-  () => import("@/components/CommentBar.vue")
+const Hero = defineAsyncComponent(useGetAsyncComponent("Hero"));
+const StatementBanner = defineAsyncComponent(
+  useGetAsyncComponent("StatementBanner")
 );
 const CollectionListing = defineAsyncComponent(
-  () => import("@/components/CollectionListing.vue")
+  useGetAsyncComponent("CollectionListing")
 );
 const ProductListing = defineAsyncComponent(
-  () => import("@/components/ProductListing.vue")
+  useGetAsyncComponent("ProductListing")
 );
 
-// CommentBar
-const commentBarMissionData: Ref<CommentBarData | undefined> = ref(undefined);
+/* StatementBanner data */
+const statementMissionResult: UseFetchWithStateReturn<StatementBannerInterface> =
+  getStatementMission();
 
-onMounted(async () => {
-  commentBarMissionData.value = await getCommentBarMissionData();
-});
-// end CommentBar
+/* CollectionListing data */
+const collectionsByGenderResult: UseFetchWithStateReturn<Collection[]> =
+  getCollectionsByGender();
 
-// CollectionListing
-const collectionListingGenderData: Ref<CollectionListingData | undefined> =
-  ref(undefined);
-
-onMounted(async () => {
-  collectionListingGenderData.value = await getCollectionListingGenderData();
-});
-// end CollectionListing
-
-// ProductListing
-const productListingPromotionsData: Ref<ProductListingData | undefined> =
-  ref(undefined);
-
-onMounted(async () => {
-  productListingPromotionsData.value = await getProductListingPromotionsData();
-});
-// end ProductListing
+/* ProductListing data */
+const promotionsResult: UseFetchWithStateReturn<ProductSummary[]> =
+  getPromotions();
 </script>
 
 <template>
-  <Hero />
-  <CommentBar :data="commentBarMissionData" />
-  <CollectionListing :data="collectionListingGenderData" />
-  <ProductListing :data="productListingPromotionsData" />
+  <div class="home-view-container">
+    <Hero />
+    <StatementBanner :statementResult="statementMissionResult" />
+    <CollectionListing
+      title="By Gender"
+      :collectionsResult="collectionsByGenderResult"
+    />
+    <ProductListing title="Promotions" :productsResult="promotionsResult" />
+  </div>
 </template>
+
+<style scoped lang="scss">
+@use "@/assets/styles/_constants" as *;
+
+.home-view-container {
+  @media screen and (min-width: $AwakningBreakpointDesktop) {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: -1;
+  }
+}
+</style>

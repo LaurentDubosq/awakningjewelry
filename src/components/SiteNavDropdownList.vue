@@ -1,33 +1,23 @@
 <script setup lang="ts">
-import type { SiteSubMenuItem } from "@/data/menus";
-import { defineAsyncComponent, type PropType } from "vue";
-const SiteNavDropdownItem = defineAsyncComponent(
-  () => import("./SiteNavDropdownItem.vue")
-);
+import type { SiteSubMenuItem } from "@/types/components";
+import { type PropType } from "vue";
+import SiteNavDropdownItem from "./SiteNavDropdownItem.vue";
 
-const { items } = defineProps({
-  items: { type: Array as PropType<SiteSubMenuItem[]>, required: true },
+const { links, dropdownText } = defineProps({
+  links: { type: Array as PropType<SiteSubMenuItem[]>, required: true },
+  dropdownText: { type: String, required: true },
 });
 </script>
 
 <template>
-  <menu class="site-nav__dropdown-list">
-    <li
-      class="site-nav__dropdown-list-item"
-      data-testid="site-nav__dropdown-list-item"
-      @click="$emit('close-dropdown')"
-      v-for="item in items"
-    >
-      <RouterLink
-        data-testid="site-nav__dropdown-list-item-link"
-        :to="`${item.url}`"
-      >
-        <SiteNavDropdownItem>
-          {{ item.title }}
-        </SiteNavDropdownItem>
-      </RouterLink>
-    </li>
-  </menu>
+  <ul
+    class="site-nav__dropdown-list"
+    :id="`site-nav__dropdown-list-${dropdownText.toLowerCase()}`"
+    :aria-labelledby="`site-nav__dropdown-button-${dropdownText.toLowerCase()}`"
+    data-testid="site-nav__dropdown-list"
+  >
+    <SiteNavDropdownItem :link v-for="link in links" />
+  </ul>
 </template>
 
 <style scoped lang="scss">

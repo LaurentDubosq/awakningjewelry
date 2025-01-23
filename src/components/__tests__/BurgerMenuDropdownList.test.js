@@ -1,75 +1,57 @@
 import { mount } from "@vue/test-utils";
-import { toggleBurgerMenuKey } from "@/utils/injectionkeys";
 import BurgerMenuDropdownList from "@/components/BurgerMenuDropdownList.vue";
 import BurgerMenuDropdownItem from "@/components/BurgerMenuDropdownItem.vue";
+import router from "@/router";
+import { toggleBurgerMenuKey } from "@/utils/injectionkeys";
 import frontDataBase from "../../../db.json";
 
-const siteMenuItems = frontDataBase["siteMenuItems"];
-const dropdownList = siteMenuItems[1].subMenuItems;
+const mockSiteMenu = frontDataBase["siteMenu"];
+const mockDropdownText = mockSiteMenu[1].text;
+const mockLinks = mockSiteMenu[1].subMenu;
+const mockLinksLength = mockLinks.length;
 
-describe("BurgerMenuDropdownList component:", () => {
-  let toggleBurgerMenu;
+// Mock the fetcher used in the mocked router
+vi.mock("@/data/dataFetchers", () => {
+  return {
+    getPagesMetaData: vi.fn().mockReturnValue(undefined),
+  };
+});
+
+// Component Factory
+function mountBurgerMenuDropdownList() {
+  return mount(BurgerMenuDropdownList, {
+    props: { links: mockLinks, dropdownText: mockDropdownText },
+    global: {
+      stubs: { BurgerMenuDropdownItem: true },
+      plugins: [router],
+      provide: { [toggleBurgerMenuKey]: vi.fn() },
+    },
+  });
+}
+
+describe("BurgerMenuDropdownList.vue", () => {
   let wrapper;
-  let listItemElements;
-  let BurgerMenuDropdownItemComponents;
 
   beforeEach(() => {
-    toggleBurgerMenu = vi.fn();
-
-    wrapper = mount(BurgerMenuDropdownList, {
-      global: {
-        provide: {
-          [toggleBurgerMenuKey]: toggleBurgerMenu,
-        },
-      },
-      props: { items: dropdownList },
-    });
-
-    listItemElements = wrapper.findAll(
-      "[data-testid='burger-menu__dropdown-list-item']"
-    );
-    BurgerMenuDropdownItemComponents = wrapper.findAllComponents(
-      BurgerMenuDropdownItem
-    );
+    wrapper = mountBurgerMenuDropdownList();
   });
 
-  test("renders its list entirely", () => {
-    expect(listItemElements).toHaveLength(dropdownList.length);
+  // Smoke test
+  test("mounts successfully", () => {
+    expect(wrapper.exists()).toBeTruthy();
   });
 
-  describe("Each Item:", () => {
-    dropdownList.forEach((item, index) => {
-      describe(`Item at index ${index}:`, () => {
-        test("renders its BurgerMenuDropdownItem component:", () => {
-          expect(BurgerMenuDropdownItemComponents[index].exists()).toBe(true);
-        });
+  test("renders all its expected items with necessary information", () => {
+    const itemComponents = wrapper.findAllComponents(BurgerMenuDropdownItem);
 
-        test("renders its title", () => {
-          expect(BurgerMenuDropdownItemComponents[index].text()).toContain(
-            dropdownList[index].title
-          );
-        });
+    // Assert all the expected item's component are rendered
+    expect(itemComponents).toHaveLength(mockLinksLength);
 
-        it("has a link with its url value well setted", () => {
-          const linkElement = listItemElements[index].find(
-            "[data-testid='burger-menu__dropdown-list-item-link']"
-          );
-
-          // Assert the item has a link tag
-          expect(linkElement.exists()).toBe(true);
-
-          // Assert the item has its link value well setted
-          expect(linkElement.attributes("to")).toBe(dropdownList[index].url);
-        });
-      });
-    });
-
-    test("triggers the 'toggleBurgerMenu' function when the link is clicked", async () => {
-      const firstItemLinkElement = wrapper.find(
-        "[data-testid='burger-menu__dropdown-list-item-link']"
-      );
-      await firstItemLinkElement.trigger("click");
-      expect(toggleBurgerMenu).toHaveBeenCalledTimes(1);
+    // Assert that each item component has its data well setted as prop
+    itemComponents.forEach((itemComponent, index) => {
+      const mockLink = mockLinks[index];
+      // Assert the 'link' prop has the correct value
+      expect(itemComponent.props("link")).toMatchObject(mockLink);
     });
   });
 });

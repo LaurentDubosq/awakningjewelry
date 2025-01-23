@@ -1,11 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
-import { getPagesMetaData } from "@/composables/fetch";
-import type { PageMetaData } from "@/data/seo";
-import type { Routes } from "./index.d";
+import { getPagesMetaData } from "@/data/dataFetchers";
+import type { PageMetaData } from "@/types/router";
+import type { Routes } from "../types/router";
 
 const pagesMetaData: PageMetaData[] | undefined = await getPagesMetaData();
 const routes: Routes = {};
+
+// Addition of Pages Meta Data for each route
 if (pagesMetaData) {
   for (const page of pagesMetaData) {
     routes[page.name] = {
@@ -15,21 +16,29 @@ if (pagesMetaData) {
   }
 }
 
+// Creation of the router
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: "/",
       name: "home",
-      component: HomeView,
+      component: () => import("@/views/HomeView.vue"),
       meta: {
         title: routes.home?.title,
         description: routes.home?.description,
       },
     },
+    // Will match everything and put it under `route.params.pathMatch`
+    {
+      path: "/:pathMatch(.*)*",
+      name: "notFound",
+      component: () => import("@/views/NotFound.vue"),
+    },
   ],
 });
 
+// Add Pages Meta data to each loaded page
 router.beforeEach((to, from) => {
   let metaDescriptionElement = document.querySelector<HTMLMetaElement>(
     'meta[name="description"]'

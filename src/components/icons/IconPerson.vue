@@ -1,6 +1,9 @@
 <template>
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-    <title>Human Silhouette Icon</title>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 20 20"
+    data-testid="icon-person"
+  >
     <path
       fill-rule="evenodd"
       d="M10 3a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm-2 3.5a2 2 0 1 1 4 0 2 2 0 0 1-4 0Z"

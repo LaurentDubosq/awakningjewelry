@@ -1,64 +1,76 @@
-@use './reset';
-@use './constants' as *;
+@use "./reset";
+@use "./constants" as *;
 
 body {
-    color: $AwakningColorBlack;
-    font-family: $AwakningFontArapey;
-    font-size: 16px;
-    line-height: 1.563;
+  color: $AwakningColorBlack;
+  font-family: $AwakningFontArapey;
+  font-size: 16px;
+  line-height: 1.563;
 }
 
 h2 {
-    font-family: $AwakningFontOldStandardTT;
+  font-family: $AwakningFontOldStandardTT;
 }
 
 h3 {
-    font-family: $AwakningFontMontserrat;
+  font-family: $AwakningFontMontserrat;
 }
 
 svg {
-    display: block;
+  display: block;
 }
 
 hr {
-    width: 50px;
-    height: 1px;
-    background-color: $AwakningColorBlack;
-    margin: 20px auto;
+  width: 50px;
+  height: 1px;
+  background-color: $AwakningColorBlack;
+  margin: 20px auto;
 }
 
 a:hover {
-    opacity: 0.75;
+  opacity: 0.75;
 }
 
 .btn {
-    padding: 12px 20px;
-    font-family: $AwakningFontMontserrat;
-    font-size: 0.8125rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: .1em;
-    cursor: pointer;
+  padding: 12px 20px;
+  font-family: $AwakningFontMontserrat;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
 }
 
 .btn--primary {
-    background-color: $AwakningColorBlack;
-    color: $AwakningColorWhite;
+  background-color: $AwakningColorBlack;
+  color: $AwakningColorWhite;
 }
 
 /* Utility Classes */
 .wrapper {
-    max-width: 1050px;
-    margin: 0 auto;
-    padding: 0 15px;
+  max-width: 1050px;
+  margin: 0 auto;
+  padding: 0 15px;
 }
 
-.price--strikethrough  {
-    color: $AwakningColorBlackNeglected;
-    text-decoration: line-through;
+.price--strikethrough {
+  color: $AwakningColorBlackNeglected;
+  text-decoration: line-through;
 }
 
 .price--discounted {
-    color: $AwakningColorGreen;
-    margin-left: 0.3125rem;
+  color: $AwakningColorGreen;
+  margin-left: 0.3125rem;
+}
+
+// Hide an element without affecting its accessibility or search engine parser consideration
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }

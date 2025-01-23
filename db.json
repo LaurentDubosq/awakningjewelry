@@ -1,154 +1,169 @@
 {
-    "siteMenuItems": [
-        {
-            "id": 1,
-            "title": "About",
-            "url": "/pages/about-us",
-            "type": "text"
-        },
-        {
-            "id": 2,
-            "title": "Shop",
-            "url": "",
-            "type": "text",
-            "subMenuItems" : [
-                {
-                    "id": 1,
-                    "title": "Charm Bracelets",
-                    "url": "/collections/women-buddhist-charm-bracelets",
-                    "type": "text"
-                },
-                {
-                    "id": 2,
-                    "title": "Elegance Bracelets",
-                    "url": "/collections/women-buddhist-elegance-bracelets",
-                    "type": "text"
-                },
-                {
-                    "id": 3,
-                    "title": "108 Mala Beads",
-                    "url": "/collections/108-unisex-mala-beads",
-                    "type": "text"
-                }
-            ]
-        },
-        {
-            "id": 3,
-            "title": "Promotions",
-            "url": "/collections/private-promotions",
-            "type": "text"
-        },
-        {
-            "id": 4,
-            "title": "Faqs & Contact",
-            "url": "/pages/faq-and-contact",
-            "type": "text"
-        },
-        {
-            "id": 5,
-            "title": "Account",
-            "url": "/account",
-            "type": "icon"
-        }
-    ],
-    "pagesMetaData": [
-        {
-            "name" : "home",
-            "title" : "Innovante Buddhist Jewelry Brand - AwakningJewelry.com",
-            "description": "Draw energy from your Eastern values to live your spirituality and find well-being in our Western world by wearing our Bracelets tailored to your dress codes &amp; 108 Malas Beads adapted to your Meditation &amp; Yoga sessions."
-        }
-    ],
-    "heroSlides" : [
-        {
-            "id": 1,
-            "images": {
-                "mobile" : "https://cdn.shopify.com/s/files/1/2275/5667/files/inclusiveness-true-love-charm-bracelet-of-awakning-buddhist-jewelry-640w.avif",
-                "desktop" : "https://cdn.shopify.com/s/files/1/2275/5667/files/inclusiveness-true-love-charm-bracelet-of-awakning-buddhist-jewelry-1600w.avif",
-                "alt" : "Inclusiveness of True Love 925 Silver Plated Charm Bracelet"
-            },
-            "subtitle": "Ward off misperceptions",
-            "title": "Charm Bracelets",
-            "url": "/collections/women-buddhist-charm-bracelets"
-        },
-        {
-            "id": 2,
-            "images": {
-                "mobile" : "https://cdn.shopify.com/s/files/1/2275/5667/files/buddha-courage-108-mala-beads-of-awakning-buddhist-jewelry-640w.avif",
-                "desktop" : "https://cdn.shopify.com/s/files/1/2275/5667/files/buddha-courage-108-mala-beads-of-awakning-buddhist-jewelry-1600w.avif",
-                "alt" : "Unisex Mala Buddha Courage 108 Natural Tiger's Eye Beads"
-            },
-            "subtitle": "Develop yourself internally",
-            "title": "108 Beads Malas",
-            "url": "/collections/108-unisex-mala-beads"
-        },
-        {
-            "id": 3,
-            "images": {
-                "mobile" : "https://cdn.shopify.com/s/files/1/2275/5667/files/supreme-serenity-of-life-s-tree-of-awakning-buddhist-jewelry-640w.avif",
-                "desktop" : "https://cdn.shopify.com/s/files/1/2275/5667/files/supreme-serenity-of-life-s-tree-of-awakning-buddhist-jewelry-1600w.avif",
-                "alt" : "Supreme Serenity of Life's Tree 925 Sterling Silver Elegance Bracelet"
-            },
-            "subtitle": "Accomplish Yourself",
-            "title": "Elegance Bracelets",
-            "url": "/collections/women-buddhist-elegance-bracelets"
-        }
-    ],
-    "commentBarMissionData" : {
-        "title" : "Our mission:",
-        "text" : "Make you feel empowered and stimulated by connecting you to your spiritual values",
-        "image" : {
-            "url" : "./favicon-white-transparent.png",
-            "alt" : "Icon containing Illustration of a person medidating above the floor"
-        }
-     },
-     "collectionListingGenderData" : {
-         "title" : "By Gender",
-         "collections" : [
-            {
-                "image" : "https://cdn.shopify.com/s/files/1/2275/5667/files/woman-model-urban-adventurer.avif",
-                "title" : "Women",
-                "url" : "/collections/women" 
-            },
-            {
-                "image" : "https://cdn.shopify.com/s/files/1/2275/5667/files/man-model-urban.avif",
-                "title" : "Men",
-                "url" : "/collections/men" 
-            }
-        ]
+  "siteMenu": [
+    {
+      "id": 1,
+      "type": "text",
+      "text": "About",
+      "url": "/pages/about-us",
+      "title": "Discover us"
     },
-    "productListingPromotionsData" : {
-        "title" : "Promotions",
-        "products" : [
-            {
-                "title" : "Infinite Wisdom of the Tree of Life Charm Bracelet",
-                "image" : {
-                    "url" : "https://cdn.shopify.com/s/files/1/2275/5667/files/infinite-wisdom-of-tree-of-life-charm-bracelet-of-awakning-buddhist-jewelry.avif",
-                    "alt" : "Infinite Wisdom of Tree of Life Charm Bracelet from above showcasing brilliant charms on the theme of nature and the tree of life"
-                },
-                "price" : "$28.99",
-                "promotionalPrice" : "$23.19",
-                "url" : "/collections/women-buddhist-charm-bracelets/products/infinite-wisdom-of-the-tree-of-life-silver-plated-charm-bracelet"
-            },
-            {
-                "title" : "Eternal True Love Elegance Bracelet",
-                "image" : {
-                    "url" : "https://cdn.shopify.com/s/files/1/2275/5667/files/eternal-true-love-elegance-bracelet-of-awakning-buddhist-jewelry.avif",
-                    "alt" : "Eternal True Love Elegance Bracelet showcasing from front an elegent hearts and eternal decorative links on a thin chain"
-                },
-                "price" : "$31.99",
-                "promotionalPrice" : "$28.99",
-                "url" : "/collections/women-buddhist-elegance-bracelets/products/eternal-true-love-925-silver-plated-elegance-bracelet"
-            },
-            {
-                "title" : "Clarity of Mind of Life Tree 108 Unisex Mala Beads",
-                "image" : {
-                    "url" : "https://cdn.shopify.com/s/files/1/2275/5667/files/clarity-of-mind-of-life-tree-108-beads-mala-of-awakning-buddhist-jewelry.avif",
-                    "alt" : "Clarity of Mind of Life Tree 108 Beads Mala showcasing from front a well-strung bracelet with various beads colors reminiscent of the different colours of wood and nature adorned with a tree of life pendant"
-                },
-                "price" : "$37.99",
-                "promotionalPrice" : "$30.39",
-                "url" : "/collections/108-unisex-mala-beads/products/unisex-mala-clarity-of-mind-of-life-tree-108-natural-picasso-marble-beads"
-            }
-        ]
+    {
+      "id": 2,
+      "type": "dropdown",
+      "text": "Shop",
+      "url": null,
+      "title": "Explore our products",
+      "subMenu": [
+        {
+          "id": 1,
+          "text": "Charm Bracelets",
+          "url": "/collections/women-buddhist-charm-bracelets"
+        },
+        {
+          "id": 2,
+          "text": "Elegance Bracelets",
+          "url": "/collections/women-buddhist-elegance-bracelets"
+        },
+        {
+          "id": 3,
+          "text": "108 Mala Beads",
+          "url": "/collections/108-unisex-mala-beads"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "text",
+      "text": "Promotions",
+      "url": "/collections/private-promotions",
+      "title": "Acces current promotions"
+    },
+    {
+      "id": 4,
+      "type": "text",
+      "text": "Faqs & Contact",
+      "url": "/pages/faq-and-contact",
+      "title": "Get help"
+    },
+    {
+      "id": 5,
+      "type": "icon",
+      "text": "Account",
+      "url": "/account",
+      "name": "account",
+      "title": "Go to my account"
     }
+  ],
+  "pagesMetaData": [
+    {
+      "name": "home",
+      "title": "Innovante Buddhist Jewelry Brand - AwakningJewelry.com",
+      "description": "Draw energy from your Eastern values to live your spirituality and find well-being in our Western world by wearing our Bracelets tailored to your dress codes &amp; 108 Malas Beads adapted to your Meditation &amp; Yoga sessions."
+    }
+  ],
+  "heroSlides": [
+    {
+      "id": 1,
+      "images": {
+        "mobile": {
+          "url": "https://cdn.shopify.com/s/files/1/2275/5667/files/inclusiveness-true-love-charm-bracelet-of-awakning-buddhist-jewelry-640w.avif"
+        },
+        "desktop": {
+          "url": "https://cdn.shopify.com/s/files/1/2275/5667/files/inclusiveness-true-love-charm-bracelet-of-awakning-buddhist-jewelry-1600w.avif"
+        },
+        "alt": "Inclusiveness of True Love 925 Silver Plated Charm Bracelet"
+      },
+      "subtitle": "Ward off misperceptions",
+      "title": "Charm Bracelets",
+      "url": "/collections/women-buddhist-charm-bracelets"
+    },
+    {
+      "id": 2,
+      "images": {
+        "mobile": {
+          "url": "https://cdn.shopify.com/s/files/1/2275/5667/files/buddha-courage-108-mala-beads-of-awakning-buddhist-jewelry-640w.avif"
+        },
+        "desktop": {
+          "url": "https://cdn.shopify.com/s/files/1/2275/5667/files/buddha-courage-108-mala-beads-of-awakning-buddhist-jewelry-1600w.avif"
+        },
+        "alt": "Unisex Mala Buddha Courage 108 Natural Tiger's Eye Beads"
+      },
+      "subtitle": "Develop yourself internally",
+      "title": "108 Beads Malas",
+      "url": "/collections/108-unisex-mala-beads"
+    },
+    {
+      "id": 3,
+      "images": {
+        "mobile": {
+          "url": "https://cdn.shopify.com/s/files/1/2275/5667/files/supreme-serenity-of-life-s-tree-of-awakning-buddhist-jewelry-640w.avif"
+        },
+        "desktop": {
+          "url": "https://cdn.shopify.com/s/files/1/2275/5667/files/supreme-serenity-of-life-s-tree-of-awakning-buddhist-jewelry-1600w.avif"
+        },
+        "alt": "Supreme Serenity of Life's Tree 925 Sterling Silver Elegance Bracelet"
+      },
+      "subtitle": "Accomplish Yourself",
+      "title": "Elegance Bracelets",
+      "url": "/collections/women-buddhist-elegance-bracelets"
+    }
+  ],
+  "statementMission": {
+    "title": "Our mission:",
+    "text": "Make you feel empowered and stimulated by connecting you to your spiritual values",
+    "image": {
+      "url": "./favicon-white-transparent.png",
+      "alt": ""
+    }
+  },
+  "collectionsByGender": [
+    {
+      "image": {
+        "url": "https://cdn.shopify.com/s/files/1/2275/5667/files/woman-model-urban-adventurer.avif",
+        "alt": ""
+      },
+      "title": "Women",
+      "url": "/collections/women"
+    },
+    {
+      "image": {
+        "url": "https://cdn.shopify.com/s/files/1/2275/5667/files/man-model-urban.avif",
+        "alt": ""
+      },
+      "title": "Men",
+      "url": "/collections/men"
+    }
+  ],
+  "promotions": [
+    {
+      "title": "Infinite Wisdom of the Tree of Life Charm Bracelet",
+      "image": {
+        "url": "https://cdn.shopify.com/s/files/1/2275/5667/files/infinite-wisdom-of-tree-of-life-charm-bracelet-of-awakning-buddhist-jewelry.avif",
+        "alt": "Infinite Wisdom of Tree of Life Charm Bracelet from above showcasing brilliant charms on the theme of nature and the tree of life"
+      },
+      "price": "$28.99",
+      "promotionalPrice": "$23.19",
+      "url": "/collections/women-buddhist-charm-bracelets/products/infinite-wisdom-of-the-tree-of-life-silver-plated-charm-bracelet"
+    },
+    {
+      "title": "Eternal True Love Elegance Bracelet",
+      "image": {
+        "url": "https://cdn.shopify.com/s/files/1/2275/5667/files/eternal-true-love-elegance-bracelet-of-awakning-buddhist-jewelry.avif",
+        "alt": "Eternal True Love Elegance Bracelet showcasing from front an elegent hearts and eternal decorative links on a thin chain"
+      },
+      "price": "$31.99",
+      "promotionalPrice": "$28.99",
+      "url": "/collections/women-buddhist-elegance-bracelets/products/eternal-true-love-925-silver-plated-elegance-bracelet"
+    },
+    {
+      "title": "Clarity of Mind of Life Tree 108 Unisex Mala Beads",
+      "image": {
+        "url": "https://cdn.shopify.com/s/files/1/2275/5667/files/clarity-of-mind-of-life-tree-108-beads-mala-of-awakning-buddhist-jewelry.avif",
+        "alt": "Clarity of Mind of Life Tree 108 Beads Mala showcasing from front a well-strung bracelet with various beads colors reminiscent of the different colours of wood and nature adorned with a tree of life pendant"
+      },
+      "price": "$37.99",
+      "promotionalPrice": "$30.39",
+      "url": "/collections/108-unisex-mala-beads/products/unisex-mala-clarity-of-mind-of-life-tree-108-natural-picasso-marble-beads"
+    }
+  ]
 }

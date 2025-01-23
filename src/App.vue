@@ -5,36 +5,49 @@ import SiteHeader from "./components/SiteHeader.vue";
 import BurgerMenu from "./components/BurgerMenu.vue";
 import MyTransition from "./components/MyTransition.vue";
 
-// Site Menu Items - Get Data & Send it to SiteNav component via dependency injection and to BurgerMenu component via prop
-import type { SiteMenuItem } from "./data/menus";
-import { getSiteMenuItems } from "./composables/fetch";
-import { siteMenuItemsKey } from "./utils/injectionkeys";
+/*************/
+/* Site Menu */
+/*************/
 
-const siteMenuItems: Ref<SiteMenuItem[] | undefined> = ref([]);
+// Provide the site menu (to: SiteNav.vue)
+import type { SiteMenuItem } from "./types/components";
+import { getSiteMenu } from "./data/dataFetchers";
+import { siteMenuKey } from "./utils/injectionkeys";
 
-provide(siteMenuItemsKey, siteMenuItems); // Send Menu Items List to SiteNav component
+const siteMenuResult: UseFetchWithStateReturn<SiteMenuItem[]> = getSiteMenu();
 
-onMounted(async () => {
-  siteMenuItems.value = await getSiteMenuItems();
-});
-// end Site Menu Items - Get Data & Send it to SiteNav component via dependency injection and to BurgerMenu component via prop
+provide(siteMenuKey, siteMenuResult);
 
-// Burger Menu - Open/Close Logic & Send handler and status
-import SASSCONSTANTS from "@/assets/styles/_constants.module.scss"; /* Get the SASS Constants to use it in Javascript */
-import {
-  toggleBurgerMenuKey,
-  isBurgerMenuOpenKey,
-} from "./utils/injectionkeys";
+/***************/
+/* Burger Menu */
+/***************/
 
-const DESKTOPBREAKPOINT: number = Number(
-  SASSCONSTANTS.AwakningBreakpointDesktop.slice(0, -2)
-); // Get the desktop breakpoint defined in SASS
 const isBurgerMenuOpen: Ref<boolean> = ref(false);
+
+/* Provide the burger menu opening status (to: BurgerMenuToggle.vue) */
+import { isBurgerMenuOpenKey } from "./utils/injectionkeys";
+
+provide(isBurgerMenuOpenKey, isBurgerMenuOpen);
+
+/* Provide the burger menu logic necessary to toggle the burger menu (to: BurgerMenuLink.vue, BurgerMenuDropdownItem.vue, BurgerMenuToggle.vue) */
+import { toggleBurgerMenuKey } from "./utils/injectionkeys";
 
 function toggleBurgerMenu() {
   isBurgerMenuOpen.value = !isBurgerMenuOpen.value;
 }
 
+provide(toggleBurgerMenuKey, toggleBurgerMenu);
+
+/* Logic to close the burger menu when switch from mobile to desktop */
+// Get SASS Constants to use it in Javascript
+import SASSCONSTANTS from "@/assets/styles/_constants.module.scss";
+
+// Get the desktop breakpoint value from design system
+const DESKTOPBREAKPOINT: number = Number(
+  SASSCONSTANTS.AwakningBreakpointDesktop.slice(0, -2)
+);
+
+// Logic to close the burger menu when we resize the window width from mobile to desktop.
 function closeBurgerMenuOnDesktop() {
   if (
     document.documentElement.clientWidth >= DESKTOPBREAKPOINT &&
@@ -44,38 +57,40 @@ function closeBurgerMenuOnDesktop() {
   }
 }
 
-provide(toggleBurgerMenuKey, toggleBurgerMenu); // Send the open/close burger menu handle function to BurgerMenuDropdownList component
-provide(isBurgerMenuOpenKey, isBurgerMenuOpen); // Send the open/close burger menu status to SiteHeader component to toggle the burger menu ICON
-
+// Check at every window resize if burger menu should be closed
 onMounted(() => {
-  window.addEventListener("resize", closeBurgerMenuOnDesktop); // Close the Burger Menu when we resize the window width from mobile to desktop.
+  window.addEventListener("resize", closeBurgerMenuOnDesktop);
 });
 
+// Remove the listener
 onUnmounted(() => {
   window.removeEventListener("resize", closeBurgerMenuOnDesktop);
 });
-// end Burger Menu - Open/Close Logic & Send handler and status
 
-// Global Variables
-import { useIsOnMobile } from "./composables/display";
+/********************/
+/* Global Variables */
+/********************/
+
+// Provide mobile/desktop environment (to: whole app)
+import { useIsOnMobile } from "./composables/useIsOnMobile";
 import { useIsOnMobileKey } from "./utils/injectionkeys";
+import type { UseFetchWithStateReturn } from "./types/fetch";
 
-provide(useIsOnMobileKey, useIsOnMobile()); // inform if we are in mobile or desktop environment
-// end Global Variables
+provide(useIsOnMobileKey, useIsOnMobile());
 </script>
 
 <template>
   <div class="site-container">
-    <MyTransition name="marginLeftMinus300px">
+    <MyTransition name="marginLeftMinus300px" :group="false">
       <BurgerMenu
-        :siteMenuItems
+        :siteMenuResult
         @close-burger-menu="toggleBurgerMenu"
         v-if="isBurgerMenuOpen"
       />
     </MyTransition>
     <div class="site-content">
       <div class="site-content-container">
-        <SiteHeader @toggle-burger-menu="toggleBurgerMenu" />
+        <SiteHeader />
         <main>
           <RouterView />
         </main>

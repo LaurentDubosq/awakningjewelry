@@ -1,39 +1,61 @@
 <script setup lang="ts">
-import type { SiteMenuItem } from "@/data/menus";
-import { type PropType } from "vue";
-import BurgerMenuItem from "./BurgerMenuItem.vue";
+import type { SiteMenuItem } from "@/types/components";
+import type { UseFetchWithStateReturn } from "@/types/fetch";
+import type { FetchStatus } from "@/types/fetch";
+import { type PropType, type ComputedRef, computed } from "vue";
+import BurgerMenuLink from "./BurgerMenuLink.vue";
 import BurgerMenuDropdown from "./BurgerMenuDropdown.vue";
+import LoadingComponent from "./LoadingComponent.vue";
+import ErrorComponent from "./ErrorComponent.vue";
 
-const { siteMenuItems } = defineProps({
-  siteMenuItems: { type: Array as PropType<SiteMenuItem[] | undefined> },
+const { siteMenuResult } = defineProps({
+  siteMenuResult: {
+    type: Object as PropType<UseFetchWithStateReturn<SiteMenuItem[]>>,
+    required: true,
+  },
 });
+
+const siteMenuData: ComputedRef<SiteMenuItem[] | undefined> = computed(
+  () => siteMenuResult.data?.value
+);
+
+const siteMenuFetchStatus: ComputedRef<FetchStatus | undefined> = computed(
+  () => siteMenuResult?.status?.value
+);
+
+// Utilities
+function isLink(siteMenuItem: SiteMenuItem): Boolean {
+  return !siteMenuItem.subMenu;
+}
+function isDropdown(siteMenuItem: SiteMenuItem): Boolean {
+  return !!siteMenuItem.subMenu;
+}
 </script>
 
 <template>
-  <nav class="burger-menu">
-    <menu class="burger-menu__list">
-      <li
-        class="burger-menu__list-item"
-        data-testid="burger-menu__list-item"
-        v-for="siteMenuItem of siteMenuItems"
-      >
-        <BurgerMenuDropdown
-          :dropdown="siteMenuItem"
-          v-if="siteMenuItem.subMenuItems"
-        />
-        <RouterLink
-          :to="siteMenuItem.url"
-          class="burger-menu__link"
-          data-testid="burger-menu__link"
-          @click="$emit('close-burger-menu')"
-          v-else
+  <nav
+    class="burger-menu"
+    @keydown.escape="$emit('close-burger-menu')"
+    aria-label="Website's mobile navigation burger menu"
+    id="burger-menu"
+  >
+    <ul class="burger-menu__list">
+      <template v-if="siteMenuFetchStatus === 'resolved'">
+        <li
+          class="burger-menu__item"
+          data-testid="burger-menu__item"
+          v-for="siteMenuItem of siteMenuData"
         >
-          <BurgerMenuItem>
-            {{ siteMenuItem.title }}
-          </BurgerMenuItem>
-        </RouterLink>
-      </li>
-    </menu>
+          <BurgerMenuLink :link="siteMenuItem" v-if="isLink(siteMenuItem)" />
+          <BurgerMenuDropdown
+            :dropdown="siteMenuItem"
+            v-else-if="isDropdown(siteMenuItem)"
+          />
+        </li>
+      </template>
+      <LoadingComponent v-if="siteMenuFetchStatus === 'pending'" />
+      <ErrorComponent v-if="siteMenuFetchStatus === 'rejected'" />
+    </ul>
   </nav>
 </template>
 

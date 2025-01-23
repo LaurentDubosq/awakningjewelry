@@ -1,24 +1,49 @@
 <script setup lang="ts">
-import { type PropType } from "vue";
-import { type ProductListingData } from "@/data/components";
+import { type PropType, computed, type ComputedRef } from "vue";
+import type { UseFetchWithStateReturn } from "@/types/fetch";
+import type { FetchStatus } from "@/types/fetch";
+import type { ProductSummary } from "@/types/global.d.ts";
 import ProductListingItem from "./ProductListingItem.vue";
+import LoadingComponent from "./LoadingComponent.vue";
+import ErrorComponent from "./ErrorComponent.vue";
 
-const { data } = defineProps({
-  data: {
-    type: Object as PropType<ProductListingData | undefined>,
+const { title, productsResult } = defineProps({
+  title: {
+    type: String,
+    required: true,
+  },
+  productsResult: {
+    type: Object as PropType<UseFetchWithStateReturn<ProductSummary[]>>,
+    required: true,
   },
 });
+
+const productsData: ComputedRef<ProductSummary[] | undefined> = computed(
+  () => productsResult.data?.value
+);
+
+const productsFetchStatus: ComputedRef<FetchStatus | undefined> = computed(
+  () => productsResult?.status?.value
+);
 </script>
 
 <template>
-  <section class="productListing">
+  <section class="product-listing" aria-labelledby="product-listing-title">
     <div class="wrapper">
-      <h2 class="productListing__title" data-testid="productListing__title">
-        {{ data?.title }}
+      <h2
+        class="product-listing__title"
+        id="product-listing__title"
+        data-testid="product-listing__title"
+      >
+        {{ title }}
       </h2>
-      <hr class="productListing__separator" />
-      <ul class="productListing__list">
-        <ProductListingItem v-for="product in data?.products" :product />
+      <hr class="product-listing__separator" />
+      <ul class="product-listing__list" aria-label="Products">
+        <template v-if="productsFetchStatus === 'resolved'">
+          <ProductListingItem v-for="product in productsData" :product />
+        </template>
+        <LoadingComponent v-if="productsFetchStatus === 'pending'" />
+        <ErrorComponent v-if="productsFetchStatus === 'rejected'" />
       </ul>
     </div>
   </section>
@@ -27,7 +52,7 @@ const { data } = defineProps({
 <style scoped lang="scss">
 @use "@/assets/styles/_constants.scss" as *;
 
-.productListing {
+.product-listing {
   margin: 45px 0;
   @media screen and (min-width: $AwakningBreakpointDesktop) {
     margin: 90px 0;

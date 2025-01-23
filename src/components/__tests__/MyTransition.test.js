@@ -1,84 +1,133 @@
 import { mount } from "@vue/test-utils";
 import MyTransition from "@/components/MyTransition.vue";
-import SiteNavDropdownList from "@/components/SiteNavDropdownList.vue"; // Arbitrary component
+import SiteNavDropdownList from "@/components/SiteNavDropdownList.vue";
+import App from "@/App.vue";
 import { TransitionGroup, Transition } from "vue"; // Allow us to point the Vue's Built-in component
 
-describe("MyTransition component:", () => {
+const mockTransitionGroupSlotInfoWithDuration = {
+  slot: SiteNavDropdownList,
+  props: {
+    name: "translateY",
+    group: true,
+    duration: 3500,
+  },
+  stubs: { SiteNavDropdownList: { template: "<div />" } },
+};
+const mockTransitionGroupSlotInfoWithoutDuration = {
+  slot: SiteNavDropdownList,
+  props: {
+    name: "translateY",
+    group: true,
+  },
+  stubs: { SiteNavDropdownList: { template: "<div />" } },
+};
+const mockTransitionSlotInfo = {
+  slot: App,
+  props: {
+    name: "marginLeftMinus300px",
+    group: false,
+  },
+  stubs: { App: { template: "<div />" } },
+};
+
+// Component Factory
+function mountComponent({ slot, props, stubs }) {
+  return mount(MyTransition, {
+    slots: { default: slot },
+    props,
+    global: {
+      stubs,
+    },
+  });
+}
+
+describe("MyTransition.vue", () => {
   let wrapper;
-  const name = "margintopMinus100PerCentWithInner";
-  const duration = 3500;
 
-  describe("TransitionGroup component:", () => {
-    beforeEach(() => {
-      wrapper = mount(MyTransition, {
-        slots: { default: SiteNavDropdownList },
-        props: { name: name, group: true, duration: duration },
-      });
-    });
+  // Smoke test
+  test("mounts successfully", () => {
+    // Assert the testing environement is ready for transition group variant
+    wrapper = mountComponent(mockTransitionGroupSlotInfoWithDuration);
+    expect(wrapper.exists()).toBeTruthy();
 
-    it("is rendered when filled with its 'name', 'duration' props, and its slot content", () => {
+    // Assert the testing environement is ready for transition variant
+    wrapper = mountComponent(mockTransitionSlotInfo);
+    expect(wrapper.exists()).toBeTruthy();
+  });
+
+  describe("TransitionGroup.vue", () => {
+    it("is rendered with necessary information, with duration prop", () => {
+      const mockedProps = mockTransitionGroupSlotInfoWithDuration.props;
+
+      // Mounting Component
+      const wrapper = mountComponent(mockTransitionGroupSlotInfoWithDuration);
+
+      // Find TransitionGroup component
       const TransitionGroupComponent = wrapper.findComponent(TransitionGroup);
 
-      // Assert the vue's built-in component is rendered
-      expect(TransitionGroupComponent.exists()).toBe(true);
+      // Assert the TransitionGroup built-in component is rendered
+      expect(TransitionGroupComponent.exists()).toBeTruthy();
 
       // Assert its 'name' prop value is well setted
-      expect(TransitionGroupComponent.props("name")).toBe(name);
+      expect(TransitionGroupComponent.props("name")).toBe(mockedProps.name);
 
       // Assert its 'duration' prop value is well setted
-      expect(TransitionGroupComponent.props("duration")).toBe(duration);
+      expect(TransitionGroupComponent.props("duration")).toBe(
+        mockedProps.duration
+      );
 
       // Assert its slot content is rendered
-      const SiteNavDropdownListComponent =
+      const slotComponent =
         TransitionGroupComponent.findComponent(SiteNavDropdownList);
-      expect(SiteNavDropdownListComponent.exists()).toBe(true);
+      expect(slotComponent.exists()).toBeTruthy();
     });
 
-    it("is rendered when filled with its 'name' prop , its slot content, but without the 'duration' prop", () => {
-      wrapper = mount(MyTransition, {
-        slots: { default: SiteNavDropdownList },
-        props: { name: name, group: true },
-      });
+    it("is rendered with necessary information, but without duration prop", () => {
+      const mockedProps = mockTransitionGroupSlotInfoWithoutDuration.props;
 
+      // Mounting Component
+      const wrapper = mountComponent(
+        mockTransitionGroupSlotInfoWithoutDuration
+      );
+
+      // Find TransitionGroup component
       const TransitionGroupComponent = wrapper.findComponent(TransitionGroup);
 
-      // Assert the vue's built-in component is rendered
-      expect(TransitionGroupComponent.exists()).toBe(true);
+      // Assert the TransitionGroup built-in component is rendered
+      expect(TransitionGroupComponent.exists()).toBeTruthy();
 
       // Assert its 'name' prop value is well setted
-      expect(TransitionGroupComponent.props("name")).toBe(name);
+      expect(TransitionGroupComponent.props("name")).toBe(mockedProps.name);
 
-      // Assert its 'duration' prop value is undefined
-      expect(TransitionGroupComponent.props("duration")).toBe(undefined);
+      // Assert its 'duration' prop value has the correct value
+      expect(TransitionGroupComponent.props("duration")).toBeUndefined();
 
       // Assert its slot content is rendered
-      const SiteNavDropdownListComponent =
+      const slotComponent =
         TransitionGroupComponent.findComponent(SiteNavDropdownList);
-      expect(SiteNavDropdownListComponent.exists()).toBe(true);
+      expect(slotComponent.exists()).toBeTruthy();
     });
   });
 
-  describe("Transition component:", () => {
-    beforeEach(() => {
-      wrapper = mount(MyTransition, {
-        slots: { default: SiteNavDropdownList },
-        props: { name },
-      });
-    });
+  describe("Transition.vue", () => {
+    const mockedProps = mockTransitionSlotInfo.props;
 
-    test("is rendered with its 'name' prop value and its nested component", () => {
+    test("is rendered with necessary information", () => {
+      // Mounting Component
+      wrapper = mountComponent(mockTransitionSlotInfo);
+
+      // Find Transition component
       const TransitionComponent = wrapper.findComponent(Transition);
-      const SiteNavDropdownListComponent =
-        wrapper.findComponent(SiteNavDropdownList);
 
-      // Assert the vue's built-in component is rendered
-      expect(TransitionComponent.exists()).toBe(true);
+      // Assert the Transition built-in component is rendered
+      expect(TransitionComponent.exists()).toBeTruthy();
 
       // Assert its 'name' prop value is well setted
-      expect(TransitionComponent.props("name")).toBe(name);
+      expect(TransitionComponent.props("name")).toBe(mockedProps.name);
 
-      // Assert its the slot content is well rendered
-      expect(SiteNavDropdownListComponent.exists()).toBe(true);
+      // Assert its slot content is well rendered
+      const slotComponent = wrapper.findComponent(App);
+      expect(slotComponent.exists()).toBeTruthy();
     });
   });
 });

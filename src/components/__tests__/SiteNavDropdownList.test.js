@@ -1,67 +1,56 @@
 import { mount } from "@vue/test-utils";
 import SiteNavDropdownList from "@/components/SiteNavDropdownList.vue";
 import SiteNavDropdownItem from "@/components/SiteNavDropdownItem.vue";
+import router from "@/router";
+import { closeSiteNavDropdownKey } from "@/utils/injectionkeys";
 import frontDataBase from "../../../db.json";
 
-const siteMenuItems = frontDataBase["siteMenuItems"];
-const dropdownList = siteMenuItems[1].subMenuItems;
+const mockSiteMenu = frontDataBase["siteMenu"];
+const mockDropdownText = mockSiteMenu[1].text;
+const mockLinks = mockSiteMenu[1].subMenu;
+const mockCloseSiteNavDropdown = vi.fn();
 
-describe("SiteNavDropdownList component:", () => {
+// Mock the fetcher used in the mocked router
+vi.mock("@/data/dataFetchers", () => {
+  return {
+    getPagesMetaData: vi.fn().mockReturnValue(undefined),
+  };
+});
+
+// Component Factory
+function mountSiteNavDropdownList() {
+  return mount(SiteNavDropdownList, {
+    props: { links: mockLinks, dropdownText: mockDropdownText },
+    global: {
+      plugins: [router],
+      provide: { [closeSiteNavDropdownKey]: mockCloseSiteNavDropdown },
+    },
+  });
+}
+
+describe("SiteNavDropdownList.vue", () => {
   let wrapper;
-  let SiteNavDropdownItemComponents;
-  let listItemElements;
 
   beforeEach(() => {
-    wrapper = mount(SiteNavDropdownList, {
-      props: { items: dropdownList },
-      global: {
-        stubs: { SiteNavDropdownItem },
-      },
+    wrapper = mountSiteNavDropdownList();
+  });
+
+  // Smoke test
+  test("mounts successfully", () => {
+    expect(wrapper.exists()).toBeTruthy();
+  });
+
+  test("renders all its expected items with necessary information", () => {
+    const itemComponents = wrapper.findAllComponents(SiteNavDropdownItem);
+
+    // Assert that all the expected items' component are rendered
+    expect(itemComponents).toHaveLength(mockLinks.length);
+
+    // Assert that each item component has its data well setted as prop
+    itemComponents.forEach((itemComponent, index) => {
+      const mockLink = mockLinks[index];
+      // Assert that the 'link' prop has the correct value
+      expect(itemComponent.props("link")).toMatchObject(mockLink);
     });
-    SiteNavDropdownItemComponents =
-      wrapper.findAllComponents(SiteNavDropdownItem);
-    listItemElements = wrapper.findAll(
-      "[data-testid='site-nav__dropdown-list-item']"
-    );
-  });
-
-  test("renders its list entirely", () => {
-    expect(listItemElements).toHaveLength(dropdownList.length);
-  });
-
-  describe("Each Item:", () => {
-    dropdownList.forEach((item, index) => {
-      describe(`Item at index ${index}:`, () => {
-        test("renders its SiteNavDropdownItem component:", () => {
-          const SiteNavDropdownItemComponent =
-            listItemElements[index].findComponent(SiteNavDropdownItem);
-          expect(SiteNavDropdownItemComponent.exists()).toBe(true);
-        });
-
-        test("renders its title", () => {
-          expect(SiteNavDropdownItemComponents[index].text()).toContain(
-            dropdownList[index].title
-          );
-        });
-
-        it("has a link with its url value well setted", () => {
-          const linkElement = listItemElements[index].find(
-            "[data-testid='site-nav__dropdown-list-item-link']"
-          );
-
-          // Assert the item has a link tag
-          expect(linkElement.exists()).toBe(true);
-
-          // Assert the item has its link value well setted
-          expect(linkElement.attributes("to")).toBe(dropdownList[index].url);
-        });
-      });
-    });
-  });
-
-  test("emits the 'close-dropdown' custom event when the item is clicked", async () => {
-    const firstListItemElement = listItemElements[0];
-    await firstListItemElement.trigger("click");
-    expect(wrapper.emitted("close-dropdown")).toHaveLength(1);
   });
 });

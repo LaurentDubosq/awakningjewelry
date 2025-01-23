@@ -1,36 +1,35 @@
 <script setup lang="ts">
+import { TransitionGroup, Transition } from "vue";
+
 const { name, group } = defineProps({
   name: { type: String, required: true },
-  group: { type: Boolean, default: false },
+  group: { type: Boolean, required: true },
   duration: { type: Number },
 });
 </script>
 
 <template>
-  <TransitionGroup :name :duration v-if="group">
-    <slot />
-  </TransitionGroup>
-  <Transition :name v-else>
-    <slot />
-  </Transition>
+  <component :name :is="group ? TransitionGroup : Transition" :duration
+    ><slot
+  /></component>
 </template>
 
 <style lang="scss">
 @use "@/assets/styles/_constants" as *;
 
-/* fadeSlideShow */
-.fadeSlideShow-enter-active,
-.fadeSlideShow-leave-active {
+/* fadeSlideshow */
+.fadeSlideshow-enter-active,
+.fadeSlideshow-leave-active {
   transition: opacity 0.5s ease;
 }
-.fadeSlideShow-leave-active {
+.fadeSlideshow-leave-active {
   position: absolute;
   @media screen and (max-width: $AwakningBreakpointDesktop) {
     padding: 0 15px;
   }
 }
-.fadeSlideShow-enter-from,
-.fadeSlideShow-leave-to {
+.fadeSlideshow-enter-from,
+.fadeSlideshow-leave-to {
   opacity: 0;
 }
 

@@ -1,212 +1,343 @@
+import { getSiteMenu } from "@/data/dataFetchers";
+import { useIsOnMobile } from "@/composables/useIsOnMobile";
+import router from "@/router";
 import { flushPromises, mount } from "@vue/test-utils";
-import { createRouter, createWebHistory, RouterView } from "vue-router";
-import { getSiteMenuItems, getPagesMetaData } from "./composables/fetch";
-import { useIsOnMobile } from "./composables/display";
 import App from "@/App.vue";
 import BurgerMenu from "@/components/BurgerMenu.vue";
 import SiteHeader from "@/components/SiteHeader.vue";
 import SiteNav from "@/components/SiteNav.vue";
-import CrossIcon from "@/components/icons/IconCross.vue";
-import frontDataBase from "../db.json";
+import { RouterView } from "vue-router";
+import { nextTick } from "vue";
 
-const siteMenuItems = frontDataBase["siteMenuItems"];
-const pagesMetaData = frontDataBase["pagesMetaData"];
+// Initialize variables able to work with "vi.mock" (because of the vi.mock hoisting phase)
+var frontDataBase;
+var mockPagesMetaData;
 
-describe("App component:", () => {
+// Store other database data after the ESM initialization phase
+const mockSiteMenuResult = {
+  data: { value: frontDataBase["siteMenu"] },
+  status: { value: "resolved" },
+};
+
+// Mocks fetchers with data
+vi.mock("@/data/dataFetchers", async () => {
+  // Necessary data method to use to mock directly with data
+  frontDataBase = await import("../db.json");
+  mockPagesMetaData = frontDataBase["pagesMetaData"];
+
+  return {
+    getPagesMetaData: vi.fn().mockReturnValue(mockPagesMetaData),
+    getSiteMenu: vi.fn(),
+  };
+});
+getSiteMenu.mockReturnValue(mockSiteMenuResult);
+
+// Mock composable
+vi.mock("@/composables/useIsOnMobile", () => {
+  return {
+    useIsOnMobile: vi.fn(),
+  };
+});
+useIsOnMobile.mockReturnValue(true);
+
+// Component Factory
+function mountApp() {
+  return mount(App, {
+    global: {
+      plugins: [router],
+      stubs: {
+        "router-view": true,
+        SiteNav,
+      },
+    },
+    attachTo: document.body,
+  });
+}
+
+describe("App.vue", () => {
   let wrapper;
 
-  // Router's mock initialization
-  const routes = [
-    {
-      path: "/",
-      component: App,
-    },
-  ];
-  const router = createRouter({
-    history: createWebHistory(),
-    routes,
-  });
-
   beforeEach(async () => {
-    // Mock the 'siteMenuItems' and 'getPagesMetaData' API calls
-    vi.mock("./composables/fetch", () => {
-      return {
-        getSiteMenuItems: vi.fn(),
-        getPagesMetaData: vi.fn(), // Mock necessary to the SiteLogo component render
-      };
-    });
-    getSiteMenuItems.mockReturnValue(siteMenuItems);
-    getPagesMetaData.mockReturnValue(pagesMetaData);
-
-    // Mock the UseIsOnMobile composable module because JSDOM doesn't support "window" global object and we need to ensure we are on mobile
-    vi.mock("./composables/display", () => {
-      return {
-        useIsOnMobile: vi.fn(), // Mock necessary to test the 'siteMenuItems' inject
-      };
-    });
-    useIsOnMobile.mockReturnValue(true); // set mobile environment
-
-    // Reinitialize the mocked router to the Homepage
-    router.push("/");
-    await router.isReady();
-
-    // Mock's the router during component mount
-    wrapper = mount(App, {
-      global: {
-        plugins: [router],
-        stubs: ["router-view"], // avoid a double render of the component
-      },
-    });
+    wrapper = mountApp();
   });
 
-  describe("BurgerMenu component:", () => {
+  afterEach(() => {
+    wrapper.unmount();
+  });
+
+  // Smoke test
+  test("mounts successfully", () => {
+    expect(wrapper.exists()).toBeTruthy();
+  });
+
+  /***************/
+  /* Burger Menu */
+  /***************/
+
+  describe("BurgerMenu.vue", () => {
     it("is not rendered at initial render", async () => {
       const BurgerMenuComponent = wrapper.findComponent(BurgerMenu);
-      expect(BurgerMenuComponent.exists()).toBe(false);
+      expect(BurgerMenuComponent.exists()).toBeFalsy();
     });
 
-    it("is rendered when we clic on burger menu icon with its 'siteMenuItems' prop value well setted", async () => {
-      // Open the burger menu
-      const burgerMenuIconButtonElement = wrapper.find(
-        "[data-testid='site-header__burger-menu-icon-button']"
-      );
-      await burgerMenuIconButtonElement.trigger("click");
+    describe("Behaviors:", () => {
+      describe("When open:", () => {
+        let button;
+        let clickEvent;
+        let BurgerMenuComponent;
 
-      const BurgerMenuComponent = wrapper.findComponent(BurgerMenu);
+        beforeEach(async () => {
+          // Open the burger menu
+          button = wrapper.find(
+            "[data-testid='site-header__burger-menu-toggle']"
+          );
+          clickEvent = new MouseEvent("click", { detail: 1 }); // Necessary to customize "detail" option
+          await button.element.dispatchEvent(clickEvent);
 
-      // Assert the burger menu is rendered
-      expect(BurgerMenuComponent.exists()).toBe(true);
+          // Find the burger menu component
+          BurgerMenuComponent = wrapper.findComponent(BurgerMenu);
+        });
 
-      // Assert it has its 'siteMenuItems' prop value well setted
-      expect(BurgerMenuComponent.props("siteMenuItems")).toMatchObject(
-        siteMenuItems
-      );
-    });
+        it("is rendered with necessary information", async () => {
+          // Assert the burger menu component is rendered
+          expect(BurgerMenuComponent.exists()).toBeTruthy();
 
-    it("is not rendered when a clic emits the 'close-burger-menu' custom event", async () => {
-      // Open the burger menu
-      const burgerMenuIconButtonElement = wrapper.find(
-        "[data-testid='site-header__burger-menu-icon-button']"
-      );
-      await burgerMenuIconButtonElement.trigger("click");
+          // Assert its 'siteMenuResult' prop value is well setted
+          expect(BurgerMenuComponent.props("siteMenuResult")).toMatchObject(
+            mockSiteMenuResult
+          );
+        });
 
-      // Assert the burger menu is rendered to avoid false positive in next assertion
-      const BurgerMenuComponent = wrapper.findComponent(BurgerMenu);
-      expect(BurgerMenuComponent.exists()).toBe(true);
+        test("when a link is clicked, it closes the burger menu", async () => {
+          // Assert the burger menu is open
+          expect(BurgerMenuComponent.exists()).toBeTruthy();
 
-      // Click on the first burger menu item link to trigger 'close-burger-menu' custom event
-      const firstBurgerMenuItemLink = wrapper.find(
-        "[data-testid='burger-menu__link']"
-      );
-      await firstBurgerMenuItemLink.trigger("click");
+          // Click a link
+          const link = wrapper.find("[data-testid='burger-menu__link']");
+          await link.trigger("click");
 
-      // Assert the burger menu is not rendered
-      expect(BurgerMenuComponent.exists()).toBe(false);
+          // Assert the burger menu is close
+          expect(BurgerMenuComponent.exists()).toBeFalsy();
+        });
+
+        test("when a dropdown link is clicked, it closes the burger menu", async () => {
+          // Assert the burger menu is open
+          expect(BurgerMenuComponent.exists()).toBeTruthy();
+
+          // Click a dropdown link
+          const link = wrapper.find(
+            "[data-testid='burger-menu__dropdown-item-link']"
+          );
+          await link.trigger("click");
+
+          // Assert the burger menu is close
+          expect(BurgerMenuComponent.exists()).toBeFalsy();
+        });
+
+        test("when a focusable element is focused and the Escape key is pressed, it closes the burger menu", async () => {
+          // Assert the burger menu is open
+          expect(BurgerMenuComponent.exists()).toBeTruthy();
+
+          // Focus a link
+          const link = wrapper.find(
+            "[data-testid='burger-menu__dropdown-item-link']"
+          );
+          await link.trigger("focus");
+
+          // Press the Escape key
+          await link.trigger("keydown.escape");
+
+          // Assert the burger menu is close
+          expect(BurgerMenuComponent.exists()).toBeFalsy();
+        });
+      });
     });
   });
 
-  describe("SiteHeader component:", () => {
+  /***************/
+  /* Site Header */
+  /***************/
+
+  describe("SiteHeader.vue", () => {
     test("is rendered", () => {
       const SiteHeaderComponent = wrapper.findComponent(SiteHeader);
-      expect(SiteHeaderComponent.exists()).toBe(true);
+      expect(SiteHeaderComponent.exists()).toBeTruthy();
     });
 
-    test("open the burger when we click on the burger menu icon and closes it at the next click", async () => {
-      // Open the burger menu
-      const burgerMenuIconButtonElement = wrapper.find(
-        "[data-testid='site-header__burger-menu-icon-button']"
-      );
-      await burgerMenuIconButtonElement.trigger("click");
+    describe("Behaviors:", () => {
+      test("when the burger menu is close, it renders the toggle burger icon", () => {
+        const icon = wrapper.find("[data-testid='icon-burger']");
+        expect(icon.exists()).toBeTruthy();
+      });
 
-      // Assert the burger menu is open
-      const BurgerMenuComponent = wrapper.findComponent(BurgerMenu);
-      expect(BurgerMenuComponent.exists()).toBe(true);
+      test("when the burger menu is open, it renders the toggle cross icon", async () => {
+        // Open the burger menu
+        const button = wrapper.find(
+          "[data-testid='site-header__burger-menu-toggle']"
+        );
+        await button.trigger("click");
 
-      // Close the burger menu
-      await burgerMenuIconButtonElement.trigger("click");
+        // Assert the burger menu is open
+        const BurgerMenuComponent = wrapper.findComponent(BurgerMenu);
+        expect(BurgerMenuComponent.exists()).toBeTruthy();
 
-      // Assert the burger menu is open
-      expect(BurgerMenuComponent.exists()).toBe(false);
+        // Assert the cross icon is rendered
+        const icon = wrapper.find("[data-testid='icon-cross']");
+        expect(icon.exists()).toBeTruthy();
+      });
+
+      test("when we click on burger menu toggle icon, open/close the burger menu", async () => {
+        // Find the burger menu toggle button
+        const button = wrapper.find(
+          "[data-testid='site-header__burger-menu-toggle']"
+        );
+
+        // Click on the button
+        const clickEvent = new MouseEvent("click", { detail: 1 }); // Necessary to customize "detail" option
+        await button.element.dispatchEvent(clickEvent);
+
+        // Find the burger menu component
+        const BurgerMenuComponent = wrapper.findComponent(BurgerMenu);
+
+        // Assert the burger menu is open
+        expect(BurgerMenuComponent.exists()).toBeTruthy();
+
+        // Click on the button
+        await button.element.dispatchEvent(clickEvent);
+
+        // Assert the burger menu is close
+        expect(BurgerMenuComponent.exists()).toBeFalsy();
+      });
+
+      test("when we press the Enter key on the burger menu toggle button, it opens the burger menu then focus the first focusable element", async () => {
+        // Find the burger menu toggle button
+        const button = wrapper.find(
+          "[data-testid='site-header__burger-menu-toggle']"
+        );
+
+        // Press Enter on the button to open the burger menu
+        const clickEvent = new MouseEvent("click", { detail: 0 }); // simulate an "enter" key pressed
+        await button.element.dispatchEvent(clickEvent);
+        await nextTick();
+
+        // Find the burger menu component
+        const BurgerMenuComponent = wrapper.findComponent(BurgerMenu);
+
+        // Assert the burger menu is open
+        expect(BurgerMenuComponent.exists()).toBeTruthy();
+
+        // Find the first focusable element
+        const focusedElement = BurgerMenuComponent.find("button, a");
+
+        // Assert the first focusable element is focused
+        expect(document.activeElement).toStrictEqual(focusedElement.element);
+      });
+
+      test("when the burger menu is open and the focus is on the burger toggle icon, it closes the burger menu when pressing Enter, then keeps the focus on the toggle", async () => {
+        // Get the burger menu toggle button
+        const button = wrapper.find(
+          "[data-testid='site-header__burger-menu-toggle']"
+        );
+
+        // Open the burger menu
+        const clickEvent = new MouseEvent("click", { detail: 0 }); // simulate an "enter" key pressed
+        await button.element.dispatchEvent(clickEvent);
+        await nextTick();
+
+        // Find the burger menu component
+        const BurgerMenuComponent = wrapper.findComponent(BurgerMenu);
+
+        // Assert the burger menu is open
+        expect(BurgerMenuComponent.exists()).toBeTruthy();
+
+        // Focus the button
+        button.element.focus(); // this method forces the focus because the useFocusElement's focus appropriated control
+
+        // Press Enter on the button to close the burger menu
+        await button.element.dispatchEvent(clickEvent);
+        await nextTick();
+
+        // Assert the burger menu is close
+        expect(BurgerMenuComponent.exists()).toBeFalsy();
+
+        // Assert the button is still focused
+        expect(document.activeElement).toStrictEqual(button.element);
+      });
     });
   });
+
+  /************/
+  /* Site Nav */
+  /************/
+
+  describe("SiteNav.vue", () => {
+    test("send properly the 'siteMenu' through 'siteMenu' provider by testing the first site navigation item display", async () => {
+      // Set the desktop environment
+      useIsOnMobile.mockReturnValue(false);
+
+      // Remount the component with environment updated
+      wrapper = mountApp();
+
+      // Wait after the SiteNav async import has been resolved after the component mounting
+      await flushPromises();
+
+      // Find the item
+      const item = wrapper.find("[data-testid='site-nav__item']");
+
+      // Assert the site menu is rendered
+      expect(item.exists()).toBeTruthy();
+
+      // Set back the environment to mobile
+      useIsOnMobile.mockReturnValue(true);
+    });
+  });
+
+  /**************/
+  /* RouterView */
+  /**************/
 
   describe("RouterView built-in component:", () => {
     test("is rendered", () => {
       const RouterViewComponent = wrapper.findComponent(RouterView);
-      expect(RouterViewComponent.exists()).toBe(true);
+      expect(RouterViewComponent.exists()).toBeTruthy();
     });
   });
 
-  describe("Providers:", () => {
-    test("inject 'siteMenuItems' properly in SiteNav component", async () => {
-      // Mock the UseIsOnMobile composable module to ensure we are on desktop
-      vi.mock("./composables/display", () => {
-        return {
-          useIsOnMobile: vi.fn(),
-        };
-      });
-      useIsOnMobile.mockReturnValue(false); // "false" ensure desktop environment
+  /*******/
+  /* App */
+  /*******/
 
-      // Mock's the router during component mount
-      wrapper = mount(App, {
-        global: {
-          plugins: [router],
-          stubs: {
-            "router-view": true, // avoid a double render of the component
-            SiteNav, // stub SiteNav component to import it synchronously instead of asynchronously
-          },
+  // Snapshot test
+  test("app component has not been improperly modified", async () => {
+    // Remount the component to focus on App.vue structure (by excluding child components)
+    wrapper = mount(App, {
+      global: {
+        stubs: {
+          BurgerMenu: true,
+          SiteHeader: true,
+          "router-view": true,
         },
-      });
-
-      await flushPromises(); // Wait until the siteMenuItems inject has received the data
-
-      // Assert the injected array has been properly received by counting the quantity of item displayed
-      const siteNavItemElements = wrapper.findAll(
-        "[data-testid='site-nav__list-item']"
-      );
-      expect(siteNavItemElements).toHaveLength(siteMenuItems.length);
+      },
     });
 
-    test("inject 'toggleBurgerMenu' properly in BurgerMenuDropdownList component", async () => {
-      // Open the burger menu
-      const burgerMenuIconButtonElement = wrapper.find(
-        "[data-testid='site-header__burger-menu-icon-button']"
-      );
-      await burgerMenuIconButtonElement.trigger("click");
+    // Open the burger menu
+    wrapper.vm.toggleBurgerMenu();
+    await nextTick();
 
-      // Assert the burger menu is rendered to avoid false-positive on the next assertion
-      const BurgerMenuComponent = wrapper.findComponent(BurgerMenu);
-      expect(BurgerMenuComponent.exists()).toBe(true);
-
-      // Close the burger menu using the injected 'toggleBurgerMenu' function
-      const burgerMenuDropdownListItemLinkElement = wrapper.find(
-        "[data-testid='burger-menu__dropdown-list-item-link']"
-      );
-      await burgerMenuDropdownListItemLinkElement.trigger("click");
-
-      // Assert the burger menu is not rendered
-      expect(BurgerMenuComponent.exists()).toBe(false);
-    });
-
-    test("inject 'isBurgerMenuOpen' properly in SiteHeader component", async () => {
-      // Open the burger menu to be able to assert using a truthy value
-      const burgerMenuIconButtonElement = wrapper.find(
-        "[data-testid='site-header__burger-menu-icon-button']"
-      );
-      await burgerMenuIconButtonElement.trigger("click");
-
-      // Assert the cross icon is rendered
-      const CrossIconComponent = wrapper.findComponent(CrossIcon);
-      expect(CrossIconComponent.exists()).toBe(true);
-    });
-
-    test("inject 'useIsOnMobile' properly in SiteHeader component", () => {
-      const siteHeaderAccountIconWrapperElement = wrapper.find(
-        "[data-testid='site-header__account-icon-wrapper']"
-      );
-
-      // Assert the mobile account icon wrapper rendered on mobile as expected
-      expect(siteHeaderAccountIconWrapperElement.exists()).toBe(true);
-    });
+    expect(wrapper.html()).toMatchInlineSnapshot(`
+      "<div data-v-7a7a37b1="" class="site-container">
+        <transition-stub data-v-7a7a37b1="" name="marginLeftMinus300px" appear="false" persisted="false" css="true">
+          <burger-menu-stub data-v-7a7a37b1="" sitemenuresult="[object Object]"></burger-menu-stub>
+        </transition-stub>
+        <div data-v-7a7a37b1="" class="site-content">
+          <div data-v-7a7a37b1="" class="site-content-container">
+            <site-header-stub data-v-7a7a37b1=""></site-header-stub>
+            <main data-v-7a7a37b1="">
+              <router-view-stub data-v-7a7a37b1="" name="default"></router-view-stub>
+            </main>
+          </div>
+        </div>
+      </div>"
+    `);
   });
 });

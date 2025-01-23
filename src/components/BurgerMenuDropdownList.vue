@@ -1,43 +1,29 @@
 <script setup lang="ts">
-import type { SiteSubMenuItem } from "@/data/menus";
-import { toggleBurgerMenuKey } from "@/utils/injectionkeys";
-import { inject, type PropType } from "vue";
+import type { SiteSubMenuItem } from "@/types/components";
+import { type PropType } from "vue";
 import BurgerMenuDropdownItem from "./BurgerMenuDropdownItem.vue";
 
-const toggleBurgerMenu: Function | undefined = inject(toggleBurgerMenuKey);
-
-const { items } = defineProps({
-  items: { type: Object as PropType<SiteSubMenuItem[]>, required: true },
+const { links, dropdownText } = defineProps({
+  links: { type: Object as PropType<SiteSubMenuItem[]>, required: true },
+  dropdownText: { type: String, required: true },
 });
 </script>
 
 <template>
   <div class="burger-menu__dropdown-list-wrapper">
-    <menu class="burger-menu__dropdown-list transition">
-      <li
-        class="burger-menu__dropdown-list-item"
-        data-testid="burger-menu__dropdown-list-item"
-        v-for="item in items"
-      >
-        <RouterLink
-          :to="item.url"
-          @click="toggleBurgerMenu"
-          data-testid="burger-menu__dropdown-list-item-link"
-        >
-          <BurgerMenuDropdownItem>
-            {{ item.title }}
-          </BurgerMenuDropdownItem>
-        </RouterLink>
-      </li>
-    </menu>
+    <ul
+      class="burger-menu__dropdown-list transition"
+      :id="`burger-menu__dropdown-list-${dropdownText.toLowerCase()}`"
+      :aria-labelledby="`burger-menu__dropdown-button-${dropdownText.toLowerCase()}`"
+      data-testid="burger-menu__dropdown-list"
+    >
+      <BurgerMenuDropdownItem :link v-for="link in links" />
+    </ul>
   </div>
 </template>
 
 <style scoped lang="scss">
 .burger-menu__dropdown-list-wrapper {
-  overflow: hidden; // Necessary for the transition
-}
-.burger-menu__dropdown-list-item {
-  padding-left: 30px;
+  overflow: hidden; // Necessary for the proper functioning of the transition
 }
 </style>

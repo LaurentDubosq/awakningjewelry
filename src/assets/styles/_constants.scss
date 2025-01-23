@@ -3,14 +3,15 @@ $AwakningBreakpointDesktop: 950px;
 $AwakningBreakpointMobileMinWidth: 300px;
 
 /* Colors */
-$AwakningColorBlack: #1F2021;
+$AwakningColorBlack: #1f2021;
 $AwakningColorBlackHover: #3d3f41;
 $AwakningColorBlackNeglected: #616161;
-$AwakningColorBrightRed: #CC2B2B;
-$AwakningColorDarkRed: #A92424;
-$AwakningColorGreen: #359e30;
-$AwakningColorVeryLightGray: #F6F6F6;
-$AwakningColorWhite: #FFFFFF;
+$AwakningColorBrightRed: #cc2b2b;
+$AwakningColorDarkRed: #a92424;
+$AwakningColorError: red;
+$AwakningColorGreen: #358734;
+$AwakningColorVeryLightGray: #f6f6f6;
+$AwakningColorWhite: #ffffff;
 
 /* Fonts */
 $AwakningFontMontserrat: "Montserrat", sans-serif;
@@ -21,4 +22,4 @@ $AwakningFontOldStandardTT: "Old Standard TT", serif;
 $AwakningBoxShadow: 0 10px 20px #00000017;
 
 /* Site Nav */
-$siteNavItemPaddingX: 15px;
+$siteNavLinkPaddingX: 15px; // required to calculate the width of the site nav dropdown header underline when the site nav dropdown is open

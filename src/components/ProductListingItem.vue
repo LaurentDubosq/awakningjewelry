@@ -1,44 +1,52 @@
 <script setup lang="ts">
-import type { Product } from "@/data/global.d.ts";
+import type { ProductSummary } from "@/types/global";
 import type { PropType } from "vue";
 
 const { product } = defineProps({
-  product: { type: Object as PropType<Product>, required: true },
+  product: { type: Object as PropType<ProductSummary>, required: true },
 });
 </script>
 
 <template>
-  <li class="productListing__item">
+  <li class="product-listing__item">
     <RouterLink
-      class="productListing__item-link"
       :to="product.url"
-      data-testid="productListing__item-link"
+      class="product-listing__item-link"
+      :aria-label="`Access the ${product.title} product page`"
+      :title="`Access the ${product.title} product page`"
+      data-testid="product-listing__item-link"
     >
-      <div class="productListing__item-link-inner">
-        <div class="productListing__item-image-wrapper">
-          <img
-            :src="product.image.url"
-            :alt="product.image.alt"
-            class="productListing__item-image"
-            data-testid="productListing__item-image"
-          />
-        </div>
-        <div class="productListing__item-details">
-          <h3
-            class="productListing__item-title"
-            data-testid="productListing__item-title"
+      <div class="product-listing__item-image-wrapper">
+        <img
+          :src="product.image.url"
+          :alt="product.image.alt"
+          class="product-listing__item-image"
+          data-testid="product-listing__item-image"
+        />
+      </div>
+      <div class="product-listing__item-details">
+        <h3
+          class="product-listing__item-title"
+          data-testid="product-listing__item-title"
+        >
+          {{ product.title }}
+        </h3>
+        <div
+          class="product-listing__item-price"
+          data-testid="product-listing__item-price"
+        >
+          <span
+            class="price--strikethrough"
+            aria-description="Original price"
+            data-testid="product-listing__item-original-price"
+            >{{ product.price }}</span
           >
-            {{ product.title }}
-          </h3>
-          <div
-            class="productListing__item-price"
-            data-testid="productListing__item-price"
+          <span
+            class="price--discounted"
+            aria-description="Discounted price"
+            data-testid="product-listing__item-discounted-price"
+            >{{ product.promotionalPrice }}</span
           >
-            <span class="price--strikethrough">{{ product.price }}</span>
-            <span class="price--discounted">{{
-              product.promotionalPrice
-            }}</span>
-          </div>
         </div>
       </div>
     </RouterLink>
@@ -48,7 +56,7 @@ const { product } = defineProps({
 <style scoped lang="scss">
 @use "@/assets/styles/_constants" as *;
 
-.productListing__item {
+.product-listing__item {
   display: flex;
   flex-direction: column;
   align-items: stretch;

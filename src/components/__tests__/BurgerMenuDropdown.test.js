@@ -1,89 +1,138 @@
 import { mount } from "@vue/test-utils";
 import BurgerMenuDropdown from "@/components/BurgerMenuDropdown.vue";
-import BurgerMenuDropdownHeader from "@/components/BurgerMenuDropdownHeader.vue";
+import BurgerMenuDropdownButton from "@/components/BurgerMenuDropdownButton.vue";
 import BurgerMenuDropdownList from "@/components/BurgerMenuDropdownList.vue";
+import { toggleBurgerMenuKey } from "@/utils/injectionkeys";
+import router from "@/router";
 import frontDataBase from "../../../db.json";
 
-const dropdown = frontDataBase.siteMenuItems[1];
+const mockDropdown = frontDataBase.siteMenu[1];
+const mockDropdownText = mockDropdown.text;
+const mockLinks = mockDropdown.subMenu;
 
-describe("BurgerMenuDropdown component:", () => {
+// Mock the fetcher used in the mocked router
+vi.mock("@/data/dataFetchers", () => {
+  return {
+    getPagesMetaData: vi.fn().mockReturnValue(undefined),
+  };
+});
+
+// Component Factory
+function mountBurgerMenuDropdown() {
+  return mount(BurgerMenuDropdown, {
+    props: { dropdown: mockDropdown },
+    global: {
+      provide: { [toggleBurgerMenuKey]: vi.fn() },
+      plugins: [router],
+    },
+  });
+}
+
+describe("BurgerMenuDropdown.vue", () => {
   let wrapper;
-  let BurgerMenuDropdownHeaderComponent;
-  let BurgerMenuDropdownListComponent;
 
   beforeEach(() => {
-    wrapper = mount(BurgerMenuDropdown, {
-      props: { dropdown },
-    });
-
-    BurgerMenuDropdownHeaderComponent = wrapper.findComponent(
-      BurgerMenuDropdownHeader
-    );
-    BurgerMenuDropdownListComponent = wrapper.findComponent(
-      BurgerMenuDropdownList
-    );
+    wrapper = mountBurgerMenuDropdown();
   });
 
-  describe("BurgerMenuDropdownHeader component:", () => {
-    test("is rendered", () => {
-      expect(BurgerMenuDropdownHeaderComponent.exists()).toBe(true);
-    });
-
-    test("renders its title", () => {
-      expect(BurgerMenuDropdownHeaderComponent.text()).toContain(
-        dropdown.title
-      );
-    });
-
-    test("has its 'isDropdownOpen' prop value setted to 'true' at initial render", () => {
-      const BurgerMenuDropdownHeaderComponent = wrapper.findComponent(
-        BurgerMenuDropdownHeader
-      );
-      expect(BurgerMenuDropdownHeaderComponent.props("isDropdownOpen")).toBe(
-        true
-      );
-    });
-
-    test("triggers the 'toggle-dropdown' custom event handler and set the 'isDropdownOpen' prop value to 'false'", async () => {
-      // Click on the dropdown icon
-      const headerIconButtonElement = wrapper.find(
-        "[data-testid='burger-menu__dropdown-header-button']"
-      );
-      await headerIconButtonElement.trigger("click");
-
-      // Assert the custom event handler has been fired by checking the value of the 'isDropdownOpen' prop value of the dropdown header component
-      const BurgerMenuDropdownHeaderComponent = wrapper.findComponent(
-        BurgerMenuDropdownHeader
-      );
-      expect(BurgerMenuDropdownHeaderComponent.props("isDropdownOpen")).toBe(
-        false
-      );
-    });
+  // Smoke test
+  test("mounts successfully", () => {
+    expect(wrapper.exists()).toBeTruthy();
   });
 
-  describe("BurgerMenuDropdownList component:", () => {
-    test("is rendered at initial render", () => {
-      expect(BurgerMenuDropdownListComponent.exists()).toBe(true);
+  test("renders the button component with necessary information", () => {
+    const buttonComponent = wrapper.findComponent(BurgerMenuDropdownButton);
+
+    // Assert the button component is rendered
+    expect(buttonComponent.exists()).toBeTruthy();
+
+    // Assert the "text" prop has the correct value
+    expect(buttonComponent.props("text")).toContain(mockDropdownText);
+
+    // Assert the "isDropdownOpen" prop has the correct value
+    expect(buttonComponent.props("isDropdownOpen")).toBe(true);
+  });
+
+  test("renders the list component with necessary information", () => {
+    const listComponent = wrapper.findComponent(BurgerMenuDropdownList);
+
+    // Assert the list component is rendered
+    expect(listComponent.exists()).toBeTruthy();
+
+    // Assert the "links" prop has the correct value
+    expect(listComponent.props("links")).toStrictEqual(mockLinks);
+
+    // Assert the "dropdownText" prop has the correct value
+    expect(listComponent.props("dropdownText")).toBe(mockDropdownText);
+  });
+
+  describe("Behaviors:", () => {
+    test("the dropdown is open at initial render", () => {
+      // Find the dropdown list component
+      const listComponent = wrapper.findComponent(BurgerMenuDropdownList);
+
+      // Assert the dropdown is open
+      expect(listComponent.exists()).toBeTruthy();
     });
 
-    test("has its 'list' prop value well setted", () => {
-      expect(BurgerMenuDropdownListComponent.props("items")).toMatchObject(
-        dropdown.subMenuItems
-      );
+    describe("Touch Navigation:", () => {
+      test("when the button is touched, it opens/closes the dropdown", async () => {
+        let ListComponent;
+
+        // Assert the dropdown is open
+        ListComponent = wrapper.findComponent(BurgerMenuDropdownList);
+        expect(ListComponent.exists()).toBeTruthy();
+
+        // Touch the button
+        const button = wrapper.find(
+          "[data-testid='burger-menu__dropdown-button']"
+        );
+        await button.trigger("click");
+
+        // Assert the dropdown is close
+        expect(ListComponent.exists()).toBeFalsy();
+
+        // Touch the button again
+        await button.trigger("click");
+
+        // Assert the dropdown is open again
+        ListComponent = wrapper.findComponent(BurgerMenuDropdownList);
+        expect(ListComponent.exists()).toBeTruthy();
+      });
     });
 
-    test("is not rendered when the dropdown header icon is clicked", async () => {
-      // Close the dropdown
-      const headerIconButtonElement = wrapper.find(
-        "[data-testid='burger-menu__dropdown-header-button']"
-      );
-      await headerIconButtonElement.trigger("click");
+    describe("Renders:", () => {
+      test("when the dropdown is open, the sign minus icon is rendered", () => {
+        /* We target the icon instead of component because we decided to not have tests for SVG components */
 
-      // Assert the list is not rendered anymore
-      const BurgerMenuDropdownListComponent = wrapper.findComponent(
-        BurgerMenuDropdownList
-      );
-      expect(BurgerMenuDropdownListComponent.exists()).toBe(false);
+        // Find the icon
+        const icon = wrapper.find("[data-testid='icon-sign-minus']");
+
+        // Assert the icon is rendered
+        expect(icon.exists()).toBeTruthy();
+      });
+
+      test("when the dropdown is close, the sign plus icon is rendered", async () => {
+        /* We target the icon instead of component because we decided to not have tests for SVG components */
+
+        // Close the dropdown
+        const button = wrapper.find(
+          "[data-testid='burger-menu__dropdown-button']"
+        );
+        await button.trigger("click");
+
+        // Find the list component
+        const ListComponent = wrapper.findComponent(BurgerMenuDropdownList);
+
+        // Assert the dropdown is close
+        expect(ListComponent.exists()).toBeFalsy();
+
+        // Find the icon
+        const icon = wrapper.find("[data-testid='icon-sign-plus']");
+
+        // Assert the icon is rendered
+        expect(icon.exists()).toBeTruthy();
+      });
     });
   });
 });

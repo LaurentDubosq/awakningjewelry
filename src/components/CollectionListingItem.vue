@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Collection } from "@/data/global";
-import { onMounted, onUnmounted, ref, type PropType, type Ref } from "vue";
+import type { Collection } from "@/types/global";
+import { type PropType } from "vue";
 
 const { collection } = defineProps({
   collection: {
@@ -8,55 +8,27 @@ const { collection } = defineProps({
     required: true,
   },
 });
-
-const itemElement: Ref<HTMLLIElement | null> = ref(null);
-
-const setItemElementHeight = (element: HTMLLIElement) => {
-  element.style.height = element.clientWidth + "px";
-};
-
-// Set the element height at initial render
-onMounted(() => {
-  if (itemElement.value) {
-    setItemElementHeight(itemElement.value);
-  }
-});
-// end Set the element height at initial render
-
-// Set the element height at resize
-onMounted(() => {
-  window.addEventListener("resize", () => {
-    if (itemElement.value) {
-      setItemElementHeight(itemElement.value);
-    }
-  });
-});
-
-onUnmounted(() => {
-  window.removeEventListener("resize", () => {
-    if (itemElement.value) {
-      setItemElementHeight(itemElement.value);
-    }
-  });
-});
-// end Set the element height at resize
 </script>
 
 <template>
-  <li
-    class="collectionListing__item"
-    :style="{ backgroundImage: `url(${collection.image})` }"
-    ref="itemElement"
-    data-testid="collectionListing__item"
-  >
+  <li class="collection-listing__item" data-testid="collection-listing__item">
     <RouterLink
       :to="collection.url"
-      class="collectionListing__item-link"
-      data-testid="collectionListing__link"
+      class="collection-listing__item-link"
+      :aria-label="`Explore ${collection.title} collection`"
+      :title="`Explore ${collection.title} collection`"
+      data-testid="collection-listing__link"
     >
+      <img
+        :src="collection.image.url"
+        alt=""
+        class="collection-listing__item-img"
+        aria-hidden="true"
+        data-testid="collection-listing__item-img"
+      />
       <h3
-        class="collectionListing__item-title"
-        data-testid="collectionListing__item-title"
+        class="collection-listing__item-title"
+        data-testid="collection-listing__item-title"
       >
         {{ collection.title }}
       </h3>
@@ -67,19 +39,29 @@ onUnmounted(() => {
 <style scoped lang="scss">
 @use "@/assets/styles/_constants.scss" as *;
 
-.collectionListing__item {
+.collection-listing__item {
   flex-basis: 50%;
-  background-size: cover;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: scale(0.98);
+  }
 
   &-link {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    position: relative;
+    display: block;
+  }
+
+  &-img {
+    display: block;
+    filter: brightness(25%);
   }
 
   &-title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     color: $AwakningColorWhite;
     font-family: $AwakningFontArapey;
     font-size: 1.625rem;

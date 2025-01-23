@@ -1,21 +1,26 @@
+<script setup lang="ts">
+const { alternativeText } = defineProps({
+  alternativeText: { type: String, required: true },
+});
+</script>
+
 <template>
-  <div type="button" class="site-header__icon">
-    <div class="site-header__icon-size">
-      <slot />
-    </div>
+  <div class="site-header__icon-clickable-area">
+    <slot />
+    <span
+      class="site-header__icon-text sr-only"
+      data-testid="site-header__icon-text"
+      >{{ alternativeText }}</span
+    >
   </div>
 </template>
 
 <style scoped lang="scss">
-.site-header__icon {
+.site-header__icon-clickable-area {
   width: 50px;
   height: 50px;
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
-
-  &-size {
-    width: 27px;
-  }
 }
 </style>
