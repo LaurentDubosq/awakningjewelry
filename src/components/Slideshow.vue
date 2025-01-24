@@ -49,7 +49,7 @@ const duration = 86400000; // 1 day
 /* Autoplaying Logic */
 onMounted(() => {
   // Get the dynamic OS/browser "reduced motion" user preference statut
-  const isReducedMotion = useIsReducedMotion();
+  const isReducedMotion: Ref<boolean> = useIsReducedMotion();
 
   // Watch its value to toggle the animation in live
   watch(
