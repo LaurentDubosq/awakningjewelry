@@ -22,7 +22,7 @@ const mockHandleKeydownEndPayload = {
 const mountSlideshowSlickSlider = (props) => {
   return mount(SlideshowSlickSlider, {
     props: {
-      slidesDataLength: mockSlidesLength,
+      slidesLength: mockSlidesLength,
       currentIndex: mockCurrentIndex,
       ...props,
     },

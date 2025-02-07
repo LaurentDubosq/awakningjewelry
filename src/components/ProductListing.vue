@@ -1,30 +1,24 @@
 <script setup lang="ts">
-import { type PropType, computed, type ComputedRef } from "vue";
-import type { UseFetchWithStateReturn } from "@/types/fetch";
+import { type PropType } from "vue";
 import type { FetchStatus } from "@/types/fetch";
 import type { ProductSummary } from "@/types/global.d.ts";
 import ProductListingItem from "./ProductListingItem.vue";
 import LoadingComponent from "./LoadingComponent.vue";
 import ErrorComponent from "./ErrorComponent.vue";
 
-const { title, productsResult } = defineProps({
+const { title, products, fetchStatus } = defineProps({
   title: {
     type: String,
     required: true,
   },
-  productsResult: {
-    type: Object as PropType<UseFetchWithStateReturn<ProductSummary[]>>,
+  products: {
+    type: Object as PropType<ProductSummary[]> | undefined,
+  },
+  fetchStatus: {
+    type: String as PropType<FetchStatus>,
     required: true,
   },
 });
-
-const productsData: ComputedRef<ProductSummary[] | undefined> = computed(
-  () => productsResult.data?.value
-);
-
-const productsFetchStatus: ComputedRef<FetchStatus | undefined> = computed(
-  () => productsResult?.status?.value
-);
 </script>
 
 <template>
@@ -39,11 +33,11 @@ const productsFetchStatus: ComputedRef<FetchStatus | undefined> = computed(
       </h2>
       <hr class="product-listing__separator" />
       <ul class="product-listing__list" aria-label="Products">
-        <template v-if="productsFetchStatus === 'resolved'">
-          <ProductListingItem v-for="product in productsData" :product />
+        <template v-if="fetchStatus === 'resolved'">
+          <ProductListingItem v-for="product in products" :product />
         </template>
-        <LoadingComponent v-if="productsFetchStatus === 'pending'" />
-        <ErrorComponent v-if="productsFetchStatus === 'rejected'" />
+        <LoadingComponent v-if="fetchStatus === 'pending'" />
+        <ErrorComponent v-if="fetchStatus === 'rejected'" />
       </ul>
     </div>
   </section>

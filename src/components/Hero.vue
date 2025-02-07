@@ -2,26 +2,33 @@
 import { getHeroSlides } from "@/data/dataFetchers";
 import type { HeroSlideType } from "@/types/components";
 import type { UseFetchWithStateReturn } from "@/types/fetch";
-import type { FetchStatus } from "@/types/fetch";
-import { computed, type ComputedRef } from "vue";
 import Slideshow from "./Slideshow.vue";
 import HeroSlide from "./HeroSlide.vue";
 import LoadingComponent from "./LoadingComponent.vue";
 import ErrorComponent from "./ErrorComponent.vue";
+import { useHeroSlidesResultStore } from "@/stores/heroSlides";
+import { storeToRefs } from "pinia";
 
-const slidesResult: UseFetchWithStateReturn<HeroSlideType[]> = getHeroSlides();
+// Get the store instance
+const heroSlidesStore = useHeroSlidesResultStore();
 
-const slidesData: ComputedRef<HeroSlideType[] | undefined> = computed(
-  () => slidesResult.data.value
-);
+// Get the store's states, computeds and methods
+const {
+  heroSlidesResult,
+  heroSlidesData: slides,
+  heroSlidesDataLength: slidesLength,
+  heroSlidesFetchStatus: fetchStatus,
+} = storeToRefs(heroSlidesStore);
+const { updateHeroSlidesResult } = heroSlidesStore;
 
-const slidesDataLength: ComputedRef<number | undefined> = computed(
-  () => slidesData.value?.length
-);
+// Don't fetch the data if the data already exists in the store (for performance reason)
+if (!heroSlidesResult.value) {
+  // Get the data fetch result
+  const result: UseFetchWithStateReturn<HeroSlideType[]> = getHeroSlides();
 
-const slidesFetchStatus: ComputedRef<FetchStatus | undefined> = computed(
-  () => slidesResult?.status?.value
-);
+  // Update the store with the result
+  updateHeroSlidesResult(result);
+}
 </script>
 
 <template>
@@ -30,16 +37,12 @@ const slidesFetchStatus: ComputedRef<FetchStatus | undefined> = computed(
     aria-roledescription="carousel"
     aria-label="Highlighted our product categories"
   >
-    <template v-if="slidesFetchStatus === 'resolved'">
-      <Slideshow
-        :slidesDataLength
-        v-if="slidesDataLength"
-        v-slot="{ currentIndex }"
-      >
-        <template v-for="(slide, index) in slidesData" :key="slide.id">
+    <template v-if="fetchStatus === 'resolved'">
+      <Slideshow :slidesLength v-if="slidesLength" v-slot="{ currentIndex }">
+        <template v-for="(slide, index) in slides" :key="slide.id">
           <HeroSlide
             :slide
-            :slidesDataLength
+            :slidesLength
             :slideIndex="index"
             :isActive="index === currentIndex"
             v-show="index === currentIndex"
@@ -47,7 +50,7 @@ const slidesFetchStatus: ComputedRef<FetchStatus | undefined> = computed(
         </template>
       </Slideshow>
     </template>
-    <LoadingComponent v-if="slidesFetchStatus === 'pending'" />
-    <ErrorComponent v-if="slidesFetchStatus === 'rejected'" />
+    <LoadingComponent v-if="fetchStatus === 'pending'" />
+    <ErrorComponent v-if="fetchStatus === 'rejected'" />
   </section>
 </template>

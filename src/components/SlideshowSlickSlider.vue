@@ -2,7 +2,7 @@
 import { ref, type Ref } from "vue";
 
 const props = defineProps({
-  slidesDataLength: { type: Number, required: true },
+  slidesLength: { type: Number, required: true },
   currentIndex: { type: Number, required: true },
 });
 const emit = defineEmits(["display-slide"]);
@@ -16,14 +16,14 @@ const handleKeydown = (event: KeyboardEvent) => {
     if (props.currentIndex > 0) {
       payload = { index: props.currentIndex - 1, focusable: true };
     } else {
-      payload = { index: props.slidesDataLength - 1, focusable: true };
+      payload = { index: props.slidesLength - 1, focusable: true };
     }
 
     emit("display-slide", payload);
   } else if (event.key === "ArrowRight") {
     let payload;
 
-    if (props.currentIndex < props.slidesDataLength - 1) {
+    if (props.currentIndex < props.slidesLength - 1) {
       payload = { index: props.currentIndex + 1, focusable: true };
     } else {
       payload = { index: 0, focusable: true };
@@ -36,7 +36,7 @@ const handleKeydown = (event: KeyboardEvent) => {
   } else if (event.key === "End") {
     event.preventDefault(); // old method because .prevent on the element blocks the tab sequence on the element
     emit("display-slide", {
-      index: props.slidesDataLength - 1,
+      index: props.slidesLength - 1,
       focusable: true,
     });
   }
@@ -58,7 +58,7 @@ const handleKeydown = (event: KeyboardEvent) => {
       :class="{
         'slideshow__slick-slider-button--active': index === currentIndex,
       }"
-      v-for="(slide, index) in slidesDataLength"
+      v-for="(slide, index) in slidesLength"
       @mousedown.prevent
       @click="$emit('display-slide', { index, focusable: false })"
       @keydown="handleKeydown"

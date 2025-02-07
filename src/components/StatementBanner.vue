@@ -1,26 +1,20 @@
 <script setup lang="ts">
 import { type StatementBanner } from "@/types/components";
-import type { UseFetchWithStateReturn } from "@/types/fetch";
 import type { FetchStatus } from "@/types/fetch";
 import LoadingComponent from "./LoadingComponent.vue";
 import ErrorComponent from "./ErrorComponent.vue";
-import { type PropType, type ComputedRef, computed } from "vue";
+import { type PropType } from "vue";
 
 /* As the component can be used multiple times in the application, its parent has the responsibility to fetch the data */
-const { statementResult } = defineProps({
-  statementResult: {
-    type: Object as PropType<UseFetchWithStateReturn<StatementBanner>>,
+const { statement, fetchStatus } = defineProps({
+  statement: {
+    type: Object as PropType<StatementBanner> | undefined,
+  },
+  fetchStatus: {
+    type: String as PropType<FetchStatus>,
     required: true,
   },
 });
-
-const statementData: ComputedRef<StatementBanner | undefined> = computed(
-  () => statementResult.data?.value
-);
-
-const statementFetchStatus: ComputedRef<FetchStatus | undefined> = computed(
-  () => statementResult?.status?.value
-);
 </script>
 
 <template>
@@ -29,31 +23,31 @@ const statementFetchStatus: ComputedRef<FetchStatus | undefined> = computed(
     aria-roledescription="statement banner"
     aria-labelledby="statement-banner__title"
   >
-    <template v-if="statementFetchStatus === 'resolved'">
+    <template v-if="fetchStatus === 'resolved'">
       <h2
         class="statement-banner__title"
         id="statement-banner__title"
         aria-describedby="statement-banner__text"
         data-testid="statement-banner__title"
       >
-        {{ statementData?.title }}
+        {{ statement?.title }}
       </h2>
       <p
         class="statement-banner__text"
         id="statement-banner__text"
         data-testid="statement-banner__text"
       >
-        {{ statementData?.text }}
+        {{ statement?.text }}
       </p>
       <img
-        :src="statementData?.image.url"
-        :alt="statementData?.image.alt"
+        :src="statement?.image.url"
+        :alt="statement?.image.alt"
         class="statement-banner__image"
         data-testid="statement-banner__image"
       />
     </template>
-    <LoadingComponent v-if="statementFetchStatus === 'pending'" />
-    <ErrorComponent v-if="statementFetchStatus === 'rejected'" />
+    <LoadingComponent v-if="fetchStatus === 'pending'" />
+    <ErrorComponent v-if="fetchStatus === 'rejected'" />
   </section>
 </template>
 

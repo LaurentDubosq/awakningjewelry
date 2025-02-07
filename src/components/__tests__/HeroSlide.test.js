@@ -24,7 +24,7 @@ function mountHeroSlide() {
   return mount(HeroSlide, {
     props: {
       slide: mockSlide,
-      slidesDataLength: 1,
+      slidesLength: 1,
       slideIndex: 0,
       isActive: true,
     },

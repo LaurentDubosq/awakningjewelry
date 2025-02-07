@@ -7,9 +7,11 @@ import frontDatabase from "../../../db.json";
 import router from "@/router";
 
 const mockCollectionsResult = {
-  data: { value: frontDatabase.collectionsByGender },
+  data: frontDatabase.collectionsByGender,
+  status: "resolved",
 };
-const mockCollectionsData = mockCollectionsResult.data.value;
+const mockCollectionsData = mockCollectionsResult.data;
+const mockCollectionsStatus = mockCollectionsResult.status;
 const mockCollectionsLength = mockCollectionsData.length;
 const mockTitle = "By gender";
 
@@ -21,14 +23,13 @@ vi.mock("@/data/dataFetchers", () => {
 });
 
 // Component Factory
-function mountCollectionListing(status = "resolved") {
+function mountCollectionListing(props) {
   return mount(CollectionListing, {
     props: {
       title: mockTitle,
-      collectionsResult: {
-        ...mockCollectionsResult,
-        status: { value: status },
-      },
+      collections: mockCollectionsData,
+      fetchStatus: mockCollectionsStatus,
+      ...props,
     },
     global: { plugins: [router] },
   });
@@ -75,7 +76,7 @@ describe("CollectionListing.vue", () => {
   describe("Behaviors:", () => {
     test("when the data fetcher status is 'pending', the loading component is rendered", () => {
       // Remount the component with pending status active
-      wrapper = mountCollectionListing("pending");
+      wrapper = mountCollectionListing({ fetchStatus: "pending" });
 
       // Assert the loading component is rendered
       const loadingComponent = wrapper.findComponent(LoadingComponent);
@@ -92,7 +93,7 @@ describe("CollectionListing.vue", () => {
 
     test("when the data fetcher status is 'rejected', the error component is rendered", () => {
       // Remount the component with rejected status active
-      wrapper = mountCollectionListing("rejected");
+      wrapper = mountCollectionListing({ fetchStatus: "rejected" });
 
       // Assert the error component is rendered
       const errorComponent = wrapper.findComponent(ErrorComponent);

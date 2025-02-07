@@ -6,16 +6,22 @@ import ErrorComponent from "@/components/ErrorComponent.vue";
 import frontDataBase from "../../../db.json";
 
 const mockTitle = "Promotions";
-const mockProductsResult = { data: { value: frontDataBase.promotions } };
-const mockProductsData = mockProductsResult.data.value;
+const mockProductsResult = {
+  data: frontDataBase.promotions,
+  status: "resolved",
+};
+const mockProductsData = mockProductsResult.data;
+const mockProductsStatus = mockProductsResult.status;
 const mockProductsDataLength = mockProductsData.length;
 
 // Component factory
-function mountProductListing(status = "resolved") {
+function mountProductListing(props) {
   return mount(ProductListing, {
     props: {
       title: mockTitle,
-      productsResult: { ...mockProductsResult, status: { value: status } },
+      products: mockProductsData,
+      fetchStatus: mockProductsStatus,
+      ...props,
     },
     global: { stubs: { ProductListingItem: true } },
   });
@@ -54,7 +60,7 @@ describe("ProductListing.vue", () => {
   describe("Behaviors:", () => {
     test("when the data fetcher status is 'pending', the loading component is rendered", () => {
       // Remount the component with pending status active
-      wrapper = mountProductListing("pending");
+      wrapper = mountProductListing({ fetchStatus: "pending" });
 
       // Assert the loading component is rendered
       const loadingComponent = wrapper.findComponent(LoadingComponent);
@@ -70,7 +76,7 @@ describe("ProductListing.vue", () => {
 
     test("when the data fetcher status is 'rejected', the error component is rendered", () => {
       // Remount the component with rejected status active
-      wrapper = mountProductListing("rejected");
+      wrapper = mountProductListing({ fetchStatus: "rejected" });
 
       // Assert the error component is rendered
       const errorComponent = wrapper.findComponent(ErrorComponent);

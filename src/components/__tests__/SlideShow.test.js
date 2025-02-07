@@ -32,7 +32,7 @@ const mockHeroSlideComponent = defineComponent({
       v-for="(slide, index) in mockSlides"
       :key="slide.id"
       :slide
-      :slidesDataLength="mockSlidesLength"
+      :slidesLength="mockSlidesLength"
       :slideIndex="index"
       :isActive="index === currentIndex"
       v-show="index === currentIndex"
@@ -66,7 +66,7 @@ useIsReducedMotion.mockReturnValue(ref(false)); // the false value means there i
 function mountSlideshow() {
   return mount(Slideshow, {
     attachTo: document.body,
-    props: { slidesDataLength: mockSlidesLength },
+    props: { slidesLength: mockSlidesLength },
     slots: {
       default: ({ currentIndex }) =>
         h(mockHeroSlideComponent, { currentIndex }), // send the local currentIndex variable to mockHeroSlideComponent component as props
@@ -193,8 +193,8 @@ describe("Slideshow.vue", () => {
         SlideshowSlickSliderComponent.props("slickSliderTopPosition")
       ).toBe(mockSlickSliderTopPosition);
 
-      // Assert its "slidesDataLength" prop has the correct value
-      expect(SlideshowSlickSliderComponent.props("slidesDataLength")).toBe(
+      // Assert its "slidesLength" prop has the correct value
+      expect(SlideshowSlickSliderComponent.props("slidesLength")).toBe(
         mockSlidesLength
       );
 

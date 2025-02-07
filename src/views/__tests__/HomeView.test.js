@@ -13,23 +13,27 @@ import {
   getPromotions,
 } from "@/data/dataFetchers";
 import router from "@/router";
+import { createPinia } from "pinia";
 
 // Mocks data
 const mockStatementBannerResult = {
-  data: { value: frontDataBase.statementMission },
-  status: { value: "resolved" },
+  data: frontDataBase.statementMission,
+  status: "resolved",
 };
-const mockStatementBannerData = mockStatementBannerResult.data.value;
+const mockStatementBannerData = mockStatementBannerResult.data;
+const mockStatementBannerStatus = mockStatementBannerResult.status;
 const mockCollectionsByGenderResult = {
-  data: { value: frontDataBase.collectionsByGender },
-  status: { value: "resolved" },
+  data: frontDataBase.collectionsByGender,
+  status: "resolved",
 };
-const mockCollectionsByGenderData = mockCollectionsByGenderResult.data.value;
-const mockPromotionsResult = {
-  data: { value: frontDataBase.promotions },
-  status: { value: "resolved" },
+const mockCollectionsByGenderData = mockCollectionsByGenderResult.data;
+const mockCollectionsByGenderStatus = mockCollectionsByGenderResult.status;
+const mockProductsResult = {
+  data: frontDataBase.promotions,
+  status: "resolved",
 };
-const mockPromotionsData = mockPromotionsResult.data.value;
+const mockProductsData = mockProductsResult.data;
+const mockProductsStatus = mockProductsResult.status;
 
 // Mocks fetchers with data
 vi.mock("@/data/dataFetchers", () => {
@@ -42,7 +46,7 @@ vi.mock("@/data/dataFetchers", () => {
 });
 getStatementMission.mockReturnValue(mockStatementBannerResult);
 getCollectionsByGender.mockReturnValue(mockCollectionsByGenderResult);
-getPromotions.mockReturnValue(mockPromotionsResult);
+getPromotions.mockReturnValue(mockProductsResult);
 
 // Component Factory
 function mountHomeview() {
@@ -54,7 +58,7 @@ function mountHomeview() {
         CollectionListing,
         ProductListing,
       },
-      plugins: [router],
+      plugins: [createPinia(), router],
     },
   });
 }
@@ -98,9 +102,14 @@ describe("HomeView.vue", () => {
       // Assert the component is rendered
       expect(StatementBannerComponent.exists()).toBeTruthy();
 
-      // Assert its "statementResult" prop has the correct value
-      expect(StatementBannerComponent.props("statementResult")).toMatchObject(
-        mockStatementBannerResult
+      // Assert its "statement" prop has the correct value
+      expect(StatementBannerComponent.props("statement")).toMatchObject(
+        mockStatementBannerData
+      );
+
+      // Assert its "fetchStatus" prop has the correct value
+      expect(StatementBannerComponent.props("fetchStatus")).toMatchObject(
+        mockStatementBannerStatus
       );
     });
 
@@ -146,10 +155,15 @@ describe("HomeView.vue", () => {
       // Assert its "title" prop value has the correct value
       expect(CollectionListingComponent.props("title")).toBe(mockTitle);
 
-      // Assert its "collectionsResult" prop value has the correct value
-      expect(
-        CollectionListingComponent.props("collectionsResult")
-      ).toMatchObject(mockCollectionsByGenderResult);
+      // Assert its "collections" prop value has the correct value
+      expect(CollectionListingComponent.props("collections")).toMatchObject(
+        mockCollectionsByGenderData
+      );
+
+      // Assert its "fetchStatus" prop value has the correct value
+      expect(CollectionListingComponent.props("fetchStatus")).toMatchObject(
+        mockCollectionsByGenderStatus
+      );
     });
 
     test("renders its data", () => {
@@ -208,9 +222,8 @@ describe("HomeView.vue", () => {
   describe("ProductListing.vue", () => {
     let ProductListingComponent;
     const mockTitle = "Promotions";
-    const mockProductsResult = mockPromotionsResult;
-    const mockProductsData = mockPromotionsResult.data.value;
-    const mockProductsLength = mockProductsData.length;
+    const mockProducts = mockProductsData;
+    const mockProductsLength = mockProducts.length;
 
     beforeEach(() => {
       ProductListingComponent = wrapper.findComponent(ProductListing);
@@ -223,9 +236,14 @@ describe("HomeView.vue", () => {
       // Assert its "title" prop has the correct value
       expect(ProductListingComponent.props("title")).toBe(mockTitle);
 
-      // Assert its "productsResult" prop has the correct value
-      expect(ProductListingComponent.props("productsResult")).toMatchObject(
-        mockProductsResult
+      // Assert its "products" prop has the correct value
+      expect(ProductListingComponent.props("products")).toMatchObject(
+        mockProducts
+      );
+
+      // Assert its "fetchStatus" prop has the correct value
+      expect(ProductListingComponent.props("fetchStatus")).toMatchObject(
+        mockProductsStatus
       );
     });
 
@@ -265,7 +283,7 @@ describe("HomeView.vue", () => {
         const discountedPrice = Product.find(
           "[ data-testid='product-listing__item-discounted-price']"
         );
-        const mockProduct = mockProductsData[index];
+        const mockProduct = mockProducts[index];
         const mockProductURL = mockProduct.url;
         const mockProductImageURL = mockProduct.image.url;
         const mockProductImageALT = mockProduct.image.alt;

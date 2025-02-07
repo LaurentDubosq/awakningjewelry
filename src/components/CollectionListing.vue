@@ -1,27 +1,21 @@
 <script setup lang="ts">
-import { type PropType, computed, type ComputedRef } from "vue";
+import { type PropType } from "vue";
 import type { Collection } from "@/types/global.d.ts";
 import CollectionListingItem from "./CollectionListingItem.vue";
-import type { UseFetchWithStateReturn } from "@/types/fetch";
 import type { FetchStatus } from "@/types/fetch";
 import LoadingComponent from "./LoadingComponent.vue";
 import ErrorComponent from "./ErrorComponent.vue";
 
-const { title, collectionsResult } = defineProps({
+const { title, collections, fetchStatus } = defineProps({
   title: { type: String, required: true },
-  collectionsResult: {
-    type: Object as PropType<UseFetchWithStateReturn<Collection[]>>,
+  collections: {
+    type: Object as PropType<Collection[]> | undefined,
+  },
+  fetchStatus: {
+    type: String as PropType<FetchStatus>,
     required: true,
   },
 });
-
-const collectionsData: ComputedRef<Collection[] | undefined> = computed(
-  () => collectionsResult.data.value
-);
-
-const collectionsFetchStatus: ComputedRef<FetchStatus | undefined> = computed(
-  () => collectionsResult?.status?.value
-);
 </script>
 
 <template>
@@ -38,14 +32,14 @@ const collectionsFetchStatus: ComputedRef<FetchStatus | undefined> = computed(
       </h2>
       <hr class="collection-listing__separator" />
       <ul class="collection-listing__list" aria-label="Collections">
-        <template v-if="collectionsFetchStatus === 'resolved'">
+        <template v-if="fetchStatus === 'resolved'">
           <CollectionListingItem
-            v-for="collection in collectionsData"
+            v-for="collection in collections"
             :collection
           />
         </template>
-        <LoadingComponent v-if="collectionsFetchStatus === 'pending'" />
-        <ErrorComponent v-if="collectionsFetchStatus === 'rejected'" />
+        <LoadingComponent v-if="fetchStatus === 'pending'" />
+        <ErrorComponent v-if="fetchStatus === 'rejected'" />
       </ul>
     </div>
   </section>

@@ -22,8 +22,8 @@ import useIsReducedMotion from "@/composables/useIsReducedMotion";
 /****************/
 
 // Get the slides length to manage the looping behavior and to calculte the number of slick slider dots
-const { slidesDataLength } = defineProps({
-  slidesDataLength: { type: Number, required: true },
+const { slidesLength } = defineProps({
+  slidesLength: { type: Number, required: true },
 });
 // Get the environement to restrains the position calculation of slick slider to mobile
 const useIsOnMobile: Ref<boolean> | undefined = inject(useIsOnMobileKey);
@@ -176,11 +176,11 @@ const displayPrevSlide = () => {
   if (currentIndex.value > 0) {
     currentIndex.value--;
   } else {
-    currentIndex.value = slidesDataLength - 1;
+    currentIndex.value = slidesLength - 1;
   }
 };
 const displayNextSlide = () => {
-  if (currentIndex.value >= slidesDataLength - 1) {
+  if (currentIndex.value >= slidesLength - 1) {
     currentIndex.value = 0;
   } else {
     currentIndex.value++;
@@ -259,7 +259,7 @@ const startAutoPlayExplicitly = () => {
       />
     </div>
     <SlideshowSlickSlider
-      :slidesDataLength
+      :slidesLength
       :currentIndex
       @displaySlide="handleDisplaySlide"
       :style="slickSliderStyle"

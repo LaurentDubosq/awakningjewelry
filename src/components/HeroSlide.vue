@@ -3,9 +3,9 @@ import SASSCONSTANTS from "@/assets/styles/_constants.module.scss";
 import type { HeroSlideType } from "@/types/components";
 import { type PropType } from "vue";
 
-const { slide, slidesDataLength, slideIndex, isActive } = defineProps({
+const { slide, slidesLength, slideIndex, isActive } = defineProps({
   slide: { type: Object as PropType<HeroSlideType>, required: true },
-  slidesDataLength: { type: Number, required: true },
+  slidesLength: { type: Number, required: true },
   slideIndex: { type: Number, required: true },
   isActive: { type: Boolean, required: true },
 });
@@ -17,7 +17,7 @@ const DESKTOPBREAKPOINT: string = SASSCONSTANTS.AwakningBreakpointDesktop;
     class="hero__slide"
     role="tabpanel"
     aria-roledescription="slide"
-    :aria-label="`Slide ${slideIndex + 1} of ${slidesDataLength}`"
+    :aria-label="`Slide ${slideIndex + 1} of ${slidesLength}`"
     :id="`slideshow-${slideIndex + 1}`"
   >
     <picture class="hero__slide-picture">

@@ -4,18 +4,24 @@ import LoadingComponent from "@/components/LoadingComponent.vue";
 import ErrorComponent from "@/components/ErrorComponent.vue";
 import frontDataBase from "../../../db.json";
 
-const mockStatementResult = { data: { value: frontDataBase.statementMission } };
-const mockStatementData = mockStatementResult.data.value;
+const mockStatementResult = {
+  data: frontDataBase.statementMission,
+  status: "resolved",
+};
+const mockStatementData = mockStatementResult.data;
+const mockStatementStatus = mockStatementResult.status;
 const mockStatementTitle = mockStatementData.title;
 const mockStatementText = mockStatementData.text;
 const mockStatementImageURL = mockStatementData.image.url;
 const mockStatementImageAlt = mockStatementData.image.alt;
 
 // Component Factory
-function mountStatementBanner(status = "resolved") {
+function mountStatementBanner(props) {
   return mount(StatementBanner, {
     props: {
-      statementResult: { ...mockStatementResult, status: { value: status } },
+      statement: mockStatementData,
+      fetchStatus: mockStatementStatus,
+      ...props,
     },
   });
 }
@@ -56,7 +62,7 @@ describe("StatementBanner.vue", () => {
   describe("Behaviors:", () => {
     test("when the data fetcher status is 'pending', the loading component is rendered", () => {
       // Remount the component with pending status active
-      wrapper = mountStatementBanner("pending");
+      wrapper = mountStatementBanner({ fetchStatus: "pending" });
 
       // Assert the loading component is rendered
       const loadingComponent = wrapper.findComponent(LoadingComponent);
@@ -71,7 +77,7 @@ describe("StatementBanner.vue", () => {
 
     test("when the data fetcher status is 'rejected', the error component is rendered", () => {
       // Remount the component with rejected status active
-      wrapper = mountStatementBanner("rejected");
+      wrapper = mountStatementBanner({ fetchStatus: "rejected" });
 
       // Assert the error component is rendered
       const errorComponent = wrapper.findComponent(ErrorComponent);

@@ -10,13 +10,14 @@ import { getHeroSlides } from "@/data/dataFetchers";
 import { useIsOnMobileKey } from "@/utils/injectionkeys";
 import frontDataBase from "../../../db.json";
 import router from "@/router";
+import { createPinia } from "pinia";
 
 // Mocks data
 const mockHeroSlidesResult = {
-  data: { value: frontDataBase.heroSlides },
-  status: { value: "resolved" },
+  data: frontDataBase.heroSlides,
+  status: "resolved",
 };
-const mockHeroSlidesData = mockHeroSlidesResult.data.value;
+const mockHeroSlidesData = mockHeroSlidesResult.data;
 const mockHeroSlidesLength = mockHeroSlidesData.length;
 
 // Mock the browsers's resizeObserver API
@@ -50,7 +51,7 @@ function mountHero() {
     global: {
       stubs: { Slideshow },
       provide: { [useIsOnMobileKey]: true },
-      plugins: [router],
+      plugins: [createPinia(), router],
     },
   });
 }
@@ -78,8 +79,8 @@ describe("Hero.vue", () => {
       // Assert the Slideshow component is rendered
       expect(SlideshowComponent.exists()).toBeTruthy();
 
-      // Assert its "slidesDataLength" prop value has the correct value
-      expect(SlideshowComponent.props("slidesDataLength")).toMatchObject(
+      // Assert its "slidesLength" prop value has the correct value
+      expect(SlideshowComponent.props("slidesLength")).toMatchObject(
         mockHeroSlidesLength
       );
     });
@@ -111,8 +112,8 @@ describe("Hero.vue", () => {
           // Assert the "slide" prop has the correct value
           expect(HeroSlideComponent.props("slide")).toMatchObject(mockSlide);
 
-          // Assert the "slidesDataLength" prop has the correct value
-          expect(HeroSlideComponent.props("slidesDataLength")).toBe(
+          // Assert the "slidesLength" prop has the correct value
+          expect(HeroSlideComponent.props("slidesLength")).toBe(
             mockHeroSlidesLength
           );
 
@@ -160,8 +161,8 @@ describe("Hero.vue", () => {
           // Assert the button/link "href" value is well setted
           expect(link.attributes("href")).toContain(mockSlideLinkURL);
 
-          // Assert the "slidesDataLength" prop value is well setted
-          expect(slide.props("slidesDataLength")).toBe(mockHeroSlidesLength);
+          // Assert the "slidesLength" prop value is well setted
+          expect(slide.props("slidesLength")).toBe(mockHeroSlidesLength);
 
           // Assert the "index" prop value is well setted
           expect(slide.props("slideIndex")).toBe(index);
@@ -194,11 +195,8 @@ describe("Hero.vue", () => {
     });
 
     test("when the data fetcher status is 'pending', the loading component is rendered", () => {
-      // As Hero component is responsible to fetch the data we have to mock its fetcher to change its fetch status
-      getHeroSlides.mockReturnValue({
-        ...mockHeroSlidesResult,
-        status: { value: "pending" },
-      });
+      // As Hero component has its data fetcher mocked, we have to set its status to "pending" manualy
+      mockHeroSlidesResult.status = "pending";
 
       // Remount the component to simulate the pending status
       wrapper = mountHero();
@@ -208,10 +206,7 @@ describe("Hero.vue", () => {
       expect(loadingComponent.exists()).toBeTruthy();
 
       // Reset the mock fetch status to "resolved" for following tests
-      getHeroSlides.mockReturnValue({
-        ...mockHeroSlidesResult,
-        status: { value: "resolved" },
-      });
+      mockHeroSlidesResult.status = "resolved";
     });
 
     test("when the data fetcher status is 'resolved', its data is rendered", () => {
@@ -221,11 +216,8 @@ describe("Hero.vue", () => {
     });
 
     test("when the data fetcher status is 'rejected', the error component is rendered", () => {
-      // As Hero component is responsible to fetch the data we have to mock its fetcher to change its fetch status
-      getHeroSlides.mockReturnValue({
-        ...mockHeroSlidesResult,
-        status: { value: "rejected" },
-      });
+      // As Hero component has its data fetcher mocked, we have to set its status to "rejected" manualy
+      mockHeroSlidesResult.status = "rejected";
 
       // Remount the component to simulate the rejected status
       wrapper = mountHero();
@@ -233,12 +225,9 @@ describe("Hero.vue", () => {
       // Assert the error component is rendered
       const errorComponent = wrapper.findComponent(ErrorComponent);
       expect(errorComponent.exists()).toBeTruthy();
-    });
 
-    // Reset the mock fetch status to "resolved" for following tests
-    getHeroSlides.mockReturnValue({
-      ...mockHeroSlidesResult,
-      status: { value: "resolved" },
+      // Reset the mock fetch status to "resolved" for following tests
+      mockHeroSlidesResult.status = "resolved";
     });
   });
 });
