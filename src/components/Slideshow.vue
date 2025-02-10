@@ -161,7 +161,7 @@ const handleDisplaySlide = (event: { index: number; focusable: boolean }) => {
 };
 
 /* Display Logic */
-let timer: number;
+let timer: ReturnType<typeof setInterval>;
 
 const startAutoPlay = () => {
   timer = setInterval(() => displayNextSlide(), 3500);
