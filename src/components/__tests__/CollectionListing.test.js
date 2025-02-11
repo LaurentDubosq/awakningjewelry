@@ -1,26 +1,26 @@
-import { mount } from "@vue/test-utils";
-import CollectionListing from "@/components/CollectionListing.vue";
-import CollectionListingItem from "@/components/CollectionListingItem.vue";
-import LoadingComponent from "@/components/LoadingComponent.vue";
-import ErrorComponent from "@/components/ErrorComponent.vue";
-import frontDatabase from "../../../db.json";
-import router from "@/router";
+import { mount } from '@vue/test-utils'
+import CollectionListing from '@/components/CollectionListing.vue'
+import CollectionListingItem from '@/components/CollectionListingItem.vue'
+import LoadingComponent from '@/components/LoadingComponent.vue'
+import ErrorComponent from '@/components/ErrorComponent.vue'
+import frontDatabase from '../../../db.json'
+import router from '@/router'
 
 const mockCollectionsResult = {
   data: frontDatabase.collectionsByGender,
-  status: "resolved",
-};
-const mockCollectionsData = mockCollectionsResult.data;
-const mockCollectionsStatus = mockCollectionsResult.status;
-const mockCollectionsLength = mockCollectionsData.length;
-const mockTitle = "By gender";
+  status: 'resolved',
+}
+const mockCollectionsData = mockCollectionsResult.data
+const mockCollectionsStatus = mockCollectionsResult.status
+const mockCollectionsLength = mockCollectionsData.length
+const mockTitle = 'By gender'
 
 // Mock the fetcher used in the mocked router
-vi.mock("@/data/dataFetchers", () => {
+vi.mock('@/data/dataFetchers', () => {
   return {
     getPagesMetaData: vi.fn().mockReturnValue(undefined),
-  };
-});
+  }
+})
 
 // Component Factory
 function mountCollectionListing(props) {
@@ -32,72 +32,64 @@ function mountCollectionListing(props) {
       ...props,
     },
     global: { plugins: [router] },
-  });
+  })
 }
 
-describe("CollectionListing.vue", () => {
-  let wrapper;
+describe('CollectionListing.vue', () => {
+  let wrapper
 
   beforeEach(() => {
-    wrapper = mountCollectionListing();
-  });
+    wrapper = mountCollectionListing()
+  })
 
   // Smoke test
-  test("mounts successfully", () => {
-    expect(wrapper.exists()).toBeTruthy();
-  });
+  test('mounts successfully', () => {
+    expect(wrapper.exists()).toBeTruthy()
+  })
 
-  test("renders its title", () => {
-    const title = wrapper.find("[data-testid='collection-listing__title']");
-    expect(title.text()).toContain(mockTitle);
-  });
+  test('renders its title', () => {
+    const title = wrapper.find("[data-testid='collection-listing__title']")
+    expect(title.text()).toContain(mockTitle)
+  })
 
-  test("renders all collections with necessary information", () => {
-    const CollectionListingItemComponents = wrapper.findAllComponents(
-      CollectionListingItem
-    );
+  test('renders all collections with necessary information', () => {
+    const CollectionListingItemComponents = wrapper.findAllComponents(CollectionListingItem)
 
     // Assert that all collections are rendered
-    expect(CollectionListingItemComponents).toHaveLength(mockCollectionsLength);
+    expect(CollectionListingItemComponents).toHaveLength(mockCollectionsLength)
 
     // Assert any collection is rendered with necessary information
-    CollectionListingItemComponents.forEach(
-      (CollectionListingItemComponent, index) => {
-        const mockCollection = mockCollectionsData[index];
+    CollectionListingItemComponents.forEach((CollectionListingItemComponent, index) => {
+      const mockCollection = mockCollectionsData[index]
 
-        // Assert the CollectionListingItemComponent has its "collection" prop value well setted
-        expect(
-          CollectionListingItemComponent.props("collection")
-        ).toMatchObject(mockCollection);
-      }
-    );
-  });
+      // Assert the CollectionListingItemComponent has its "collection" prop value well setted
+      expect(CollectionListingItemComponent.props('collection')).toMatchObject(mockCollection)
+    })
+  })
 
-  describe("Behaviors:", () => {
+  describe('Behaviors:', () => {
     test("when the data fetcher status is 'pending', the loading component is rendered", () => {
       // Remount the component with pending status active
-      wrapper = mountCollectionListing({ fetchStatus: "pending" });
+      wrapper = mountCollectionListing({ fetchStatus: 'pending' })
 
       // Assert the loading component is rendered
-      const loadingComponent = wrapper.findComponent(LoadingComponent);
-      expect(loadingComponent.exists()).toBeTruthy();
-    });
+      const loadingComponent = wrapper.findComponent(LoadingComponent)
+      expect(loadingComponent.exists()).toBeTruthy()
+    })
 
     test("when the data fetcher status is 'resolved', its data is rendered", () => {
       // Assert that one of its pieces of data is rendered
-      const CollectionListingItemComponent = wrapper.findComponent(
-        CollectionListingItem
-      );
-      expect(CollectionListingItemComponent.exists()).toBeTruthy();
-    });
+      const CollectionListingItemComponent = wrapper.findComponent(CollectionListingItem)
+      expect(CollectionListingItemComponent.exists()).toBeTruthy()
+    })
 
     test("when the data fetcher status is 'rejected', the error component is rendered", () => {
       // Remount the component with rejected status active
-      wrapper = mountCollectionListing({ fetchStatus: "rejected" });
+      wrapper = mountCollectionListing({ fetchStatus: 'rejected' })
 
       // Assert the error component is rendered
-      const errorComponent = wrapper.findComponent(ErrorComponent);
-      expect(errorComponent.exists()).toBeTruthy();
-    });
-  });
-});
+      const errorComponent = wrapper.findComponent(ErrorComponent)
+      expect(errorComponent.exists()).toBeTruthy()
+    })
+  })
+})

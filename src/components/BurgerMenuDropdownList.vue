@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { SiteSubMenuItem } from "@/types/components";
-import { type PropType } from "vue";
-import BurgerMenuDropdownItem from "./BurgerMenuDropdownItem.vue";
+import type { SiteSubMenuItem } from '@/types/components'
+import { type PropType } from 'vue'
+import BurgerMenuDropdownItem from './BurgerMenuDropdownItem.vue'
 
 const { links, dropdownText } = defineProps({
   links: { type: Object as PropType<SiteSubMenuItem[]>, required: true },
   dropdownText: { type: String, required: true },
-});
+})
 </script>
 
 <template>

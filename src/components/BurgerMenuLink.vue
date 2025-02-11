@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { SiteMenuItem } from "@/types/components";
-import { inject, type PropType } from "vue";
-import { toggleBurgerMenuKey } from "@/utils/injectionkeys";
+import type { SiteMenuItem } from '@/types/components'
+import { inject, type PropType } from 'vue'
+import { toggleBurgerMenuKey } from '@/utils/injectionkeys'
 
 const { link } = defineProps({
   link: { type: Object as PropType<SiteMenuItem>, required: true },
-});
-const toggleBurgerMenu: Function | undefined = inject(toggleBurgerMenuKey);
+})
+const toggleBurgerMenu: Function | undefined = inject(toggleBurgerMenuKey)
 </script>
 
 <template>
@@ -21,7 +21,7 @@ const toggleBurgerMenu: Function | undefined = inject(toggleBurgerMenuKey);
 </template>
 
 <style lang="scss">
-@use "@/assets/styles/_constants.scss" as *;
+@use '@/assets/styles/_constants.scss' as *;
 
 /* The current style tag is unscoped to allow BurgerMenuDropdownButton and BurgerMenuDropdownItem to use the "burger-menu__link" CSS class */
 .burger-menu__link {

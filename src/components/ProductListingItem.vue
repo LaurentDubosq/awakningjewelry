@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { ProductSummary } from "@/types/global";
-import type { PropType } from "vue";
+import type { ProductSummary } from '@/types/global'
+import type { PropType } from 'vue'
 
 const { product } = defineProps({
   product: { type: Object as PropType<ProductSummary>, required: true },
-});
+})
 </script>
 
 <template>
@@ -25,16 +25,10 @@ const { product } = defineProps({
         />
       </div>
       <div class="product-listing__item-details">
-        <h3
-          class="product-listing__item-title"
-          data-testid="product-listing__item-title"
-        >
+        <h3 class="product-listing__item-title" data-testid="product-listing__item-title">
           {{ product.title }}
         </h3>
-        <div
-          class="product-listing__item-price"
-          data-testid="product-listing__item-price"
-        >
+        <div class="product-listing__item-price" data-testid="product-listing__item-price">
           <span
             class="price--strikethrough"
             aria-description="Original price"
@@ -54,7 +48,7 @@ const { product } = defineProps({
 </template>
 
 <style scoped lang="scss">
-@use "@/assets/styles/_constants" as *;
+@use '@/assets/styles/_constants' as *;
 
 .product-listing__item {
   display: flex;

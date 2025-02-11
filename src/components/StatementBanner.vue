@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { StatementBanner } from "@/types/components";
-import type { FetchStatus } from "@/types/fetch";
-import LoadingComponent from "./LoadingComponent.vue";
-import ErrorComponent from "./ErrorComponent.vue";
-import { type PropType } from "vue";
+import type { StatementBanner } from '@/types/components'
+import type { FetchStatus } from '@/types/fetch'
+import LoadingComponent from './LoadingComponent.vue'
+import ErrorComponent from './ErrorComponent.vue'
+import { type PropType } from 'vue'
 
 /* As the component can be used multiple times in the application, its parent has the responsibility to fetch the data */
 const { statement, fetchStatus } = defineProps({
@@ -14,7 +14,7 @@ const { statement, fetchStatus } = defineProps({
     type: String as PropType<FetchStatus>,
     required: true,
   },
-});
+})
 </script>
 
 <template>
@@ -52,7 +52,7 @@ const { statement, fetchStatus } = defineProps({
 </template>
 
 <style scoped lang="scss">
-@use "@/assets/styles/_constants.scss" as *;
+@use '@/assets/styles/_constants.scss' as *;
 
 .statement-banner {
   background-color: $AwakningColorBlack;

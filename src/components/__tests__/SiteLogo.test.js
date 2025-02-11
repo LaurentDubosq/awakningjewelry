@@ -1,27 +1,27 @@
-import { mount } from "@vue/test-utils";
-import SiteLogo from "@/components/SiteLogo.vue";
+import { mount } from '@vue/test-utils'
+import SiteLogo from '@/components/SiteLogo.vue'
 
-describe("SiteLogo.vue", async () => {
-  let wrapper;
+describe('SiteLogo.vue', async () => {
+  let wrapper
 
   beforeEach(() => {
-    wrapper = mount(SiteLogo);
-  });
+    wrapper = mount(SiteLogo)
+  })
 
   // Smoke test
-  test("mounts successfully", () => {
-    expect(wrapper.exists()).toBeTruthy();
-  });
+  test('mounts successfully', () => {
+    expect(wrapper.exists()).toBeTruthy()
+  })
 
-  test("renders site logo with necessary information", () => {
-    const logo = wrapper.find("[data-testid='site-logo']");
-    const alternativeText = wrapper.find("[data-testid='site-logo-text']");
+  test('renders site logo with necessary information', () => {
+    const logo = wrapper.find("[data-testid='site-logo']")
+    const alternativeText = wrapper.find("[data-testid='site-logo-text']")
 
     // Assert the logo is rendered
-    expect(logo.exists()).toBeTruthy();
+    expect(logo.exists()).toBeTruthy()
 
     // Assert the alternative text is rendered
-    expect(alternativeText.text()).toContain("Homepage");
+    expect(alternativeText.text()).toContain('Homepage')
 
     // Assert that the logo has not been improperly modified
     expect(wrapper.html()).toMatchInlineSnapshot(`
@@ -30,6 +30,6 @@ describe("SiteLogo.vue", async () => {
         <path data-v-164b155e="" d="M492.3 723.1c-5.4 2-4.9 8.9.7 8.9 3.8 0 6.7-3.9 5.1-6.8-1.3-2.5-3.1-3.1-5.8-2.1zm289.9 13.1c-3.1 3.4-4.8 10.8-3.5 15.3 1 3.2.8 4.2-2.3 10.4-6.6 13.3-17.4 18.8-17.4 9 0-6.3 11.2-31.3 14.6-32.6.8-.3 1.4-.9 1.4-1.4 0-1-6-1.2-8.4-.3-.9.4-4.8 6.9-8.7 14.5-8.2 16.2-13.8 23.9-17.4 23.9-2.8 0-3.9-2.5-2.9-6.7 1.1-4.6 12.2-26.8 14.4-28.8 1.1-1 2-2.2 2-2.7 0-1.3-7.4-.9-9.2.4-.8.7-4.8 7.5-8.8 15.2-8.3 15.8-13.5 22-19.3 23.1-5.3 1-7.7-1.3-7.7-7.4 0-6.5.9-9.1 3.1-9.1 4 0 12.6-4.2 16.1-7.7 5.8-6 7.1-11 3.8-14.3-8.1-8.1-28 9.7-29.7 26.6-1 9.2 2.9 14.5 10.6 14.6 6.8.1 11.2-2.3 15.8-8.4l2.3-3.2v3.6c0 4.1 3.6 7.8 7.4 7.8s9.7-5.2 14.2-12.6c1-1.6 1.2-1 1.2 3.5.1 6.8 2 9.1 7.5 9.1 9.7 0 17.1-10 24.8-33.3 1.6-4.9 2.9-9.3 2.9-9.8 0-1.8-4.7-.9-6.8 1.3zm-52.2 5.3c0 2.8-.9 4.5-4.1 8-3.8 4.1-12.2 8.6-13.5 7.2-1-1 4.1-8.8 9-14 5.7-5.8 8.6-6.2 8.6-1.2z"></path>
       </svg>
       <span data-v-164b155e="" class="site-logo-text sr-only" data-testid="site-logo-text">Homepage</span>"
-    `);
-  });
-});
+    `)
+  })
+})

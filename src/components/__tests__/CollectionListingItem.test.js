@@ -1,19 +1,19 @@
-import { mount } from "@vue/test-utils";
-import CollectionListingItem from "@/components/CollectionListingItem.vue";
-import frontDataBase from "../../../db.json";
-import router from "@/router";
+import { mount } from '@vue/test-utils'
+import CollectionListingItem from '@/components/CollectionListingItem.vue'
+import frontDataBase from '../../../db.json'
+import router from '@/router'
 
-const mockCollection = frontDataBase.collectionsByGender[0];
-const mockCollectionURL = mockCollection.url;
-const mockCollectionImageURL = mockCollection.image.url;
-const mockCollectionTitle = mockCollection.title;
+const mockCollection = frontDataBase.collectionsByGender[0]
+const mockCollectionURL = mockCollection.url
+const mockCollectionImageURL = mockCollection.image.url
+const mockCollectionTitle = mockCollection.title
 
 // Mock the fetcher used in the mocked router
-vi.mock("@/data/dataFetchers", () => {
+vi.mock('@/data/dataFetchers', () => {
   return {
     getPagesMetaData: vi.fn().mockReturnValue(undefined),
-  };
-});
+  }
+})
 
 // Component Factory
 function mountCollectionListingItem() {
@@ -24,44 +24,42 @@ function mountCollectionListingItem() {
     global: {
       plugins: [router],
     },
-  });
+  })
 }
 
-describe("CollectionListingItem.vue", () => {
-  let wrapper;
+describe('CollectionListingItem.vue', () => {
+  let wrapper
 
   beforeEach(() => {
-    wrapper = mountCollectionListingItem();
-  });
+    wrapper = mountCollectionListingItem()
+  })
 
   // Smoke test
-  test("mounts successfully", () => {
-    expect(wrapper.exists()).toBeTruthy();
-  });
+  test('mounts successfully', () => {
+    expect(wrapper.exists()).toBeTruthy()
+  })
 
-  test("renders collection with necessary information", () => {
-    const link = wrapper.find("[data-testid='collection-listing__link']");
-    const img = wrapper.find("[data-testid='collection-listing__item-img']");
-    const title = wrapper.find(
-      "[data-testid='collection-listing__item-title']"
-    );
+  test('renders collection with necessary information', () => {
+    const link = wrapper.find("[data-testid='collection-listing__link']")
+    const img = wrapper.find("[data-testid='collection-listing__item-img']")
+    const title = wrapper.find("[data-testid='collection-listing__item-title']")
 
     // Assert the collection has a link tag
-    expect(link.exists()).toBeTruthy();
+    expect(link.exists()).toBeTruthy()
 
     // Assert the link tag has the correct "url" value
-    expect(link.attributes("href")).toBe(mockCollectionURL);
+    expect(link.attributes('href')).toBe(mockCollectionURL)
 
     // Assert its img is rendered
-    expect(img.exists()).toBeTruthy();
+    expect(img.exists()).toBeTruthy()
 
     // Assert its image has the correct "src" value
-    expect(img.attributes("src")).toBe(mockCollectionImageURL);
+    expect(img.attributes('src')).toBe(mockCollectionImageURL)
 
     // Assert its image has its "alt" attribut empty
-    expect(img.attributes("alt")).toBe("");
+    expect(img.attributes('alt')).toBe('')
 
     // Assert its title is rendered
-    expect(title.text()).toContain(mockCollectionTitle);
-  });
-});
+    expect(title.text()).toContain(mockCollectionTitle)
+  })
+})

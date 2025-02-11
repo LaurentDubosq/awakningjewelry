@@ -6,12 +6,18 @@ This website offers for sale a range of categories of Buddhist jewelry and other
 
 [VSCode](https://code.visualstudio.com/)
 [Vue - Official](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
-[ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
-[Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+
+## Type Support for `.vue` Imports in TS
+
+TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Vue - Official](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+
+## Customize configuration
+
+See [Vite Configuration Reference](https://vite.dev/config/).
 
 ## Development Principles
 
-DRY, KISS, YAGNI, SOLID, Clean Code.
+DRY, KISS, YAGNI, Clean Code, SRP (SOLID).
 
 ## Project Setup
 
@@ -27,7 +33,7 @@ cd awakningjewelry
 npm install
 ```
 
-## Launch of the development environment
+### Compile and Hot-Reload for Development
 
 ```sh
 npm run mock-api
@@ -41,16 +47,22 @@ npm run dev
 http://localhost:5173/
 ```
 
-## Command for the build process
+### Type-Check, Compile and Minify for Production
 
 ```sh
 npm run build
 ```
 
-## Run Unit Tests with [Vitest](https://vitest.dev/)
+### Run Unit Tests with [Vitest](https://vitest.dev/)
 
 ```sh
-npm run test
+npm run test:unit
+```
+
+### Lint with [ESLint](https://eslint.org/)
+
+```sh
+npm run lint
 ```
 
 ## Process to follow for your Commits

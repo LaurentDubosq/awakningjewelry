@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import type { SiteMenuItem } from "@/types/components";
-import { ref, type Ref, type PropType } from "vue";
-import BurgerMenuDropdownButton from "./BurgerMenuDropdownButton.vue";
-import BurgerMenuDropdownList from "./BurgerMenuDropdownList.vue";
-import MyTransition from "./MyTransition.vue";
+import type { SiteMenuItem } from '@/types/components'
+import { ref, type Ref, type PropType } from 'vue'
+import BurgerMenuDropdownButton from './BurgerMenuDropdownButton.vue'
+import BurgerMenuDropdownList from './BurgerMenuDropdownList.vue'
+import MyTransition from './MyTransition.vue'
 
 const { dropdown } = defineProps({
   dropdown: { type: Object as PropType<SiteMenuItem>, required: true },
-});
+})
 
-const isDropdownOpen: Ref<boolean> = ref(true);
+const isDropdownOpen: Ref<boolean> = ref(true)
 </script>
 
 <template>
@@ -19,11 +19,7 @@ const isDropdownOpen: Ref<boolean> = ref(true);
       :isDropdownOpen
       @toggle-dropdown="isDropdownOpen = !isDropdownOpen"
     />
-    <MyTransition
-      name="margintopMinus100PerCentWithInner"
-      :group="true"
-      :duration="300"
-    >
+    <MyTransition name="margintopMinus100PerCentWithInner" :group="true" :duration="300">
       <BurgerMenuDropdownList
         :links="dropdown.subMenu"
         :dropdownText="dropdown.text"

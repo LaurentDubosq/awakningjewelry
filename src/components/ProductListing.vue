@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { type PropType } from "vue";
-import type { FetchStatus } from "@/types/fetch";
-import type { ProductSummary } from "@/types/global.d.ts";
-import ProductListingItem from "./ProductListingItem.vue";
-import LoadingComponent from "./LoadingComponent.vue";
-import ErrorComponent from "./ErrorComponent.vue";
+import { type PropType } from 'vue'
+import type { FetchStatus } from '@/types/fetch'
+import type { ProductSummary } from '@/types/global.d.ts'
+import ProductListingItem from './ProductListingItem.vue'
+import LoadingComponent from './LoadingComponent.vue'
+import ErrorComponent from './ErrorComponent.vue'
 
 const { title, products, fetchStatus } = defineProps({
   title: {
@@ -18,7 +18,7 @@ const { title, products, fetchStatus } = defineProps({
     type: String as PropType<FetchStatus>,
     required: true,
   },
-});
+})
 </script>
 
 <template>
@@ -44,7 +44,7 @@ const { title, products, fetchStatus } = defineProps({
 </template>
 
 <style scoped lang="scss">
-@use "@/assets/styles/_constants.scss" as *;
+@use '@/assets/styles/_constants.scss' as *;
 
 .product-listing {
   margin: 45px 0;

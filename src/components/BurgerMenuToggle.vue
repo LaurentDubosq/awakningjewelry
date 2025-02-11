@@ -1,41 +1,36 @@
 <script setup lang="ts">
-import { inject, nextTick, type Ref } from "vue";
-import {
-  isBurgerMenuOpenKey,
-  toggleBurgerMenuKey,
-} from "@/utils/injectionkeys";
-import { useFocusElement } from "@/composables/useFocusElement";
-import SiteHeaderIcon from "./SiteHeaderIcon.vue";
-import IconBurger from "./icons/IconBurger.vue";
-import IconCross from "./icons/IconCross.vue";
+import { inject, nextTick, type Ref } from 'vue'
+import { isBurgerMenuOpenKey, toggleBurgerMenuKey } from '@/utils/injectionkeys'
+import { useFocusElement } from '@/composables/useFocusElement'
+import SiteHeaderIcon from './SiteHeaderIcon.vue'
+import IconBurger from './icons/IconBurger.vue'
+import IconCross from './icons/IconCross.vue'
 
-const isBurgerMenuOpen: Ref<boolean> | undefined = inject(isBurgerMenuOpenKey); // Get the burger menu open/close status
-const toggleBurgerMenu: Function | undefined = inject(toggleBurgerMenuKey); // Get the burger menu toggle
+const isBurgerMenuOpen: Ref<boolean> | undefined = inject(isBurgerMenuOpenKey) // Get the burger menu open/close status
+const toggleBurgerMenu: Function | undefined = inject(toggleBurgerMenuKey) // Get the burger menu toggle
 
 async function handleClick(event: MouseEvent | KeyboardEvent) {
   // When the keyboard has generated the event
   if (event.detail === 0) {
     // Toggle the burger menu
-    toggleBurgerMenu && toggleBurgerMenu();
+    toggleBurgerMenu && toggleBurgerMenu()
 
     /* Focus the first item on burger menu opening */
     if (isBurgerMenuOpen && isBurgerMenuOpen.value) {
       // Wait after the burger menu has been opened
-      await nextTick();
+      await nextTick()
 
       // Find the first item
-      const item = document.querySelector(
-        "[data-testid='burger-menu__item']"
-      ) as HTMLElement | null;
+      const item = document.querySelector("[data-testid='burger-menu__item']") as HTMLElement | null
 
       // Focus the item
-      useFocusElement(item);
+      useFocusElement(item)
     }
   }
 
   // When the mouse has generated the event
   if (event.detail === 1) {
-    toggleBurgerMenu && toggleBurgerMenu();
+    toggleBurgerMenu && toggleBurgerMenu()
   }
 }
 </script>

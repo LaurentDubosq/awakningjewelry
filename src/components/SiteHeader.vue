@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { inject, type Ref, defineAsyncComponent } from "vue";
-import { useIsOnMobileKey } from "@/utils/injectionkeys";
-import BurgerMenuToggle from "./BurgerMenuToggle.vue";
-import SiteLogo from "./SiteLogo.vue";
-import SiteHeaderIcon from "./SiteHeaderIcon.vue";
-import IconPerson from "./icons/IconPerson.vue";
-import IconCart from "./icons/IconCart.vue";
-import useGetAsyncComponent from "@/composables/useGetAsyncComponent";
-const SiteNav = defineAsyncComponent(useGetAsyncComponent("SiteNav")); // Async import because mobile environment doesn't need the siteNav
+import { inject, type Ref, defineAsyncComponent } from 'vue'
+import { useIsOnMobileKey } from '@/utils/injectionkeys'
+import BurgerMenuToggle from './BurgerMenuToggle.vue'
+import SiteLogo from './SiteLogo.vue'
+import SiteHeaderIcon from './SiteHeaderIcon.vue'
+import IconPerson from './icons/IconPerson.vue'
+import IconCart from './icons/IconCart.vue'
+import useGetAsyncComponent from '@/composables/useGetAsyncComponent'
+const SiteNav = defineAsyncComponent(useGetAsyncComponent('SiteNav')) // Async import because mobile environment doesn't need the siteNav
 
 /* Get the current display platform (mobile/desktop) to condition the asynchronous component imports. It also provides a more
  readable code and the possibility of testing the renders according to environments */
-const useIsOnMobile: Ref<boolean> | undefined = inject(useIsOnMobileKey);
+const useIsOnMobile: Ref<boolean> | undefined = inject(useIsOnMobileKey)
 </script>
 
 <template>
@@ -47,11 +47,7 @@ const useIsOnMobile: Ref<boolean> | undefined = inject(useIsOnMobileKey);
               <IconPerson width="27" aria-hidden="true" />
             </SiteHeaderIcon>
           </RouterLink>
-          <RouterLink
-            to="/cart"
-            title="Go to cart"
-            data-testid="site-header__cart-link"
-          >
+          <RouterLink to="/cart" title="Go to cart" data-testid="site-header__cart-link">
             <SiteHeaderIcon alternativeText="Cart">
               <IconCart width="27" aria-hidden="true" />
             </SiteHeaderIcon>
@@ -63,7 +59,7 @@ const useIsOnMobile: Ref<boolean> | undefined = inject(useIsOnMobileKey);
 </template>
 
 <style scoped lang="scss">
-@use "@/assets/styles/_constants" as *;
+@use '@/assets/styles/_constants' as *;
 
 .site-header {
   &-inner {

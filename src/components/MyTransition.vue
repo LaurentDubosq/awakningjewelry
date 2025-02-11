@@ -1,21 +1,19 @@
 <script setup lang="ts">
-import { TransitionGroup, Transition } from "vue";
+import { TransitionGroup, Transition } from 'vue'
 
 const { name, group } = defineProps({
   name: { type: String, required: true },
   group: { type: Boolean, required: true },
   duration: { type: Number },
-});
+})
 </script>
 
 <template>
-  <component :name :is="group ? TransitionGroup : Transition" :duration
-    ><slot
-  /></component>
+  <component :name :is="group ? TransitionGroup : Transition" :duration><slot /></component>
 </template>
 
 <style lang="scss">
-@use "@/assets/styles/_constants" as *;
+@use '@/assets/styles/_constants' as *;
 
 /* fadeSlideshow */
 .fadeSlideshow-enter-active,

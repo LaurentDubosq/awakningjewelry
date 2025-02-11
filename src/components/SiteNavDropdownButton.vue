@@ -3,9 +3,9 @@ const { text, title, isDropdownOpen } = defineProps({
   text: { type: String, required: true },
   title: { type: String, required: true },
   isDropdownOpen: { type: Boolean, required: true },
-});
+})
 
-const textLowered = text.toLowerCase();
+const textLowered = text.toLowerCase()
 </script>
 
 <template>
@@ -33,7 +33,7 @@ const textLowered = text.toLowerCase();
 </template>
 
 <style scoped lang="scss">
-@use "@/assets/styles/_constants.scss" as *;
+@use '@/assets/styles/_constants.scss' as *;
 
 .site-nav__dropdown-button {
   display: flex;
@@ -44,7 +44,7 @@ const textLowered = text.toLowerCase();
     box-shadow: $AwakningBoxShadow;
 
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       width: calc(
         100% - ($siteNavLinkPaddingX * 2)

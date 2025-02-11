@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { SiteSubMenuItem } from "@/types/components";
-import { type PropType } from "vue";
-import SiteNavDropdownItem from "./SiteNavDropdownItem.vue";
+import type { SiteSubMenuItem } from '@/types/components'
+import { type PropType } from 'vue'
+import SiteNavDropdownItem from './SiteNavDropdownItem.vue'
 
 const { links, dropdownText } = defineProps({
   links: { type: Array as PropType<SiteSubMenuItem[]>, required: true },
   dropdownText: { type: String, required: true },
-});
+})
 </script>
 
 <template>
@@ -21,7 +21,7 @@ const { links, dropdownText } = defineProps({
 </template>
 
 <style scoped lang="scss">
-@use "@/assets/styles/_constants.scss" as *;
+@use '@/assets/styles/_constants.scss' as *;
 
 .site-nav__dropdown-list {
   position: absolute;

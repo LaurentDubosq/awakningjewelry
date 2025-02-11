@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import IconPause from "./icons/IconPause.vue";
-import IconPlay from "./icons/IconPlay.vue";
+import IconPause from './icons/IconPause.vue'
+import IconPlay from './icons/IconPlay.vue'
 
 const { isPlaying } = defineProps({
   isPlaying: { type: Boolean, required: true },
-});
+})
 </script>
 
 <template>
@@ -14,12 +14,8 @@ const { isPlaying } = defineProps({
     @touchstart.stop
     @touchend.stop
     @focusin.stop
-    :title="
-      isPlaying ? 'Stop automatic slide show' : 'Start automatic slide show'
-    "
-    :aria-label="
-      isPlaying ? 'Stop automatic slide show' : 'Start automatic slide show'
-    "
+    :title="isPlaying ? 'Stop automatic slide show' : 'Start automatic slide show'"
+    :aria-label="isPlaying ? 'Stop automatic slide show' : 'Start automatic slide show'"
     data-testid="slideshow__autorotation-button"
   >
     <div class="slideshow__autorotation-button-icon-background">

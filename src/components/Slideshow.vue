@@ -9,13 +9,13 @@ import {
   watch,
   type ComputedRef,
   type Ref,
-} from "vue";
-import MyTransition from "./MyTransition.vue";
-import SlideshowAutorotationButton from "./SlideshowAutorotationButton.vue";
-import SlideshowSlickSlider from "./SlideshowSlickSlider.vue";
-import { useGetClientHeightAtElementResize } from "@/composables/useGetClientHeightAtElementResize";
-import { useIsOnMobileKey } from "@/utils/injectionkeys";
-import useIsReducedMotion from "@/composables/useIsReducedMotion";
+} from 'vue'
+import MyTransition from './MyTransition.vue'
+import SlideshowAutorotationButton from './SlideshowAutorotationButton.vue'
+import SlideshowSlickSlider from './SlideshowSlickSlider.vue'
+import { useGetClientHeightAtElementResize } from '@/composables/useGetClientHeightAtElementResize'
+import { useIsOnMobileKey } from '@/utils/injectionkeys'
+import useIsReducedMotion from '@/composables/useIsReducedMotion'
 
 /****************/
 /* Dependencies */
@@ -24,23 +24,23 @@ import useIsReducedMotion from "@/composables/useIsReducedMotion";
 // Get the slides length to manage the looping behavior and to calculte the number of slick slider dots
 const { slidesLength } = defineProps({
   slidesLength: { type: Number, required: true },
-});
+})
 // Get the environement to restrains the position calculation of slick slider to mobile
-const useIsOnMobile: Ref<boolean> | undefined = inject(useIsOnMobileKey);
+const useIsOnMobile: Ref<boolean> | undefined = inject(useIsOnMobileKey)
 
 /*******************/
 /* Reactive states */
 /*******************/
 
 // Store the index corresponding to the displayed slide
-const currentIndex: Ref<number> = ref(0);
+const currentIndex: Ref<number> = ref(0)
 // Store the autorotation slideshow statut
-const isPlaying: Ref<boolean> = ref(true);
+const isPlaying: Ref<boolean> = ref(true)
 // Stores the user's command to stop auto-rotation
-const isPlayingExplicitly: Ref<boolean | null> = ref(null);
+const isPlayingExplicitly: Ref<boolean | null> = ref(null)
 
 // The "duration" variable exists to fix the scroll to bottom bug caused by the transition (v-show used with v-for)
-const duration = 86400000; // 1 day
+const duration = 86400000 // 1 day
 
 /*********/
 /* Logic */
@@ -49,194 +49,191 @@ const duration = 86400000; // 1 day
 /* Autoplaying Logic */
 onMounted(() => {
   // Get the dynamic OS/browser "reduced motion" user preference statut
-  const isReducedMotion: Ref<boolean> = useIsReducedMotion();
+  const isReducedMotion: Ref<boolean> = useIsReducedMotion()
 
   // Watch its value to toggle the animation in live
   watch(
     isReducedMotion,
     () => {
       if (isReducedMotion.value) {
-        stopAutoPlayExplicitly();
+        stopAutoPlayExplicitly()
       } else {
-        startAutoPlay();
+        startAutoPlay()
       }
     },
-    { immediate: true }
-  );
-});
+    { immediate: true },
+  )
+})
 onUnmounted(() => {
-  stopAutoPlay();
-});
+  stopAutoPlay()
+})
 
 /* Hover Logic */
 const handleMouseenter = () => {
   if (isPlayingExplicitly.value === null) {
-    stopAutoPlay();
+    stopAutoPlay()
   }
-};
+}
 const handleMouseleave = () => {
   if (isPlayingExplicitly.value === null) {
-    startAutoPlay();
+    startAutoPlay()
   }
-};
+}
 
 /* Swipe Logic */
-let touchStartX: number;
-let touchEndX: number;
+let touchStartX: number
+let touchEndX: number
 
 const isSwipingLeft = () => {
-  return touchStartX - touchEndX >= 20;
-};
+  return touchStartX - touchEndX >= 20
+}
 const isSwipingRight = () => {
-  return touchStartX - touchEndX <= -20;
-};
+  return touchStartX - touchEndX <= -20
+}
 const swipeSlide = () => {
   if (isSwipingLeft()) {
-    displayPrevSlide();
+    displayPrevSlide()
   } else if (isSwipingRight()) {
-    displayNextSlide();
+    displayNextSlide()
   }
-};
+}
 const handleTouchstart = (e: TouchEvent) => {
   // Stop autorotation explicitly
-  stopAutoPlayExplicitly();
+  stopAutoPlayExplicitly()
 
   // Store the touchStart position
-  touchStartX = e.changedTouches[0].screenX; // "screenX" avoid conflit when scrolling at the same time versus "clientX"
-};
+  touchStartX = e.changedTouches[0].screenX // "screenX" avoid conflit when scrolling at the same time versus "clientX"
+}
 const handleTouchend = (e: TouchEvent) => {
   // Store the touchEnd position
-  touchEndX = e.changedTouches[0].screenX; // "screenX" avoid conflit when scrolling at the same time versus "clientX"
+  touchEndX = e.changedTouches[0].screenX // "screenX" avoid conflit when scrolling at the same time versus "clientX"
 
   // Try to swipe
-  swipeSlide();
-};
+  swipeSlide()
+}
 
 /* Slideshow focus logic */
 const handleFocusIn = (event: FocusEvent) => {
   // If the user has chosen to pause or resume the carousel autorotation, we do nothing
-  if (
-    isPlayingExplicitly.value === true ||
-    isPlayingExplicitly.value === false
-  ) {
-    return;
+  if (isPlayingExplicitly.value === true || isPlayingExplicitly.value === false) {
+    return
   }
 
   // Any slideshow element focus stop the autorotation explicitly
-  stopAutoPlay();
-};
+  stopAutoPlay()
+}
 
 /* Autorotation Button Logic */
 const handleStopAutoplay = () => {
   // Stop autorotation explicitly
-  stopAutoPlayExplicitly();
-};
+  stopAutoPlayExplicitly()
+}
 const handleStartAutoplay = () => {
   // Start autorotation explicitly
-  startAutoPlayExplicitly();
-};
+  startAutoPlayExplicitly()
+}
 
 /* Slick Slider Buttons Logic */
 const focusCurrentSlickSliderButton = async () => {
   if (slideshowElement.value) {
-    await nextTick();
+    await nextTick()
     const slickSliderButtonElement: HTMLElement | null =
-      slideshowElement.value.querySelector("[aria-selected='true']");
+      slideshowElement.value.querySelector("[aria-selected='true']")
     if (slickSliderButtonElement) {
-      slickSliderButtonElement.focus();
+      slickSliderButtonElement.focus()
     }
   }
-};
+}
 const handleDisplaySlide = (event: { index: number; focusable: boolean }) => {
   // Stop autorotation explicitly
-  stopAutoPlayExplicitly();
+  stopAutoPlayExplicitly()
 
   // Display the expected slide
-  currentIndex.value = event.index;
+  currentIndex.value = event.index
 
   // Focus on its corresponding button for a keyboard navigation
   if (event.focusable) {
-    focusCurrentSlickSliderButton();
+    focusCurrentSlickSliderButton()
   }
-};
+}
 
 /* Display Logic */
-let timer: ReturnType<typeof setInterval>;
+let timer: ReturnType<typeof setInterval>
 
 const startAutoPlay = () => {
-  timer = setInterval(() => displayNextSlide(), 3500);
-  isPlaying.value = true;
-};
+  timer = setInterval(() => displayNextSlide(), 3500)
+  isPlaying.value = true
+}
 const stopAutoPlay = () => {
-  clearInterval(timer);
-  isPlaying.value = false;
-};
+  clearInterval(timer)
+  isPlaying.value = false
+}
 
 const displayPrevSlide = () => {
   if (currentIndex.value > 0) {
-    currentIndex.value--;
+    currentIndex.value--
   } else {
-    currentIndex.value = slidesLength - 1;
+    currentIndex.value = slidesLength - 1
   }
-};
+}
 const displayNextSlide = () => {
   if (currentIndex.value >= slidesLength - 1) {
-    currentIndex.value = 0;
+    currentIndex.value = 0
   } else {
-    currentIndex.value++;
+    currentIndex.value++
   }
-};
+}
 
 /* Slick Slider Mobile Positioning */
-const slideshowElement: Ref<HTMLPictureElement | null> = ref(null);
+const slideshowElement: Ref<HTMLPictureElement | null> = ref(null)
 
 // Store the value used to position the slick slide from the top of its referent parent on mobile
-const slickSliderTopPosition: Ref<Ref<number> | null> = ref(null); // Nested refs necessary to have reactivity at intial render and during updates
+const slickSliderTopPosition: Ref<Ref<number> | null> = ref(null) // Nested refs necessary to have reactivity at intial render and during updates
 
 // Compute the style object to improve template readability
-const slickSliderStyle: ComputedRef<Object | undefined> = computed(() => {
+const slickSliderStyle: ComputedRef<object | undefined> = computed(() => {
   if (slickSliderTopPosition?.value?.value) {
     return {
       top: `${slickSliderTopPosition.value.value}px`,
-    };
+    }
   }
-});
+})
 
 onMounted(() => {
   // Get the first picture tag (all images must have the same native dimensions)
   const pictureElement: HTMLPictureElement | null | undefined =
-    slideshowElement.value?.querySelector("picture");
+    slideshowElement.value?.querySelector('picture')
 
   if (pictureElement) {
     // Get the picture tag clientHeight at every resize
-    const clientHeight = useGetClientHeightAtElementResize(pictureElement);
+    const clientHeight = useGetClientHeightAtElementResize(pictureElement)
 
     // Set the slick slider position only on mobile
     watch(clientHeight, () => {
       if (useIsOnMobile && useIsOnMobile.value) {
-        slickSliderTopPosition.value = clientHeight;
+        slickSliderTopPosition.value = clientHeight
       } else {
-        slickSliderTopPosition.value = null;
+        slickSliderTopPosition.value = null
       }
-    });
+    })
   }
-});
+})
 
 /* Utilities */
 const stopAutoPlayExplicitly = () => {
   // Stop Autorotation
-  stopAutoPlay();
+  stopAutoPlay()
 
   // Store user explicit intention to stop autorotation
-  isPlayingExplicitly.value = false;
-};
+  isPlayingExplicitly.value = false
+}
 const startAutoPlayExplicitly = () => {
   // Start Autorotation
-  startAutoPlay();
+  startAutoPlay()
 
   // Store user explicit intention to start autorotation
-  isPlayingExplicitly.value = true;
-};
+  isPlayingExplicitly.value = true
+}
 </script>
 
 <template>
@@ -271,7 +268,7 @@ const startAutoPlayExplicitly = () => {
 </template>
 
 <style scoped lang="scss">
-@use "@/assets/styles/_constants" as *;
+@use '@/assets/styles/_constants' as *;
 
 .slideshow {
   display: flex;

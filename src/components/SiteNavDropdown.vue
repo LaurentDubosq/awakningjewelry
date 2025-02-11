@@ -1,27 +1,27 @@
 <script setup lang="ts">
-import type { SiteMenuItem } from "@/types/components";
-import { provide, ref, type Ref, type PropType } from "vue";
-import MyTransition from "./MyTransition.vue";
-import { closeSiteNavDropdownKey } from "@/utils/injectionkeys";
-import SiteNavDropdownButton from "./SiteNavDropdownButton.vue";
-import SiteNavDropdownList from "./SiteNavDropdownList.vue";
-import useExecuteOnFocusLeave from "@/composables/useExecuteOnFocusLeave";
+import type { SiteMenuItem } from '@/types/components'
+import { provide, ref, type Ref, type PropType } from 'vue'
+import MyTransition from './MyTransition.vue'
+import { closeSiteNavDropdownKey } from '@/utils/injectionkeys'
+import SiteNavDropdownButton from './SiteNavDropdownButton.vue'
+import SiteNavDropdownList from './SiteNavDropdownList.vue'
+import useExecuteOnFocusLeave from '@/composables/useExecuteOnFocusLeave'
 
 const { dropdown } = defineProps({
   dropdown: { type: Object as PropType<SiteMenuItem>, required: true },
-});
+})
 
-const isDropdownOpen: Ref<boolean> = ref(false);
+const isDropdownOpen: Ref<boolean> = ref(false)
 
 function openDropdown() {
-  isDropdownOpen.value = true;
+  isDropdownOpen.value = true
 }
 function closeDropdown() {
-  isDropdownOpen.value = false;
+  isDropdownOpen.value = false
 }
 
 /* Send "closeDropdown" function to the dropdown item component */
-provide(closeSiteNavDropdownKey, closeDropdown);
+provide(closeSiteNavDropdownKey, closeDropdown)
 </script>
 
 <template>

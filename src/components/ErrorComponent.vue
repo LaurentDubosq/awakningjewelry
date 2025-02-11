@@ -5,7 +5,7 @@
 </template>
 
 <style lang="scss">
-@use "@/assets/styles/_constants.scss" as *;
+@use '@/assets/styles/_constants.scss' as *;
 
 .error-message {
   color: $AwakningColorError;

@@ -6,7 +6,7 @@
 </template>
 
 <style lang="scss">
-@use "@/assets/styles/_constants.scss" as *;
+@use '@/assets/styles/_constants.scss' as *;
 
 .loader-wrapper {
   display: flex;

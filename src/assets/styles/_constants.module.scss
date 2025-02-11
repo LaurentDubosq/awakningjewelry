@@ -1,6 +1,6 @@
-@import "_constants";
+@use '@/assets/styles/_constants.scss' as *;
 
 :export {
-    AwakningBreakpointDesktop: $AwakningBreakpointDesktop;
-    AwakningColorWhite: $AwakningColorWhite;
+  AwakningBreakpointDesktop: $AwakningBreakpointDesktop;
+  AwakningColorWhite: $AwakningColorWhite;
 }

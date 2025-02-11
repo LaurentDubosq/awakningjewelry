@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import type { Collection } from "@/types/global";
-import { type PropType } from "vue";
+import type { Collection } from '@/types/global'
+import { type PropType } from 'vue'
 
 const { collection } = defineProps({
   collection: {
     type: Object as PropType<Collection>,
     required: true,
   },
-});
+})
 </script>
 
 <template>
@@ -26,10 +26,7 @@ const { collection } = defineProps({
         aria-hidden="true"
         data-testid="collection-listing__item-img"
       />
-      <h3
-        class="collection-listing__item-title"
-        data-testid="collection-listing__item-title"
-      >
+      <h3 class="collection-listing__item-title" data-testid="collection-listing__item-title">
         {{ collection.title }}
       </h3>
     </RouterLink>
@@ -37,7 +34,7 @@ const { collection } = defineProps({
 </template>
 
 <style scoped lang="scss">
-@use "@/assets/styles/_constants.scss" as *;
+@use '@/assets/styles/_constants.scss' as *;
 
 .collection-listing__item {
   flex-basis: 50%;

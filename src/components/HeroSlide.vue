@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import SASSCONSTANTS from "@/assets/styles/_constants.module.scss";
-import type { HeroSlideType } from "@/types/components";
-import { type PropType } from "vue";
+import SASSCONSTANTS from '@/assets/styles/_constants.module.scss'
+import type { HeroSlideType } from '@/types/components'
+import { type PropType } from 'vue'
 
 const { slide, slidesLength, slideIndex, isActive } = defineProps({
   slide: { type: Object as PropType<HeroSlideType>, required: true },
   slidesLength: { type: Number, required: true },
   slideIndex: { type: Number, required: true },
   isActive: { type: Boolean, required: true },
-});
-const DESKTOPBREAKPOINT: string = SASSCONSTANTS.AwakningBreakpointDesktop;
+})
+const DESKTOPBREAKPOINT: string = SASSCONSTANTS.AwakningBreakpointDesktop
 </script>
 
 <template>
@@ -53,7 +53,7 @@ const DESKTOPBREAKPOINT: string = SASSCONSTANTS.AwakningBreakpointDesktop;
 </template>
 
 <style scoped lang="scss">
-@use "@/assets/styles/_constants" as *;
+@use '@/assets/styles/_constants' as *;
 
 .hero__slide {
   display: flex;

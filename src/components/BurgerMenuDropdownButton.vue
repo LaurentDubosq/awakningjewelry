@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import SASSCONSTANTS from "@/assets/styles/_constants.module.scss";
-import IconSignMinus from "./icons/IconSignMinus.vue";
-import IconSignPlus from "./icons/IconSignPlus.vue";
+import SASSCONSTANTS from '@/assets/styles/_constants.module.scss'
+import IconSignMinus from './icons/IconSignMinus.vue'
+import IconSignPlus from './icons/IconSignPlus.vue'
 
 const { text, isDropdownOpen } = defineProps({
   text: { type: String, required: true },
   isDropdownOpen: { type: Boolean, required: true },
-});
+})
 
-const COLORWHITE: string = SASSCONSTANTS.AwakningColorWhite; // Set plus/minus icon color from design system
-const textLowered = text.toLowerCase();
+const COLORWHITE: string = SASSCONSTANTS.AwakningColorWhite // Set plus/minus icon color from design system
+const textLowered = text.toLowerCase()
 </script>
 
 <template>

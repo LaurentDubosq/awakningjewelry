@@ -1,108 +1,87 @@
 <script setup lang="ts">
-import useGetAsyncComponent from "@/composables/useGetAsyncComponent";
-import {
-  getPromotions,
-  getCollectionsByGender,
-  getStatementMission,
-} from "@/data/dataFetchers";
-import type { StatementBanner as StatementBannerInterface } from "@/types/components";
-import type { Collection, ProductSummary } from "@/types/global.d.ts";
-import type { UseFetchWithStateReturn } from "@/types/fetch";
-import { defineAsyncComponent } from "vue";
-import { storeToRefs } from "pinia";
+import useGetAsyncComponent from '@/composables/useGetAsyncComponent'
+import { getPromotions, getCollectionsByGender, getStatementMission } from '@/data/dataFetchers'
+import type { StatementBanner as StatementBannerInterface } from '@/types/components'
+import type { Collection, ProductSummary } from '@/types/global.d.ts'
+import type { UseFetchWithStateReturn } from '@/types/fetch'
+import { defineAsyncComponent } from 'vue'
+import { storeToRefs } from 'pinia'
 
-const Hero = defineAsyncComponent(useGetAsyncComponent("Hero"));
-const StatementBanner = defineAsyncComponent(
-  useGetAsyncComponent("StatementBanner")
-);
-const CollectionListing = defineAsyncComponent(
-  useGetAsyncComponent("CollectionListing")
-);
-const ProductListing = defineAsyncComponent(
-  useGetAsyncComponent("ProductListing")
-);
+const Hero = defineAsyncComponent(useGetAsyncComponent('Hero'))
+const StatementBanner = defineAsyncComponent(useGetAsyncComponent('StatementBanner'))
+const CollectionListing = defineAsyncComponent(useGetAsyncComponent('CollectionListing'))
+const ProductListing = defineAsyncComponent(useGetAsyncComponent('ProductListing'))
 
 /************************/
 /* StatementBanner data */
 /************************/
-import { useStatementMissionResultStore } from "@/stores/statementMission";
+import { useStatementMissionResultStore } from '@/stores/statementMission'
 
 // Get the store instance
-const statementMissionStore = useStatementMissionResultStore();
+const statementMissionStore = useStatementMissionResultStore()
 
 // Get the store's states, computeds and methods
-const {
-  statementMissionResult,
-  statementMissionData,
-  statementMissionFetchStatus,
-} = storeToRefs(statementMissionStore);
-const { updateStatementMissionResult } = statementMissionStore;
+const { statementMissionResult, statementMissionData, statementMissionFetchStatus } =
+  storeToRefs(statementMissionStore)
+const { updateStatementMissionResult } = statementMissionStore
 
 // Don't fetch the data if the data already exists in the store (for performance reason)
 if (!statementMissionResult.value) {
   // Get the data fetch result
-  const result: UseFetchWithStateReturn<StatementBannerInterface> =
-    getStatementMission();
+  const result: UseFetchWithStateReturn<StatementBannerInterface> = getStatementMission()
 
   // Update the store with the result
-  updateStatementMissionResult(result);
+  updateStatementMissionResult(result)
 }
 /**************************/
 /* CollectionListing data */
 /**************************/
-import { useCollectionsByGenderResultStore } from "@/stores/collectionsByGender";
+import { useCollectionsByGenderResultStore } from '@/stores/collectionsByGender'
 
 // Get the store instance
-const collectionsByGenderStore = useCollectionsByGenderResultStore();
+const collectionsByGenderStore = useCollectionsByGenderResultStore()
 
 // Get the store's states, computeds and methods
-const {
-  collectionsByGenderResult,
-  collectionsByGenderData,
-  collectionsByGenderFetchStatus,
-} = storeToRefs(collectionsByGenderStore);
-const { updateCollectionsByGenderResult } = collectionsByGenderStore;
+const { collectionsByGenderResult, collectionsByGenderData, collectionsByGenderFetchStatus } =
+  storeToRefs(collectionsByGenderStore)
+const { updateCollectionsByGenderResult } = collectionsByGenderStore
 
 // Don't fetch the data if the data already exists in the store (for performance reason)
 if (!collectionsByGenderResult.value) {
   // Get the data fetch result
-  const result: UseFetchWithStateReturn<Collection[]> =
-    getCollectionsByGender();
+  const result: UseFetchWithStateReturn<Collection[]> = getCollectionsByGender()
 
   // Update the store with the result
-  updateCollectionsByGenderResult(result);
+  updateCollectionsByGenderResult(result)
 }
 
 /***********************/
 /* ProductListing data */
 /***********************/
-import { usePromotionsResultStore } from "@/stores/promotions";
+import { usePromotionsResultStore } from '@/stores/promotions'
 
 // Get the store instance
-const promotionsStore = usePromotionsResultStore();
+const promotionsStore = usePromotionsResultStore()
 
 // Get the store's states, computeds and methods
 const { promotionsResult, promotionsResultData, promotionsResultFetchStatus } =
-  storeToRefs(promotionsStore);
-const { updatePromotionsResult } = promotionsStore;
+  storeToRefs(promotionsStore)
+const { updatePromotionsResult } = promotionsStore
 
 // Don't fetch the data if the data already exists in the store (for performance reason)
 if (!promotionsResult.value) {
   // Get the data fetch result
-  const result: UseFetchWithStateReturn<ProductSummary[]> = getPromotions();
+  const result: UseFetchWithStateReturn<ProductSummary[]> = getPromotions()
 
   // Update the store with the result
-  updatePromotionsResult(result);
+  updatePromotionsResult(result)
 }
 </script>
 
 <template>
   <div class="home-view-container">
     <Hero />
-    <StatementBanner
-      :statement="statementMissionData"
-      :fetchStatus="statementMissionFetchStatus"
-    />
+    <StatementBanner :statement="statementMissionData" :fetchStatus="statementMissionFetchStatus" />
     <CollectionListing
       title="By Gender"
       :collections="collectionsByGenderData"
@@ -117,7 +96,7 @@ if (!promotionsResult.value) {
 </template>
 
 <style scoped lang="scss">
-@use "@/assets/styles/_constants" as *;
+@use '@/assets/styles/_constants' as *;
 
 .home-view-container {
   @media screen and (min-width: $AwakningBreakpointDesktop) {

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { type PropType } from "vue";
-import type { SiteMenuItem } from "@/types/components";
-import SiteHeaderIcon from "./SiteHeaderIcon.vue";
+import { type PropType } from 'vue'
+import type { SiteMenuItem } from '@/types/components'
+import SiteHeaderIcon from './SiteHeaderIcon.vue'
 
 const { link } = defineProps({
   link: { type: Object as PropType<SiteMenuItem>, required: true },
-});
+})
 </script>
 
 <template>
@@ -36,7 +36,7 @@ const { link } = defineProps({
 </template>
 
 <style lang="scss">
-@use "@/assets/styles/_constants.scss" as *;
+@use '@/assets/styles/_constants.scss' as *;
 
 /* The current style tag is unscoped to allow SiteNavDropdownButton to use the "site-nav__link--text" CSS class */
 .site-nav__link--text {

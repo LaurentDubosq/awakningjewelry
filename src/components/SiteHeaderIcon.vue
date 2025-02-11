@@ -1,17 +1,15 @@
 <script setup lang="ts">
 const { alternativeText } = defineProps({
   alternativeText: { type: String, required: true },
-});
+})
 </script>
 
 <template>
   <div class="site-header__icon-clickable-area">
     <slot />
-    <span
-      class="site-header__icon-text sr-only"
-      data-testid="site-header__icon-text"
-      >{{ alternativeText }}</span
-    >
+    <span class="site-header__icon-text sr-only" data-testid="site-header__icon-text">{{
+      alternativeText
+    }}</span>
   </div>
 </template>
 
