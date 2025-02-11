@@ -7,7 +7,7 @@ const { link } = defineProps({
   link: { type: Object as PropType<SiteSubMenuItem>, required: true },
 })
 
-const toggleBurgerMenu: Function | undefined = inject(toggleBurgerMenuKey)
+const toggleBurgerMenu: (() => void) | undefined = inject(toggleBurgerMenuKey)
 </script>
 
 <template>

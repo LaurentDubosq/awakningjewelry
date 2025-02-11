@@ -7,7 +7,7 @@ const { link } = defineProps({
   link: { type: Object as PropType<SiteSubMenuItem>, required: true },
 })
 
-const closeDropdown: Function | undefined = inject(closeSiteNavDropdownKey)
+const closeDropdown: (() => void) | undefined = inject(closeSiteNavDropdownKey)
 </script>
 
 <template>

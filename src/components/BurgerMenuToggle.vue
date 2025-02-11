@@ -7,13 +7,15 @@ import IconBurger from './icons/IconBurger.vue'
 import IconCross from './icons/IconCross.vue'
 
 const isBurgerMenuOpen: Ref<boolean> | undefined = inject(isBurgerMenuOpenKey) // Get the burger menu open/close status
-const toggleBurgerMenu: Function | undefined = inject(toggleBurgerMenuKey) // Get the burger menu toggle
+const toggleBurgerMenu: (() => void) | undefined = inject(toggleBurgerMenuKey) // Get the burger menu toggle
 
 async function handleClick(event: MouseEvent | KeyboardEvent) {
   // When the keyboard has generated the event
   if (event.detail === 0) {
     // Toggle the burger menu
-    toggleBurgerMenu && toggleBurgerMenu()
+    if (toggleBurgerMenu) {
+      toggleBurgerMenu()
+    }
 
     /* Focus the first item on burger menu opening */
     if (isBurgerMenuOpen && isBurgerMenuOpen.value) {
@@ -30,7 +32,9 @@ async function handleClick(event: MouseEvent | KeyboardEvent) {
 
   // When the mouse has generated the event
   if (event.detail === 1) {
-    toggleBurgerMenu && toggleBurgerMenu()
+    if (toggleBurgerMenu) {
+      toggleBurgerMenu()
+    }
   }
 }
 </script>

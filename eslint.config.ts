@@ -21,10 +21,24 @@ export default defineConfigWithVueTs(
 
   pluginVue.configs['flat/essential'],
   vueTsConfigs.recommended,
-  
+
   {
     ...pluginVitest.configs.recommended,
     files: ['src/**/__tests__/*'],
   },
+
+  {
+    rules: {
+      'vue/multi-word-component-names': [
+        'error',
+        {
+          ignores: ['Hero', 'Slideshow'], // add component names here to exclude them from the multi-word name check
+        },
+      ],
+      'vue/require-v-for-key': 'off', // disables the rule for detecting :key in v-for loops
+      'vue/valid-v-for': 'off', // disables the rule for requiring :key in v-for loops
+    },
+  },
+
   skipFormatting,
 )

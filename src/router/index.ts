@@ -39,7 +39,7 @@ const router = createRouter({
 })
 
 // Add Pages Meta data to each loaded page
-router.beforeEach((to, from) => {
+router.beforeEach((to) => {
   let metaDescriptionElement = document.querySelector<HTMLMetaElement>('meta[name="description"]')
 
   if (to.meta.title) {

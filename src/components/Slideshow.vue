@@ -113,7 +113,7 @@ const handleTouchend = (e: TouchEvent) => {
 }
 
 /* Slideshow focus logic */
-const handleFocusIn = (event: FocusEvent) => {
+const handleFocusIn = () => {
   // If the user has chosen to pause or resume the carousel autorotation, we do nothing
   if (isPlayingExplicitly.value === true || isPlayingExplicitly.value === false) {
     return
@@ -197,6 +197,7 @@ const slickSliderStyle: ComputedRef<object | undefined> = computed(() => {
       top: `${slickSliderTopPosition.value.value}px`,
     }
   }
+  return undefined
 })
 
 onMounted(() => {

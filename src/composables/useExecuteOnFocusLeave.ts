@@ -1,5 +1,5 @@
 // Execute the callback when the next focused element will be out of the current
-export default function useExecuteOnFocusLeave(event: FocusEvent, action: Function) {
+export default function useExecuteOnFocusLeave(event: FocusEvent, action: () => void) {
   // Get the current element (the one that has the @focusout directive)
   const element = event.currentTarget as HTMLElement
 

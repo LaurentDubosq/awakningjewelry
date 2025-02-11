@@ -6,7 +6,7 @@ import { toggleBurgerMenuKey } from '@/utils/injectionkeys'
 const { link } = defineProps({
   link: { type: Object as PropType<SiteMenuItem>, required: true },
 })
-const toggleBurgerMenu: Function | undefined = inject(toggleBurgerMenuKey)
+const toggleBurgerMenu: (() => void) | undefined = inject(toggleBurgerMenuKey)
 </script>
 
 <template>
