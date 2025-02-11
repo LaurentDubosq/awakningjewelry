@@ -15,8 +15,7 @@ const { title, products, fetchStatus } = defineProps({
     type: Object as PropType<ProductSummary[]> | undefined,
   },
   fetchStatus: {
-    type: String as PropType<FetchStatus>,
-    required: true,
+    type: String as PropType<FetchStatus> | undefined,
   },
 })
 </script>

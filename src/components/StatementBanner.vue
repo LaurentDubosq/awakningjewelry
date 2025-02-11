@@ -11,8 +11,7 @@ const { statement, fetchStatus } = defineProps({
     type: Object as PropType<StatementBanner> | undefined,
   },
   fetchStatus: {
-    type: String as PropType<FetchStatus>,
-    required: true,
+    type: String as PropType<FetchStatus> | undefined,
   },
 })
 </script>

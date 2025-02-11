@@ -1,16 +1,13 @@
 <script setup lang="ts">
-import useGetAsyncComponent from '@/composables/useGetAsyncComponent'
+import Hero from '@/components/Hero.vue'
+import StatementBanner from '@/components/StatementBanner.vue'
+import CollectionListing from '@/components/CollectionListing.vue'
+import ProductListing from '@/components/ProductListing.vue'
 import { getPromotions, getCollectionsByGender, getStatementMission } from '@/data/dataFetchers'
 import type { StatementBanner as StatementBannerInterface } from '@/types/components'
 import type { Collection, ProductSummary } from '@/types/global.d.ts'
 import type { UseFetchWithStateReturn } from '@/types/fetch'
-import { defineAsyncComponent } from 'vue'
 import { storeToRefs } from 'pinia'
-
-const Hero = defineAsyncComponent(useGetAsyncComponent('Hero'))
-const StatementBanner = defineAsyncComponent(useGetAsyncComponent('StatementBanner'))
-const CollectionListing = defineAsyncComponent(useGetAsyncComponent('CollectionListing'))
-const ProductListing = defineAsyncComponent(useGetAsyncComponent('ProductListing'))
 
 /************************/
 /* StatementBanner data */

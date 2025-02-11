@@ -12,8 +12,7 @@ const { title, collections, fetchStatus } = defineProps({
     type: Object as PropType<Collection[]> | undefined,
   },
   fetchStatus: {
-    type: String as PropType<FetchStatus>,
-    required: true,
+    type: String as PropType<FetchStatus> | undefined,
   },
 })
 </script>

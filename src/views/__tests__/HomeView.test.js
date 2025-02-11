@@ -50,9 +50,6 @@ function mountHomeview() {
     global: {
       stubs: {
         Hero: true,
-        StatementBanner,
-        CollectionListing,
-        ProductListing,
       },
       plugins: [createPinia(), router],
     },
