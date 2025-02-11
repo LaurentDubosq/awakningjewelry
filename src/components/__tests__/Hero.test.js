@@ -49,7 +49,6 @@ function mountHero() {
   return mount(Hero, {
     attachTo: document.body,
     global: {
-      stubs: { Slideshow },
       provide: { [useIsOnMobileKey]: true },
       plugins: [createPinia(), router],
     },
