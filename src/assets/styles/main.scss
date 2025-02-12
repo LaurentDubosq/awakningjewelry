@@ -66,11 +66,12 @@ a:hover {
 // Hide an element without affecting its accessibility or search engine parser consideration
 .sr-only {
   position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
+  width: 10px;
+  height: 10px;
+  margin: -10px;
   padding: 0;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   border: 0;
+  left: 0;
 }
