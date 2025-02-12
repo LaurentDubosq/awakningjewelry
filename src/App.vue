@@ -33,7 +33,15 @@ provide(isBurgerMenuOpenKey, isBurgerMenuOpen)
 import { toggleBurgerMenuKey } from './utils/injectionkeys'
 
 function toggleBurgerMenu() {
+  // Manage the open/close behavior of the burger menu
   isBurgerMenuOpen.value = !isBurgerMenuOpen.value
+
+  // Prevent body scroll when the burger menu is open
+  if (isBurgerMenuOpen.value) {
+    document.body.style.overflow = 'hidden'
+  } else {
+    document.body.style.overflow = 'visible'
+  }
 }
 
 provide(toggleBurgerMenuKey, toggleBurgerMenu)
