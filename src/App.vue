@@ -88,7 +88,7 @@ provide(useIsOnMobileKey, useIsOnMobile())
 <template>
   <div class="site-container">
     <MyTransition name="marginLeftMinus300px" :group="false">
-      <BurgerMenu :siteMenuResult @close-burger-menu="toggleBurgerMenu" v-if="isBurgerMenuOpen" />
+      <BurgerMenu :siteMenuResult @close-burger-menu="toggleBurgerMenu" v-show="isBurgerMenuOpen" />
     </MyTransition>
     <div class="site-content">
       <div class="site-content-container">
