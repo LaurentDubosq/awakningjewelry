@@ -15,22 +15,6 @@ const { name, group } = defineProps({
 <style lang="scss">
 @use '@/assets/styles/_constants' as *;
 
-/* fadeSlideshow */
-.fadeSlideshow-enter-active,
-.fadeSlideshow-leave-active {
-  transition: opacity 0.5s ease;
-}
-.fadeSlideshow-leave-active {
-  position: absolute;
-  @media screen and (max-width: $AwakningBreakpointDesktop) {
-    padding: 0 15px;
-  }
-}
-.fadeSlideshow-enter-from,
-.fadeSlideshow-leave-to {
-  opacity: 0;
-}
-
 /* translateY */
 .translateY-enter-active {
   transition: all 0.3s ease;

@@ -78,7 +78,7 @@ const handleKeydown = (event: KeyboardEvent) => {
 <style scoped lang="scss">
 @use '@/assets/styles/_constants' as *;
 .slideshow__slick-slider {
-  z-index: 1;
+  z-index: 2;
   position: absolute;
   padding: 4px;
   display: flex;

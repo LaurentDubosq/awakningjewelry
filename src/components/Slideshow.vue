@@ -10,7 +10,6 @@ import {
   type ComputedRef,
   type Ref,
 } from 'vue'
-import MyTransition from './MyTransition.vue'
 import SlideshowAutorotationButton from './SlideshowAutorotationButton.vue'
 import SlideshowSlickSlider from './SlideshowSlickSlider.vue'
 import { useGetClientHeightAtElementResize } from '@/composables/useGetClientHeightAtElementResize'
@@ -38,9 +37,6 @@ const currentIndex: Ref<number> = ref(0)
 const isPlaying: Ref<boolean> = ref(true)
 // Stores the user's command to stop auto-rotation
 const isPlayingExplicitly: Ref<boolean | null> = ref(null)
-
-// The "duration" variable exists to fix the scroll to bottom bug caused by the transition (v-show used with v-for)
-const duration = 86400000 // 1 day
 
 /*********/
 /* Logic */
@@ -262,9 +258,7 @@ const startAutoPlayExplicitly = () => {
       @displaySlide="handleDisplaySlide"
       :style="slickSliderStyle"
     />
-    <MyTransition name="fadeSlideshow" :group="true" :duration>
-      <slot :currentIndex />
-    </MyTransition>
+    <slot :currentIndex />
   </div>
 </template>
 
@@ -286,7 +280,25 @@ const startAutoPlayExplicitly = () => {
     bottom: 0;
     width: 100%;
     line-height: 0;
-    z-index: 1;
+    z-index: 2;
   }
+}
+
+:slotted(.slideshow__slide) {
+  position: absolute;
+  opacity: 0;
+  z-index: 0;
+  transition: opacity 1s ease;
+  padding: 0 15px;
+  @media screen and (min-width: $AwakningBreakpointDesktop) {
+    padding: 0;
+  }
+}
+
+:slotted(.slideshow__slide--active) {
+  position: static;
+  opacity: 1;
+  z-index: 1;
+  padding: 0;
 }
 </style>

@@ -41,11 +41,12 @@ if (!heroSlidesResult.value) {
       <Slideshow :slidesLength v-if="slidesLength" v-slot="{ currentIndex }">
         <template v-for="(slide, index) in slides" :key="slide.id">
           <HeroSlide
+            class="slideshow__slide"
+            :class="{ 'slideshow__slide--active': index === currentIndex }"
             :slide
             :slidesLength
             :slideIndex="index"
             :isActive="index === currentIndex"
-            v-show="index === currentIndex"
           />
         </template>
       </Slideshow>
