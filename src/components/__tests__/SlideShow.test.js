@@ -8,14 +8,15 @@ import IconPlay from '@/components/icons/IconPlay.vue'
 import HeroSlide from '@/components/HeroSlide.vue'
 import useIsReducedMotion from '@/composables/useIsReducedMotion'
 import frontDataBase from '../../../db.json'
-import { useIsOnMobileKey } from '@/utils/injectionkeys'
+import { createTestingPinia } from '@pinia/testing'
+import { useIsOnMobileStore } from '@/stores/isOnMobile'
 import { h, defineComponent } from 'vue'
 import router from '@/router'
 
+// Initializations
 const mockSlides = frontDataBase.heroSlides.slice(0, 2) // only two slides are enough to perform the tests
 const mockSlidesLength = mockSlides.length
 const mockCurrentIndex = 0
-// In order to test the dynamic behavior of Slideshow.vue, we need to mock the slot with a dynamic content
 const mockHeroSlideComponent = defineComponent({
   props: ['currentIndex'],
   data() {
@@ -38,7 +39,8 @@ const mockHeroSlideComponent = defineComponent({
       v-show="index === currentIndex"
     />
   `,
-})
+}) // In order to test the dynamic behavior of Slideshow.vue, we need a dummy component to mock the slot with a dynamic content
+const pinia = createTestingPinia()
 
 // Mock the browsers's resizeObserver API
 global.ResizeObserver = class {
@@ -62,6 +64,10 @@ vi.mock('@/composables/useIsReducedMotion', () => {
 })
 useIsReducedMotion.mockReturnValue(ref(false)) // the false value means there is not animation reduction activated. Everything is set to normal.
 
+// Mock the IsOnMobile's value store to mobile environment by default
+const isOnMobileStore = useIsOnMobileStore()
+isOnMobileStore.isOnMobile = true
+
 // Component Factory
 function mountSlideshow() {
   return mount(Slideshow, {
@@ -71,8 +77,7 @@ function mountSlideshow() {
       default: ({ currentIndex }) => h(mockHeroSlideComponent, { currentIndex }), // send the local currentIndex variable to mockHeroSlideComponent component as props
     },
     global: {
-      provide: { [useIsOnMobileKey]: true },
-      plugins: [router],
+      plugins: [router, pinia],
     },
   })
 }

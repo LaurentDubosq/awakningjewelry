@@ -1,5 +1,6 @@
 import { getSiteMenu } from '@/data/dataFetchers'
-import { useIsOnMobile } from '@/composables/useIsOnMobile'
+import { createTestingPinia } from '@pinia/testing'
+import { useIsOnMobileStore } from '@/stores/isOnMobile'
 import router from '@/router'
 import { flushPromises, mount } from '@vue/test-utils'
 import App from '@/App.vue'
@@ -12,6 +13,9 @@ import { nextTick } from 'vue'
 // Initialize variables able to work with "vi.mock" (because of the vi.mock hoisting phase)
 var frontDataBase
 var mockPagesMetaData
+
+// Initialize store
+const pinia = createTestingPinia()
 
 // Store other database data after the ESM initialization phase
 const mockSiteMenuResult = {
@@ -32,20 +36,16 @@ vi.mock('@/data/dataFetchers', async () => {
 })
 getSiteMenu.mockReturnValue(mockSiteMenuResult)
 
-// Mock composable
-vi.mock('@/composables/useIsOnMobile', () => {
-  return {
-    useIsOnMobile: vi.fn(),
-  }
-})
-useIsOnMobile.mockReturnValue(true)
+// Mock the IsOnMobile's value store to set the environment to mobile by default
+const isOnMobileStore = useIsOnMobileStore()
+isOnMobileStore.isOnMobile = true
 
 // Component Factory
 function mountApp() {
   return mount(App, {
     attachTo: document.body,
     global: {
-      plugins: [router],
+      plugins: [router, pinia],
       stubs: {
         'router-view': true,
         SiteNav,
@@ -60,6 +60,7 @@ describe('App.vue', () => {
 
   beforeEach(async () => {
     wrapper = mountApp()
+    isOnMobileStore.isOnMobile = true // reset the environment to mobile
   })
 
   afterEach(() => {
@@ -258,7 +259,7 @@ describe('App.vue', () => {
   describe('SiteNav.vue', () => {
     test("send properly the 'siteMenu' through 'siteMenu' provider by testing the first site navigation item display", async () => {
       // Set the desktop environment
-      useIsOnMobile.mockReturnValue(false)
+      isOnMobileStore.isOnMobile = false
 
       // Remount the component with environment updated
       wrapper = mountApp()
@@ -271,9 +272,6 @@ describe('App.vue', () => {
 
       // Assert the site menu is rendered
       expect(item.exists()).toBeTruthy()
-
-      // Set back the environment to mobile
-      useIsOnMobile.mockReturnValue(true)
     })
   })
 

@@ -4,11 +4,15 @@ import { ref, type Ref, onMounted, onUnmounted } from 'vue'
 // Get the SCSS desktop breakpoint
 const awakningBreakpointDesktop = parseFloat(SASSCONSTANTS.AwakningBreakpointDesktop)
 
-// Detects mobile/desktop environment at initial render
-const isOnMobile: Ref<boolean> = ref(window.innerWidth < awakningBreakpointDesktop)
+// Check if the screen is in mobile mode
+const checkIsOnMobile = (): boolean => window.innerWidth < awakningBreakpointDesktop
 
+// Detects mobile/desktop environment at initial render
+const isOnMobile: Ref<boolean> = ref(checkIsOnMobile())
+
+// Update the state at every window resize
 const updateIsOnMobile = () => {
-  isOnMobile.value = window.innerWidth < awakningBreakpointDesktop
+  isOnMobile.value = checkIsOnMobile()
 }
 
 export const useIsOnMobile = (): Ref<boolean> => {

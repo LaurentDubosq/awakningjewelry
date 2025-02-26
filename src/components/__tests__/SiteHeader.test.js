@@ -1,10 +1,5 @@
 import { flushPromises, mount } from '@vue/test-utils'
-import {
-  isBurgerMenuOpenKey,
-  useIsOnMobileKey,
-  toggleBurgerMenuKey,
-  siteMenuKey,
-} from '@/utils/injectionkeys'
+import { isBurgerMenuOpenKey, toggleBurgerMenuKey, siteMenuKey } from '@/utils/injectionkeys'
 import router from '@/router'
 import SiteHeader from '@/components/SiteHeader.vue'
 import BurgerMenuToggle from '@/components/BurgerMenuToggle.vue'
@@ -12,9 +7,13 @@ import SiteLogo from '@/components/SiteLogo.vue'
 import SiteNav from '@/components/SiteNav.vue'
 import SiteHeaderIcon from '@/components/SiteHeaderIcon.vue'
 import frontDataBase from '../../../db.json'
+import { createTestingPinia } from '@pinia/testing'
+import { useIsOnMobileStore } from '@/stores/isOnMobile'
 
+// Initializations
 const mockSiteMenu = frontDataBase['siteMenu']
 let toggleBurgerMenu = vi.fn()
+const pinia = createTestingPinia()
 
 // Mock the fetcher used in the mocked router
 vi.mock('@/data/dataFetchers', () => {
@@ -23,13 +22,16 @@ vi.mock('@/data/dataFetchers', () => {
   }
 })
 
+// Mock the IsOnMobile's value store to mobile environment by default
+const isOnMobileStore = useIsOnMobileStore()
+isOnMobileStore.isOnMobile = true
+
 // Component Factory
 function mountSiteHeader(providers = {}) {
   return mount(SiteHeader, {
     global: {
-      plugins: [router],
+      plugins: [router, pinia],
       provide: {
-        [useIsOnMobileKey]: true, // set mobile environment by default
         [isBurgerMenuOpenKey]: false,
         [toggleBurgerMenuKey]: toggleBurgerMenu,
         [siteMenuKey]: mockSiteMenu,
@@ -45,6 +47,10 @@ function mountSiteHeader(providers = {}) {
 describe('SiteHeader.vue', () => {
   let wrapper
 
+  beforeEach(() => {
+    isOnMobileStore.isOnMobile = true // reset the environment to mobile
+  })
+
   // Smoke Tests
   test('mounts successfully', () => {
     // Assert the testing environement is ready for mobile initial render
@@ -52,7 +58,8 @@ describe('SiteHeader.vue', () => {
     expect(wrapper.exists()).toBeTruthy()
 
     // Assert the testing environement is ready for desktop initial render
-    wrapper = mountSiteHeader({ [useIsOnMobileKey]: false })
+    isOnMobileStore.isOnMobile = false // set environment to desktop
+    wrapper = mountSiteHeader()
     expect(wrapper.exists()).toBeTruthy()
   })
 
@@ -65,7 +72,8 @@ describe('SiteHeader.vue', () => {
 
     // Because the burger menu toggle is critical we also check that the component is not rendered on desktop
     test('is not rendered on desktop', () => {
-      wrapper = mountSiteHeader({ [useIsOnMobileKey]: false })
+      isOnMobileStore.isOnMobile = false // set environment to desktop
+      wrapper = mountSiteHeader()
       const BurgerMenuToggleComponent = wrapper.findComponent(BurgerMenuToggle)
       expect(BurgerMenuToggleComponent.exists()).toBeFalsy()
     })
@@ -90,7 +98,8 @@ describe('SiteHeader.vue', () => {
 
   describe('SiteNav.vue', () => {
     test('is rendered on desktop', async () => {
-      wrapper = mountSiteHeader({ [useIsOnMobileKey]: false })
+      isOnMobileStore.isOnMobile = false // set environment to desktop
+      wrapper = mountSiteHeader()
 
       // Wait after the SiteNav async import has been resolved after the component mounting
       await flushPromises()
@@ -155,7 +164,8 @@ describe('SiteHeader.vue', () => {
 
     // Because the account link is critical we also check that the component is not rendered on desktop
     test('is not rendered on desktop', () => {
-      wrapper = mountSiteHeader({ [useIsOnMobileKey]: false })
+      isOnMobileStore.isOnMobile = false // set environment to desktop
+      wrapper = mountSiteHeader()
       const link = wrapper.find("[data-testid='site-header__account-link']")
       expect(link.exists()).toBeFalsy()
     })

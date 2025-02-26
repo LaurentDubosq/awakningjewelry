@@ -7,7 +7,6 @@ import LoadingComponent from '@/components/LoadingComponent.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
 import useIsReducedMotion from '@/composables/useIsReducedMotion'
 import { getHeroSlides } from '@/data/dataFetchers'
-import { useIsOnMobileKey } from '@/utils/injectionkeys'
 import frontDataBase from '../../../db.json'
 import router from '@/router'
 import { createPinia } from 'pinia'
@@ -49,7 +48,6 @@ function mountHero() {
   return mount(Hero, {
     attachTo: document.body,
     global: {
-      provide: { [useIsOnMobileKey]: true },
       plugins: [createPinia(), router],
     },
   })

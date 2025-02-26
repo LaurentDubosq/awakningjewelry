@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {
   computed,
-  inject,
   nextTick,
   onMounted,
   onUnmounted,
@@ -10,10 +9,11 @@ import {
   type ComputedRef,
   type Ref,
 } from 'vue'
+import { useIsOnMobileStore } from '@/stores/isOnMobile'
+import { storeToRefs } from 'pinia'
 import SlideshowAutorotationButton from './SlideshowAutorotationButton.vue'
 import SlideshowSlickSlider from './SlideshowSlickSlider.vue'
 import { useGetClientHeightAtElementResize } from '@/composables/useGetClientHeightAtElementResize'
-import { useIsOnMobileKey } from '@/utils/injectionkeys'
 import useIsReducedMotion from '@/composables/useIsReducedMotion'
 
 /****************/
@@ -25,7 +25,8 @@ const { slidesLength } = defineProps({
   slidesLength: { type: Number, required: true },
 })
 // Get the environement to restrains the position calculation of slick slider to mobile
-const useIsOnMobile: Ref<boolean> | undefined = inject(useIsOnMobileKey)
+const isOnMobileStore = useIsOnMobileStore()
+const { isOnMobile } = storeToRefs(isOnMobileStore)
 
 /*******************/
 /* Reactive states */
@@ -207,7 +208,7 @@ onMounted(() => {
 
     // Set the slick slider position only on mobile
     watch(clientHeight, () => {
-      if (useIsOnMobile && useIsOnMobile.value) {
+      if (isOnMobile && isOnMobile.value) {
         slickSliderTopPosition.value = clientHeight
       } else {
         slickSliderTopPosition.value = null

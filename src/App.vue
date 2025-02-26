@@ -13,6 +13,7 @@ import MyTransition from './components/MyTransition.vue'
 import type { SiteMenuItem } from './types/components'
 import { getSiteMenu } from './data/dataFetchers'
 import { siteMenuKey } from './utils/injectionkeys'
+import type { UseFetchWithStateReturn } from './types/fetch'
 
 const siteMenuResult: UseFetchWithStateReturn<SiteMenuItem[]> = getSiteMenu()
 
@@ -72,17 +73,6 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('resize', closeBurgerMenuOnDesktop)
 })
-
-/********************/
-/* Global Variables */
-/********************/
-
-// Provide mobile/desktop environment (to: whole app)
-import { useIsOnMobile } from './composables/useIsOnMobile'
-import { useIsOnMobileKey } from './utils/injectionkeys'
-import type { UseFetchWithStateReturn } from './types/fetch'
-
-provide(useIsOnMobileKey, useIsOnMobile())
 </script>
 
 <template>

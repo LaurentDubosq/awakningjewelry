@@ -6,4 +6,3 @@ export const siteMenuKey = Symbol() as InjectionKey<UseFetchWithStateReturn<Site
 export const toggleBurgerMenuKey = Symbol() as InjectionKey<() => void>
 export const closeSiteNavDropdownKey = Symbol() as InjectionKey<() => void>
 export const isBurgerMenuOpenKey = Symbol() as InjectionKey<Ref<boolean>>
-export const useIsOnMobileKey = Symbol() as InjectionKey<Ref<boolean>>

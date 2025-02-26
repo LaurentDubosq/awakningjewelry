@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { inject, type Ref, defineAsyncComponent } from 'vue'
-import { useIsOnMobileKey } from '@/utils/injectionkeys'
+import { defineAsyncComponent } from 'vue'
+import { useIsOnMobileStore } from '@/stores/isOnMobile'
+import { storeToRefs } from 'pinia'
 import BurgerMenuToggle from './BurgerMenuToggle.vue'
 import SiteLogo from './SiteLogo.vue'
 import SiteHeaderIcon from './SiteHeaderIcon.vue'
@@ -10,8 +11,9 @@ import useGetAsyncComponent from '@/composables/useGetAsyncComponent'
 const SiteNav = defineAsyncComponent(useGetAsyncComponent('SiteNav')) // Async import because mobile environment doesn't need the siteNav
 
 /* Get the current display platform (mobile/desktop) to condition the asynchronous component imports. It also provides a more
- readable code and the possibility of testing the renders according to environments */
-const useIsOnMobile: Ref<boolean> | undefined = inject(useIsOnMobileKey)
+readable code and the possibility of testing the renders according to environments */
+const isOnMobileStore = useIsOnMobileStore()
+const { isOnMobile } = storeToRefs(isOnMobileStore)
 </script>
 
 <template>
@@ -21,7 +23,7 @@ const useIsOnMobile: Ref<boolean> | undefined = inject(useIsOnMobileKey)
         <div
           class="site-header__left-container"
           data-testid="site-header__left-container"
-          v-if="useIsOnMobile"
+          v-if="isOnMobile"
         >
           <BurgerMenuToggle />
         </div>
@@ -36,12 +38,12 @@ const useIsOnMobile: Ref<boolean> | undefined = inject(useIsOnMobileKey)
           </RouterLink>
         </div>
         <div class="site-header__right-container">
-          <SiteNav v-if="!useIsOnMobile" />
+          <SiteNav v-if="!isOnMobile" />
           <RouterLink
             to="/account"
             title="Go to my account"
             data-testid="site-header__account-link"
-            v-if="useIsOnMobile"
+            v-if="isOnMobile"
           >
             <SiteHeaderIcon alternativeText="Account">
               <IconPerson width="27" aria-hidden="true" />
