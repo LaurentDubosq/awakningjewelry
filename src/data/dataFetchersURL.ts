@@ -1,17 +1,19 @@
+export const LAYOUT_API_BASE_URL = import.meta.env.VITE_LAYOUT_API_URL
+
 /* Router */
-export const pagesMetaDataUrl: string = 'http://localhost:3001/pagesMetaData'
+export const pagesMetaDataUrl: string = `${LAYOUT_API_BASE_URL}/pagesMetaData`
 
 /* SiteNav & BurgerMenu */
-export const siteMenuUrl: string = 'http://localhost:3001/siteMenu'
+export const siteMenuUrl: string = `${LAYOUT_API_BASE_URL}/siteMenu`
 
 /* HeroSlides */
-export const heroSlidesURL: string = 'http://localhost:3001/heroSlides'
+export const heroSlidesURL: string = `${LAYOUT_API_BASE_URL}/heroSlides`
 
 /* StatementMission */
-export const statementMissionURL: string = 'http://localhost:3001/statementMission'
+export const statementMissionURL: string = `${LAYOUT_API_BASE_URL}/statementMission`
 
 /* CollectionsByGender */
-export const collectionsByGenderURL: string = 'http://localhost:3001/collectionsByGender'
+export const collectionsByGenderURL: string = `${LAYOUT_API_BASE_URL}/collectionsByGender`
 
 /* Promotions */
-export const promotionsURL: string = 'http://localhost:3001/promotions'
+export const promotionsURL: string = `${LAYOUT_API_BASE_URL}/promotions`
