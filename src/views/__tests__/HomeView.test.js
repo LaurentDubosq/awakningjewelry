@@ -9,9 +9,30 @@ import ProductListingItem from '@/components/ProductListingItem.vue'
 import frontDataBase from '../../../db.json'
 import { getStatementMission, getCollectionsByGender, getPromotions } from '@/data/dataFetchers'
 import router from '@/router'
-import { createPinia } from 'pinia'
+import { defineStore } from 'pinia'
+import { createTestingPinia } from '@pinia/testing'
+import { ref } from 'vue'
 
-// Mocks data
+/************/
+/* Hoisting */
+/************/
+
+// Mock the data fetchers
+vi.mock('@/data/dataFetchers', () => {
+  return {
+    getPagesMetaData: vi.fn().mockReturnValue(undefined), // used in the mocked router
+    getStatementMission: vi.fn(),
+    getCollectionsByGender: vi.fn(),
+    getPromotions: vi.fn(),
+  }
+})
+
+/*******************/
+/* Initializations */
+/*******************/
+
+/* Data */
+
 const mockStatementBannerResult = {
   data: frontDataBase.statementMission,
   status: 'resolved',
@@ -31,18 +52,73 @@ const mockProductsResult = {
 const mockProductsData = mockProductsResult.data
 const mockProductsStatus = mockProductsResult.status
 
-// Mocks fetchers with data
-vi.mock('@/data/dataFetchers', () => {
+/* Stores */
+
+// Initialize a testing pinia instance
+const pinia = createTestingPinia()
+
+// Create the stores
+const useStatementMissionResultStore = defineStore('StatementMissionResult', () => {
+  const statementMissionResult = ref(mockStatementBannerResult)
+  const statementMissionData = ref(mockStatementBannerData)
+  const statementMissionFetchStatus = ref(mockStatementBannerStatus)
+  const updateStatementMissionResult = (newStatementMissionResult) => {
+    statementMissionResult.value = newStatementMissionResult
+  }
   return {
-    getPagesMetaData: vi.fn().mockReturnValue(undefined), // used in the mocked router
-    getStatementMission: vi.fn(),
-    getCollectionsByGender: vi.fn(),
-    getPromotions: vi.fn(),
+    statementMissionResult,
+    statementMissionData,
+    statementMissionFetchStatus,
+    updateStatementMissionResult,
   }
 })
+
+const useCollectionsByGenderResultStore = defineStore('CollectionsByGenderResult', () => {
+  const collectionsByGenderResult = ref(mockCollectionsByGenderResult)
+  const collectionsByGenderData = ref(mockCollectionsByGenderData)
+  const collectionsByGenderFetchStatus = ref(mockCollectionsByGenderStatus)
+  const updateCollectionsByGenderResult = (newCollectionsByGenderResult) => {
+    collectionsByGenderResult.value = newCollectionsByGenderResult
+  }
+  return {
+    collectionsByGenderResult,
+    collectionsByGenderData,
+    collectionsByGenderFetchStatus,
+    updateCollectionsByGenderResult,
+  }
+})
+
+const usePromotionsResultStore = defineStore('PromotionsResult', () => {
+  const promotionsResult = ref(mockProductsResult)
+  const promotionsResultData = ref(mockProductsData)
+  const promotionsResultFetchStatus = ref(mockProductsStatus)
+  const updatePromotionsResult = (newPromotionsResult) => {
+    promotionsResult.value = newPromotionsResult
+  }
+  return {
+    promotionsResult,
+    promotionsResultData,
+    promotionsResultFetchStatus,
+    updatePromotionsResult,
+  }
+})
+
+// Initialize the stores
+useStatementMissionResultStore()
+useCollectionsByGenderResultStore()
+usePromotionsResultStore()
+
+/*******************************/
+/* Additional Mock Assignation */
+/*******************************/
+
 getStatementMission.mockReturnValue(mockStatementBannerResult)
 getCollectionsByGender.mockReturnValue(mockCollectionsByGenderResult)
 getPromotions.mockReturnValue(mockProductsResult)
+
+/*********/
+/* Build */
+/*********/
 
 // Component Factory
 function mountHomeview() {
@@ -51,10 +127,14 @@ function mountHomeview() {
       stubs: {
         Hero: true,
       },
-      plugins: [createPinia(), router],
+      plugins: [router, pinia],
     },
   })
 }
+
+/********/
+/* Test */
+/********/
 
 describe('HomeView.vue', () => {
   let wrapper
