@@ -45,12 +45,12 @@ const mockCollectionsByGenderResult = {
 }
 const mockCollectionsByGenderData = mockCollectionsByGenderResult.data
 const mockCollectionsByGenderStatus = mockCollectionsByGenderResult.status
-const mockProductsResult = {
+const mockPromotionsResult = {
   data: frontDataBase.promotions,
   status: 'resolved',
 }
-const mockProductsData = mockProductsResult.data
-const mockProductsStatus = mockProductsResult.status
+const mockPromotionsData = mockPromotionsResult.data
+const mockPromotionsStatus = mockPromotionsResult.status
 
 /* Stores */
 
@@ -89,9 +89,9 @@ const useCollectionsByGenderResultStore = defineStore('CollectionsByGenderResult
 })
 
 const usePromotionsResultStore = defineStore('PromotionsResult', () => {
-  const promotionsResult = ref(mockProductsResult)
-  const promotionsResultData = ref(mockProductsData)
-  const promotionsResultFetchStatus = ref(mockProductsStatus)
+  const promotionsResult = ref(mockPromotionsResult)
+  const promotionsResultData = ref(mockPromotionsData)
+  const promotionsResultFetchStatus = ref(mockPromotionsStatus)
   const updatePromotionsResult = (newPromotionsResult) => {
     promotionsResult.value = newPromotionsResult
   }
@@ -114,7 +114,7 @@ usePromotionsResultStore()
 
 getStatementMission.mockReturnValue(mockStatementBannerResult)
 getCollectionsByGender.mockReturnValue(mockCollectionsByGenderResult)
-getPromotions.mockReturnValue(mockProductsResult)
+getPromotions.mockReturnValue(mockPromotionsResult)
 
 /*********/
 /* Build */
@@ -277,8 +277,8 @@ describe('HomeView.vue', () => {
   describe('ProductListing.vue', () => {
     let ProductListingComponent
     const mockTitle = 'Promotions'
-    const mockProducts = mockProductsData
-    const mockProductsLength = mockProducts.length
+    const mockPromotions = mockPromotionsData
+    const mockPromotionsLength = mockPromotions.length
 
     beforeEach(() => {
       ProductListingComponent = wrapper.findComponent(ProductListing)
@@ -292,10 +292,10 @@ describe('HomeView.vue', () => {
       expect(ProductListingComponent.props('title')).toBe(mockTitle)
 
       // Assert its "products" prop has the correct value
-      expect(ProductListingComponent.props('products')).toMatchObject(mockProducts)
+      expect(ProductListingComponent.props('products')).toMatchObject(mockPromotions)
 
       // Assert its "fetchStatus" prop has the correct value
-      expect(ProductListingComponent.props('fetchStatus')).toMatchObject(mockProductsStatus)
+      expect(ProductListingComponent.props('fetchStatus')).toMatchObject(mockPromotionsStatus)
     })
 
     test('renders its data', () => {
@@ -311,13 +311,13 @@ describe('HomeView.vue', () => {
       expect(title.text()).toContain(mockTitle)
 
       // Assert all the ProductListingComponent component has been rendered
-      expect(ProductListingItemComponents).toHaveLength(mockProductsLength)
+      expect(ProductListingItemComponents).toHaveLength(mockPromotionsLength)
 
       /**************************/
       /* ProductListingItem.vue */
       /**************************/
 
-      // Assert any product is rendered with necessary information
+      // Assert any product(promotion) is rendered with necessary information
       ProductListingItemComponents.forEach((Product, index) => {
         const link = Product.find("[data-testid='product-listing__item-link']")
         const image = Product.find("[data-testid='product-listing__item-image']")
@@ -326,7 +326,7 @@ describe('HomeView.vue', () => {
         const discountedPrice = Product.find(
           "[ data-testid='product-listing__item-discounted-price']",
         )
-        const mockProduct = mockProducts[index]
+        const mockProduct = mockPromotions[index]
         const mockProductURL = mockProduct.url
         const mockProductImageURL = mockProduct.image.url
         const mockProductImageALT = mockProduct.image.alt
