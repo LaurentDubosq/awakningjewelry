@@ -8,23 +8,46 @@ import SiteNav from '@/components/SiteNav.vue'
 import SiteHeaderIcon from '@/components/SiteHeaderIcon.vue'
 import frontDataBase from '../../../db.json'
 import { createTestingPinia } from '@pinia/testing'
-import { useIsOnMobileStore } from '@/stores/isOnMobile'
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
-// Initializations
-const mockSiteMenu = frontDataBase['siteMenu']
-let toggleBurgerMenu = vi.fn()
-const pinia = createTestingPinia()
+/************/
+/* Hoisting */
+/************/
 
-// Mock the fetcher used in the mocked router
+// Mock the "getPagesMetaData" data fetcher used in the mocked router
 vi.mock('@/data/dataFetchers', () => {
   return {
     getPagesMetaData: vi.fn().mockReturnValue(undefined),
   }
 })
 
-// Mock the IsOnMobile's value store to mobile environment by default
+/*******************/
+/* Initializations */
+/*******************/
+
+/* Data */
+
+const mockSiteMenu = frontDataBase.siteMenu
+let toggleBurgerMenu = vi.fn()
+
+/* Stores */
+
+// Initialize a testing pinia instance
+const pinia = createTestingPinia()
+
+// Create the stores
+const useIsOnMobileStore = defineStore('IsOnMobile', () => {
+  const isOnMobile = ref(true)
+  return { isOnMobile }
+})
+
+// Initialize the stores
 const isOnMobileStore = useIsOnMobileStore()
-isOnMobileStore.isOnMobile = true
+
+/*********/
+/* Build */
+/*********/
 
 // Component Factory
 function mountSiteHeader(providers = {}) {
@@ -43,6 +66,10 @@ function mountSiteHeader(providers = {}) {
     },
   })
 }
+
+/********/
+/* Test */
+/********/
 
 describe('SiteHeader.vue', () => {
   let wrapper

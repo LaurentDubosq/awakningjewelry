@@ -1,6 +1,5 @@
 import { getSiteMenu } from '@/data/dataFetchers'
 import { createTestingPinia } from '@pinia/testing'
-import { useIsOnMobileStore } from '@/stores/isOnMobile'
 import router from '@/router'
 import { flushPromises, mount } from '@vue/test-utils'
 import App from '@/App.vue'
@@ -8,24 +7,20 @@ import BurgerMenu from '@/components/BurgerMenu.vue'
 import SiteHeader from '@/components/SiteHeader.vue'
 import SiteNav from '@/components/SiteNav.vue'
 import { RouterView } from 'vue-router'
-import { nextTick } from 'vue'
+import { nextTick, ref } from 'vue'
+import { defineStore } from 'pinia'
 
-// Initialize variables able to work with "vi.mock" (because of the vi.mock hoisting phase)
+/************/
+/* Hoisting */
+/************/
+
+// Initialize variables able to work with "vi.mock" for the following "getPagesMetaData" mock
 var frontDataBase
 var mockPagesMetaData
 
-// Initialize store
-const pinia = createTestingPinia()
-
-// Store other database data after the ESM initialization phase
-const mockSiteMenuResult = {
-  data: { value: frontDataBase['siteMenu'] },
-  status: { value: 'resolved' },
-}
-
 // Mocks fetchers with data
 vi.mock('@/data/dataFetchers', async () => {
-  // Necessary data method to use to mock directly with data
+  // Necessary method to provide data to "getPagesMetaData" fetcher
   frontDataBase = await import('../db.json')
   mockPagesMetaData = frontDataBase['pagesMetaData']
 
@@ -34,11 +29,40 @@ vi.mock('@/data/dataFetchers', async () => {
     getSiteMenu: vi.fn(),
   }
 })
+
+/*******************/
+/* Initializations */
+/*******************/
+
+/* Data */
+const mockSiteMenuResult = {
+  data: { value: frontDataBase['siteMenu'] },
+  status: { value: 'resolved' },
+}
+
+/* Stores */
+
+// Initialize a testing pinia instance
+const pinia = createTestingPinia()
+
+// Create the stores
+const useIsOnMobileStore = defineStore('IsOnMobile', () => {
+  const isOnMobile = ref(true)
+  return { isOnMobile }
+})
+
+// Initialize the stores
+const isOnMobileStore = useIsOnMobileStore()
+
+/*******************************/
+/* Additional Mock Assignation */
+/*******************************/
+
 getSiteMenu.mockReturnValue(mockSiteMenuResult)
 
-// Mock the IsOnMobile's value store to set the environment to mobile by default
-const isOnMobileStore = useIsOnMobileStore()
-isOnMobileStore.isOnMobile = true
+/*********/
+/* Build */
+/*********/
 
 // Component Factory
 function mountApp() {
@@ -55,12 +79,16 @@ function mountApp() {
   })
 }
 
+/********/
+/* Test */
+/********/
+
 describe('App.vue', () => {
   let wrapper
 
   beforeEach(async () => {
-    wrapper = mountApp()
     isOnMobileStore.isOnMobile = true // reset the environment to mobile
+    wrapper = mountApp()
   })
 
   afterEach(() => {
