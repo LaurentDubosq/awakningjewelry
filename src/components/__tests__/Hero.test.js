@@ -5,58 +5,103 @@ import Slideshow from '@/components/Slideshow.vue'
 import HeroSlide from '@/components/HeroSlide.vue'
 import LoadingComponent from '@/components/LoadingComponent.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
-import useIsReducedMotion from '@/composables/useIsReducedMotion'
 import { getHeroSlides } from '@/data/dataFetchers'
 import frontDataBase from '../../../db.json'
 import router from '@/router'
-import { createPinia } from 'pinia'
+import { defineStore } from 'pinia'
+import { createTestingPinia } from '@pinia/testing'
 
-// Mocks data
-const mockHeroSlidesResult = {
-  data: frontDataBase.heroSlides,
-  status: 'resolved',
-}
-const mockHeroSlidesData = mockHeroSlidesResult.data
-const mockHeroSlidesLength = mockHeroSlidesData.length
+/************/
+/* Hoisting */
+/************/
 
-// Mock the browsers's resizeObserver API
-global.ResizeObserver = class {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-}
+// Mock the "useGetClientHeightAtElementResize" composable
+vi.mock('@/composables/useGetClientHeightAtElementResize', () => {
+  return {
+    useGetClientHeightAtElementResize: vi.fn().mockReturnValue(ref(100)),
+  }
+})
 
-// Mock the fetcher used in the get hero slides data
+// Mock the "getHeroSlides" and "getPagesMetaData" data fetchers
 vi.mock('@/data/dataFetchers', () => {
   return {
     getHeroSlides: vi.fn(),
     getPagesMetaData: vi.fn().mockReturnValue(undefined),
   }
 })
+
+/*******************/
+/* Initializations */
+/*******************/
+
+/* Data */
+
+const mockHeroSlidesResult = {
+  data: frontDataBase.heroSlides,
+  status: 'resolved',
+}
+const mockHeroSlidesData = mockHeroSlidesResult.data
+const mockHeroSlidesDataLength = mockHeroSlidesData.length
+const mockHeroSlidesStatus = mockHeroSlidesResult.status
+
+/* Stores */
+
+// Initialize a testing pinia instance
+const pinia = createTestingPinia()
+
+// Create the stores
+const useHeroSlidesResultStore = defineStore('HeroSlidesResult', () => {
+  const heroSlidesResult = ref(mockHeroSlidesResult)
+  const heroSlidesData = ref(mockHeroSlidesData)
+  const heroSlidesDataLength = ref(mockHeroSlidesDataLength)
+  const heroSlidesFetchStatus = ref(mockHeroSlidesStatus)
+  return { heroSlidesResult, heroSlidesData, heroSlidesDataLength, heroSlidesFetchStatus }
+})
+
+const useIsReducedMotionStore = defineStore('IsReducedMotion', () => {
+  const isReducedMotion = ref(false)
+  return { isReducedMotion }
+})
+
+const useIsOnMobileStore = defineStore('IsOnMobile', () => {
+  const isOnMobile = ref(true)
+  return { isOnMobile }
+})
+
+// Initialize the stores
+const isHeroSlidesResultStore = useHeroSlidesResultStore()
+useIsReducedMotionStore()
+useIsOnMobileStore()
+
+/*******************************/
+/* Additional Mock Assignation */
+/*******************************/
+
 getHeroSlides.mockReturnValue(mockHeroSlidesResult)
 
-// Mock the useIsReducedMotion composable
-vi.mock('@/composables/useIsReducedMotion', () => {
-  return {
-    default: vi.fn(),
-  }
-})
-useIsReducedMotion.mockReturnValue(ref(false)) // the false value means there is not animation reduction activated. Everything is set to normal.
+/*********/
+/* Build */
+/*********/
 
 // Component Factory
 function mountHero() {
   return mount(Hero, {
     attachTo: document.body,
     global: {
-      plugins: [createPinia(), router],
+      plugins: [router, pinia],
     },
   })
 }
+
+/********/
+/* Test */
+/********/
 
 describe('Hero.vue', () => {
   let wrapper
 
   beforeEach(() => {
+    isHeroSlidesResultStore.heroSlidesFetchStatus = 'resolved' // reset to the default value
     wrapper = mountHero()
   })
 
@@ -77,14 +122,14 @@ describe('Hero.vue', () => {
       expect(SlideshowComponent.exists()).toBeTruthy()
 
       // Assert its "slidesLength" prop value has the correct value
-      expect(SlideshowComponent.props('slidesLength')).toMatchObject(mockHeroSlidesLength)
+      expect(SlideshowComponent.props('slidesLength')).toMatchObject(mockHeroSlidesDataLength)
     })
 
     test('renders all its expected slick slider buttons', () => {
       const slickSliderButtons = wrapper.findAll("[data-testid='slideshow__slick-slider-button']")
 
       // Assert all its buttons(items) are rendered
-      expect(slickSliderButtons).toHaveLength(mockHeroSlidesLength)
+      expect(slickSliderButtons).toHaveLength(mockHeroSlidesDataLength)
     })
 
     describe('HeroSlide.vue:', () => {
@@ -96,7 +141,7 @@ describe('Hero.vue', () => {
 
       test('are well rendered as slot content of SlideShow.vue', () => {
         // Assert all the expected HeroSlide component are rendered
-        expect(HeroSlideComponents).toHaveLength(mockHeroSlidesLength)
+        expect(HeroSlideComponents).toHaveLength(mockHeroSlidesDataLength)
 
         // Assert each HeroSlide component is rendered with necessary information
         HeroSlideComponents.forEach((HeroSlideComponent, index) => {
@@ -106,7 +151,7 @@ describe('Hero.vue', () => {
           expect(HeroSlideComponent.props('slide')).toMatchObject(mockSlide)
 
           // Assert the "slidesLength" prop has the correct value
-          expect(HeroSlideComponent.props('slidesLength')).toBe(mockHeroSlidesLength)
+          expect(HeroSlideComponent.props('slidesLength')).toBe(mockHeroSlidesDataLength)
 
           // Assert the "slideIndex" prop has the correct value
           expect(HeroSlideComponent.props('slideIndex')).toBe(index)
@@ -151,7 +196,7 @@ describe('Hero.vue', () => {
           expect(link.attributes('href')).toContain(mockSlideLinkURL)
 
           // Assert the "slidesLength" prop value is well setted
-          expect(slide.props('slidesLength')).toBe(mockHeroSlidesLength)
+          expect(slide.props('slidesLength')).toBe(mockHeroSlidesDataLength)
 
           // Assert the "index" prop value is well setted
           expect(slide.props('slideIndex')).toBe(index)
@@ -183,7 +228,7 @@ describe('Hero.vue', () => {
 
     test("when the data fetcher status is 'pending', the loading component is rendered", () => {
       // As Hero component has its data fetcher mocked, we have to set its status to "pending" manualy
-      mockHeroSlidesResult.status = 'pending'
+      isHeroSlidesResultStore.heroSlidesFetchStatus = 'pending'
 
       // Remount the component to simulate the pending status
       wrapper = mountHero()
@@ -191,9 +236,6 @@ describe('Hero.vue', () => {
       // Assert the loading component is rendered
       const loadingComponent = wrapper.findComponent(LoadingComponent)
       expect(loadingComponent.exists()).toBeTruthy()
-
-      // Reset the mock fetch status to "resolved" for following tests
-      mockHeroSlidesResult.status = 'resolved'
     })
 
     test("when the data fetcher status is 'resolved', its data is rendered", () => {
@@ -204,7 +246,7 @@ describe('Hero.vue', () => {
 
     test("when the data fetcher status is 'rejected', the error component is rendered", () => {
       // As Hero component has its data fetcher mocked, we have to set its status to "rejected" manualy
-      mockHeroSlidesResult.status = 'rejected'
+      isHeroSlidesResultStore.heroSlidesFetchStatus = 'rejected'
 
       // Remount the component to simulate the rejected status
       wrapper = mountHero()
@@ -212,9 +254,6 @@ describe('Hero.vue', () => {
       // Assert the error component is rendered
       const errorComponent = wrapper.findComponent(ErrorComponent)
       expect(errorComponent.exists()).toBeTruthy()
-
-      // Reset the mock fetch status to "resolved" for following tests
-      mockHeroSlidesResult.status = 'resolved'
     })
   })
 })

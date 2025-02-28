@@ -1,7 +1,7 @@
 import { ref, type Ref, onUnmounted } from 'vue'
 
 /* This composable return the reduced motion statut of the user operating system and/or the browser */
-export default function isReducedMotion() {
+export default function useIsReducedMotion() {
   // Get the reduce motion preference object
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
 

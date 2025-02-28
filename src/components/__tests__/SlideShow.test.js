@@ -6,17 +6,43 @@ import SlideshowSlickSlider from '@/components/SlideshowSlickSlider.vue'
 import IconPause from '@/components/icons/IconPause.vue'
 import IconPlay from '@/components/icons/IconPlay.vue'
 import HeroSlide from '@/components/HeroSlide.vue'
-import useIsReducedMotion from '@/composables/useIsReducedMotion'
 import frontDataBase from '../../../db.json'
 import { createTestingPinia } from '@pinia/testing'
-import { useIsOnMobileStore } from '@/stores/isOnMobile'
 import { h, defineComponent } from 'vue'
 import router from '@/router'
+import { defineStore } from 'pinia'
 
-// Initializations
+/************/
+/* Hoisting */
+/************/
+
+// Mock the "useGetClientHeightAtElementResize" composable
+vi.mock('@/composables/useGetClientHeightAtElementResize', () => {
+  return {
+    useGetClientHeightAtElementResize: vi.fn().mockReturnValue(ref(100)),
+  }
+})
+
+// Mock the "getPagesMetaData" data fetcher used in the mocked router
+vi.mock('@/data/dataFetchers', () => {
+  return {
+    getPagesMetaData: vi.fn().mockReturnValue(undefined),
+  }
+})
+
+/*******************/
+/* Initializations */
+/*******************/
+
+/* Data */
+
 const mockSlides = frontDataBase.heroSlides.slice(0, 2) // only two slides are enough to perform the tests
 const mockSlidesLength = mockSlides.length
 const mockCurrentIndex = 0
+
+/* Slot */
+
+// In order to test the dynamic behavior of Slideshow.vue, we need a dummy component to mock the slot with a dynamic content
 const mockHeroSlideComponent = defineComponent({
   props: ['currentIndex'],
   data() {
@@ -39,34 +65,31 @@ const mockHeroSlideComponent = defineComponent({
       v-show="index === currentIndex"
     />
   `,
-}) // In order to test the dynamic behavior of Slideshow.vue, we need a dummy component to mock the slot with a dynamic content
+})
+
+/* Stores */
+
+// Initialize a testing pinia instance
 const pinia = createTestingPinia()
 
-// Mock the browsers's resizeObserver API
-global.ResizeObserver = class {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-}
-
-// Mock the fetcher used in the mocked router
-vi.mock('@/data/dataFetchers', () => {
-  return {
-    getPagesMetaData: vi.fn().mockReturnValue(undefined),
-  }
+// Create the stores
+const useIsReducedMotionStore = defineStore('IsReducedMotion', () => {
+  const isReducedMotion = ref(false)
+  return { isReducedMotion }
 })
 
-// Mock the useIsReducedMotion composable used to prevent autoplay animation
-vi.mock('@/composables/useIsReducedMotion', () => {
-  return {
-    default: vi.fn(),
-  }
+const useIsOnMobileStore = defineStore('IsOnMobile', () => {
+  const isOnMobile = ref(true)
+  return { isOnMobile }
 })
-useIsReducedMotion.mockReturnValue(ref(false)) // the false value means there is not animation reduction activated. Everything is set to normal.
 
-// Mock the IsOnMobile's value store to mobile environment by default
-const isOnMobileStore = useIsOnMobileStore()
-isOnMobileStore.isOnMobile = true
+// Initialize the stores
+const isReducedMotionStore = useIsReducedMotionStore()
+useIsOnMobileStore()
+
+/*********/
+/* Build */
+/*********/
 
 // Component Factory
 function mountSlideshow() {
@@ -82,10 +105,15 @@ function mountSlideshow() {
   })
 }
 
+/********/
+/* Test */
+/********/
+
 describe('Slideshow.vue', () => {
   let wrapper
 
   beforeEach(() => {
+    isReducedMotionStore.isReducedMotion = false // reset to the default value
     wrapper = mountSlideshow()
   })
 
@@ -380,10 +408,10 @@ describe('Slideshow.vue', () => {
     }, 11000)
 
     test('when the user has the reduce motion activated, the autorotation should be pause at initial render', async () => {
-      // Modify the useIsReducedMotion composable to prevent animations
-      useIsReducedMotion.mockReturnValue(ref(true)) // the true value means the animation reduction is activated, the user has decided to block animations.
+      // Enable the reduce motion feature to block animations
+      isReducedMotionStore.isReducedMotion = true
 
-      // Mount the component with the mock updated
+      // Mount the component with the reduce motion feature updated
       wrapper = mountSlideshow()
 
       const HeroSlideComponents = wrapper.findAllComponents(HeroSlide)
@@ -397,9 +425,6 @@ describe('Slideshow.vue', () => {
 
       // Assert the first/starting slide is still rendered
       expect(FirstHeroSlideComponent.isVisible()).toBeTruthy()
-
-      // Reset the useIsReducedMotion composable to not prevent animations for the following tests
-      useIsReducedMotion.mockReturnValue(ref(false))
     })
 
     test('when the user hovers over the slideshow, the autorotation should stop, then when the mouse leaves the slideshow, the autorotation should resume', async () => {

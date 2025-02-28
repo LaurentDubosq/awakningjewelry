@@ -10,11 +10,11 @@ import {
   type Ref,
 } from 'vue'
 import { useIsOnMobileStore } from '@/stores/isOnMobile'
+import { useIsReducedMotionStore } from '@/stores/isReducedMotion'
 import { storeToRefs } from 'pinia'
 import SlideshowAutorotationButton from './SlideshowAutorotationButton.vue'
 import SlideshowSlickSlider from './SlideshowSlickSlider.vue'
 import { useGetClientHeightAtElementResize } from '@/composables/useGetClientHeightAtElementResize'
-import useIsReducedMotion from '@/composables/useIsReducedMotion'
 
 /****************/
 /* Dependencies */
@@ -45,8 +45,9 @@ const isPlayingExplicitly: Ref<boolean | null> = ref(null)
 
 /* Autoplaying Logic */
 onMounted(() => {
-  // Get the dynamic OS/browser "reduced motion" user preference statut
-  const isReducedMotion: Ref<boolean> = useIsReducedMotion()
+  // Get the dynamic OS/browser "reduced motion" user preference statut from store
+  const isReducedMotionStore = useIsReducedMotionStore()
+  const { isReducedMotion } = storeToRefs(isReducedMotionStore)
 
   // Watch its value to toggle the animation in live
   watch(
