@@ -13,9 +13,9 @@ import { defineStore } from 'pinia'
 import { createTestingPinia } from '@pinia/testing'
 import { ref } from 'vue'
 
-/************/
-/* Hoisting */
-/************/
+/**************/
+/* 1.Hoisting */
+/**************/
 
 // Mock the data fetchers
 vi.mock('@/data/dataFetchers', () => {
@@ -27,9 +27,9 @@ vi.mock('@/data/dataFetchers', () => {
   }
 })
 
-/*******************/
-/* Initializations */
-/*******************/
+/********************/
+/* 2.Initialization */
+/********************/
 
 /* Data */
 
@@ -108,17 +108,17 @@ useStatementMissionResultStore()
 useCollectionsByGenderResultStore()
 usePromotionsResultStore()
 
-/*******************************/
-/* Additional Mock Assignation */
-/*******************************/
+/*********************************/
+/* 3.Additional Mock Assignation */
+/*********************************/
 
 getStatementMission.mockReturnValue(mockStatementBannerResult)
 getCollectionsByGender.mockReturnValue(mockCollectionsByGenderResult)
 getPromotions.mockReturnValue(mockPromotionsResult)
 
-/*********/
-/* Build */
-/*********/
+/***********/
+/* 4.Build */
+/***********/
 
 // Component Factory
 function mountHomeview() {
@@ -132,9 +132,9 @@ function mountHomeview() {
   })
 }
 
-/********/
-/* Test */
-/********/
+/**********/
+/* 5.Test */
+/**********/
 
 describe('HomeView.vue', () => {
   let wrapper

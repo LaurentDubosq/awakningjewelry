@@ -6,6 +6,21 @@ import ErrorComponent from '@/components/ErrorComponent.vue'
 import frontDatabase from '../../../db.json'
 import router from '@/router'
 
+/**************/
+/* 1.Hoisting */
+/**************/
+
+// Mock the "getPagesMetaData" data fetcher used in the mocked router
+vi.mock('@/data/dataFetchers', () => {
+  return {
+    getPagesMetaData: vi.fn().mockReturnValue(undefined),
+  }
+})
+
+/********************/
+/* 2.Initialization */
+/********************/
+
 const mockCollectionsResult = {
   data: frontDatabase.collectionsByGender,
   status: 'resolved',
@@ -15,12 +30,9 @@ const mockCollectionsStatus = mockCollectionsResult.status
 const mockCollectionsLength = mockCollectionsData.length
 const mockTitle = 'By gender'
 
-// Mock the fetcher used in the mocked router
-vi.mock('@/data/dataFetchers', () => {
-  return {
-    getPagesMetaData: vi.fn().mockReturnValue(undefined),
-  }
-})
+/***********/
+/* 3.Build */
+/***********/
 
 // Component Factory
 function mountCollectionListing(props) {
@@ -34,6 +46,10 @@ function mountCollectionListing(props) {
     global: { plugins: [router] },
   })
 }
+
+/**********/
+/* 4.Test */
+/**********/
 
 describe('CollectionListing.vue', () => {
   let wrapper

@@ -4,6 +4,10 @@ import LoadingComponent from '@/components/LoadingComponent.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
 import frontDataBase from '../../../db.json'
 
+/********************/
+/* 1.Initialization */
+/********************/
+
 const mockStatementResult = {
   data: frontDataBase.statementMission,
   status: 'resolved',
@@ -15,6 +19,10 @@ const mockStatementText = mockStatementData.text
 const mockStatementImageURL = mockStatementData.image.url
 const mockStatementImageAlt = mockStatementData.image.alt
 
+/***********/
+/* 2.Build */
+/***********/
+
 // Component Factory
 function mountStatementBanner(props) {
   return mount(StatementBanner, {
@@ -25,6 +33,10 @@ function mountStatementBanner(props) {
     },
   })
 }
+
+/**********/
+/* 3.Test */
+/**********/
 
 describe('StatementBanner.vue', () => {
   let wrapper

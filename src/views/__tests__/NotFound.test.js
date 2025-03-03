@@ -1,6 +1,10 @@
 import { mount, RouterLinkStub } from '@vue/test-utils'
 import NotFound from '../NotFound.vue'
 
+/***********/
+/* 1.Build */
+/***********/
+
 // Component Factory
 function mountNotFound() {
   return mount(NotFound, {
@@ -11,6 +15,10 @@ function mountNotFound() {
     },
   })
 }
+
+/**********/
+/* 2.Test */
+/**********/
 
 describe('NotFound.vue', () => {
   let wrapper

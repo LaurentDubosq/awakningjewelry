@@ -3,12 +3,20 @@ import SlideshowAutorotationButton from '@/components/SlideshowAutorotationButto
 import IconPause from '@/components/icons/IconPause.vue'
 import IconPlay from '@/components/icons/IconPlay.vue'
 
+/***********/
+/* 1.Build */
+/***********/
+
 // Component Factory
 const mountSlideshowAutorotationButton = (props = {}) => {
   return mount(SlideshowAutorotationButton, {
     props: { isPlaying: true, ...props },
   })
 }
+
+/**********/
+/* 2.Test */
+/**********/
 
 describe('SlideshowAutorotationButton.vue', () => {
   let wrapper

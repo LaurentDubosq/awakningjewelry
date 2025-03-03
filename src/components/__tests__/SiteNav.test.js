@@ -8,18 +8,30 @@ import LoadingComponent from '@/components/LoadingComponent.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
 import frontDataBase from '../../../db.json'
 
+/**************/
+/* 1.Hoisting */
+/**************/
+
+// Mock the "getPagesMetaData" data fetcher used in the mocked router
+vi.mock('@/data/dataFetchers', () => {
+  return {
+    getPagesMetaData: vi.fn().mockReturnValue(undefined),
+  }
+})
+
+/********************/
+/* 2.Initialization */
+/********************/
+
 const mockSiteMenuResult = {
   data: { value: frontDataBase['siteMenu'] },
   status: { value: 'resolved' },
 }
 const mockSiteMenuData = mockSiteMenuResult.data.value
 
-// Mock the fetcher used in the mocked router logic
-vi.mock('@/data/dataFetchers', () => {
-  return {
-    getPagesMetaData: vi.fn().mockReturnValue(undefined),
-  }
-})
+/***********/
+/* 3.Build */
+/***********/
 
 // Component Factory
 function mountSiteNav(status = 'resolved') {
@@ -32,6 +44,10 @@ function mountSiteNav(status = 'resolved') {
     },
   })
 }
+
+/**********/
+/* 4.Test */
+/**********/
 
 describe('SiteNav.vue', () => {
   let wrapper

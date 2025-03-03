@@ -11,9 +11,9 @@ import router from '@/router'
 import { defineStore } from 'pinia'
 import { createTestingPinia } from '@pinia/testing'
 
-/************/
-/* Hoisting */
-/************/
+/**************/
+/* 1.Hoisting */
+/**************/
 
 // Mock the "useGetClientHeightAtElementResize" composable
 vi.mock('@/composables/useGetClientHeightAtElementResize', () => {
@@ -30,9 +30,9 @@ vi.mock('@/data/dataFetchers', () => {
   }
 })
 
-/*******************/
-/* Initializations */
-/*******************/
+/********************/
+/* 2.Initialization */
+/********************/
 
 /* Data */
 
@@ -73,15 +73,15 @@ const isHeroSlidesResultStore = useHeroSlidesResultStore()
 useIsReducedMotionStore()
 useIsOnMobileStore()
 
-/*******************************/
-/* Additional Mock Assignation */
-/*******************************/
+/*********************************/
+/* 3.Additional Mock Assignation */
+/*********************************/
 
 getHeroSlides.mockReturnValue(mockHeroSlidesResult)
 
-/*********/
-/* Build */
-/*********/
+/***********/
+/* 4.Build */
+/***********/
 
 // Component Factory
 function mountHero() {
@@ -93,9 +93,9 @@ function mountHero() {
   })
 }
 
-/********/
-/* Test */
-/********/
+/**********/
+/* 5.Test */
+/**********/
 
 describe('Hero.vue', () => {
   let wrapper

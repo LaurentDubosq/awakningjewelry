@@ -1,6 +1,10 @@
 import { mount } from '@vue/test-utils'
 import SiteLogo from '@/components/SiteLogo.vue'
 
+/**********/
+/* 1.Test */
+/**********/
+
 describe('SiteLogo.vue', async () => {
   let wrapper
 

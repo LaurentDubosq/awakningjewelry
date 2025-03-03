@@ -5,18 +5,30 @@ import SiteNavDropdownList from '@/components/SiteNavDropdownList.vue'
 import router from '@/router'
 import frontDataBase from '../../../db.json'
 
+/**************/
+/* 1.Hoisting */
+/**************/
+
+// Mock the "getPagesMetaData" data fetcher used in the mocked router
+vi.mock('@/data/dataFetchers', () => {
+  return {
+    getPagesMetaData: vi.fn().mockReturnValue(undefined),
+  }
+})
+
+/********************/
+/* 2.Initialization */
+/********************/
+
 const mockSiteMenu = frontDataBase['siteMenu']
 const mockDropdown = mockSiteMenu[1]
 const mockDropdownText = mockDropdown.text
 const mockDropdownTitle = mockDropdown.title
 const mockLinks = mockDropdown.subMenu
 
-// Mock the fetcher used in the mocked router
-vi.mock('@/data/dataFetchers', () => {
-  return {
-    getPagesMetaData: vi.fn().mockReturnValue(undefined),
-  }
-})
+/***********/
+/* 3.Build */
+/***********/
 
 // Component Factory
 function mountSiteNavDropdown() {
@@ -27,6 +39,10 @@ function mountSiteNavDropdown() {
     },
   })
 }
+
+/**********/
+/* 4.Test */
+/**********/
 
 describe('SiteNavDropdown.vue', () => {
   let wrapper

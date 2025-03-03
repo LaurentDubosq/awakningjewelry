@@ -5,6 +5,10 @@ import LoadingComponent from '@/components/LoadingComponent.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
 import frontDataBase from '../../../db.json'
 
+/********************/
+/* 1.Initialization */
+/********************/
+
 const mockTitle = 'Promotions'
 const mockProductsResult = {
   data: frontDataBase.promotions,
@@ -13,6 +17,10 @@ const mockProductsResult = {
 const mockProductsData = mockProductsResult.data
 const mockProductsStatus = mockProductsResult.status
 const mockProductsDataLength = mockProductsData.length
+
+/***********/
+/* 2.Build */
+/***********/
 
 // Component factory
 function mountProductListing(props) {
@@ -26,6 +34,10 @@ function mountProductListing(props) {
     global: { stubs: { ProductListingItem: true } },
   })
 }
+
+/**********/
+/* 3.Test */
+/**********/
 
 describe('ProductListing.vue', () => {
   let wrapper

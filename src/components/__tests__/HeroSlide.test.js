@@ -4,6 +4,21 @@ import HeroSlide from '@/components/HeroSlide.vue'
 import frontDataBase from '../../../db.json'
 import router from '@/router'
 
+/**************/
+/* 1.Hoisting */
+/**************/
+
+// Mock the "getPagesMetaData" data fetcher used in the mocked router
+vi.mock('@/data/dataFetchers', () => {
+  return {
+    getPagesMetaData: vi.fn().mockReturnValue(undefined),
+  }
+})
+
+/********************/
+/* 2.Initialization */
+/********************/
+
 const mockSlide = frontDataBase.heroSlides[0]
 const mockSlideSubtitle = mockSlide.subtitle
 const mockSlideTitle = mockSlide.title
@@ -12,12 +27,9 @@ const mockSlideImageAlt = mockSlide.images.alt
 const mockSlideImageMobileURL = mockSlide.images.mobile.url
 const mockSlideImageDesktopURL = mockSlide.images.desktop.url
 
-// Mock the fetcher used in the mocked router
-vi.mock('@/data/dataFetchers', () => {
-  return {
-    getPagesMetaData: vi.fn().mockReturnValue(undefined),
-  }
-})
+/***********/
+/* 3.Build */
+/***********/
 
 // Component Factory
 function mountHeroSlide() {
@@ -33,6 +45,10 @@ function mountHeroSlide() {
     },
   })
 }
+
+/**********/
+/* 4.Test */
+/**********/
 
 describe('HeroSlide.vue', () => {
   let wrapper

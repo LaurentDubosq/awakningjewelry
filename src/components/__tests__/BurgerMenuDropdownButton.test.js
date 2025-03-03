@@ -2,9 +2,17 @@ import { mount } from '@vue/test-utils'
 import BurgerMenuDropdownButton from '@/components/BurgerMenuDropdownButton.vue'
 import frontDataBase from '../../../db.json'
 
+/********************/
+/* 1.Initialization */
+/********************/
+
 const mockDropdown = frontDataBase.siteMenu[1]
 const mockDropdownText = mockDropdown.text
 const mockDropdownTitle = mockDropdown.title
+
+/***********/
+/* 2.Build */
+/***********/
 
 // Component Factory
 function mountBurgerMenuDropdownButton(propsOptions = {}) {
@@ -17,6 +25,10 @@ function mountBurgerMenuDropdownButton(propsOptions = {}) {
     },
   })
 }
+
+/**********/
+/* 3.Test */
+/**********/
 
 describe('BurgerMenuDropdownButton.vue', () => {
   let wrapper

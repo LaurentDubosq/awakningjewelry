@@ -5,16 +5,28 @@ import SiteHeaderIcon from '@/components/SiteHeaderIcon.vue'
 import IconPerson from '@/components/icons/IconPerson.vue'
 import frontDataBase from '../../../db.json'
 
-const mockSiteMenu = frontDataBase['siteMenu']
-const mockLinkTypeText = mockSiteMenu[0]
-const mockLinkTypeIcon = mockSiteMenu[4]
+/**************/
+/* 1.Hoisting */
+/**************/
 
-// Mock the fetcher used in the mocked router
+// Mock the "getPagesMetaData" data fetcher used in the mocked router
 vi.mock('@/data/dataFetchers', () => {
   return {
     getPagesMetaData: vi.fn().mockReturnValue(undefined),
   }
 })
+
+/********************/
+/* 2.Initialization */
+/********************/
+
+const mockSiteMenu = frontDataBase['siteMenu']
+const mockLinkTypeText = mockSiteMenu[0]
+const mockLinkTypeIcon = mockSiteMenu[4]
+
+/***********/
+/* 3.Build */
+/***********/
 
 // Component Factory
 function mountSiteNavLink(options) {
@@ -26,6 +38,10 @@ function mountSiteNavLink(options) {
     ...options,
   })
 }
+
+/**********/
+/* 4.Test */
+/**********/
 
 describe('SiteNavLink.vue', () => {
   // Smoke test

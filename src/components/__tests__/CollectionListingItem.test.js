@@ -3,17 +3,29 @@ import CollectionListingItem from '@/components/CollectionListingItem.vue'
 import frontDataBase from '../../../db.json'
 import router from '@/router'
 
-const mockCollection = frontDataBase.collectionsByGender[0]
-const mockCollectionURL = mockCollection.url
-const mockCollectionImageURL = mockCollection.image.url
-const mockCollectionTitle = mockCollection.title
+/**************/
+/* 1.Hoisting */
+/**************/
 
-// Mock the fetcher used in the mocked router
+// Mock the "getPagesMetaData" data fetcher used in the mocked router
 vi.mock('@/data/dataFetchers', () => {
   return {
     getPagesMetaData: vi.fn().mockReturnValue(undefined),
   }
 })
+
+/********************/
+/* 2.Initialization */
+/********************/
+
+const mockCollection = frontDataBase.collectionsByGender[0]
+const mockCollectionURL = mockCollection.url
+const mockCollectionImageURL = mockCollection.image.url
+const mockCollectionTitle = mockCollection.title
+
+/***********/
+/* 3.Build */
+/***********/
 
 // Component Factory
 function mountCollectionListingItem() {
@@ -26,6 +38,10 @@ function mountCollectionListingItem() {
     },
   })
 }
+
+/**********/
+/* 4.Test */
+/**********/
 
 describe('CollectionListingItem.vue', () => {
   let wrapper

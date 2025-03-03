@@ -5,7 +5,15 @@ import IconCross from '../icons/IconCross.vue'
 import { isBurgerMenuOpenKey, toggleBurgerMenuKey } from '@/utils/injectionkeys'
 import SiteHeaderIcon from '../SiteHeaderIcon.vue'
 
+/********************/
+/* 1.Initialization */
+/********************/
+
 let toggleBurgerMenu = vi.fn()
+
+/***********/
+/* 2.Build */
+/***********/
 
 // Component factory
 function mountBurgerMenuToggle(providers = {}) {
@@ -19,6 +27,10 @@ function mountBurgerMenuToggle(providers = {}) {
     },
   })
 }
+
+/**********/
+/* 3.Test */
+/**********/
 
 describe('BurgerMenuToggle.vue', () => {
   let wrapper

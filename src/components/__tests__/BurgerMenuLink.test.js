@@ -4,18 +4,30 @@ import frontDataBase from '../../../db.json'
 import router from '@/router'
 import { toggleBurgerMenuKey } from '@/utils/injectionkeys'
 
+/**************/
+/* 1.Hoisting */
+/**************/
+
+// Mock the "getPagesMetaData" data fetcher used in the mocked router
+vi.mock('@/data/dataFetchers', () => {
+  return {
+    getPagesMetaData: vi.fn().mockReturnValue(undefined),
+  }
+})
+
+/********************/
+/* 2.Initialization */
+/********************/
+
 const mockSiteMenu = frontDataBase['siteMenu']
 const mockLink = mockSiteMenu[0]
 const mockLinkURL = mockLink.url
 const mockLinkText = mockLink.text
 const mockToggleBurgerMenu = vi.fn()
 
-// Mock the fetcher used in the mocked router
-vi.mock('@/data/dataFetchers', () => {
-  return {
-    getPagesMetaData: vi.fn().mockReturnValue(undefined),
-  }
-})
+/***********/
+/* 3.Build */
+/***********/
 
 // Component Factory
 function mountBurgerMenuLink() {
@@ -27,6 +39,10 @@ function mountBurgerMenuLink() {
     },
   })
 }
+
+/**********/
+/* 4.Test */
+/**********/
 
 describe('BurgerMenuLink.vue', () => {
   let wrapper

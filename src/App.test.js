@@ -10,9 +10,9 @@ import { RouterView } from 'vue-router'
 import { nextTick, ref } from 'vue'
 import { defineStore } from 'pinia'
 
-/************/
-/* Hoisting */
-/************/
+/**************/
+/* 1.Hoisting */
+/**************/
 
 // Initialize variables able to work with "vi.mock" for the following "getPagesMetaData" mock
 var frontDataBase
@@ -30,9 +30,9 @@ vi.mock('@/data/dataFetchers', async () => {
   }
 })
 
-/*******************/
-/* Initializations */
-/*******************/
+/*********************/
+/* 2.Initializations */
+/*********************/
 
 /* Data */
 const mockSiteMenuResult = {
@@ -54,15 +54,15 @@ const useIsOnMobileStore = defineStore('IsOnMobile', () => {
 // Initialize the stores
 const isOnMobileStore = useIsOnMobileStore()
 
-/*******************************/
-/* Additional Mock Assignation */
-/*******************************/
+/*********************************/
+/* 3.Additional Mock Assignation */
+/*********************************/
 
 getSiteMenu.mockReturnValue(mockSiteMenuResult)
 
-/*********/
-/* Build */
-/*********/
+/***********/
+/* 4.Build */
+/***********/
 
 // Component Factory
 function mountApp() {
@@ -79,9 +79,9 @@ function mountApp() {
   })
 }
 
-/********/
-/* Test */
-/********/
+/**********/
+/* 5.Test */
+/**********/
 
 describe('App.vue', () => {
   let wrapper

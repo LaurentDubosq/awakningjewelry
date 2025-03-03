@@ -1,6 +1,10 @@
 import { mount } from '@vue/test-utils'
 import SlideshowSlickSlider from '@/components/SlideshowSlickSlider.vue'
 
+/********************/
+/* 1.Initialization */
+/********************/
+
 const mockSlidesLength = 2
 const mockCurrentIndex = 0
 const mockHandleClickPayload = { index: 0, focusable: false }
@@ -18,6 +22,10 @@ const mockHandleKeydownEndPayload = {
   focusable: true,
 }
 
+/***********/
+/* 2.Build */
+/***********/
+
 // Component Factory
 const mountSlideshowSlickSlider = (props) => {
   return mount(SlideshowSlickSlider, {
@@ -28,6 +36,10 @@ const mountSlideshowSlickSlider = (props) => {
     },
   })
 }
+
+/**********/
+/* 3.Test */
+/**********/
 
 describe('SlideshowSlickSlider.vue', () => {
   let wrapper

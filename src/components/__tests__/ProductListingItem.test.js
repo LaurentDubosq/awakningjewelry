@@ -3,6 +3,21 @@ import ProductListingItem from '@/components/ProductListingItem.vue'
 import frontDataBase from '../../../db.json'
 import router from '@/router'
 
+/**************/
+/* 1.Hoisting */
+/**************/
+
+// Mock the "getPagesMetaData" data fetcher used in the mocked router
+vi.mock('@/data/dataFetchers', () => {
+  return {
+    getPagesMetaData: vi.fn().mockReturnValue(undefined),
+  }
+})
+
+/********************/
+/* 2.Initialization */
+/********************/
+
 const mockProduct = frontDataBase.promotions[0]
 const mockProductURL = mockProduct.url
 const mockProductImageURL = mockProduct.image.url
@@ -11,12 +26,9 @@ const mockProductTitle = mockProduct.title
 const mockProductOriginalPrice = mockProduct.price
 const mockProductDiscountedPrice = mockProduct.promotionalPrice
 
-// Mock the fetcher used in the mocked router
-vi.mock('@/data/dataFetchers', () => {
-  return {
-    getPagesMetaData: vi.fn().mockReturnValue(undefined),
-  }
-})
+/***********/
+/* 3.Build */
+/***********/
 
 // Component Factory
 function mountProductListingItem() {
@@ -27,6 +39,10 @@ function mountProductListingItem() {
     },
   })
 }
+
+/**********/
+/* 4.Test */
+/**********/
 
 describe('ProductListingItem.vue', () => {
   let wrapper

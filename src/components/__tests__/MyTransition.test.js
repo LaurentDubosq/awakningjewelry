@@ -4,6 +4,10 @@ import SiteNavDropdownList from '@/components/SiteNavDropdownList.vue'
 import App from '@/App.vue'
 import { TransitionGroup, Transition } from 'vue' // Allow us to point the Vue's Built-in component
 
+/********************/
+/* 1.Initialization */
+/********************/
+
 const mockTransitionGroupSlotInfoWithDuration = {
   slot: SiteNavDropdownList,
   props: {
@@ -30,6 +34,10 @@ const mockTransitionSlotInfo = {
   stubs: { App: { template: '<div />' } },
 }
 
+/***********/
+/* 2.Build */
+/***********/
+
 // Component Factory
 function mountComponent({ slot, props, stubs }) {
   return mount(MyTransition, {
@@ -40,6 +48,10 @@ function mountComponent({ slot, props, stubs }) {
     },
   })
 }
+
+/**********/
+/* 3.Test */
+/**********/
 
 describe('MyTransition.vue', () => {
   let wrapper

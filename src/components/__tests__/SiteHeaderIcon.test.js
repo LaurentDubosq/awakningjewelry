@@ -3,9 +3,17 @@ import SiteHeaderIcon from '@/components/SiteHeaderIcon.vue'
 import IconPerson from '@/components/icons/IconPerson.vue'
 import frontDataBase from '../../../db.json'
 
+/********************/
+/* 1.Initialization */
+/********************/
+
 const mockSiteMenu = frontDataBase['siteMenu']
 const mockLink = mockSiteMenu[4]
 const mockLinkAlternativeText = mockLink.text
+
+/***********/
+/* 2.Build */
+/***********/
 
 // Component Factory
 function mountSiteHeaderIcon(options = {}) {
@@ -14,6 +22,10 @@ function mountSiteHeaderIcon(options = {}) {
     ...options,
   })
 }
+
+/**********/
+/* 3.Test */
+/**********/
 
 describe('SiteHeaderIcon Component:', () => {
   let wrapper

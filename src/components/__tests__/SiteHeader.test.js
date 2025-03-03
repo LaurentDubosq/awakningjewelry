@@ -11,9 +11,9 @@ import { createTestingPinia } from '@pinia/testing'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-/************/
-/* Hoisting */
-/************/
+/**************/
+/* 1.Hoisting */
+/**************/
 
 // Mock the "getPagesMetaData" data fetcher used in the mocked router
 vi.mock('@/data/dataFetchers', () => {
@@ -22,9 +22,9 @@ vi.mock('@/data/dataFetchers', () => {
   }
 })
 
-/*******************/
-/* Initializations */
-/*******************/
+/********************/
+/* 2.Initialization */
+/********************/
 
 /* Data */
 
@@ -45,9 +45,9 @@ const useIsOnMobileStore = defineStore('IsOnMobile', () => {
 // Initialize the stores
 const isOnMobileStore = useIsOnMobileStore()
 
-/*********/
-/* Build */
-/*********/
+/***********/
+/* 3.Build */
+/***********/
 
 // Component Factory
 function mountSiteHeader(providers = {}) {
@@ -67,9 +67,9 @@ function mountSiteHeader(providers = {}) {
   })
 }
 
-/********/
-/* Test */
-/********/
+/**********/
+/* 4.Test */
+/**********/
 
 describe('SiteHeader.vue', () => {
   let wrapper

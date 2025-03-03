@@ -12,9 +12,9 @@ import { h, defineComponent } from 'vue'
 import router from '@/router'
 import { defineStore } from 'pinia'
 
-/************/
-/* Hoisting */
-/************/
+/**************/
+/* 1.Hoisting */
+/**************/
 
 // Mock the "useGetClientHeightAtElementResize" composable
 vi.mock('@/composables/useGetClientHeightAtElementResize', () => {
@@ -30,9 +30,9 @@ vi.mock('@/data/dataFetchers', () => {
   }
 })
 
-/*******************/
-/* Initializations */
-/*******************/
+/*********************/
+/* 2.Initializations */
+/*********************/
 
 /* Data */
 
@@ -87,9 +87,9 @@ const useIsOnMobileStore = defineStore('IsOnMobile', () => {
 const isReducedMotionStore = useIsReducedMotionStore()
 useIsOnMobileStore()
 
-/*********/
-/* Build */
-/*********/
+/***********/
+/* 3.Build */
+/***********/
 
 // Component Factory
 function mountSlideshow() {
@@ -105,9 +105,9 @@ function mountSlideshow() {
   })
 }
 
-/********/
-/* Test */
-/********/
+/**********/
+/* 4.Test */
+/**********/
 
 describe('Slideshow.vue', () => {
   let wrapper
