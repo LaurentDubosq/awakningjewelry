@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { getHeroSlides } from '@/data/dataFetchers'
-import type { HeroSlideType } from '@/types/components'
-import type { UseFetchWithStateReturn } from '@/types/fetch'
 import Slideshow from './Slideshow.vue'
 import HeroSlide from './HeroSlide.vue'
 import LoadingComponent from './LoadingComponent.vue'
@@ -12,23 +9,12 @@ import { storeToRefs } from 'pinia'
 // Get the store instance
 const heroSlidesStore = useHeroSlidesResultStore()
 
-// Get the store's states, computeds and methods
+// Get the store's states and computeds
 const {
-  heroSlidesResult,
   heroSlidesData: slides,
   heroSlidesDataLength: slidesLength,
   heroSlidesFetchStatus: fetchStatus,
 } = storeToRefs(heroSlidesStore)
-const { updateHeroSlidesResult } = heroSlidesStore
-
-// Don't fetch the data if the data already exists in the store (for performance reason)
-if (!heroSlidesResult.value) {
-  // Get the data fetch result
-  const result: UseFetchWithStateReturn<HeroSlideType[]> = getHeroSlides()
-
-  // Update the store with the result
-  updateHeroSlidesResult(result)
-}
 </script>
 
 <template>

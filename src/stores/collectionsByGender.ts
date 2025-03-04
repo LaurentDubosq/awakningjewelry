@@ -2,6 +2,7 @@ import { ref, type Ref, type ComputedRef, computed, unref } from 'vue'
 import type { Collection } from '@/types/global.d.ts'
 import type { UseFetchWithStateReturn, FetchStatus } from '@/types/fetch'
 import { defineStore } from 'pinia'
+import { getCollectionsByGender } from '@/data/dataFetchers'
 
 export const useCollectionsByGenderResultStore = defineStore('CollectionsByGenderResult', () => {
   // States
@@ -21,6 +22,11 @@ export const useCollectionsByGenderResultStore = defineStore('CollectionsByGende
     newCollectionsByGenderResult: UseFetchWithStateReturn<Collection[]>,
   ) => {
     collectionsByGenderResult.value = newCollectionsByGenderResult
+  }
+
+  // API Call - Data fetching with data caching
+  if (!collectionsByGenderResult.value) {
+    collectionsByGenderResult.value = getCollectionsByGender()
   }
 
   return {

@@ -2,6 +2,7 @@ import { ref, type Ref, type ComputedRef, computed, unref } from 'vue'
 import type { ProductSummary } from '@/types/global.d.ts'
 import type { UseFetchWithStateReturn, FetchStatus } from '@/types/fetch'
 import { defineStore } from 'pinia'
+import { getPromotions } from '@/data/dataFetchers'
 
 export const usePromotionsResultStore = defineStore('PromotionsResult', () => {
   // States
@@ -21,6 +22,11 @@ export const usePromotionsResultStore = defineStore('PromotionsResult', () => {
     newPromotionsResult: UseFetchWithStateReturn<ProductSummary[]>,
   ) => {
     promotionsResult.value = newPromotionsResult
+  }
+
+  // API Call - Data fetching with data caching
+  if (!promotionsResult.value) {
+    promotionsResult.value = getPromotions()
   }
 
   return {

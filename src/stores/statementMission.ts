@@ -2,6 +2,7 @@ import { ref, type Ref, type ComputedRef, computed, unref } from 'vue'
 import type { StatementBanner } from '@/types/components'
 import type { UseFetchWithStateReturn, FetchStatus } from '@/types/fetch'
 import { defineStore } from 'pinia'
+import { getStatementMission } from '@/data/dataFetchers'
 
 export const useStatementMissionResultStore = defineStore('StatementMissionResult', () => {
   // States
@@ -21,6 +22,11 @@ export const useStatementMissionResultStore = defineStore('StatementMissionResul
     newStatementMissionResult: UseFetchWithStateReturn<StatementBanner>,
   ) => {
     statementMissionResult.value = newStatementMissionResult
+  }
+
+  // API Call - Data fetching with data caching
+  if (!statementMissionResult.value) {
+    statementMissionResult.value = getStatementMission()
   }
 
   return {
