@@ -7,11 +7,10 @@ import CollectionListingItem from '@/components/CollectionListingItem.vue'
 import ProductListing from '@/components/ProductListing.vue'
 import ProductListingItem from '@/components/ProductListingItem.vue'
 import frontDataBase from '../../../db.json'
-import { getStatementMission, getCollectionsByGender, getPromotions } from '@/data/dataFetchers'
 import router from '@/router'
 import { defineStore } from 'pinia'
 import { createTestingPinia } from '@pinia/testing'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 /**************/
 /* 1.Hoisting */
@@ -21,9 +20,6 @@ import { ref } from 'vue'
 vi.mock('@/data/dataFetchers', () => {
   return {
     getPagesMetaData: vi.fn().mockReturnValue(undefined), // used in the mocked router
-    getStatementMission: vi.fn(),
-    getCollectionsByGender: vi.fn(),
-    getPromotions: vi.fn(),
   }
 })
 
@@ -55,13 +51,13 @@ const mockPromotionsStatus = mockPromotionsResult.status
 /* Stores */
 
 // Initialize a testing pinia instance
-const pinia = createTestingPinia()
+const pinia = createTestingPinia({ stubActions: false })
 
 // Create the stores
 const useStatementMissionResultStore = defineStore('StatementMissionResult', () => {
   const statementMissionResult = ref(mockStatementBannerResult)
-  const statementMissionData = ref(mockStatementBannerData)
-  const statementMissionFetchStatus = ref(mockStatementBannerStatus)
+  const statementMissionData = computed(() => statementMissionResult.value.data)
+  const statementMissionFetchStatus = computed(() => statementMissionResult.value.status)
   const updateStatementMissionResult = (newStatementMissionResult) => {
     statementMissionResult.value = newStatementMissionResult
   }
@@ -75,8 +71,8 @@ const useStatementMissionResultStore = defineStore('StatementMissionResult', () 
 
 const useCollectionsByGenderResultStore = defineStore('CollectionsByGenderResult', () => {
   const collectionsByGenderResult = ref(mockCollectionsByGenderResult)
-  const collectionsByGenderData = ref(mockCollectionsByGenderData)
-  const collectionsByGenderFetchStatus = ref(mockCollectionsByGenderStatus)
+  const collectionsByGenderData = computed(() => collectionsByGenderResult.value.data)
+  const collectionsByGenderFetchStatus = computed(() => collectionsByGenderResult.value.status)
   const updateCollectionsByGenderResult = (newCollectionsByGenderResult) => {
     collectionsByGenderResult.value = newCollectionsByGenderResult
   }
@@ -90,8 +86,8 @@ const useCollectionsByGenderResultStore = defineStore('CollectionsByGenderResult
 
 const usePromotionsResultStore = defineStore('PromotionsResult', () => {
   const promotionsResult = ref(mockPromotionsResult)
-  const promotionsResultData = ref(mockPromotionsData)
-  const promotionsResultFetchStatus = ref(mockPromotionsStatus)
+  const promotionsResultData = computed(() => promotionsResult.value.data)
+  const promotionsResultFetchStatus = computed(() => promotionsResult.value.status)
   const updatePromotionsResult = (newPromotionsResult) => {
     promotionsResult.value = newPromotionsResult
   }
@@ -108,16 +104,8 @@ useStatementMissionResultStore()
 useCollectionsByGenderResultStore()
 usePromotionsResultStore()
 
-/*********************************/
-/* 3.Additional Mock Assignation */
-/*********************************/
-
-getStatementMission.mockReturnValue(mockStatementBannerResult)
-getCollectionsByGender.mockReturnValue(mockCollectionsByGenderResult)
-getPromotions.mockReturnValue(mockPromotionsResult)
-
 /***********/
-/* 4.Build */
+/* 3.Build */
 /***********/
 
 // Component Factory
@@ -133,7 +121,7 @@ function mountHomeview() {
 }
 
 /**********/
-/* 5.Test */
+/* 4.Test */
 /**********/
 
 describe('HomeView.vue', () => {

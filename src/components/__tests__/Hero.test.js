@@ -1,11 +1,10 @@
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { mount } from '@vue/test-utils'
 import Hero from '@/components/Hero.vue'
 import Slideshow from '@/components/Slideshow.vue'
 import HeroSlide from '@/components/HeroSlide.vue'
 import LoadingComponent from '@/components/LoadingComponent.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
-import { getHeroSlides } from '@/data/dataFetchers'
 import frontDataBase from '../../../db.json'
 import router from '@/router'
 import { defineStore } from 'pinia'
@@ -22,10 +21,9 @@ vi.mock('@/composables/useGetClientHeightAtElementResize', () => {
   }
 })
 
-// Mock the "getHeroSlides" and "getPagesMetaData" data fetchers
+// Mock the "getPagesMetaData" data fetcher
 vi.mock('@/data/dataFetchers', () => {
   return {
-    getHeroSlides: vi.fn(),
     getPagesMetaData: vi.fn().mockReturnValue(undefined),
   }
 })
@@ -42,7 +40,6 @@ const mockHeroSlidesResult = {
 }
 const mockHeroSlidesData = mockHeroSlidesResult.data
 const mockHeroSlidesDataLength = mockHeroSlidesData.length
-const mockHeroSlidesStatus = mockHeroSlidesResult.status
 
 /* Stores */
 
@@ -52,9 +49,9 @@ const pinia = createTestingPinia()
 // Create the stores
 const useHeroSlidesResultStore = defineStore('HeroSlidesResult', () => {
   const heroSlidesResult = ref(mockHeroSlidesResult)
-  const heroSlidesData = ref(mockHeroSlidesData)
-  const heroSlidesDataLength = ref(mockHeroSlidesDataLength)
-  const heroSlidesFetchStatus = ref(mockHeroSlidesStatus)
+  const heroSlidesData = computed(() => heroSlidesResult.value?.data)
+  const heroSlidesDataLength = computed(() => heroSlidesData.value?.length)
+  const heroSlidesFetchStatus = computed(() => heroSlidesResult.value.status)
   return { heroSlidesResult, heroSlidesData, heroSlidesDataLength, heroSlidesFetchStatus }
 })
 
@@ -73,14 +70,8 @@ const isHeroSlidesResultStore = useHeroSlidesResultStore()
 useIsReducedMotionStore()
 useIsOnMobileStore()
 
-/*********************************/
-/* 3.Additional Mock Assignation */
-/*********************************/
-
-getHeroSlides.mockReturnValue(mockHeroSlidesResult)
-
 /***********/
-/* 4.Build */
+/* 3.Build */
 /***********/
 
 // Component Factory
@@ -94,7 +85,7 @@ function mountHero() {
 }
 
 /**********/
-/* 5.Test */
+/* 4.Test */
 /**********/
 
 describe('Hero.vue', () => {
