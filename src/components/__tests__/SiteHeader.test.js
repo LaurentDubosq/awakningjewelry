@@ -1,5 +1,5 @@
 import { flushPromises, mount } from '@vue/test-utils'
-import { isBurgerMenuOpenKey, toggleBurgerMenuKey, siteMenuKey } from '@/utils/injectionkeys'
+import { siteMenuKey } from '@/utils/injectionkeys'
 import router from '@/router'
 import SiteHeader from '@/components/SiteHeader.vue'
 import BurgerMenuToggle from '@/components/BurgerMenuToggle.vue'
@@ -29,7 +29,6 @@ vi.mock('@/data/dataFetchers', () => {
 /* Data */
 
 const mockSiteMenu = frontDataBase.siteMenu
-let toggleBurgerMenu = vi.fn()
 
 /* Stores */
 
@@ -50,15 +49,12 @@ const isOnMobileStore = useIsOnMobileStore()
 /***********/
 
 // Component Factory
-function mountSiteHeader(providers = {}) {
+function mountSiteHeader() {
   return mount(SiteHeader, {
     global: {
       plugins: [router, pinia],
       provide: {
-        [isBurgerMenuOpenKey]: false,
-        [toggleBurgerMenuKey]: toggleBurgerMenu,
         [siteMenuKey]: mockSiteMenu,
-        ...providers,
       },
       stubs: {
         SiteNav: true,

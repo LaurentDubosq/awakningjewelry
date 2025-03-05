@@ -2,7 +2,6 @@ import { mount } from '@vue/test-utils'
 import BurgerMenuDropdownList from '@/components/BurgerMenuDropdownList.vue'
 import BurgerMenuDropdownItem from '@/components/BurgerMenuDropdownItem.vue'
 import router from '@/router'
-import { toggleBurgerMenuKey } from '@/utils/injectionkeys'
 import frontDataBase from '../../../db.json'
 
 /**************/
@@ -36,7 +35,6 @@ function mountBurgerMenuDropdownList() {
     global: {
       stubs: { BurgerMenuDropdownItem: true },
       plugins: [router],
-      provide: { [toggleBurgerMenuKey]: vi.fn() },
     },
   })
 }

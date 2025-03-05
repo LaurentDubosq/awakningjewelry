@@ -1,13 +1,17 @@
 <script setup lang="ts">
+import { useIsBurgerMenuOpen } from '@/stores/isBurgerMenuOpen'
 import type { SiteSubMenuItem } from '@/types/components'
-import { toggleBurgerMenuKey } from '@/utils/injectionkeys'
-import { inject, type PropType } from 'vue'
+import { type PropType } from 'vue'
 
 const { link } = defineProps({
   link: { type: Object as PropType<SiteSubMenuItem>, required: true },
 })
 
-const toggleBurgerMenu: (() => void) | undefined = inject(toggleBurgerMenuKey)
+// Get the stores instances
+const isBurgerMenuOpenStore = useIsBurgerMenuOpen()
+
+// Get the store's states and computeds
+const { toggleBurgerMenu } = isBurgerMenuOpenStore
 </script>
 
 <template>

@@ -1,13 +1,18 @@
 <script setup lang="ts">
-import { inject, nextTick, type Ref } from 'vue'
-import { isBurgerMenuOpenKey, toggleBurgerMenuKey } from '@/utils/injectionkeys'
+import { nextTick } from 'vue'
 import { useFocusElement } from '@/composables/useFocusElement'
 import SiteHeaderIcon from './SiteHeaderIcon.vue'
 import IconBurger from './icons/IconBurger.vue'
 import IconCross from './icons/IconCross.vue'
+import { useIsBurgerMenuOpen } from '@/stores/isBurgerMenuOpen'
+import { storeToRefs } from 'pinia'
 
-const isBurgerMenuOpen: Ref<boolean> | undefined = inject(isBurgerMenuOpenKey) // Get the burger menu open/close status
-const toggleBurgerMenu: (() => void) | undefined = inject(toggleBurgerMenuKey) // Get the burger menu toggle
+// Get the stores instances
+const isBurgerMenuOpenStore = useIsBurgerMenuOpen()
+
+// Get the store's states and computeds
+const { isBurgerMenuOpen } = storeToRefs(isBurgerMenuOpenStore)
+const { toggleBurgerMenu } = isBurgerMenuOpenStore
 
 async function handleClick(event: MouseEvent | KeyboardEvent) {
   // When the keyboard has generated the event

@@ -2,7 +2,9 @@ import { mount } from '@vue/test-utils'
 import BurgerMenuLink from '@/components/BurgerMenuLink.vue'
 import frontDataBase from '../../../db.json'
 import router from '@/router'
-import { toggleBurgerMenuKey } from '@/utils/injectionkeys'
+import { createTestingPinia } from '@pinia/testing'
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
 /**************/
 /* 1.Hoisting */
@@ -19,11 +21,29 @@ vi.mock('@/data/dataFetchers', () => {
 /* 2.Initialization */
 /********************/
 
+/* Data */
+
 const mockSiteMenu = frontDataBase['siteMenu']
 const mockLink = mockSiteMenu[0]
 const mockLinkURL = mockLink.url
 const mockLinkText = mockLink.text
-const mockToggleBurgerMenu = vi.fn()
+
+/* Stores */
+
+// Initialize a testing pinia instance
+const pinia = createTestingPinia({ stubActions: false })
+
+// Create the stores
+const useIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
+  const isBurgerMenuOpen = ref(true)
+  const toggleBurgerMenu = () => {
+    isBurgerMenuOpen.value = !isBurgerMenuOpen.value
+  }
+  return { isBurgerMenuOpen, toggleBurgerMenu }
+})
+
+// Initialize the stores
+const isBurgerMenuOpenStore = useIsBurgerMenuOpenStore()
 
 /***********/
 /* 3.Build */
@@ -34,8 +54,7 @@ function mountBurgerMenuLink() {
   return mount(BurgerMenuLink, {
     props: { link: mockLink },
     global: {
-      plugins: [router],
-      provide: { [toggleBurgerMenuKey]: mockToggleBurgerMenu },
+      plugins: [router, pinia],
     },
   })
 }
@@ -71,11 +90,14 @@ describe('BurgerMenuLink.vue', () => {
 
   describe('Behaviors:', () => {
     test('when the link is clicked, it commands the burger menu to close', async () => {
+      // Assert that the store indicates the burger menu is open
+      expect(isBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
+
       // Click on the link
       await link.trigger('click')
 
-      // Assert the order to close the burger menu has been triggered
-      expect(mockToggleBurgerMenu).toHaveBeenCalledTimes(1)
+      // Assert that the store indicates the burger menu is close
+      expect(isBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
     })
   })
 })

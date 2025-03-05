@@ -1,9 +1,18 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, provide, type Ref } from 'vue'
+import { provide } from 'vue'
 import { RouterView } from 'vue-router'
 import SiteHeader from './components/SiteHeader.vue'
 import BurgerMenu from './components/BurgerMenu.vue'
 import MyTransition from './components/MyTransition.vue'
+import { useIsBurgerMenuOpen } from './stores/isBurgerMenuOpen'
+import { storeToRefs } from 'pinia'
+
+// Get the stores instances
+const isBurgerMenuOpenStore = useIsBurgerMenuOpen()
+
+// Get the store's states and computeds
+const { isBurgerMenuOpen } = storeToRefs(isBurgerMenuOpenStore)
+const { toggleBurgerMenu } = isBurgerMenuOpenStore
 
 /*************/
 /* Site Menu */
@@ -18,61 +27,6 @@ import type { UseFetchWithStateReturn } from './types/fetch'
 const siteMenuResult: UseFetchWithStateReturn<SiteMenuItem[]> = getSiteMenu()
 
 provide(siteMenuKey, siteMenuResult)
-
-/***************/
-/* Burger Menu */
-/***************/
-
-const isBurgerMenuOpen: Ref<boolean> = ref(false)
-
-/* Provide the burger menu opening status (to: BurgerMenuToggle.vue) */
-import { isBurgerMenuOpenKey } from './utils/injectionkeys'
-
-provide(isBurgerMenuOpenKey, isBurgerMenuOpen)
-
-/* Provide the burger menu logic necessary to toggle the burger menu (to: BurgerMenuLink.vue, BurgerMenuDropdownItem.vue, BurgerMenuToggle.vue) */
-import { toggleBurgerMenuKey } from './utils/injectionkeys'
-
-function toggleBurgerMenu() {
-  // Manage the open/close behavior of the burger menu
-  isBurgerMenuOpen.value = !isBurgerMenuOpen.value
-
-  // Prevent body scroll when the burger menu is open
-  if (isBurgerMenuOpen.value) {
-    document.body.style.overflow = 'hidden'
-  } else {
-    document.body.style.overflow = 'visible'
-  }
-}
-
-provide(toggleBurgerMenuKey, toggleBurgerMenu)
-
-/* Logic to close the burger menu when switch from mobile to desktop */
-// Get SASS Constants to use it in Javascript
-import SASSCONSTANTS from '@/assets/styles/_constants.module.scss'
-
-// Get the desktop breakpoint value from design system
-const DESKTOPBREAKPOINT: number = Number(SASSCONSTANTS.AwakningBreakpointDesktop.slice(0, -2))
-
-// Logic to close the burger menu when we resize the window width from mobile to desktop.
-function closeBurgerMenuOnDesktop() {
-  if (
-    document.documentElement.clientWidth >= DESKTOPBREAKPOINT &&
-    isBurgerMenuOpen.value !== false
-  ) {
-    isBurgerMenuOpen.value = false
-  }
-}
-
-// Check at every window resize if burger menu should be closed
-onMounted(() => {
-  window.addEventListener('resize', closeBurgerMenuOnDesktop)
-})
-
-// Remove the listener
-onUnmounted(() => {
-  window.removeEventListener('resize', closeBurgerMenuOnDesktop)
-})
 </script>
 
 <template>

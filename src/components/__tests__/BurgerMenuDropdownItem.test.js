@@ -1,8 +1,10 @@
 import { mount } from '@vue/test-utils'
 import BurgerMenuDropdownItem from '@/components/BurgerMenuDropdownItem.vue'
 import router from '@/router'
-import { toggleBurgerMenuKey } from '@/utils/injectionkeys'
 import frontDataBase from '../../../db.json'
+import { createTestingPinia } from '@pinia/testing'
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
 /**************/
 /* 1.Hoisting */
@@ -19,11 +21,29 @@ vi.mock('@/data/dataFetchers', () => {
 /* 2.Initialization */
 /********************/
 
+/* Data */
+
 const mockSiteMenu = frontDataBase['siteMenu']
 const mockLink = mockSiteMenu[1].subMenu[0]
 const mockLinkText = mockSiteMenu[1].subMenu[0].text
 const mockLinkURL = mockSiteMenu[1].subMenu[0].url
-const mockToggleBurgerMenu = vi.fn()
+
+/* Stores */
+
+// Initialize a testing pinia instance
+const pinia = createTestingPinia({ stubActions: false })
+
+// Create the stores
+const useIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
+  const isBurgerMenuOpen = ref(true)
+  const toggleBurgerMenu = () => {
+    isBurgerMenuOpen.value = !isBurgerMenuOpen.value
+  }
+  return { isBurgerMenuOpen, toggleBurgerMenu }
+})
+
+// Initialize the stores
+const isBurgerMenuOpenStore = useIsBurgerMenuOpenStore()
 
 /***********/
 /* 3.Build */
@@ -34,8 +54,7 @@ function mountBurgerMenuDropdownItem(propsOptions = {}) {
   return mount(BurgerMenuDropdownItem, {
     props: { link: mockLink, ...propsOptions },
     global: {
-      plugins: [router],
-      provide: { [toggleBurgerMenuKey]: mockToggleBurgerMenu },
+      plugins: [router, pinia],
     },
   })
 }
@@ -71,11 +90,14 @@ describe('BurgerMenuDropdownItem.vue', () => {
 
   describe('Behaviors:', () => {
     test('when the link is touched, it commands the dropdown to close', async () => {
+      // Assert that the store indicates the burger menu is open
+      expect(isBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
+
       // Touch the link
       await link.trigger('click')
 
-      // Assert the open/close dropdown function has been triggered
-      expect(mockToggleBurgerMenu).toHaveBeenCalledTimes(1)
+      // Assert that the store indicates the burger menu is close
+      expect(isBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
     })
   })
 })

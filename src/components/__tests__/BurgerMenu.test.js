@@ -4,9 +4,11 @@ import BurgerMenuLink from '@/components/BurgerMenuLink.vue'
 import BurgerMenuDropdown from '@/components/BurgerMenuDropdown.vue'
 import LoadingComponent from '@/components/LoadingComponent.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
-import { toggleBurgerMenuKey } from '@/utils/injectionkeys'
 import router from '@/router'
 import frontDataBase from '../../../db.json'
+import { createTestingPinia } from '@pinia/testing'
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
 /**************/
 /* 1.Hoisting */
@@ -23,10 +25,29 @@ vi.mock('@/data/dataFetchers', () => {
 /* 2.Initialization */
 /********************/
 
+/* Data */
+
 const siteMenuResult = {
   data: { value: frontDataBase['siteMenu'] },
 }
 const mockSiteMenuData = siteMenuResult.data.value
+
+/* Stores */
+
+// Initialize a testing pinia instance
+const pinia = createTestingPinia({ stubActions: false })
+
+// Create the stores
+const useIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
+  const isBurgerMenuOpen = ref(false)
+  const toggleBurgerMenu = () => {
+    isBurgerMenuOpen.value = !isBurgerMenuOpen.value
+  }
+  return { isBurgerMenuOpen, toggleBurgerMenu }
+})
+
+// Initialize the stores
+useIsBurgerMenuOpenStore()
 
 /***********/
 /* 3.Build */
@@ -37,8 +58,7 @@ function mountBurgerMenu(status = 'resolved') {
   return mount(BurgerMenu, {
     props: { siteMenuResult: { ...siteMenuResult, status: { value: status } } },
     global: {
-      provide: { [toggleBurgerMenuKey]: vi.fn() },
-      plugins: [router],
+      plugins: [router, pinia],
     },
   })
 }

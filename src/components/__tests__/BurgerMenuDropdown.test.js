@@ -2,9 +2,11 @@ import { mount } from '@vue/test-utils'
 import BurgerMenuDropdown from '@/components/BurgerMenuDropdown.vue'
 import BurgerMenuDropdownButton from '@/components/BurgerMenuDropdownButton.vue'
 import BurgerMenuDropdownList from '@/components/BurgerMenuDropdownList.vue'
-import { toggleBurgerMenuKey } from '@/utils/injectionkeys'
 import router from '@/router'
 import frontDataBase from '../../../db.json'
+import { createTestingPinia } from '@pinia/testing'
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
 /**************/
 /* 1.Hoisting */
@@ -21,9 +23,28 @@ vi.mock('@/data/dataFetchers', () => {
 /* 2.Initialization */
 /********************/
 
+/* Data */
+
 const mockDropdown = frontDataBase.siteMenu[1]
 const mockDropdownText = mockDropdown.text
 const mockLinks = mockDropdown.subMenu
+
+/* Stores */
+
+// Initialize a testing pinia instance
+const pinia = createTestingPinia({ stubActions: false })
+
+// Create the stores
+const useIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
+  const isBurgerMenuOpen = ref(true)
+  const toggleBurgerMenu = () => {
+    isBurgerMenuOpen.value = !isBurgerMenuOpen.value
+  }
+  return { isBurgerMenuOpen, toggleBurgerMenu }
+})
+
+// Initialize the stores
+useIsBurgerMenuOpenStore()
 
 /***********/
 /* 3.Build */
@@ -34,8 +55,7 @@ function mountBurgerMenuDropdown() {
   return mount(BurgerMenuDropdown, {
     props: { dropdown: mockDropdown },
     global: {
-      provide: { [toggleBurgerMenuKey]: vi.fn() },
-      plugins: [router],
+      plugins: [router, pinia],
     },
   })
 }

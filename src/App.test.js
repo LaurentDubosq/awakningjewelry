@@ -35,6 +35,7 @@ vi.mock('@/data/dataFetchers', async () => {
 /*********************/
 
 /* Data */
+
 const mockSiteMenuResult = {
   data: { value: frontDataBase['siteMenu'] },
   status: { value: 'resolved' },
@@ -43,16 +44,24 @@ const mockSiteMenuResult = {
 /* Stores */
 
 // Initialize a testing pinia instance
-const pinia = createTestingPinia()
+const pinia = createTestingPinia({ stubActions: false })
 
 // Create the stores
 const useIsOnMobileStore = defineStore('IsOnMobile', () => {
   const isOnMobile = ref(true)
   return { isOnMobile }
 })
+const useIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
+  const isBurgerMenuOpen = ref(false)
+  const toggleBurgerMenu = () => {
+    isBurgerMenuOpen.value = !isBurgerMenuOpen.value
+  }
+  return { isBurgerMenuOpen, toggleBurgerMenu }
+})
 
 // Initialize the stores
 const isOnMobileStore = useIsOnMobileStore()
+const isBurgerMenuOpenStore = useIsBurgerMenuOpenStore()
 
 /*********************************/
 /* 3.Additional Mock Assignation */
@@ -88,6 +97,7 @@ describe('App.vue', () => {
 
   beforeEach(async () => {
     isOnMobileStore.isOnMobile = true // reset the environment to mobile
+    isBurgerMenuOpenStore.isBurgerMenuOpen = false // reset the burger menu to close status
     wrapper = mountApp()
   })
 
@@ -112,15 +122,11 @@ describe('App.vue', () => {
 
     describe('Behaviors:', () => {
       describe('When open:', () => {
-        let button
-        let clickEvent
         let BurgerMenuComponent
 
         beforeEach(async () => {
           // Open the burger menu
-          button = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
-          clickEvent = new MouseEvent('click', { detail: 1 }) // Necessary to customize "detail" option
-          await button.element.dispatchEvent(clickEvent)
+          isBurgerMenuOpenStore.isBurgerMenuOpen = true
 
           // Find the burger menu component
           BurgerMenuComponent = wrapper.findComponent(BurgerMenu)

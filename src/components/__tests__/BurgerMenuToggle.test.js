@@ -1,30 +1,39 @@
-import { mount } from '@vue/test-utils'
+import { flushPromises, mount } from '@vue/test-utils'
 import BurgerMenuToggle from '../BurgerMenuToggle.vue'
 import IconBurger from '../icons/IconBurger.vue'
 import IconCross from '../icons/IconCross.vue'
-import { isBurgerMenuOpenKey, toggleBurgerMenuKey } from '@/utils/injectionkeys'
 import SiteHeaderIcon from '../SiteHeaderIcon.vue'
+import { createTestingPinia } from '@pinia/testing'
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
 /********************/
 /* 1.Initialization */
 /********************/
 
-let toggleBurgerMenu = vi.fn()
+// Initialize a testing pinia instance
+const pinia = createTestingPinia({ stubActions: false })
+
+// Create the stores
+const useIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
+  const isBurgerMenuOpen = ref(false)
+  const toggleBurgerMenu = () => {
+    isBurgerMenuOpen.value = !isBurgerMenuOpen.value
+  }
+  return { isBurgerMenuOpen, toggleBurgerMenu }
+})
+
+// Initialize the stores
+const isBurgerMenuOpenStore = useIsBurgerMenuOpenStore()
 
 /***********/
 /* 2.Build */
 /***********/
 
 // Component factory
-function mountBurgerMenuToggle(providers = {}) {
+function mountBurgerMenuToggle() {
   return mount(BurgerMenuToggle, {
-    global: {
-      provide: {
-        [isBurgerMenuOpenKey]: false,
-        [toggleBurgerMenuKey]: toggleBurgerMenu,
-        ...providers,
-      },
-    },
+    plugins: [pinia],
   })
 }
 
@@ -36,8 +45,8 @@ describe('BurgerMenuToggle.vue', () => {
   let wrapper
 
   beforeEach(() => {
+    isBurgerMenuOpenStore.isBurgerMenuOpen = false // reset the burger menu to close status
     wrapper = mountBurgerMenuToggle()
-    vi.clearAllMocks()
   })
 
   // Smoke Test
@@ -68,9 +77,12 @@ describe('BurgerMenuToggle.vue', () => {
     expect(icon.exists()).toBeTruthy()
   })
 
-  test('renders the cross icon with necessary information, when the burger menu is open', () => {
-    // Remount the component simulating the burger menu open
-    wrapper = mountBurgerMenuToggle({ [isBurgerMenuOpenKey]: true })
+  test('renders the cross icon with necessary information, when the burger menu is open', async () => {
+    // Open the burger menu
+    isBurgerMenuOpenStore.isBurgerMenuOpen = true
+
+    // Wait until the burger menu is opened
+    await flushPromises()
 
     // Find the SiteHeaderIconComponent
     const SiteHeaderIconComponent = wrapper.findComponent(SiteHeaderIcon)
@@ -99,29 +111,33 @@ describe('BurgerMenuToggle.vue', () => {
 
   describe('Behaviors:', () => {
     test('when the button is clicked, it commands the burger menu to toggle', async () => {
-      const button = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
+      // Assert that the store indicates the burger menu is open
+      expect(isBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
 
       // Click on the button
+      const button = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
       const clickEvent = new MouseEvent('click', { detail: 1 }) // simulate a button click
       await button.element.dispatchEvent(clickEvent)
 
-      // Assert the order to open/close the burger menu has been triggered
-      expect(toggleBurgerMenu).toHaveBeenCalledTimes(1)
+      // Assert that the store indicates the burger menu is close
+      expect(isBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
     })
 
     test('when we press the Enter key on the button, it commands the burger menu to toggle', async () => {
-      const button = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
+      // Assert that the store indicates the burger menu is open
+      expect(isBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
 
-      // Press Enter on the button
+      // Click on the button
+      const button = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
       const clickEvent = new MouseEvent('click', { detail: 0 }) // simulate an "enter" key pressed
       await button.element.dispatchEvent(clickEvent)
 
-      // Assert the order to open/close the burger menu has been triggered
-      expect(toggleBurgerMenu).toHaveBeenCalledTimes(1)
+      // Assert that the store indicates the burger menu is close
+      expect(isBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
     })
   })
 
-  /* Note : This component should focus on the first item when the burger menu is opened using the 'Enter' key.
+  /* Note : This component should focus on the first burger menu item when the burger menu is opened using the 'Enter' key.
   However, this test cannot be executed because the targeted element is not accessible from this component.
   Therefore, an integration test should be written in the App.vue test file for this purpose. */
 })
