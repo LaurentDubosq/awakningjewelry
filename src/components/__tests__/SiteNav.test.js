@@ -1,12 +1,14 @@
 import router from '@/router'
 import { mount } from '@vue/test-utils'
-import { siteMenuKey } from '@/utils/injectionkeys'
 import SiteNav from '@/components/SiteNav.vue'
 import SiteNavLink from '@/components/SiteNavLink.vue'
 import SiteNavDropdown from '@/components/SiteNavDropdown.vue'
 import LoadingComponent from '@/components/LoadingComponent.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
 import frontDataBase from '../../../db.json'
+import { defineStore } from 'pinia'
+import { computed, ref } from 'vue'
+import { createTestingPinia } from '@pinia/testing'
 
 /**************/
 /* 1.Hoisting */
@@ -23,24 +25,44 @@ vi.mock('@/data/dataFetchers', () => {
 /* 2.Initialization */
 /********************/
 
+/* Data */
+
 const mockSiteMenuResult = {
-  data: { value: frontDataBase['siteMenu'] },
-  status: { value: 'resolved' },
+  data: frontDataBase.siteMenu,
+  status: 'resolved',
 }
-const mockSiteMenuData = mockSiteMenuResult.data.value
+const mockSiteMenuData = mockSiteMenuResult.data
+const mockSiteMenuDataLength = mockSiteMenuData.length
+
+/* Stores */
+
+// Initialize a testing pinia instance
+const pinia = createTestingPinia()
+
+// Create the store
+const useSiteMenuStore = defineStore('SiteMenu', () => {
+  const siteMenu = ref(mockSiteMenuResult)
+  const siteMenuData = computed(() => siteMenu.value.data)
+  const siteMenuResultFetchStatus = computed(() => siteMenu.value.status)
+  return {
+    siteMenu,
+    siteMenuData,
+    siteMenuResultFetchStatus,
+  }
+})
+
+// Initialize the stores
+const siteMenuStore = useSiteMenuStore()
 
 /***********/
 /* 3.Build */
 /***********/
 
 // Component Factory
-function mountSiteNav(status = 'resolved') {
+function mountSiteNav() {
   return mount(SiteNav, {
     global: {
-      provide: {
-        [siteMenuKey]: { ...mockSiteMenuResult, status: { value: status } },
-      },
-      plugins: [router],
+      plugins: [router, pinia],
     },
   })
 }
@@ -53,6 +75,7 @@ describe('SiteNav.vue', () => {
   let wrapper
 
   beforeEach(() => {
+    siteMenuStore.siteMenu = { ...siteMenuStore.siteMenu, status: 'resolved' } // reset the data fetching status to resolved
     wrapper = mountSiteNav()
   })
 
@@ -64,7 +87,7 @@ describe('SiteNav.vue', () => {
   test('renders all the expected navigation items with necessary information', () => {
     // Assert that all the expected navigation items are rendered
     const items = wrapper.findAll("[data-testid='site-nav__item']")
-    expect(items).toHaveLength(mockSiteMenuData.length)
+    expect(items).toHaveLength(mockSiteMenuDataLength)
 
     // Assert that each item is rendered with its necessary information
     items.forEach(async (item, index) => {
@@ -190,6 +213,9 @@ describe('SiteNav.vue', () => {
 
   describe('Behaviors:', () => {
     test("when the data fetcher status is 'pending', the loading component is rendered", () => {
+      // Set the data fetching status to pending
+      siteMenuStore.siteMenu = { ...siteMenuStore.siteMenu, status: 'pending' } // reset the data fetching status to pending
+
       // Remount the component with pending status active
       wrapper = mountSiteNav('pending')
 
@@ -205,6 +231,9 @@ describe('SiteNav.vue', () => {
     })
 
     test("when the data fetcher status is 'rejected', the error component is rendered", () => {
+      // Set the data fetching status to rejected
+      siteMenuStore.siteMenu = { ...siteMenuStore.siteMenu, status: 'rejected' } // reset the data fetching status to rejected
+
       // Remount the component with rejected status active
       wrapper = mountSiteNav('rejected')
 

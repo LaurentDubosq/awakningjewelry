@@ -1,12 +1,10 @@
 import { flushPromises, mount } from '@vue/test-utils'
-import { siteMenuKey } from '@/utils/injectionkeys'
 import router from '@/router'
 import SiteHeader from '@/components/SiteHeader.vue'
 import BurgerMenuToggle from '@/components/BurgerMenuToggle.vue'
 import SiteLogo from '@/components/SiteLogo.vue'
 import SiteNav from '@/components/SiteNav.vue'
 import SiteHeaderIcon from '@/components/SiteHeaderIcon.vue'
-import frontDataBase from '../../../db.json'
 import { createTestingPinia } from '@pinia/testing'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
@@ -25,12 +23,6 @@ vi.mock('@/data/dataFetchers', () => {
 /********************/
 /* 2.Initialization */
 /********************/
-
-/* Data */
-
-const mockSiteMenu = frontDataBase.siteMenu
-
-/* Stores */
 
 // Initialize a testing pinia instance
 const pinia = createTestingPinia()
@@ -53,9 +45,6 @@ function mountSiteHeader() {
   return mount(SiteHeader, {
     global: {
       plugins: [router, pinia],
-      provide: {
-        [siteMenuKey]: mockSiteMenu,
-      },
       stubs: {
         SiteNav: true,
       },

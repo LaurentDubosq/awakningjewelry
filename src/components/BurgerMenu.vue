@@ -1,27 +1,17 @@
 <script setup lang="ts">
 import type { SiteMenuItem } from '@/types/components'
-import type { UseFetchWithStateReturn } from '@/types/fetch'
-import type { FetchStatus } from '@/types/fetch'
-import { type PropType, type ComputedRef, computed } from 'vue'
 import BurgerMenuLink from './BurgerMenuLink.vue'
 import BurgerMenuDropdown from './BurgerMenuDropdown.vue'
 import LoadingComponent from './LoadingComponent.vue'
 import ErrorComponent from './ErrorComponent.vue'
+import { useSiteMenuStore } from '@/stores/siteMenu'
+import { storeToRefs } from 'pinia'
 
-const { siteMenuResult } = defineProps({
-  siteMenuResult: {
-    type: Object as PropType<UseFetchWithStateReturn<SiteMenuItem[]>>,
-    required: true,
-  },
-})
+// Get the store instance
+const siteMenuStore = useSiteMenuStore()
 
-const siteMenuData: ComputedRef<SiteMenuItem[] | undefined> = computed(
-  () => siteMenuResult.data?.value,
-)
-
-const siteMenuFetchStatus: ComputedRef<FetchStatus | undefined> = computed(
-  () => siteMenuResult?.status?.value,
-)
+// Get the store's computeds
+const { siteMenuData, siteMenuResultFetchStatus } = storeToRefs(siteMenuStore)
 
 // Utilities
 function isLink(siteMenuItem: SiteMenuItem): boolean {
@@ -40,7 +30,7 @@ function isDropdown(siteMenuItem: SiteMenuItem): boolean {
     id="burger-menu"
   >
     <ul class="burger-menu__list">
-      <template v-if="siteMenuFetchStatus === 'resolved'">
+      <template v-if="siteMenuResultFetchStatus === 'resolved'">
         <li
           class="burger-menu__item"
           data-testid="burger-menu__item"
@@ -50,8 +40,8 @@ function isDropdown(siteMenuItem: SiteMenuItem): boolean {
           <BurgerMenuDropdown :dropdown="siteMenuItem" v-else-if="isDropdown(siteMenuItem)" />
         </li>
       </template>
-      <LoadingComponent v-if="siteMenuFetchStatus === 'pending'" />
-      <ErrorComponent v-if="siteMenuFetchStatus === 'rejected'" />
+      <LoadingComponent v-if="siteMenuResultFetchStatus === 'pending'" />
+      <ErrorComponent v-if="siteMenuResultFetchStatus === 'rejected'" />
     </ul>
   </nav>
 </template>

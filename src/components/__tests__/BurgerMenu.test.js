@@ -8,7 +8,7 @@ import router from '@/router'
 import frontDataBase from '../../../db.json'
 import { createTestingPinia } from '@pinia/testing'
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 /**************/
 /* 1.Hoisting */
@@ -27,10 +27,12 @@ vi.mock('@/data/dataFetchers', () => {
 
 /* Data */
 
-const siteMenuResult = {
-  data: { value: frontDataBase['siteMenu'] },
+const mockSiteMenuResult = {
+  data: frontDataBase.siteMenu,
+  status: 'resolved',
 }
-const mockSiteMenuData = siteMenuResult.data.value
+const mockSiteMenuData = mockSiteMenuResult.data
+const mockSiteMenuDataLength = mockSiteMenuData.length
 
 /* Stores */
 
@@ -45,18 +47,28 @@ const useIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
   }
   return { isBurgerMenuOpen, toggleBurgerMenu }
 })
+const useSiteMenuStore = defineStore('SiteMenu', () => {
+  const siteMenu = ref(mockSiteMenuResult)
+  const siteMenuData = computed(() => siteMenu.value.data)
+  const siteMenuResultFetchStatus = computed(() => siteMenu.value.status)
+  return {
+    siteMenu,
+    siteMenuData,
+    siteMenuResultFetchStatus,
+  }
+})
 
 // Initialize the stores
 useIsBurgerMenuOpenStore()
+const siteMenuStore = useSiteMenuStore()
 
 /***********/
 /* 3.Build */
 /***********/
 
 // Component Factory
-function mountBurgerMenu(status = 'resolved') {
+function mountBurgerMenu() {
   return mount(BurgerMenu, {
-    props: { siteMenuResult: { ...siteMenuResult, status: { value: status } } },
     global: {
       plugins: [router, pinia],
     },
@@ -71,6 +83,7 @@ describe('BurgerMenu.vue', () => {
   let wrapper
 
   beforeEach(() => {
+    siteMenuStore.siteMenu = { ...siteMenuStore.siteMenu, status: 'resolved' } // reset the data fetching status to resolved
     wrapper = mountBurgerMenu()
   })
 
@@ -82,7 +95,7 @@ describe('BurgerMenu.vue', () => {
   test('renders all the expected navigation items with necessary information', () => {
     // Assert that all the expected navigation items are rendered
     const items = wrapper.findAll("[data-testid='burger-menu__item']")
-    expect(items).toHaveLength(mockSiteMenuData.length)
+    expect(items).toHaveLength(mockSiteMenuDataLength)
 
     // Assert that each item is rendered with its necessary information
     items.forEach((item, index) => {
@@ -180,8 +193,11 @@ describe('BurgerMenu.vue', () => {
     })
 
     test("when the data fetcher status is 'pending', the loading component is rendered", () => {
+      // Set the data fetching status to pending
+      siteMenuStore.siteMenu = { ...siteMenuStore.siteMenu, status: 'pending' } // reset the data fetching status to pending
+
       // Remount the component with pending status active
-      wrapper = mountBurgerMenu('pending')
+      wrapper = mountBurgerMenu()
 
       // Assert the loading component is rendered
       const loadingComponent = wrapper.findComponent(LoadingComponent)
@@ -195,8 +211,11 @@ describe('BurgerMenu.vue', () => {
     })
 
     test("when the data fetcher status is 'rejected', the error component is rendered", () => {
+      // Set the data fetching status to rejected
+      siteMenuStore.siteMenu = { ...siteMenuStore.siteMenu, status: 'rejected' } // reset the data fetching status to rejected
+
       // Remount the component with rejected status active
-      wrapper = mountBurgerMenu('rejected')
+      wrapper = mountBurgerMenu()
 
       // Assert the error component is rendered
       const errorComponent = wrapper.findComponent(ErrorComponent)

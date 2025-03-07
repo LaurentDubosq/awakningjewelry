@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { provide } from 'vue'
 import { RouterView } from 'vue-router'
 import SiteHeader from './components/SiteHeader.vue'
 import BurgerMenu from './components/BurgerMenu.vue'
@@ -13,26 +12,12 @@ const isBurgerMenuOpenStore = useIsBurgerMenuOpen()
 // Get the store's states and computeds
 const { isBurgerMenuOpen } = storeToRefs(isBurgerMenuOpenStore)
 const { toggleBurgerMenu } = isBurgerMenuOpenStore
-
-/*************/
-/* Site Menu */
-/*************/
-
-// Provide the site menu (to: SiteNav.vue)
-import type { SiteMenuItem } from './types/components'
-import { getSiteMenu } from './data/dataFetchers'
-import { siteMenuKey } from './utils/injectionkeys'
-import type { UseFetchWithStateReturn } from './types/fetch'
-
-const siteMenuResult: UseFetchWithStateReturn<SiteMenuItem[]> = getSiteMenu()
-
-provide(siteMenuKey, siteMenuResult)
 </script>
 
 <template>
   <div class="site-container">
     <MyTransition name="marginLeftMinus300px" :group="false">
-      <BurgerMenu :siteMenuResult @close-burger-menu="toggleBurgerMenu" v-show="isBurgerMenuOpen" />
+      <BurgerMenu @close-burger-menu="toggleBurgerMenu" v-show="isBurgerMenuOpen" />
     </MyTransition>
     <div class="site-content">
       <div class="site-content-container">

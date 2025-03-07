@@ -49,8 +49,8 @@ const pinia = createTestingPinia()
 // Create the stores
 const useHeroSlidesResultStore = defineStore('HeroSlidesResult', () => {
   const heroSlidesResult = ref(mockHeroSlidesResult)
-  const heroSlidesData = computed(() => heroSlidesResult.value?.data)
-  const heroSlidesDataLength = computed(() => heroSlidesData.value?.length)
+  const heroSlidesData = computed(() => heroSlidesResult.value.data)
+  const heroSlidesDataLength = computed(() => heroSlidesData.value.length)
   const heroSlidesFetchStatus = computed(() => heroSlidesResult.value.status)
   return { heroSlidesResult, heroSlidesData, heroSlidesDataLength, heroSlidesFetchStatus }
 })

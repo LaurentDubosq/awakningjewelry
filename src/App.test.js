@@ -1,13 +1,12 @@
-import { getSiteMenu } from '@/data/dataFetchers'
 import { createTestingPinia } from '@pinia/testing'
 import router from '@/router'
-import { flushPromises, mount } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import App from '@/App.vue'
 import BurgerMenu from '@/components/BurgerMenu.vue'
 import SiteHeader from '@/components/SiteHeader.vue'
 import SiteNav from '@/components/SiteNav.vue'
 import { RouterView } from 'vue-router'
-import { nextTick, ref } from 'vue'
+import { nextTick, ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
 /**************/
@@ -26,7 +25,6 @@ vi.mock('@/data/dataFetchers', async () => {
 
   return {
     getPagesMetaData: vi.fn().mockReturnValue(mockPagesMetaData),
-    getSiteMenu: vi.fn(),
   }
 })
 
@@ -37,8 +35,8 @@ vi.mock('@/data/dataFetchers', async () => {
 /* Data */
 
 const mockSiteMenuResult = {
-  data: { value: frontDataBase['siteMenu'] },
-  status: { value: 'resolved' },
+  data: frontDataBase.siteMenu,
+  status: 'resolved',
 }
 
 /* Stores */
@@ -58,19 +56,24 @@ const useIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
   }
   return { isBurgerMenuOpen, toggleBurgerMenu }
 })
+const useSiteMenuStore = defineStore('SiteMenu', () => {
+  const siteMenu = ref(mockSiteMenuResult)
+  const siteMenuData = computed(() => siteMenu.value.data)
+  const siteMenuResultFetchStatus = computed(() => siteMenu.value.status)
+  return {
+    siteMenu,
+    siteMenuData,
+    siteMenuResultFetchStatus,
+  }
+})
 
 // Initialize the stores
 const isOnMobileStore = useIsOnMobileStore()
 const isBurgerMenuOpenStore = useIsBurgerMenuOpenStore()
-
-/*********************************/
-/* 3.Additional Mock Assignation */
-/*********************************/
-
-getSiteMenu.mockReturnValue(mockSiteMenuResult)
+useSiteMenuStore()
 
 /***********/
-/* 4.Build */
+/* 3.Build */
 /***********/
 
 // Component Factory
@@ -89,7 +92,7 @@ function mountApp() {
 }
 
 /**********/
-/* 5.Test */
+/* 4.Test */
 /**********/
 
 describe('App.vue', () => {
@@ -133,11 +136,7 @@ describe('App.vue', () => {
         })
 
         it('is rendered with necessary information', async () => {
-          // Assert the burger menu component is rendered
           expect(BurgerMenuComponent.isVisible()).toBeTruthy()
-
-          // Assert its 'siteMenuResult' prop value is well setted
-          expect(BurgerMenuComponent.props('siteMenuResult')).toMatchObject(mockSiteMenuResult)
         })
 
         test('when a link is clicked, it closes the burger menu', async () => {
@@ -286,29 +285,6 @@ describe('App.vue', () => {
     })
   })
 
-  /************/
-  /* Site Nav */
-  /************/
-
-  describe('SiteNav.vue', () => {
-    test("send properly the 'siteMenu' through 'siteMenu' provider by testing the first site navigation item display", async () => {
-      // Set the desktop environment
-      isOnMobileStore.isOnMobile = false
-
-      // Remount the component with environment updated
-      wrapper = mountApp()
-
-      // Wait after the SiteNav async import has been resolved after the component mounting
-      await flushPromises()
-
-      // Find the item
-      const item = wrapper.find("[data-testid='site-nav__item']")
-
-      // Assert the site menu is rendered
-      expect(item.exists()).toBeTruthy()
-    })
-  })
-
   /**************/
   /* RouterView */
   /**************/
@@ -338,13 +314,12 @@ describe('App.vue', () => {
     })
 
     // Open the burger menu
-    wrapper.vm.toggleBurgerMenu()
-    await nextTick()
+    isBurgerMenuOpenStore.isBurgerMenuOpen = true
 
     expect(wrapper.html()).toMatchInlineSnapshot(`
       "<div data-v-7a7a37b1="" class="site-container">
         <transition-stub data-v-7a7a37b1="" name="marginLeftMinus300px" appear="false" persisted="false" css="true">
-          <burger-menu-stub data-v-7a7a37b1="" sitemenuresult="[object Object]" style=""></burger-menu-stub>
+          <burger-menu-stub data-v-7a7a37b1="" style="display: none;"></burger-menu-stub>
         </transition-stub>
         <div data-v-7a7a37b1="" class="site-content">
           <div data-v-7a7a37b1="" class="site-content-container">
