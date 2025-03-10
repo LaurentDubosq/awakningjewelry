@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { useIsBurgerMenuOpen } from '@/stores/isBurgerMenuOpen'
 import type { SiteMenuItem } from '@/types/components'
-import { type PropType } from 'vue'
 
-const { link } = defineProps({
-  link: { type: Object as PropType<SiteMenuItem>, required: true },
-})
+const { link } = defineProps<{
+  link: SiteMenuItem
+}>()
 
 // Get the stores instances
 const isBurgerMenuOpenStore = useIsBurgerMenuOpen()

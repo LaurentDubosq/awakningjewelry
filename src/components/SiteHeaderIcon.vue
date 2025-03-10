@@ -1,7 +1,7 @@
 <script setup lang="ts">
-const { alternativeText } = defineProps({
-  alternativeText: { type: String, required: true },
-})
+const { alternativeText } = defineProps<{
+  alternativeText: string
+}>()
 </script>
 
 <template>

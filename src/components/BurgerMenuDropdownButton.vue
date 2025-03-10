@@ -3,10 +3,10 @@ import SASSCONSTANTS from '@/assets/styles/_constants.module.scss'
 import IconSignMinus from './icons/IconSignMinus.vue'
 import IconSignPlus from './icons/IconSignPlus.vue'
 
-const { text, isDropdownOpen } = defineProps({
-  text: { type: String, required: true },
-  isDropdownOpen: { type: Boolean, required: true },
-})
+const { text, isDropdownOpen } = defineProps<{
+  text: string
+  isDropdownOpen: boolean
+}>()
 
 const COLORWHITE: string = SASSCONSTANTS.AwakningColorWhite // Set plus/minus icon color from design system
 const textLowered = text.toLowerCase()

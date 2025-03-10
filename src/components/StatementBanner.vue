@@ -3,17 +3,12 @@ import type { StatementBanner } from '@/types/components'
 import type { FetchStatus } from '@/types/fetch'
 import LoadingComponent from './LoadingComponent.vue'
 import ErrorComponent from './ErrorComponent.vue'
-import { type PropType } from 'vue'
 
 /* As the component can be used multiple times in the application, its parent has the responsibility to fetch the data */
-const { statement, fetchStatus } = defineProps({
-  statement: {
-    type: Object as PropType<StatementBanner> | undefined,
-  },
-  fetchStatus: {
-    type: String as PropType<FetchStatus> | undefined,
-  },
-})
+const { statement, fetchStatus } = defineProps<{
+  statement?: StatementBanner
+  fetchStatus?: FetchStatus
+}>()
 </script>
 
 <template>

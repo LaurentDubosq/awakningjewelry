@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { SiteSubMenuItem } from '@/types/components'
 import { closeSiteNavDropdownKey } from '@/utils/injectionkeys'
-import { inject, type PropType } from 'vue'
+import { inject } from 'vue'
 
-const { link } = defineProps({
-  link: { type: Object as PropType<SiteSubMenuItem>, required: true },
-})
+const { link } = defineProps<{
+  link: SiteSubMenuItem
+}>()
 
 const closeDropdown: (() => void) | undefined = inject(closeSiteNavDropdownKey)
 </script>

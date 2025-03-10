@@ -1,20 +1,15 @@
 <script setup lang="ts">
-import { type PropType } from 'vue'
 import type { Collection } from '@/types/global.d.ts'
 import CollectionListingItem from './CollectionListingItem.vue'
 import type { FetchStatus } from '@/types/fetch'
 import LoadingComponent from './LoadingComponent.vue'
 import ErrorComponent from './ErrorComponent.vue'
 
-const { title, collections, fetchStatus } = defineProps({
-  title: { type: String, required: true },
-  collections: {
-    type: Object as PropType<Collection[]> | undefined,
-  },
-  fetchStatus: {
-    type: String as PropType<FetchStatus> | undefined,
-  },
-})
+const { title, collections, fetchStatus } = defineProps<{
+  title: string
+  collections?: Collection[]
+  fetchStatus?: FetchStatus
+}>()
 </script>
 
 <template>

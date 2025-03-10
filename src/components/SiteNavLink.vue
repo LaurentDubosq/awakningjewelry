@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { type PropType } from 'vue'
 import type { SiteMenuItem } from '@/types/components'
 import SiteHeaderIcon from './SiteHeaderIcon.vue'
 
-const { link } = defineProps({
-  link: { type: Object as PropType<SiteMenuItem>, required: true },
-})
+const { link } = defineProps<{
+  link: SiteMenuItem
+}>()
 </script>
 
 <template>

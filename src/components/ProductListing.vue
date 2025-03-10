@@ -1,23 +1,15 @@
 <script setup lang="ts">
-import { type PropType } from 'vue'
 import type { FetchStatus } from '@/types/fetch'
 import type { ProductSummary } from '@/types/global.d.ts'
 import ProductListingItem from './ProductListingItem.vue'
 import LoadingComponent from './LoadingComponent.vue'
 import ErrorComponent from './ErrorComponent.vue'
 
-const { title, products, fetchStatus } = defineProps({
-  title: {
-    type: String,
-    required: true,
-  },
-  products: {
-    type: Object as PropType<ProductSummary[]> | undefined,
-  },
-  fetchStatus: {
-    type: String as PropType<FetchStatus> | undefined,
-  },
-})
+const { title, products, fetchStatus } = defineProps<{
+  title: string
+  products?: ProductSummary[]
+  fetchStatus?: FetchStatus
+}>()
 </script>
 
 <template>

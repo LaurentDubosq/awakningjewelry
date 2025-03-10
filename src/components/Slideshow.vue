@@ -21,9 +21,9 @@ import { useGetClientHeightAtElementResize } from '@/composables/useGetClientHei
 /****************/
 
 // Get the slides length to manage the looping behavior and to calculte the number of slick slider dots
-const { slidesLength } = defineProps({
-  slidesLength: { type: Number, required: true },
-})
+const { slidesLength } = defineProps<{
+  slidesLength: number
+}>()
 // Get the environement to restrains the position calculation of slick slider to mobile
 const isOnMobileStore = useIsOnMobileStore()
 const { isOnMobile } = storeToRefs(isOnMobileStore)

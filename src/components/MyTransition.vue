@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { TransitionGroup, Transition } from 'vue'
 
-const { name, group } = defineProps({
-  name: { type: String, required: true },
-  group: { type: Boolean, required: true },
-  duration: { type: Number },
-})
+const { name, group } = defineProps<{
+  name: string
+  group: boolean
+  duration?: number
+}>()
 </script>
 
 <template>

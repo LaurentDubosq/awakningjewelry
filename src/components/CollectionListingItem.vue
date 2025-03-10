@@ -1,13 +1,9 @@
 <script setup lang="ts">
 import type { Collection } from '@/types/global'
-import { type PropType } from 'vue'
 
-const { collection } = defineProps({
-  collection: {
-    type: Object as PropType<Collection>,
-    required: true,
-  },
-})
+const { collection } = defineProps<{
+  collection: Collection
+}>()
 </script>
 
 <template>

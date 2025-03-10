@@ -1,9 +1,9 @@
 <script setup lang="ts">
-const { text, title, isDropdownOpen } = defineProps({
-  text: { type: String, required: true },
-  title: { type: String, required: true },
-  isDropdownOpen: { type: Boolean, required: true },
-})
+const { text, title, isDropdownOpen } = defineProps<{
+  text: string
+  title: string
+  isDropdownOpen: boolean
+}>()
 
 const textLowered = text.toLowerCase()
 </script>

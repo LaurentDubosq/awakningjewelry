@@ -2,9 +2,9 @@
 import IconPause from './icons/IconPause.vue'
 import IconPlay from './icons/IconPlay.vue'
 
-const { isPlaying } = defineProps({
-  isPlaying: { type: Boolean, required: true },
-})
+const { isPlaying } = defineProps<{
+  isPlaying: boolean
+}>()
 </script>
 
 <template>

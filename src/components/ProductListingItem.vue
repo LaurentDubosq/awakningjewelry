@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import type { ProductSummary } from '@/types/global'
-import type { PropType } from 'vue'
 
-const { product } = defineProps({
-  product: { type: Object as PropType<ProductSummary>, required: true },
-})
+const { product } = defineProps<{
+  product: ProductSummary
+}>()
 </script>
 
 <template>

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref, type Ref } from 'vue'
 
-const props = defineProps({
-  slidesLength: { type: Number, required: true },
-  currentIndex: { type: Number, required: true },
-})
+const props = defineProps<{
+  slidesLength: number
+  currentIndex: number
+}>()
 const emit = defineEmits(['display-slide'])
 
 const isSlickSliderFocused: Ref<boolean> = ref(false)

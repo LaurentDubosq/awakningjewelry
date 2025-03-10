@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import SASSCONSTANTS from '@/assets/styles/_constants.module.scss'
 import type { HeroSlideType } from '@/types/components'
-import { type PropType } from 'vue'
 
-const { slide, slidesLength, slideIndex, isActive } = defineProps({
-  slide: { type: Object as PropType<HeroSlideType>, required: true },
-  slidesLength: { type: Number, required: true },
-  slideIndex: { type: Number, required: true },
-  isActive: { type: Boolean, required: true },
-})
+const { slide, slidesLength, slideIndex, isActive } = defineProps<{
+  slide: HeroSlideType
+  slidesLength: number
+  slideIndex: number
+  isActive: boolean
+}>()
 const DESKTOPBREAKPOINT: string = SASSCONSTANTS.AwakningBreakpointDesktop
 </script>
 
