@@ -1,22 +1,10 @@
-import { mount } from '@vue/test-utils'
+import { mount, RouterLinkStub } from '@vue/test-utils'
 import SiteNavDropdownItem from '@/components/SiteNavDropdownItem.vue'
-import router from '@/router'
 import { closeSiteNavDropdownKey } from '@/utils/injectionkeys'
 import frontDataBase from '../../../db.json'
 
-/**************/
-/* 1.Hoisting */
-/**************/
-
-// Mock the "getPagesMetaData" data fetcher used in the mocked router
-vi.mock('@/data/dataFetchers', () => {
-  return {
-    getPagesMetaData: vi.fn().mockReturnValue(undefined),
-  }
-})
-
 /********************/
-/* 2.Initialization */
+/* 1.Initialization */
 /********************/
 
 const mockSiteMenu = frontDataBase['siteMenu']
@@ -26,7 +14,7 @@ const mockLinkURL = mockSiteMenu[1].subMenu[0].url
 const mockCloseSiteNavDropdown = vi.fn()
 
 /***********/
-/* 3.Build */
+/* 2.Build */
 /***********/
 
 // Component Factory
@@ -34,14 +22,14 @@ function mountSiteNavDropdownItem(propsOptions = {}) {
   return mount(SiteNavDropdownItem, {
     props: { link: mockLink, ...propsOptions },
     global: {
-      plugins: [router],
       provide: { [closeSiteNavDropdownKey]: mockCloseSiteNavDropdown },
+      stubs: { RouterLink: RouterLinkStub },
     },
   })
 }
 
 /**********/
-/* 4.Test */
+/* 3.Test */
 /**********/
 
 describe('SiteNavDropdownItem.vue', () => {
@@ -50,7 +38,7 @@ describe('SiteNavDropdownItem.vue', () => {
 
   beforeEach(() => {
     wrapper = mountSiteNavDropdownItem()
-    link = wrapper.find("[data-testid='site-nav__dropdown-item-link']")
+    link = wrapper.findComponent(RouterLinkStub)
   })
 
   // Smoke test
@@ -63,7 +51,7 @@ describe('SiteNavDropdownItem.vue', () => {
     expect(link.exists()).toBeTruthy()
 
     // Assert the link has the correct url
-    expect(link.attributes('href')).toContain(mockLinkURL)
+    expect(link.props('to')).toContain(mockLinkURL)
 
     // Assert the link's text is well rendered
     expect(link.text()).toContain(mockLinkText)

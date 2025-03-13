@@ -1,5 +1,4 @@
-import router from '@/router'
-import { mount } from '@vue/test-utils'
+import { mount, RouterLinkStub } from '@vue/test-utils'
 import SiteNav from '@/components/SiteNav.vue'
 import SiteNavLink from '@/components/SiteNavLink.vue'
 import SiteNavDropdown from '@/components/SiteNavDropdown.vue'
@@ -10,19 +9,8 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { createTestingPinia } from '@pinia/testing'
 
-/**************/
-/* 1.Hoisting */
-/**************/
-
-// Mock the "getPagesMetaData" data fetcher used in the mocked router
-vi.mock('@/data/dataFetchers', () => {
-  return {
-    getPagesMetaData: vi.fn().mockReturnValue(undefined),
-  }
-})
-
 /********************/
-/* 2.Initialization */
+/* 1.Initialization */
 /********************/
 
 /* Data */
@@ -55,20 +43,21 @@ const useSiteMenuStore = defineStore('SiteMenu', () => {
 const siteMenuStore = useSiteMenuStore()
 
 /***********/
-/* 3.Build */
+/* 2.Build */
 /***********/
 
 // Component Factory
 function mountSiteNav() {
   return mount(SiteNav, {
     global: {
-      plugins: [router, pinia],
+      plugins: [pinia],
+      stubs: { RouterLink: RouterLinkStub },
     },
   })
 }
 
 /**********/
-/* 4.Test */
+/* 3.Test */
 /**********/
 
 describe('SiteNav.vue', () => {
@@ -104,7 +93,7 @@ describe('SiteNav.vue', () => {
 
       if (isTextLink()) {
         const SiteNavLinkComponent = item.findComponent(SiteNavLink)
-        const linkAnchor = item.find("[data-testid='site-nav__link--text']")
+        const link = item.findComponent(RouterLinkStub)
         const mockLink = mockSiteMenuData[index]
         const mockLinkText = mockLink.text
         const mockLinkURL = mockLink.url
@@ -120,16 +109,16 @@ describe('SiteNav.vue', () => {
         /*******************/
 
         // Assert the link exists
-        expect(linkAnchor.exists()).toBeTruthy()
+        expect(link.exists()).toBeTruthy()
 
-        // Assert the link tag has the correct url
-        expect(linkAnchor.attributes('href')).toBe(mockLinkURL)
+        // Assert the link has the correct url
+        expect(link.props('to')).toBe(mockLinkURL)
 
         // Assert the link's text is rendered
-        expect(linkAnchor.text()).toContain(mockLinkText)
+        expect(link.text()).toContain(mockLinkText)
       } else if (isIconLink()) {
         const SiteNavLinkComponent = item.findComponent(SiteNavLink)
-        const linkAnchor = item.find("[data-testid='site-nav__link--icon']")
+        const link = item.findComponent(RouterLinkStub)
         const linkAlternativeText = item.find("[data-testid='site-header__icon-text']")
         const linkSVG = item.find('svg')
         const mockLink = mockSiteMenuData[index]
@@ -147,10 +136,10 @@ describe('SiteNav.vue', () => {
         /*******************/
 
         // Assert the link exists
-        expect(linkAnchor.exists()).toBeTruthy()
+        expect(link.exists()).toBeTruthy()
 
-        // Assert the link tag has the correct url
-        expect(linkAnchor.attributes('href')).toBe(mockLinkURL)
+        // Assert the link has the correct url
+        expect(link.props('to')).toBe(mockLinkURL)
 
         // Assert the link icon is rendered
         expect(linkSVG.exists()).toBeTruthy()
@@ -196,13 +185,13 @@ describe('SiteNav.vue', () => {
 
         // Assert each link is rendered with its necessary information
         dropdownItems.forEach((item, index) => {
-          const link = item.find("[data-testid='site-nav__dropdown-item-link']")
+          const link = item.findComponent(RouterLinkStub)
           const mockLink = mockDropdownList[index]
           const mockLinkText = mockLink.text
           const mockLinkURL = mockLink.url
 
-          // Assert the link tag has the correct url
-          expect(link.attributes('href')).toBe(mockLinkURL)
+          // Assert the link has the correct url
+          expect(link.props('to')).toBe(mockLinkURL)
 
           // Assert the link's text is rendered
           expect(link.text()).toContain(mockLinkText)

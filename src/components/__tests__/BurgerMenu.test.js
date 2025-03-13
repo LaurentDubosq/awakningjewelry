@@ -1,28 +1,16 @@
-import { mount } from '@vue/test-utils'
+import { mount, RouterLinkStub } from '@vue/test-utils'
 import BurgerMenu from '@/components/BurgerMenu.vue'
 import BurgerMenuLink from '@/components/BurgerMenuLink.vue'
 import BurgerMenuDropdown from '@/components/BurgerMenuDropdown.vue'
 import LoadingComponent from '@/components/LoadingComponent.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
-import router from '@/router'
 import frontDataBase from '../../../db.json'
 import { createTestingPinia } from '@pinia/testing'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
-/**************/
-/* 1.Hoisting */
-/**************/
-
-// Mock the "getPagesMetaData" data fetcher used in the mocked router
-vi.mock('@/data/dataFetchers', () => {
-  return {
-    getPagesMetaData: vi.fn().mockReturnValue(undefined),
-  }
-})
-
 /********************/
-/* 2.Initialization */
+/* 1.Initialization */
 /********************/
 
 /* Data */
@@ -63,20 +51,23 @@ useIsBurgerMenuOpenStore()
 const siteMenuStore = useSiteMenuStore()
 
 /***********/
-/* 3.Build */
+/* 2.Build */
 /***********/
 
 // Component Factory
 function mountBurgerMenu() {
   return mount(BurgerMenu, {
     global: {
-      plugins: [router, pinia],
+      plugins: [pinia],
+      stubs: {
+        RouterLink: RouterLinkStub,
+      },
     },
   })
 }
 
 /**********/
-/* 4.Test */
+/* 3.Test */
 /**********/
 
 describe('BurgerMenu.vue', () => {
@@ -109,7 +100,7 @@ describe('BurgerMenu.vue', () => {
 
       if (isLink()) {
         const BurgerMenuLinkComponent = item.findComponent(BurgerMenuLink)
-        const link = item.find("[data-testid='burger-menu__link']")
+        const link = BurgerMenuLinkComponent.findComponent(RouterLinkStub)
         const mockLink = mockSiteMenuData[index]
         const mockLinkURL = mockLink.url
         const mockLinkText = mockLink.text
@@ -124,8 +115,8 @@ describe('BurgerMenu.vue', () => {
         /* BurgerMenuLink.vue */
         /**********************/
 
-        // Assert the link tag has the correct url
-        expect(link.attributes('href')).toBe(mockLinkURL)
+        // Assert the link has the correct url
+        expect(link.props('to')).toBe(mockLinkURL)
 
         // Assert the link text is rendered
         expect(link.text()).toContain(mockLinkText)
@@ -164,13 +155,13 @@ describe('BurgerMenu.vue', () => {
 
         // Assert each link is rendered with its necessary information
         items.forEach((item, index) => {
-          const link = item.find("[data-testid='burger-menu__dropdown-item-link']")
+          const link = item.findComponent(RouterLinkStub)
           const mockLink = mockDropdownItems[index]
           const mockLinkURL = mockLink.url
           const mockLinkText = mockLink.text
 
-          // Assert the link tag has the correct url
-          expect(link.attributes('href')).toBe(mockLinkURL)
+          // Assert the link has the correct url
+          expect(link.props('to')).toBe(mockLinkURL)
 
           // Assert the link text is rendered
           expect(link.text()).toContain(mockLinkText)
@@ -182,7 +173,7 @@ describe('BurgerMenu.vue', () => {
   describe('Behaviors:', () => {
     test('when a burger menu link is focus and the escape key is pressed, it commands the burger menu to close', async () => {
       // Focus a burger menu link
-      const link = wrapper.find("[data-testid='burger-menu__link']")
+      const link = wrapper.findComponent(RouterLinkStub)
       await link.trigger('focus')
 
       // Press the escape key

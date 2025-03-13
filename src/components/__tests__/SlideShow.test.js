@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils'
+import { mount, RouterLinkStub } from '@vue/test-utils'
 import { ref } from 'vue'
 import Slideshow from '@/components/Slideshow.vue'
 import SlideshowAutorotationButton from '@/components/SlideshowAutorotationButton.vue'
@@ -9,7 +9,6 @@ import HeroSlide from '@/components/HeroSlide.vue'
 import frontDataBase from '../../../db.json'
 import { createTestingPinia } from '@pinia/testing'
 import { h, defineComponent } from 'vue'
-import router from '@/router'
 import { defineStore } from 'pinia'
 
 /**************/
@@ -20,13 +19,6 @@ import { defineStore } from 'pinia'
 vi.mock('@/composables/useGetClientHeightAtElementResize', () => {
   return {
     useGetClientHeightAtElementResize: vi.fn().mockReturnValue(ref(100)),
-  }
-})
-
-// Mock the "getPagesMetaData" data fetcher used in the mocked router
-vi.mock('@/data/dataFetchers', () => {
-  return {
-    getPagesMetaData: vi.fn().mockReturnValue(undefined),
   }
 })
 
@@ -100,7 +92,8 @@ function mountSlideshow() {
       default: ({ currentIndex }) => h(mockHeroSlideComponent, { currentIndex }), // send the local currentIndex variable to mockHeroSlideComponent component as props
     },
     global: {
-      plugins: [router, pinia],
+      plugins: [pinia],
+      stubs: { RouterLink: RouterLinkStub },
     },
   })
 }
@@ -509,7 +502,7 @@ describe('Slideshow.vue', () => {
       // Get all the focusable elements
       const focusableElements = wrapper
         .findAll(
-          'button, input, select, textarea, a[href], area, iframe, object, embed, details, audio, video, [tabindex="0"]',
+          'button, input, select, textarea, a, area, iframe, object, embed, details, audio, video, [tabindex="0"]',
         )
         .map((e) => e.element)
 

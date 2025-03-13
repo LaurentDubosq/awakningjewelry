@@ -1,23 +1,11 @@
-import { mount } from '@vue/test-utils'
+import { mount, RouterLinkStub } from '@vue/test-utils'
 import SiteNavDropdownList from '@/components/SiteNavDropdownList.vue'
 import SiteNavDropdownItem from '@/components/SiteNavDropdownItem.vue'
-import router from '@/router'
 import { closeSiteNavDropdownKey } from '@/utils/injectionkeys'
 import frontDataBase from '../../../db.json'
 
-/**************/
-/* 1.Hoisting */
-/**************/
-
-// Mock the "getPagesMetaData" data fetcher used in the mocked router
-vi.mock('@/data/dataFetchers', () => {
-  return {
-    getPagesMetaData: vi.fn().mockReturnValue(undefined),
-  }
-})
-
 /********************/
-/* 2.Initialization */
+/* 1.Initialization */
 /********************/
 
 const mockSiteMenu = frontDataBase['siteMenu']
@@ -26,7 +14,7 @@ const mockLinks = mockSiteMenu[1].subMenu
 const mockCloseSiteNavDropdown = vi.fn()
 
 /***********/
-/* 3.Build */
+/* 2.Build */
 /***********/
 
 // Component Factory
@@ -34,14 +22,14 @@ function mountSiteNavDropdownList() {
   return mount(SiteNavDropdownList, {
     props: { links: mockLinks, dropdownText: mockDropdownText },
     global: {
-      plugins: [router],
       provide: { [closeSiteNavDropdownKey]: mockCloseSiteNavDropdown },
+      stubs: { RouterLink: RouterLinkStub },
     },
   })
 }
 
 /**********/
-/* 4.Test */
+/* 3.Test */
 /**********/
 
 describe('SiteNavDropdownList.vue', () => {

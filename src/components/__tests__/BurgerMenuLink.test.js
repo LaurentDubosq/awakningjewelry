@@ -1,24 +1,12 @@
-import { mount } from '@vue/test-utils'
+import { mount, RouterLinkStub } from '@vue/test-utils'
 import BurgerMenuLink from '@/components/BurgerMenuLink.vue'
 import frontDataBase from '../../../db.json'
-import router from '@/router'
 import { createTestingPinia } from '@pinia/testing'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-/**************/
-/* 1.Hoisting */
-/**************/
-
-// Mock the "getPagesMetaData" data fetcher used in the mocked router
-vi.mock('@/data/dataFetchers', () => {
-  return {
-    getPagesMetaData: vi.fn().mockReturnValue(undefined),
-  }
-})
-
 /********************/
-/* 2.Initialization */
+/* 1.Initialization */
 /********************/
 
 /* Data */
@@ -46,7 +34,7 @@ const useIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
 const isBurgerMenuOpenStore = useIsBurgerMenuOpenStore()
 
 /***********/
-/* 3.Build */
+/* 2.Build */
 /***********/
 
 // Component Factory
@@ -54,13 +42,14 @@ function mountBurgerMenuLink() {
   return mount(BurgerMenuLink, {
     props: { link: mockLink },
     global: {
-      plugins: [router, pinia],
+      plugins: [pinia],
+      stubs: { RouterLink: RouterLinkStub },
     },
   })
 }
 
 /**********/
-/* 4.Test */
+/* 3.Test */
 /**********/
 
 describe('BurgerMenuLink.vue', () => {
@@ -69,7 +58,7 @@ describe('BurgerMenuLink.vue', () => {
 
   beforeEach(() => {
     wrapper = mountBurgerMenuLink()
-    link = wrapper.find("[data-testid='burger-menu__link']")
+    link = wrapper.findComponent(RouterLinkStub)
   })
 
   // Smoke test
@@ -81,8 +70,8 @@ describe('BurgerMenuLink.vue', () => {
     // Assert the link exists
     expect(link.exists()).toBeTruthy()
 
-    // Assert the link tag has the correct url
-    expect(link.attributes('href')).toBe(mockLinkURL)
+    // Assert the link has the correct url
+    expect(link.props('to')).toBe(mockLinkURL)
 
     // Assert the link text is rendered
     expect(link.text()).toContain(mockLinkText)

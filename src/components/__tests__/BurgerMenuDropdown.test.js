@@ -1,26 +1,14 @@
-import { mount } from '@vue/test-utils'
+import { mount, RouterLinkStub } from '@vue/test-utils'
 import BurgerMenuDropdown from '@/components/BurgerMenuDropdown.vue'
 import BurgerMenuDropdownButton from '@/components/BurgerMenuDropdownButton.vue'
 import BurgerMenuDropdownList from '@/components/BurgerMenuDropdownList.vue'
-import router from '@/router'
 import frontDataBase from '../../../db.json'
 import { createTestingPinia } from '@pinia/testing'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-/**************/
-/* 1.Hoisting */
-/**************/
-
-// Mock the "getPagesMetaData" data fetcher used in the mocked router
-vi.mock('@/data/dataFetchers', () => {
-  return {
-    getPagesMetaData: vi.fn().mockReturnValue(undefined),
-  }
-})
-
 /********************/
-/* 2.Initialization */
+/* 1.Initialization */
 /********************/
 
 /* Data */
@@ -47,7 +35,7 @@ const useIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
 useIsBurgerMenuOpenStore()
 
 /***********/
-/* 3.Build */
+/* 2.Build */
 /***********/
 
 // Component Factory
@@ -55,13 +43,16 @@ function mountBurgerMenuDropdown() {
   return mount(BurgerMenuDropdown, {
     props: { dropdown: mockDropdown },
     global: {
-      plugins: [router, pinia],
+      plugins: [pinia],
+      stubs: {
+        RouterLink: RouterLinkStub,
+      },
     },
   })
 }
 
 /**********/
-/* 4.Test */
+/* 3.Test */
 /**********/
 
 describe('BurgerMenuDropdown.vue', () => {

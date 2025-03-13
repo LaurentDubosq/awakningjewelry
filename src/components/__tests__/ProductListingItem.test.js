@@ -1,21 +1,9 @@
-import { mount } from '@vue/test-utils'
+import { mount, RouterLinkStub } from '@vue/test-utils'
 import ProductListingItem from '@/components/ProductListingItem.vue'
 import frontDataBase from '../../../db.json'
-import router from '@/router'
-
-/**************/
-/* 1.Hoisting */
-/**************/
-
-// Mock the "getPagesMetaData" data fetcher used in the mocked router
-vi.mock('@/data/dataFetchers', () => {
-  return {
-    getPagesMetaData: vi.fn().mockReturnValue(undefined),
-  }
-})
 
 /********************/
-/* 2.Initialization */
+/* 1.Initialization */
 /********************/
 
 const mockProduct = frontDataBase.promotions[0]
@@ -27,7 +15,7 @@ const mockProductOriginalPrice = mockProduct.price
 const mockProductDiscountedPrice = mockProduct.promotionalPrice
 
 /***********/
-/* 3.Build */
+/* 2.Build */
 /***********/
 
 // Component Factory
@@ -35,13 +23,13 @@ function mountProductListingItem() {
   return mount(ProductListingItem, {
     props: { product: mockProduct },
     global: {
-      plugins: [router],
+      stubs: { RouterLink: RouterLinkStub },
     },
   })
 }
 
 /**********/
-/* 4.Test */
+/* 3.Test */
 /**********/
 
 describe('ProductListingItem.vue', () => {
@@ -57,17 +45,17 @@ describe('ProductListingItem.vue', () => {
   })
 
   test('render product with necessary information', () => {
-    const link = wrapper.find("[data-testid='product-listing__item-link']")
+    const link = wrapper.findComponent(RouterLinkStub)
     const image = wrapper.find("[data-testid='product-listing__item-image']")
     const title = wrapper.find("[data-testid='product-listing__item-title']")
     const originalPrice = wrapper.find("[ data-testid='product-listing__item-original-price']")
     const discountedPrice = wrapper.find("[ data-testid='product-listing__item-discounted-price']")
 
-    // Assert the link tag exists
+    // Assert the link exists
     expect(link.exists()).toBeTruthy()
 
-    // Assert the link tag has the correct "href" value
-    expect(link.attributes('href')).toBe(mockProductURL)
+    // Assert the link has the correct url
+    expect(link.props('to')).toBe(mockProductURL)
 
     // Assert the image is rendered
     expect(image.exists()).toBeTruthy()

@@ -1,21 +1,9 @@
-import { mount } from '@vue/test-utils'
+import { mount, RouterLinkStub } from '@vue/test-utils'
 import CollectionListingItem from '@/components/CollectionListingItem.vue'
 import frontDataBase from '../../../db.json'
-import router from '@/router'
-
-/**************/
-/* 1.Hoisting */
-/**************/
-
-// Mock the "getPagesMetaData" data fetcher used in the mocked router
-vi.mock('@/data/dataFetchers', () => {
-  return {
-    getPagesMetaData: vi.fn().mockReturnValue(undefined),
-  }
-})
 
 /********************/
-/* 2.Initialization */
+/* 1.Initialization */
 /********************/
 
 const mockCollection = frontDataBase.collectionsByGender[0]
@@ -24,7 +12,7 @@ const mockCollectionImageURL = mockCollection.image.url
 const mockCollectionTitle = mockCollection.title
 
 /***********/
-/* 3.Build */
+/* 2.Build */
 /***********/
 
 // Component Factory
@@ -34,13 +22,13 @@ function mountCollectionListingItem() {
       collection: mockCollection,
     },
     global: {
-      plugins: [router],
+      stubs: { RouterLink: RouterLinkStub },
     },
   })
 }
 
 /**********/
-/* 4.Test */
+/* 3.Test */
 /**********/
 
 describe('CollectionListingItem.vue', () => {
@@ -56,15 +44,15 @@ describe('CollectionListingItem.vue', () => {
   })
 
   test('renders collection with necessary information', () => {
-    const link = wrapper.find("[data-testid='collection-listing__link']")
+    const link = wrapper.findComponent(RouterLinkStub)
     const img = wrapper.find("[data-testid='collection-listing__item-img']")
     const title = wrapper.find("[data-testid='collection-listing__item-title']")
 
-    // Assert the collection has a link tag
+    // Assert the collection has a link
     expect(link.exists()).toBeTruthy()
 
-    // Assert the link tag has the correct "url" value
-    expect(link.attributes('href')).toBe(mockCollectionURL)
+    // Assert the link has the correct "url" value
+    expect(link.props('to')).toBe(mockCollectionURL)
 
     // Assert its img is rendered
     expect(img.exists()).toBeTruthy()

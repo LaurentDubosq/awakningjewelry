@@ -1,22 +1,10 @@
-import { mount } from '@vue/test-utils'
+import { mount, RouterLinkStub } from '@vue/test-utils'
 import { beforeEach } from 'vitest'
 import HeroSlide from '@/components/HeroSlide.vue'
 import frontDataBase from '../../../db.json'
-import router from '@/router'
-
-/**************/
-/* 1.Hoisting */
-/**************/
-
-// Mock the "getPagesMetaData" data fetcher used in the mocked router
-vi.mock('@/data/dataFetchers', () => {
-  return {
-    getPagesMetaData: vi.fn().mockReturnValue(undefined),
-  }
-})
 
 /********************/
-/* 2.Initialization */
+/* 1.Initialization */
 /********************/
 
 const mockSlide = frontDataBase.heroSlides[0]
@@ -28,7 +16,7 @@ const mockSlideImageMobileURL = mockSlide.images.mobile.url
 const mockSlideImageDesktopURL = mockSlide.images.desktop.url
 
 /***********/
-/* 3.Build */
+/* 2.Build */
 /***********/
 
 // Component Factory
@@ -41,13 +29,13 @@ function mountHeroSlide() {
       isActive: true,
     },
     global: {
-      plugins: [router],
+      stubs: { RouterLink: RouterLinkStub },
     },
   })
 }
 
 /**********/
-/* 4.Test */
+/* 3.Test */
 /**********/
 
 describe('HeroSlide.vue', () => {
@@ -67,7 +55,7 @@ describe('HeroSlide.vue', () => {
     const source = wrapper.find("[data-testid='hero__slide-image-desktop']")
     const subtitle = wrapper.find("[data-testid='hero__slide-subtitle']")
     const title = wrapper.find("[data-testid='hero__slide-title']")
-    const link = wrapper.find("[data-testid='hero__slide-link']")
+    const link = wrapper.findComponent(RouterLinkStub)
 
     // Assert the mobile image is rendered
     expect(img.exists()).toBeTruthy()
@@ -90,10 +78,10 @@ describe('HeroSlide.vue', () => {
     // Assert the title is rendered
     expect(title.text()).toContain(mockSlideTitle)
 
-    // Assert the button/link is rendered
+    // Assert the link(button) is rendered
     expect(link.exists()).toBeTruthy()
 
-    // Assert the button/link "href" value is well setted
-    expect(link.attributes('href')).toContain(mockSlideLinkURL)
+    // Assert the link(button) has the correct url
+    expect(link.props('to')).toContain(mockSlideLinkURL)
   })
 })

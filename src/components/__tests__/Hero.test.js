@@ -1,12 +1,11 @@
 import { computed, ref } from 'vue'
-import { mount } from '@vue/test-utils'
+import { mount, RouterLinkStub } from '@vue/test-utils'
 import Hero from '@/components/Hero.vue'
 import Slideshow from '@/components/Slideshow.vue'
 import HeroSlide from '@/components/HeroSlide.vue'
 import LoadingComponent from '@/components/LoadingComponent.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
 import frontDataBase from '../../../db.json'
-import router from '@/router'
 import { defineStore } from 'pinia'
 import { createTestingPinia } from '@pinia/testing'
 
@@ -18,13 +17,6 @@ import { createTestingPinia } from '@pinia/testing'
 vi.mock('@/composables/useGetClientHeightAtElementResize', () => {
   return {
     useGetClientHeightAtElementResize: vi.fn().mockReturnValue(ref(100)),
-  }
-})
-
-// Mock the "getPagesMetaData" data fetcher
-vi.mock('@/data/dataFetchers', () => {
-  return {
-    getPagesMetaData: vi.fn().mockReturnValue(undefined),
   }
 })
 
@@ -79,7 +71,8 @@ function mountHero() {
   return mount(Hero, {
     attachTo: document.body,
     global: {
-      plugins: [router, pinia],
+      plugins: [pinia],
+      stubs: { RouterLink: RouterLinkStub },
     },
   })
 }
@@ -159,7 +152,7 @@ describe('Hero.vue', () => {
           const source = slide.find("[data-testid='hero__slide-image-desktop']")
           const subtitle = slide.find("[data-testid='hero__slide-subtitle']")
           const title = slide.find("[data-testid='hero__slide-title']")
-          const link = slide.find("[data-testid='hero__slide-link']")
+          const link = slide.findComponent(RouterLinkStub)
           const mockSlide = frontDataBase.heroSlides[index]
           const mockSlideSubtitle = mockSlide.subtitle
           const mockSlideTitle = mockSlide.title
@@ -183,8 +176,8 @@ describe('Hero.vue', () => {
           // Assert the title is rendered
           expect(title.text()).toContain(mockSlideTitle)
 
-          // Assert the button/link "href" value is well setted
-          expect(link.attributes('href')).toContain(mockSlideLinkURL)
+          // Assert the link(button) has the correct url
+          expect(link.props('to')).toContain(mockSlideLinkURL)
 
           // Assert the "slidesLength" prop value is well setted
           expect(slide.props('slidesLength')).toBe(mockHeroSlidesDataLength)

@@ -1,4 +1,4 @@
-import { flushPromises, mount } from '@vue/test-utils'
+import { flushPromises, mount, RouterLinkStub } from '@vue/test-utils'
 import HomeView from '@/views/HomeView.vue'
 import Hero from '@/components/Hero.vue'
 import StatementBanner from '@/components/StatementBanner.vue'
@@ -7,24 +7,12 @@ import CollectionListingItem from '@/components/CollectionListingItem.vue'
 import ProductListing from '@/components/ProductListing.vue'
 import ProductListingItem from '@/components/ProductListingItem.vue'
 import frontDataBase from '../../../db.json'
-import router from '@/router'
 import { defineStore } from 'pinia'
 import { createTestingPinia } from '@pinia/testing'
 import { computed, ref } from 'vue'
 
-/**************/
-/* 1.Hoisting */
-/**************/
-
-// Mock the data fetchers
-vi.mock('@/data/dataFetchers', () => {
-  return {
-    getPagesMetaData: vi.fn().mockReturnValue(undefined), // used in the mocked router
-  }
-})
-
 /********************/
-/* 2.Initialization */
+/* 1.Initialization */
 /********************/
 
 /* Data */
@@ -105,7 +93,7 @@ useCollectionsByGenderResultStore()
 usePromotionsResultStore()
 
 /***********/
-/* 3.Build */
+/* 2.Build */
 /***********/
 
 // Component Factory
@@ -114,14 +102,15 @@ function mountHomeview() {
     global: {
       stubs: {
         Hero: true,
+        RouterLink: RouterLinkStub,
       },
-      plugins: [router, pinia],
+      plugins: [pinia],
     },
   })
 }
 
 /**********/
-/* 4.Test */
+/* 3.Test */
 /**********/
 
 describe('HomeView.vue', () => {
@@ -238,7 +227,7 @@ describe('HomeView.vue', () => {
 
       // Assert any collection data is rendered
       CollectionListingItemComponents.forEach((CollectionListingItemComponent, index) => {
-        const link = CollectionListingItemComponent.find("[data-testid='collection-listing__link']")
+        const link = CollectionListingItemComponent.findComponent(RouterLinkStub)
         const img = CollectionListingItemComponent.find(
           "[data-testid='collection-listing__item-img']",
         )
@@ -250,8 +239,8 @@ describe('HomeView.vue', () => {
         const mockCollectionImageURL = mockCollection.image.url
         const mockCollectionTitle = mockCollection.title
 
-        // Assert the link tag has the correct "url" value
-        expect(link.attributes('href')).toBe(mockCollectionURL)
+        // Assert the link has the correct url
+        expect(link.props('to')).toBe(mockCollectionURL)
 
         // Assert its image has the correct "src" value
         expect(img.attributes('src')).toBe(mockCollectionImageURL)
@@ -307,7 +296,7 @@ describe('HomeView.vue', () => {
 
       // Assert any product(promotion) is rendered with necessary information
       ProductListingItemComponents.forEach((Product, index) => {
-        const link = Product.find("[data-testid='product-listing__item-link']")
+        const link = Product.findComponent(RouterLinkStub)
         const image = Product.find("[data-testid='product-listing__item-image']")
         const title = Product.find("[data-testid='product-listing__item-title']")
         const originalPrice = Product.find("[ data-testid='product-listing__item-original-price']")
@@ -322,8 +311,8 @@ describe('HomeView.vue', () => {
         const mockProductOriginalPrice = mockProduct.price
         const mockProductDiscountedPrice = mockProduct.promotionalPrice
 
-        // Assert the link tag has the correct "href" value
-        expect(link.attributes('href')).toBe(mockProductURL)
+        // Assert the link has the correct url
+        expect(link.props('to')).toBe(mockProductURL)
 
         // Assert the image has the correct "src" value
         expect(image.attributes('src')).toBe(mockProductImageURL)

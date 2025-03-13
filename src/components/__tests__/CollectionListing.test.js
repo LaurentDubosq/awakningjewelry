@@ -1,24 +1,12 @@
-import { mount } from '@vue/test-utils'
+import { mount, RouterLinkStub } from '@vue/test-utils'
 import CollectionListing from '@/components/CollectionListing.vue'
 import CollectionListingItem from '@/components/CollectionListingItem.vue'
 import LoadingComponent from '@/components/LoadingComponent.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
 import frontDatabase from '../../../db.json'
-import router from '@/router'
-
-/**************/
-/* 1.Hoisting */
-/**************/
-
-// Mock the "getPagesMetaData" data fetcher used in the mocked router
-vi.mock('@/data/dataFetchers', () => {
-  return {
-    getPagesMetaData: vi.fn().mockReturnValue(undefined),
-  }
-})
 
 /********************/
-/* 2.Initialization */
+/* 1.Initialization */
 /********************/
 
 const mockCollectionsResult = {
@@ -31,7 +19,7 @@ const mockCollectionsLength = mockCollectionsData.length
 const mockTitle = 'By gender'
 
 /***********/
-/* 3.Build */
+/* 2.Build */
 /***********/
 
 // Component Factory
@@ -43,12 +31,12 @@ function mountCollectionListing(props) {
       fetchStatus: mockCollectionsStatus,
       ...props,
     },
-    global: { plugins: [router] },
+    global: { stubs: { RouterLink: RouterLinkStub } },
   })
 }
 
 /**********/
-/* 4.Test */
+/* 3.Test */
 /**********/
 
 describe('CollectionListing.vue', () => {

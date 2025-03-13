@@ -1,22 +1,10 @@
-import { mount } from '@vue/test-utils'
+import { mount, RouterLinkStub } from '@vue/test-utils'
 import BurgerMenuDropdownList from '@/components/BurgerMenuDropdownList.vue'
 import BurgerMenuDropdownItem from '@/components/BurgerMenuDropdownItem.vue'
-import router from '@/router'
 import frontDataBase from '../../../db.json'
 
-/**************/
-/* 1.Hoisting */
-/**************/
-
-// Mock the "getPagesMetaData" data fetcher used in the mocked router
-vi.mock('@/data/dataFetchers', () => {
-  return {
-    getPagesMetaData: vi.fn().mockReturnValue(undefined),
-  }
-})
-
 /********************/
-/* 2.Initialization */
+/* 1.Initialization */
 /********************/
 
 const mockSiteMenu = frontDataBase['siteMenu']
@@ -25,7 +13,7 @@ const mockLinks = mockSiteMenu[1].subMenu
 const mockLinksLength = mockLinks.length
 
 /***********/
-/* 3.Build */
+/* 2.Build */
 /***********/
 
 // Component Factory
@@ -33,8 +21,7 @@ function mountBurgerMenuDropdownList() {
   return mount(BurgerMenuDropdownList, {
     props: { links: mockLinks, dropdownText: mockDropdownText },
     global: {
-      stubs: { BurgerMenuDropdownItem: true },
-      plugins: [router],
+      stubs: { BurgerMenuDropdownItem: true, RouterLink: RouterLinkStub },
     },
   })
 }
