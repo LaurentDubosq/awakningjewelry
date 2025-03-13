@@ -15,6 +15,7 @@ import { storeToRefs } from 'pinia'
 import SlideshowAutorotationButton from './SlideshowAutorotationButton.vue'
 import SlideshowSlickSlider from './SlideshowSlickSlider.vue'
 import { useGetClientHeightAtElementResize } from '@/composables/useGetClientHeightAtElementResize'
+import type { DisplaySlidePayload } from '@/types/components'
 
 /****************/
 /* Dependencies */
@@ -142,14 +143,14 @@ const focusCurrentSlickSliderButton = async () => {
     }
   }
 }
-const handleDisplaySlide = (event: { index: number; focusable: boolean }) => {
+const handleDisplaySlide = (event: DisplaySlidePayload) => {
   // Stop autorotation explicitly
   stopAutoPlayExplicitly()
 
   // Display the expected slide
   currentIndex.value = event.index
 
-  // Focus on its corresponding button for a keyboard navigation
+  // Focus on the slide's slick slider button for keyboard navigation only
   if (event.focusable) {
     focusCurrentSlickSliderButton()
   }

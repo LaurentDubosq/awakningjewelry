@@ -55,3 +55,9 @@ export interface ProductListing {
   title: string
   products: Product[]
 }
+
+/* Slideshow */
+export interface DisplaySlidePayload {
+  index: number
+  focusable: boolean
+}

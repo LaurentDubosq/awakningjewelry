@@ -1,11 +1,14 @@
 <script setup lang="ts">
+import type { DisplaySlidePayload } from '@/types/components'
 import { ref, type Ref } from 'vue'
 
 const props = defineProps<{
   slidesLength: number
   currentIndex: number
 }>()
-const emit = defineEmits(['display-slide'])
+const emit = defineEmits<{
+  'display-slide': [DisplaySlidePayload]
+}>()
 
 const isSlickSliderFocused: Ref<boolean> = ref(false)
 
