@@ -36,10 +36,10 @@ const mockHeroSlidesDataLength = mockHeroSlidesData.length
 /* Stores */
 
 // Initialize a testing pinia instance
-const pinia = createTestingPinia()
+const mockPinia = createTestingPinia()
 
 // Create the stores
-const useHeroSlidesResultStore = defineStore('HeroSlidesResult', () => {
+const mockUseHeroSlidesResultStore = defineStore('HeroSlidesResult', () => {
   const heroSlidesResult = ref(mockHeroSlidesResult)
   const heroSlidesData = computed(() => heroSlidesResult.value.data)
   const heroSlidesDataLength = computed(() => heroSlidesData.value.length)
@@ -47,20 +47,20 @@ const useHeroSlidesResultStore = defineStore('HeroSlidesResult', () => {
   return { heroSlidesResult, heroSlidesData, heroSlidesDataLength, heroSlidesFetchStatus }
 })
 
-const useIsReducedMotionStore = defineStore('IsReducedMotion', () => {
+const mockUseIsReducedMotionStore = defineStore('IsReducedMotion', () => {
   const isReducedMotion = ref(false)
   return { isReducedMotion }
 })
 
-const useIsOnMobileStore = defineStore('IsOnMobile', () => {
+const mockUseIsOnMobileStore = defineStore('IsOnMobile', () => {
   const isOnMobile = ref(true)
   return { isOnMobile }
 })
 
 // Initialize the stores
-const isHeroSlidesResultStore = useHeroSlidesResultStore()
-useIsReducedMotionStore()
-useIsOnMobileStore()
+const mockIsHeroSlidesResultStore = mockUseHeroSlidesResultStore()
+mockUseIsReducedMotionStore()
+mockUseIsOnMobileStore()
 
 /***********/
 /* 3.Build */
@@ -71,7 +71,7 @@ function mountHero() {
   return mount(Hero, {
     attachTo: document.body,
     global: {
-      plugins: [pinia],
+      plugins: [mockPinia],
       stubs: { RouterLink: RouterLinkStub },
     },
   })
@@ -85,7 +85,7 @@ describe('Hero.vue', () => {
   let wrapper
 
   beforeEach(() => {
-    isHeroSlidesResultStore.heroSlidesFetchStatus = 'resolved' // reset to the default value
+    mockIsHeroSlidesResultStore.heroSlidesFetchStatus = 'resolved' // reset to the default value
     wrapper = mountHero()
   })
 
@@ -212,7 +212,7 @@ describe('Hero.vue', () => {
 
     test("when the data fetcher status is 'pending', the loading component is rendered", () => {
       // As Hero component has its data fetcher mocked, we have to set its status to "pending" manualy
-      isHeroSlidesResultStore.heroSlidesFetchStatus = 'pending'
+      mockIsHeroSlidesResultStore.heroSlidesFetchStatus = 'pending'
 
       // Remount the component to simulate the pending status
       wrapper = mountHero()
@@ -230,7 +230,7 @@ describe('Hero.vue', () => {
 
     test("when the data fetcher status is 'rejected', the error component is rendered", () => {
       // As Hero component has its data fetcher mocked, we have to set its status to "rejected" manualy
-      isHeroSlidesResultStore.heroSlidesFetchStatus = 'rejected'
+      mockIsHeroSlidesResultStore.heroSlidesFetchStatus = 'rejected'
 
       // Remount the component to simulate the rejected status
       wrapper = mountHero()

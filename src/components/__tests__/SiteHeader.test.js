@@ -13,16 +13,16 @@ import { ref } from 'vue'
 /********************/
 
 // Initialize a testing pinia instance
-const pinia = createTestingPinia()
+const mockPinia = createTestingPinia()
 
 // Create the stores
-const useIsOnMobileStore = defineStore('IsOnMobile', () => {
+const mockUseIsOnMobileStore = defineStore('IsOnMobile', () => {
   const isOnMobile = ref(true)
   return { isOnMobile }
 })
 
 // Initialize the stores
-const isOnMobileStore = useIsOnMobileStore()
+const mockIsOnMobileStore = mockUseIsOnMobileStore()
 
 /***********/
 /* 2.Build */
@@ -32,7 +32,7 @@ const isOnMobileStore = useIsOnMobileStore()
 function mountSiteHeader() {
   return mount(SiteHeader, {
     global: {
-      plugins: [pinia],
+      plugins: [mockPinia],
       stubs: {
         SiteNav: true,
         RouterLink: RouterLinkStub,
@@ -49,7 +49,7 @@ describe('SiteHeader.vue', () => {
   let wrapper
 
   beforeEach(() => {
-    isOnMobileStore.isOnMobile = true // reset the environment to mobile
+    mockIsOnMobileStore.isOnMobile = true // reset the environment to mobile
   })
 
   // Smoke Tests
@@ -59,7 +59,7 @@ describe('SiteHeader.vue', () => {
     expect(wrapper.exists()).toBeTruthy()
 
     // Assert the testing environement is ready for desktop initial render
-    isOnMobileStore.isOnMobile = false // set environment to desktop
+    mockIsOnMobileStore.isOnMobile = false // set environment to desktop
     wrapper = mountSiteHeader()
     expect(wrapper.exists()).toBeTruthy()
   })
@@ -73,7 +73,7 @@ describe('SiteHeader.vue', () => {
 
     // Because the burger menu toggle is critical we also check that the component is not rendered on desktop
     test('is not rendered on desktop', () => {
-      isOnMobileStore.isOnMobile = false // set environment to desktop
+      mockIsOnMobileStore.isOnMobile = false // set environment to desktop
       wrapper = mountSiteHeader()
       const BurgerMenuToggleComponent = wrapper.findComponent(BurgerMenuToggle)
       expect(BurgerMenuToggleComponent.exists()).toBeFalsy()
@@ -101,7 +101,7 @@ describe('SiteHeader.vue', () => {
 
   describe('SiteNav.vue', () => {
     test('is rendered on desktop', async () => {
-      isOnMobileStore.isOnMobile = false // set environment to desktop
+      mockIsOnMobileStore.isOnMobile = false // set environment to desktop
       wrapper = mountSiteHeader()
 
       // Wait after the SiteNav async import has been resolved after the component mounting
@@ -169,7 +169,7 @@ describe('SiteHeader.vue', () => {
 
     // Because the account link is critical we also check that the component is not rendered on desktop
     test('is not rendered on desktop', () => {
-      isOnMobileStore.isOnMobile = false // set environment to desktop
+      mockIsOnMobileStore.isOnMobile = false // set environment to desktop
       wrapper = mountSiteHeader()
       const link = wrapper.find("[data-testid='site-header__account-link']")
       expect(link.exists()).toBeFalsy()

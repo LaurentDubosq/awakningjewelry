@@ -12,10 +12,10 @@ import { ref } from 'vue'
 /********************/
 
 // Initialize a testing pinia instance
-const pinia = createTestingPinia({ stubActions: false })
+const mockPinia = createTestingPinia({ stubActions: false })
 
 // Create the stores
-const useIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
+const mockUseIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
   const isBurgerMenuOpen = ref(false)
   const toggleBurgerMenu = () => {
     isBurgerMenuOpen.value = !isBurgerMenuOpen.value
@@ -24,7 +24,7 @@ const useIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
 })
 
 // Initialize the stores
-const isBurgerMenuOpenStore = useIsBurgerMenuOpenStore()
+const mockIsBurgerMenuOpenStore = mockUseIsBurgerMenuOpenStore()
 
 /***********/
 /* 2.Build */
@@ -33,7 +33,7 @@ const isBurgerMenuOpenStore = useIsBurgerMenuOpenStore()
 // Component factory
 function mountBurgerMenuToggle() {
   return mount(BurgerMenuToggle, {
-    plugins: [pinia],
+    plugins: [mockPinia],
   })
 }
 
@@ -45,7 +45,7 @@ describe('BurgerMenuToggle.vue', () => {
   let wrapper
 
   beforeEach(() => {
-    isBurgerMenuOpenStore.isBurgerMenuOpen = false // reset the burger menu to close status
+    mockIsBurgerMenuOpenStore.isBurgerMenuOpen = false // reset the burger menu to close status
     wrapper = mountBurgerMenuToggle()
   })
 
@@ -79,7 +79,7 @@ describe('BurgerMenuToggle.vue', () => {
 
   test('renders the cross icon with necessary information, when the burger menu is open', async () => {
     // Open the burger menu
-    isBurgerMenuOpenStore.isBurgerMenuOpen = true
+    mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
 
     // Wait until the burger menu is opened
     await flushPromises()
@@ -112,7 +112,7 @@ describe('BurgerMenuToggle.vue', () => {
   describe('Behaviors:', () => {
     test('when the button is clicked, it commands the burger menu to toggle', async () => {
       // Assert that the store indicates the burger menu is open
-      expect(isBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
+      expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
 
       // Click on the button
       const button = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
@@ -120,12 +120,12 @@ describe('BurgerMenuToggle.vue', () => {
       await button.element.dispatchEvent(clickEvent)
 
       // Assert that the store indicates the burger menu is close
-      expect(isBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
+      expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
     })
 
     test('when we press the Enter key on the button, it commands the burger menu to toggle', async () => {
       // Assert that the store indicates the burger menu is open
-      expect(isBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
+      expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
 
       // Click on the button
       const button = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
@@ -133,7 +133,7 @@ describe('BurgerMenuToggle.vue', () => {
       await button.element.dispatchEvent(clickEvent)
 
       // Assert that the store indicates the burger menu is close
-      expect(isBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
+      expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
     })
   })
 

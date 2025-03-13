@@ -25,10 +25,10 @@ const mockSiteMenuDataLength = mockSiteMenuData.length
 /* Stores */
 
 // Initialize a testing pinia instance
-const pinia = createTestingPinia()
+const mockPinia = createTestingPinia()
 
 // Create the store
-const useSiteMenuStore = defineStore('SiteMenu', () => {
+const mockUseSiteMenuStore = defineStore('SiteMenu', () => {
   const siteMenu = ref(mockSiteMenuResult)
   const siteMenuData = computed(() => siteMenu.value.data)
   const siteMenuResultFetchStatus = computed(() => siteMenu.value.status)
@@ -40,7 +40,7 @@ const useSiteMenuStore = defineStore('SiteMenu', () => {
 })
 
 // Initialize the stores
-const siteMenuStore = useSiteMenuStore()
+const mockSiteMenuStore = mockUseSiteMenuStore()
 
 /***********/
 /* 2.Build */
@@ -50,7 +50,7 @@ const siteMenuStore = useSiteMenuStore()
 function mountSiteNav() {
   return mount(SiteNav, {
     global: {
-      plugins: [pinia],
+      plugins: [mockPinia],
       stubs: { RouterLink: RouterLinkStub },
     },
   })
@@ -64,7 +64,7 @@ describe('SiteNav.vue', () => {
   let wrapper
 
   beforeEach(() => {
-    siteMenuStore.siteMenu = { ...siteMenuStore.siteMenu, status: 'resolved' } // reset the data fetching status to resolved
+    mockSiteMenuStore.siteMenu = { ...mockSiteMenuStore.siteMenu, status: 'resolved' } // reset the data fetching status to resolved
     wrapper = mountSiteNav()
   })
 
@@ -203,7 +203,7 @@ describe('SiteNav.vue', () => {
   describe('Behaviors:', () => {
     test("when the data fetcher status is 'pending', the loading component is rendered", () => {
       // Set the data fetching status to pending
-      siteMenuStore.siteMenu = { ...siteMenuStore.siteMenu, status: 'pending' } // reset the data fetching status to pending
+      mockSiteMenuStore.siteMenu = { ...mockSiteMenuStore.siteMenu, status: 'pending' } // reset the data fetching status to pending
 
       // Remount the component with pending status active
       wrapper = mountSiteNav('pending')
@@ -221,7 +221,7 @@ describe('SiteNav.vue', () => {
 
     test("when the data fetcher status is 'rejected', the error component is rendered", () => {
       // Set the data fetching status to rejected
-      siteMenuStore.siteMenu = { ...siteMenuStore.siteMenu, status: 'rejected' } // reset the data fetching status to rejected
+      mockSiteMenuStore.siteMenu = { ...mockSiteMenuStore.siteMenu, status: 'rejected' } // reset the data fetching status to rejected
 
       // Remount the component with rejected status active
       wrapper = mountSiteNav('rejected')

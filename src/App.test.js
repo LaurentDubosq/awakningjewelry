@@ -38,21 +38,21 @@ const mockSiteMenuResult = {
 /* Stores */
 
 // Initialize a testing pinia instance
-const pinia = createTestingPinia({ stubActions: false })
+const mockPinia = createTestingPinia({ stubActions: false })
 
 // Create the stores
-const useIsOnMobileStore = defineStore('IsOnMobile', () => {
+const mockUseIsOnMobileStore = defineStore('IsOnMobile', () => {
   const isOnMobile = ref(true)
   return { isOnMobile }
 })
-const useIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
+const mockUseIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
   const isBurgerMenuOpen = ref(false)
   const toggleBurgerMenu = () => {
     isBurgerMenuOpen.value = !isBurgerMenuOpen.value
   }
   return { isBurgerMenuOpen, toggleBurgerMenu }
 })
-const useSiteMenuStore = defineStore('SiteMenu', () => {
+const mockUseSiteMenuStore = defineStore('SiteMenu', () => {
   const siteMenu = ref(mockSiteMenuResult)
   const siteMenuData = computed(() => siteMenu.value.data)
   const siteMenuResultFetchStatus = computed(() => siteMenu.value.status)
@@ -64,9 +64,9 @@ const useSiteMenuStore = defineStore('SiteMenu', () => {
 })
 
 // Initialize the stores
-const isOnMobileStore = useIsOnMobileStore()
-const isBurgerMenuOpenStore = useIsBurgerMenuOpenStore()
-useSiteMenuStore()
+const mockIsOnMobileStore = mockUseIsOnMobileStore()
+const mockIsBurgerMenuOpenStore = mockUseIsBurgerMenuOpenStore()
+mockUseSiteMenuStore()
 
 /***********/
 /* 2.Build */
@@ -77,7 +77,7 @@ function mountApp() {
   return mount(App, {
     attachTo: document.body,
     global: {
-      plugins: [mockRouter, pinia],
+      plugins: [mockRouter, mockPinia],
       stubs: {
         'router-view': true,
         SiteNav,
@@ -94,8 +94,8 @@ describe('App.vue', () => {
   let wrapper
 
   beforeEach(async () => {
-    isOnMobileStore.isOnMobile = true // reset the environment to mobile
-    isBurgerMenuOpenStore.isBurgerMenuOpen = false // reset the burger menu to close status
+    mockIsOnMobileStore.isOnMobile = true // reset the environment to mobile
+    mockIsBurgerMenuOpenStore.isBurgerMenuOpen = false // reset the burger menu to close status
     wrapper = mountApp()
   })
 
@@ -124,7 +124,7 @@ describe('App.vue', () => {
 
         beforeEach(async () => {
           // Open the burger menu
-          isBurgerMenuOpenStore.isBurgerMenuOpen = true
+          mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
 
           // Find the burger menu component
           BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
@@ -309,7 +309,7 @@ describe('App.vue', () => {
     })
 
     // Open the burger menu
-    isBurgerMenuOpenStore.isBurgerMenuOpen = true
+    mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
 
     expect(wrapper.html()).toMatchInlineSnapshot(`
       "<div data-v-7a7a37b1="" class="site-container">

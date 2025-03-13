@@ -19,10 +19,10 @@ const mockLinkURL = mockSiteMenu[1].subMenu[0].url
 /* Stores */
 
 // Initialize a testing pinia instance
-const pinia = createTestingPinia({ stubActions: false })
+const mockPinia = createTestingPinia({ stubActions: false })
 
 // Create the stores
-const useIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
+const mockUseIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
   const isBurgerMenuOpen = ref(true)
   const toggleBurgerMenu = () => {
     isBurgerMenuOpen.value = !isBurgerMenuOpen.value
@@ -31,7 +31,7 @@ const useIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
 })
 
 // Initialize the stores
-const isBurgerMenuOpenStore = useIsBurgerMenuOpenStore()
+const mockIsBurgerMenuOpenStore = mockUseIsBurgerMenuOpenStore()
 
 /***********/
 /* 2.Build */
@@ -42,7 +42,7 @@ function mountBurgerMenuDropdownItem(propsOptions = {}) {
   return mount(BurgerMenuDropdownItem, {
     props: { link: mockLink, ...propsOptions },
     global: {
-      plugins: [pinia],
+      plugins: [mockPinia],
       stubs: { RouterLink: RouterLinkStub },
     },
   })
@@ -80,13 +80,13 @@ describe('BurgerMenuDropdownItem.vue', () => {
   describe('Behaviors:', () => {
     test('when the link is touched, it commands the dropdown to close', async () => {
       // Assert that the store indicates the burger menu is open
-      expect(isBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
+      expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
 
       // Touch the link
       await link.trigger('click')
 
       // Assert that the store indicates the burger menu is close
-      expect(isBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
+      expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
     })
   })
 })

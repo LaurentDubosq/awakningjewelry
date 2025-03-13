@@ -25,17 +25,17 @@ const mockSiteMenuDataLength = mockSiteMenuData.length
 /* Stores */
 
 // Initialize a testing pinia instance
-const pinia = createTestingPinia({ stubActions: false })
+const mockPinia = createTestingPinia({ stubActions: false })
 
 // Create the stores
-const useIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
+const mockUseIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
   const isBurgerMenuOpen = ref(false)
   const toggleBurgerMenu = () => {
     isBurgerMenuOpen.value = !isBurgerMenuOpen.value
   }
   return { isBurgerMenuOpen, toggleBurgerMenu }
 })
-const useSiteMenuStore = defineStore('SiteMenu', () => {
+const mockUseSiteMenuStore = defineStore('SiteMenu', () => {
   const siteMenu = ref(mockSiteMenuResult)
   const siteMenuData = computed(() => siteMenu.value.data)
   const siteMenuResultFetchStatus = computed(() => siteMenu.value.status)
@@ -47,8 +47,8 @@ const useSiteMenuStore = defineStore('SiteMenu', () => {
 })
 
 // Initialize the stores
-useIsBurgerMenuOpenStore()
-const siteMenuStore = useSiteMenuStore()
+mockUseIsBurgerMenuOpenStore()
+const mockSiteMenuStore = mockUseSiteMenuStore()
 
 /***********/
 /* 2.Build */
@@ -58,7 +58,7 @@ const siteMenuStore = useSiteMenuStore()
 function mountBurgerMenu() {
   return mount(BurgerMenu, {
     global: {
-      plugins: [pinia],
+      plugins: [mockPinia],
       stubs: {
         RouterLink: RouterLinkStub,
       },
@@ -74,7 +74,7 @@ describe('BurgerMenu.vue', () => {
   let wrapper
 
   beforeEach(() => {
-    siteMenuStore.siteMenu = { ...siteMenuStore.siteMenu, status: 'resolved' } // reset the data fetching status to resolved
+    mockSiteMenuStore.siteMenu = { ...mockSiteMenuStore.siteMenu, status: 'resolved' } // reset the data fetching status to resolved
     wrapper = mountBurgerMenu()
   })
 
@@ -185,7 +185,7 @@ describe('BurgerMenu.vue', () => {
 
     test("when the data fetcher status is 'pending', the loading component is rendered", () => {
       // Set the data fetching status to pending
-      siteMenuStore.siteMenu = { ...siteMenuStore.siteMenu, status: 'pending' } // reset the data fetching status to pending
+      mockSiteMenuStore.siteMenu = { ...mockSiteMenuStore.siteMenu, status: 'pending' } // reset the data fetching status to pending
 
       // Remount the component with pending status active
       wrapper = mountBurgerMenu()
@@ -203,7 +203,7 @@ describe('BurgerMenu.vue', () => {
 
     test("when the data fetcher status is 'rejected', the error component is rendered", () => {
       // Set the data fetching status to rejected
-      siteMenuStore.siteMenu = { ...siteMenuStore.siteMenu, status: 'rejected' } // reset the data fetching status to rejected
+      mockSiteMenuStore.siteMenu = { ...mockSiteMenuStore.siteMenu, status: 'rejected' } // reset the data fetching status to rejected
 
       // Remount the component with rejected status active
       wrapper = mountBurgerMenu()

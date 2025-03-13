@@ -62,22 +62,22 @@ const mockHeroSlideComponent = defineComponent({
 /* Stores */
 
 // Initialize a testing pinia instance
-const pinia = createTestingPinia()
+const mockPinia = createTestingPinia()
 
 // Create the stores
-const useIsReducedMotionStore = defineStore('IsReducedMotion', () => {
+const mockUseIsReducedMotionStore = defineStore('IsReducedMotion', () => {
   const isReducedMotion = ref(false)
   return { isReducedMotion }
 })
 
-const useIsOnMobileStore = defineStore('IsOnMobile', () => {
+const mockUseIsOnMobileStore = defineStore('IsOnMobile', () => {
   const isOnMobile = ref(true)
   return { isOnMobile }
 })
 
 // Initialize the stores
-const isReducedMotionStore = useIsReducedMotionStore()
-useIsOnMobileStore()
+const mockIsReducedMotionStore = mockUseIsReducedMotionStore()
+mockUseIsOnMobileStore()
 
 /***********/
 /* 3.Build */
@@ -92,7 +92,7 @@ function mountSlideshow() {
       default: ({ currentIndex }) => h(mockHeroSlideComponent, { currentIndex }), // send the local currentIndex variable to mockHeroSlideComponent component as props
     },
     global: {
-      plugins: [pinia],
+      plugins: [mockPinia],
       stubs: { RouterLink: RouterLinkStub },
     },
   })
@@ -106,7 +106,7 @@ describe('Slideshow.vue', () => {
   let wrapper
 
   beforeEach(() => {
-    isReducedMotionStore.isReducedMotion = false // reset to the default value
+    mockIsReducedMotionStore.isReducedMotion = false // reset to the default value
     wrapper = mountSlideshow()
   })
 
@@ -402,7 +402,7 @@ describe('Slideshow.vue', () => {
 
     test('when the user has the reduce motion activated, the autorotation should be pause at initial render', async () => {
       // Enable the reduce motion feature to block animations
-      isReducedMotionStore.isReducedMotion = true
+      mockIsReducedMotionStore.isReducedMotion = true
 
       // Mount the component with the reduce motion feature updated
       wrapper = mountSlideshow()

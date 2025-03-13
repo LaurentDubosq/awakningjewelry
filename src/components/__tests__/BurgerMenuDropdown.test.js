@@ -20,10 +20,10 @@ const mockLinks = mockDropdown.subMenu
 /* Stores */
 
 // Initialize a testing pinia instance
-const pinia = createTestingPinia({ stubActions: false })
+const mockPinia = createTestingPinia({ stubActions: false })
 
 // Create the stores
-const useIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
+const mockUseIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
   const isBurgerMenuOpen = ref(true)
   const toggleBurgerMenu = () => {
     isBurgerMenuOpen.value = !isBurgerMenuOpen.value
@@ -32,7 +32,7 @@ const useIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
 })
 
 // Initialize the stores
-useIsBurgerMenuOpenStore()
+mockUseIsBurgerMenuOpenStore()
 
 /***********/
 /* 2.Build */
@@ -43,7 +43,7 @@ function mountBurgerMenuDropdown() {
   return mount(BurgerMenuDropdown, {
     props: { dropdown: mockDropdown },
     global: {
-      plugins: [pinia],
+      plugins: [mockPinia],
       stubs: {
         RouterLink: RouterLinkStub,
       },

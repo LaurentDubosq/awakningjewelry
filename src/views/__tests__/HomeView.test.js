@@ -39,10 +39,10 @@ const mockPromotionsStatus = mockPromotionsResult.status
 /* Stores */
 
 // Initialize a testing pinia instance
-const pinia = createTestingPinia({ stubActions: false })
+const mockPinia = createTestingPinia({ stubActions: false })
 
 // Create the stores
-const useStatementMissionResultStore = defineStore('StatementMissionResult', () => {
+const mockUseStatementMissionResultStore = defineStore('StatementMissionResult', () => {
   const statementMissionResult = ref(mockStatementBannerResult)
   const statementMissionData = computed(() => statementMissionResult.value.data)
   const statementMissionFetchStatus = computed(() => statementMissionResult.value.status)
@@ -57,7 +57,7 @@ const useStatementMissionResultStore = defineStore('StatementMissionResult', () 
   }
 })
 
-const useCollectionsByGenderResultStore = defineStore('CollectionsByGenderResult', () => {
+const mockUseCollectionsByGenderResultStore = defineStore('CollectionsByGenderResult', () => {
   const collectionsByGenderResult = ref(mockCollectionsByGenderResult)
   const collectionsByGenderData = computed(() => collectionsByGenderResult.value.data)
   const collectionsByGenderFetchStatus = computed(() => collectionsByGenderResult.value.status)
@@ -72,7 +72,7 @@ const useCollectionsByGenderResultStore = defineStore('CollectionsByGenderResult
   }
 })
 
-const usePromotionsResultStore = defineStore('PromotionsResult', () => {
+const mockUsePromotionsResultStore = defineStore('PromotionsResult', () => {
   const promotionsResult = ref(mockPromotionsResult)
   const promotionsResultData = computed(() => promotionsResult.value.data)
   const promotionsResultFetchStatus = computed(() => promotionsResult.value.status)
@@ -88,9 +88,9 @@ const usePromotionsResultStore = defineStore('PromotionsResult', () => {
 })
 
 // Initialize the stores
-useStatementMissionResultStore()
-useCollectionsByGenderResultStore()
-usePromotionsResultStore()
+mockUseStatementMissionResultStore()
+mockUseCollectionsByGenderResultStore()
+mockUsePromotionsResultStore()
 
 /***********/
 /* 2.Build */
@@ -104,7 +104,7 @@ function mountHomeview() {
         Hero: true,
         RouterLink: RouterLinkStub,
       },
-      plugins: [pinia],
+      plugins: [mockPinia],
     },
   })
 }
