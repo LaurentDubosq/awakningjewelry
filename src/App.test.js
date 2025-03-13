@@ -1,36 +1,32 @@
 import { createTestingPinia } from '@pinia/testing'
-import router from '@/router'
 import { mount } from '@vue/test-utils'
 import App from '@/App.vue'
 import BurgerMenu from '@/components/BurgerMenu.vue'
 import SiteHeader from '@/components/SiteHeader.vue'
 import SiteNav from '@/components/SiteNav.vue'
 import { RouterView } from 'vue-router'
-import { nextTick, ref, computed } from 'vue'
+import { nextTick, ref, computed, defineComponent } from 'vue'
 import { defineStore } from 'pinia'
+import { createRouter, createWebHistory } from 'vue-router'
+import frontDataBase from '../db.json'
 
-/**************/
-/* 1.Hoisting */
-/**************/
+/*********************/
+/* 1.Initializations */
+/*********************/
 
-// Initialize variables able to work with "vi.mock" for the following "getPagesMetaData" mock
-var frontDataBase
-var mockPagesMetaData
+/* Router */
 
-// Mocks fetchers with data
-vi.mock('@/data/dataFetchers', async () => {
-  // Necessary method to provide data to "getPagesMetaData" fetcher
-  frontDataBase = await import('../db.json')
-  mockPagesMetaData = frontDataBase['pagesMetaData']
-
-  return {
-    getPagesMetaData: vi.fn().mockReturnValue(mockPagesMetaData),
-  }
+const mockRouter = createRouter({
+  history: createWebHistory(),
+  routes: [
+    {
+      path: '/:pathMatch(.*)*',
+      component: defineComponent({
+        template: '<div>Mocked Component</div>',
+      }),
+    },
+  ],
 })
-
-/*********************/
-/* 2.Initializations */
-/*********************/
 
 /* Data */
 
@@ -73,7 +69,7 @@ const isBurgerMenuOpenStore = useIsBurgerMenuOpenStore()
 useSiteMenuStore()
 
 /***********/
-/* 3.Build */
+/* 2.Build */
 /***********/
 
 // Component Factory
@@ -81,18 +77,17 @@ function mountApp() {
   return mount(App, {
     attachTo: document.body,
     global: {
-      plugins: [router, pinia],
+      plugins: [mockRouter, pinia],
       stubs: {
         'router-view': true,
         SiteNav,
       },
     },
-    attachTo: document.body,
   })
 }
 
 /**********/
-/* 4.Test */
+/* 3.Test */
 /**********/
 
 describe('App.vue', () => {
