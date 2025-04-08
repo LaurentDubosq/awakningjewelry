@@ -1,6 +1,5 @@
-import { mount } from '@vue/test-utils'
+import { mount, RouterLinkStub } from '@vue/test-utils'
 import ProductListing from '@/components/ProductListing.vue'
-import ProductListingItem from '@/components/ProductListingItem.vue'
 import LoadingComponent from '@/components/LoadingComponent.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
 import frontDataBase from '../../../db.json'
@@ -10,28 +9,35 @@ import frontDataBase from '../../../db.json'
 /********************/
 
 const mockTitle = 'Promotions'
-const mockProductsResult = {
-  data: frontDataBase.promotions,
-  status: 'resolved',
+const mockProductsPending = {
+  products: undefined,
+  fetchStatus: 'pending',
 }
-const mockProductsData = mockProductsResult.data
-const mockProductsStatus = mockProductsResult.status
-const mockProductsDataLength = mockProductsData.length
+const mockProductsRejected = {
+  products: undefined,
+  fetchStatus: 'rejected',
+}
+const mockProductsResolved = {
+  products: frontDataBase.promotions,
+  fetchStatus: 'resolved',
+}
+const mockProducts = mockProductsResolved.products
+const mockProductsLength = mockProducts.length
 
 /***********/
 /* 2.Build */
 /***********/
 
-// Component factory
+// Component factory (Data fetching "Pending" state)
 function mountProductListing(props) {
   return mount(ProductListing, {
     props: {
       title: mockTitle,
-      products: mockProductsData,
-      fetchStatus: mockProductsStatus,
+      products: mockProductsPending.products,
+      fetchStatus: mockProductsPending.fetchStatus,
       ...props,
     },
-    global: { stubs: { ProductListingItem: true } },
+    global: { stubs: { RouterLink: RouterLinkStub } },
   })
 }
 
@@ -39,58 +45,97 @@ function mountProductListing(props) {
 /* 3.Test */
 /**********/
 
+// WARNING : The component has 3 states regarding the data fetching status. "Pending", "Rejected" and "Resolved". The state by default is "Pending".
+
 describe('ProductListing.vue', () => {
   let wrapper
 
   beforeEach(() => {
+    // Component mounting (Data fetching "Pending" state)
     wrapper = mountProductListing()
   })
 
   // Smoke test
   test('mounts successfully', () => {
+    // Assert the wrapper component is well mounted at initial render
     expect(wrapper.exists()).toBeTruthy()
   })
 
-  test('renders its title', () => {
-    const title = wrapper.find("[data-testid='product-listing__title']")
-    expect(title.text()).toContain(mockTitle)
-  })
-
-  test('renders all the products with necessary information', () => {
-    // Assert all the products are rendered
-    const ProductListingItemComponent = wrapper.findAllComponents(ProductListingItem)
-    expect(ProductListingItemComponent).toHaveLength(mockProductsDataLength)
-
-    // Assert each product has its "product" prop value well setted
-    ProductListingItemComponent.forEach((product, index) => {
-      const mockProduct = mockProductsData[index]
-      expect(product.props('product')).toMatchObject(mockProduct)
+  describe('Initial render - Data fetching "Pending" state', () => {
+    test('renders its title', () => {
+      const title = wrapper.find("[data-testid='product-listing__title']")
+      expect(title.text()).toContain(mockTitle)
     })
-  })
 
-  describe('Behaviors:', () => {
-    test("when the data fetcher status is 'pending', the loading component is rendered", () => {
-      // Remount the component with pending status active
-      wrapper = mountProductListing({ fetchStatus: 'pending' })
-
-      // Assert the loading component is rendered
+    test('the loader animation is rendered', async () => {
       const loadingComponent = wrapper.findComponent(LoadingComponent)
       expect(loadingComponent.exists()).toBeTruthy()
     })
+  })
 
-    test("when the data fetcher status is 'resolved', its data is rendered", () => {
-      // Assert that one of its pieces of data is rendered
-      const ProductListingItemComponent = wrapper.findComponent(ProductListingItem)
-      expect(ProductListingItemComponent.exists()).toBeTruthy()
-    })
+  describe('Data fetching "Rejected" state', () => {
+    test('the error message is rendered', () => {
+      // Mount the component (rejected state)
+      const wrapper = mountProductListing(mockProductsRejected)
 
-    test("when the data fetcher status is 'rejected', the error component is rendered", () => {
-      // Remount the component with rejected status active
-      wrapper = mountProductListing({ fetchStatus: 'rejected' })
-
-      // Assert the error component is rendered
+      // Assert the error message is rendered
       const errorComponent = wrapper.findComponent(ErrorComponent)
       expect(errorComponent.exists()).toBeTruthy()
+    })
+  })
+
+  describe('Data fetching "Resolved" state', () => {
+    test('renders all the products with necessary information', () => {
+      // Mount the component (resolved state)
+      const wrapper = mountProductListing(mockProductsResolved)
+
+      // Find the products elements
+      const products = wrapper.findAll("[data-testid='product-listing__item']")
+
+      // Assert all the products are rendered
+      expect(products).toHaveLength(mockProductsLength)
+
+      // Assert any product is rendered with necessary information
+      products.forEach((product, index) => {
+        const link = product.findComponent(RouterLinkStub)
+        const image = product.find("[data-testid='product-listing__item-image']")
+        const title = product.find("[data-testid='product-listing__item-title']")
+        const originalPrice = product.find("[ data-testid='product-listing__item-original-price']")
+        const discountedPrice = product.find(
+          "[ data-testid='product-listing__item-discounted-price']",
+        )
+        const mockProduct = mockProducts[index]
+        const mockProductURL = mockProduct.url
+        const mockProductImageURL = mockProduct.image.url
+        const mockProductImageALT = mockProduct.image.alt
+        const mockProductTitle = mockProduct.title
+        const mockProductOriginalPrice = mockProduct.price
+        const mockProductDiscountedPrice = mockProduct.promotionalPrice
+
+        // Assert the product has a link
+        expect(link.exists()).toBeTruthy()
+
+        // Assert the link has the correct "url" value
+        expect(link.props('to')).toBe(mockProductURL)
+
+        // Assert its image is rendered
+        expect(image.exists()).toBeTruthy()
+
+        // Assert its image has the correct "src" value
+        expect(image.attributes('src')).toBe(mockProductImageURL)
+
+        // Assert its image has the correct "alt" value
+        expect(image.attributes('alt')).toBe(mockProductImageALT)
+
+        // Assert its title is rendered
+        expect(title.text()).toContain(mockProductTitle)
+
+        // Assert its original price is rendered
+        expect(originalPrice.text()).toContain(mockProductOriginalPrice)
+
+        // Assert its discounted price is rendered
+        expect(discountedPrice.text()).toContain(mockProductDiscountedPrice)
+      })
     })
   })
 })

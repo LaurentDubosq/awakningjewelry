@@ -23,7 +23,7 @@ const mockPinia = createTestingPinia({ stubActions: false })
 
 // Create the stores
 const mockUseIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
-  const isBurgerMenuOpen = ref(true)
+  const isBurgerMenuOpen = ref(false)
   const toggleBurgerMenu = () => {
     isBurgerMenuOpen.value = !isBurgerMenuOpen.value
   }
@@ -54,11 +54,10 @@ function mountBurgerMenuLink() {
 
 describe('BurgerMenuLink.vue', () => {
   let wrapper
-  let link
 
   beforeEach(() => {
+    // Component mounting
     wrapper = mountBurgerMenuLink()
-    link = wrapper.findComponent(RouterLinkStub)
   })
 
   // Smoke test
@@ -67,6 +66,9 @@ describe('BurgerMenuLink.vue', () => {
   })
 
   test('renders the link with necessary information', () => {
+    // Find the link
+    const link = wrapper.findComponent(RouterLinkStub)
+
     // Assert the link exists
     expect(link.exists()).toBeTruthy()
 
@@ -78,14 +80,18 @@ describe('BurgerMenuLink.vue', () => {
   })
 
   describe('Behaviors:', () => {
-    test('when the link is clicked, it commands the burger menu to close', async () => {
-      // Assert that the store indicates the burger menu is open
+    test('when the link is touched, it commands the burger menu to close', async () => {
+      // Set the burger menu status to open
+      mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
+
+      // Assert burger menu status is open
       expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
 
-      // Click on the link
+      // Touch on the link
+      const link = wrapper.findComponent(RouterLinkStub)
       await link.trigger('click')
 
-      // Assert that the store indicates the burger menu is close
+      // Assert burger menu status is close
       expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
     })
   })

@@ -8,18 +8,16 @@ import frontDataBase from '../../../db.json'
 
 const mockDropdown = frontDataBase.siteMenu[1]
 const mockDropdownText = mockDropdown.text
-const mockDropdownTitle = mockDropdown.title
 
 /***********/
 /* 2.Build */
 /***********/
 
-// Component Factory
+// Component Factory (Dropdown open state)
 function mountBurgerMenuDropdownButton(propsOptions = {}) {
   return mount(BurgerMenuDropdownButton, {
     props: {
       text: mockDropdownText,
-      title: mockDropdownTitle,
       isDropdownOpen: true,
       ...propsOptions,
     },
@@ -30,54 +28,69 @@ function mountBurgerMenuDropdownButton(propsOptions = {}) {
 /* 3.Test */
 /**********/
 
+// WARNING : The component has 2 states regarding its opening status. Open or close. The state by default is open.
+
 describe('BurgerMenuDropdownButton.vue', () => {
   let wrapper
-  let button
 
   beforeEach(() => {
+    // Component mounting (Dropdown open state)
     wrapper = mountBurgerMenuDropdownButton()
-    button = wrapper.find("[data-testid='burger-menu__dropdown-button']")
   })
 
   // Smoke test
   test('mounts successfully', () => {
+    // Assert the wrapper component is well mounted at initial render
     expect(wrapper.exists()).toBeTruthy()
   })
 
-  test('renders the button with necessary information', () => {
-    // Assert the button is rendered
-    expect(button.exists()).toBeTruthy()
+  describe('Initial render - Dropdown open state', () => {
+    test('renders the dropdown toggle button with necessary information', () => {
+      // Find the button
+      const button = wrapper.find("[data-testid='burger-menu__dropdown-button']")
 
-    // Assert its text is rendered
-    expect(button.text()).toContain(mockDropdownText)
+      // Assert the button is rendered
+      expect(button.exists()).toBeTruthy()
+
+      // Assert its text is rendered
+      expect(button.text()).toContain(mockDropdownText)
+
+      // Assert the open icon is rendered
+      const icon = button.find("[data-testid='icon-sign-minus']")
+      expect(icon.exists()).toBeTruthy()
+    })
+  })
+
+  describe('Dropdown close state', () => {
+    test('renders the dropdown toggle button with necessary information', () => {
+      // Remount the component in the state of a close dropdown
+      const wrapper = mountBurgerMenuDropdownButton({ isDropdownOpen: false })
+
+      // Assert the close icon is rendered
+      const button = wrapper.find("[data-testid='burger-menu__dropdown-button']")
+      const icon = button.find("[data-testid='icon-sign-plus']")
+      expect(icon.exists()).toBeTruthy()
+    })
   })
 
   describe('Behaviors:', () => {
-    test('when the dropdown is open, the sign minus icon is rendered', () => {
-      /* We target the icon instead of component because we decided to not have tests for SVG components */
+    /************/
+    /* Dropdown */
+    /************/
 
-      // Find the icon
+    test('the dropdown is open by default', () => {
+      // Assert the icon is rendered
       const icon = wrapper.find("[data-testid='icon-sign-minus']")
-
-      // Assert the icon is rendered
       expect(icon.exists()).toBeTruthy()
     })
 
-    test('when the dropdown is close, the sign plus icon is rendered', () => {
-      /* We target the icon instead of component because we decided to not have tests for SVG components */
+    /**************************/
+    /* Dropdown toggle button */
+    /**************************/
 
-      // Remount the component in the state of a close dropdown
-      wrapper = mountBurgerMenuDropdownButton({ isDropdownOpen: false })
-
-      // Find the icon
-      const icon = wrapper.find("[data-testid='icon-sign-plus']")
-
-      // Assert the icon is rendered
-      expect(icon.exists()).toBeTruthy()
-    })
-
-    test('when the button is touched, its commands the dropdown to open/close', async () => {
+    test('when the toggle button is touched, its commands the dropdown to open/close', async () => {
       // Touch the button
+      const button = wrapper.find("[data-testid='burger-menu__dropdown-button']")
       await button.trigger('click')
 
       // Assert the order to open/close the button has been emitted

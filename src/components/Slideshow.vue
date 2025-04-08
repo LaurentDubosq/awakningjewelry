@@ -25,7 +25,7 @@ import type { DisplaySlidePayload } from '@/types/components'
 const { slidesLength } = defineProps<{
   slidesLength: number
 }>()
-// Get the environement to restrains the position calculation of slick slider to mobile
+// Get the environment to restrains the position calculation of slick slider to mobile
 const isOnMobileStore = useIsOnMobileStore()
 const { isOnMobile } = storeToRefs(isOnMobileStore)
 

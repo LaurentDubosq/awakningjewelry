@@ -1,10 +1,6 @@
 import { mount, RouterLinkStub } from '@vue/test-utils'
 import { ref } from 'vue'
 import Slideshow from '@/components/Slideshow.vue'
-import SlideshowAutorotationButton from '@/components/SlideshowAutorotationButton.vue'
-import SlideshowSlickSlider from '@/components/SlideshowSlickSlider.vue'
-import IconPause from '@/components/icons/IconPause.vue'
-import IconPlay from '@/components/icons/IconPlay.vue'
 import HeroSlide from '@/components/HeroSlide.vue'
 import frontDataBase from '../../../db.json'
 import { createTestingPinia } from '@pinia/testing'
@@ -15,16 +11,16 @@ import { defineStore } from 'pinia'
 /* 1.Hoisting */
 /**************/
 
-// Mock the "useGetClientHeightAtElementResize" composable
+// Mock the "useGetClientHeightAtElementResize" composable used to position the slick slider on mobile
 vi.mock('@/composables/useGetClientHeightAtElementResize', () => {
   return {
     useGetClientHeightAtElementResize: vi.fn().mockReturnValue(ref(100)),
   }
 })
 
-/*********************/
-/* 2.Initializations */
-/*********************/
+/********************/
+/* 2.Initialization */
+/********************/
 
 /* Data */
 
@@ -34,7 +30,7 @@ const mockCurrentIndex = 0
 
 /* Slot */
 
-// In order to test the dynamic behavior of Slideshow.vue, we need a dummy component to mock the slot with a dynamic content
+// In order to test the dynamic behavior of Slideshow.vue, we need a dummy component to mock the slot with a dynamic content (here 2 slides)
 const mockHeroSlideComponent = defineComponent({
   props: ['currentIndex'],
   data() {
@@ -47,15 +43,16 @@ const mockHeroSlideComponent = defineComponent({
     HeroSlide,
   },
   template: `
-    <HeroSlide
-      v-for="(slide, index) in mockSlides"
-      :key="slide.id"
-      :slide
-      :slidesLength="mockSlidesLength"
-      :slideIndex="index"
-      :isActive="index === currentIndex"
-      v-show="index === currentIndex"
-    />
+    <template v-for="(slide, index) in mockSlides" :key="slide.id">
+      <HeroSlide
+        class="slideshow__slide"
+        :class="{ 'slideshow__slide--active': index === currentIndex }"
+        :slide
+        :slidesLength="mockSlidesLength"
+        :slideIndex="index"
+        :isActive="index === currentIndex"
+      />
+    </template>
   `,
 })
 
@@ -71,7 +68,7 @@ const mockUseIsReducedMotionStore = defineStore('IsReducedMotion', () => {
 })
 
 const mockUseIsOnMobileStore = defineStore('IsOnMobile', () => {
-  const isOnMobile = ref(true)
+  const isOnMobile = ref()
   return { isOnMobile }
 })
 
@@ -83,7 +80,7 @@ mockUseIsOnMobileStore()
 /* 3.Build */
 /***********/
 
-// Component Factory
+// Component Factory (Playing state is true - Reduce motion state is false)
 function mountSlideshow() {
   return mount(Slideshow, {
     attachTo: document.body,
@@ -102,124 +99,48 @@ function mountSlideshow() {
 /* 4.Test */
 /**********/
 
+// WARNING : The component has 2 states regarding the slideshow playing status. True or false. The state by default is true.
+
+// WARNING : The component has 2 states regarding the reduce motion status. True or false. The state by default is false.
+
 describe('Slideshow.vue', () => {
   let wrapper
 
   beforeEach(() => {
-    mockIsReducedMotionStore.isReducedMotion = false // reset to the default value
+    // Component mounting (Playing state is true - Reduce motion state is false)
     wrapper = mountSlideshow()
   })
 
+  afterEach(() => {
+    // Reset the store(s) state(s) to default to ensure a clean environment for each test
+    mockIsReducedMotionStore.isReducedMotion = false
+  })
+
   // Smoke test
-  test('mounts successfully', () => {
+  test('mounts successfully', async () => {
+    // Assert the wrapper component is well mounted at initial render
     expect(wrapper.exists()).toBeTruthy()
   })
 
-  describe('SlideshowAutorotationButton.vue', () => {
-    test('render the component with necessary information', () => {
-      const SlideshowSlickSliderComponent = wrapper.findComponent(SlideshowAutorotationButton)
-
-      // Assert the component is rendered
-      expect(SlideshowSlickSliderComponent.exists()).toBeTruthy()
-
-      // Assert its "isPlaying" prop has the correct value
-      expect(SlideshowSlickSliderComponent.props('isPlaying')).toBe(true)
+  describe('Initial render - Playing state is true - Reduce motion state is false', () => {
+    test('renders all the slides', () => {
+      const HeroSlideComponents = wrapper.findAllComponents(HeroSlide)
+      expect(HeroSlideComponents).toHaveLength(mockSlidesLength)
     })
 
-    describe("'pause' button variant:", () => {
-      test("renders the 'pause' button with necessary information", () => {
-        const button = wrapper.find("[data-testid='slideshow__autorotation-button']")
-        const IconPauseComponent = wrapper.findComponent(IconPause)
-
-        // Assert the "pause" icon component is rendered
-        expect(IconPauseComponent.exists()).toBeTruthy()
-
-        // Assert the "aria-label" is rendered with the correct value
-        expect(button.attributes('aria-label')).toBe('Stop automatic slide show')
-      })
-
-      describe('Behaviors:', () => {
-        test("when the 'pause' button is clicked, it stops the slideshow autorotation", async () => {
-          // Click the button
-          const button = wrapper.find("[data-testid='slideshow__autorotation-button']")
-          await button.trigger('click')
-
-          // Wait 3.5 seconds (Delay between two slides)
-          await new Promise((resolve) => setTimeout(resolve, 3500))
-
-          // Assert the first/starting slide is still rendered
-          const FirstHeroSlideComponent = wrapper.findComponent(HeroSlide)
-          expect(FirstHeroSlideComponent.isVisible()).toBeTruthy()
-        }, 7500)
-      })
-    })
-
-    describe("'play' button variant:", () => {
-      test("renders the 'play' button with necessary information", async () => {
-        // Click the 'pause' button to display the 'play' button
-        const button = wrapper.find("[data-testid='slideshow__autorotation-button']")
-        await button.trigger('click')
-
-        // Assert the "play" icon component is rendered
-        const IconPlayComponent = wrapper.findComponent(IconPlay)
-        expect(IconPlayComponent.exists()).toBeTruthy()
-
-        // Assert the "aria-label" is rendered with the correct value
-        expect(button.attributes('aria-label')).toBe('Start automatic slide show')
-      })
-
-      describe('Behaviors:', () => {
-        test("when the 'play' button is clicked, it starts again the slideshow autorotation", async () => {
-          // Click the 'pause' button to display the 'play' button
-          const button = wrapper.find("[data-testid='slideshow__autorotation-button']")
-          await button.trigger('click')
-
-          // Click the 'play' button to start again the autorotation
-          await button.trigger('click')
-
-          // Wait 3.5 seconds (Delay between two slides)
-          await new Promise((resolve) => setTimeout(resolve, 3500))
-
-          // Assert the second slide is rendered
-          const HeroSlideComponents = wrapper.findAllComponents(HeroSlide)
-          const SecondHeroSlideComponent = HeroSlideComponents[1]
-          expect(SecondHeroSlideComponent.isVisible()).toBeTruthy()
-        }, 7500)
-      })
-    })
-  })
-
-  describe('SlideshowSlickSlider.vue', () => {
-    const mockSlickSliderTopPosition = undefined
-
-    test('render the component with necessary information', () => {
-      const SlideshowSlickSliderComponent = wrapper.findComponent(SlideshowSlickSlider)
-
-      // Assert the component is rendered
-      expect(SlideshowSlickSliderComponent.exists()).toBeTruthy()
-
-      // Assert its "slickSliderTopPosition" prop has the correct value
-      expect(SlideshowSlickSliderComponent.props('slickSliderTopPosition')).toBe(
-        mockSlickSliderTopPosition,
-      )
-
-      // Assert its "slidesLength" prop has the correct value
-      expect(SlideshowSlickSliderComponent.props('slidesLength')).toBe(mockSlidesLength)
-
-      // Assert its "currentIndex" prop has the correct value
-      expect(SlideshowSlickSliderComponent.props('currentIndex')).toBe(mockCurrentIndex)
-    })
-
-    test('render all its expected buttons with necessary information', () => {
+    test('render all the slick slider buttons with their necessary information', () => {
       const buttons = wrapper.findAll("[data-testid='slideshow__slick-slider-button']")
 
-      // Assert all the expected buttons are rendered
+      // Assert all the buttons are rendered
       expect(buttons).toHaveLength(mockSlidesLength)
 
-      // Assert each button is rendered with necessary information
+      // Assert each button is rendered with its necessary information
       buttons.forEach((button, index) => {
+        // Assert the button is rendered
+        expect(button.exists()).toBeTruthy()
+
         // Assert the "aria-label" has the correct value
-        expect(button.attributes('aria-label')).toBe(`Slide ${index + 1}`)
+        expect(button.attributes('aria-label')).toBe(`Slide ${index + 1}`) // exceptionally we test an "aria-label" wai-aria attribut because the button has no text
 
         // Assert the active CSS class is used when necessary
         expect(button.classes('slideshow__slick-slider-button--active')).toBe(
@@ -228,177 +149,71 @@ describe('Slideshow.vue', () => {
       })
     })
 
-    describe('Behaviors:', () => {
-      test('when another button is clicked, it displays its slide', async () => {
-        // Click the second button
-        const buttons = wrapper.findAll("[data-testid='slideshow__slick-slider-button']")
-        const secondButton = buttons[1]
-        await secondButton.trigger('click')
+    test('renders the autorotation toggle button with necessary information', () => {
+      const button = wrapper.find("[data-testid='slideshow__autorotation-button']")
+      const icon = wrapper.find("[data-testid='icon-pause']")
 
-        // Assert the second slide is rendered
-        const HeroSlideComponents = wrapper.findAllComponents(HeroSlide)
-        const SecondHeroSlideComponent = HeroSlideComponents[1]
-        expect(SecondHeroSlideComponent.isVisible()).toBeTruthy()
-      })
+      // Assert the button is rendered
+      expect(button.exists()).toBeTruthy()
 
-      test('when the left arrow key is pressed, it displays the previous slide, until achieving 1 loop', async () => {
-        const HeroSlideComponents = wrapper.findAllComponents(HeroSlide)
+      // Assert the "pause" icon is rendered
+      expect(icon.exists()).toBeTruthy()
 
-        // Assert the starting/first slide is rendered
-        const FirstHeroSlideComponent = HeroSlideComponents[0]
-        expect(FirstHeroSlideComponent.isVisible()).toBeTruthy()
-
-        // Press the left arrow key from its corresponding slick slider button
-        const button = wrapper.find("[data-testid='slideshow__slick-slider-button']")
-        await button.trigger('keydown', {
-          key: 'ArrowLeft',
-          code: 'ArrowLeft',
-        })
-
-        // Assert the last/second slide is rendered
-        const LastHeroSlideComponent = HeroSlideComponents[HeroSlideComponents.length - 1]
-        expect(LastHeroSlideComponent.isVisible()).toBeTruthy()
-
-        // Press the left arrow key again to achieve 1 loop
-        await button.trigger('keydown', {
-          key: 'ArrowLeft',
-          code: 'ArrowLeft',
-        })
-
-        // Assert the starting/first slide is rendered again
-        expect(FirstHeroSlideComponent.isVisible()).toBeTruthy()
-      })
-
-      test('when the right arrow key is pressed, it displays the next slide, until achieving 1 loop', async () => {
-        const HeroSlideComponents = wrapper.findAllComponents(HeroSlide)
-
-        // Assert the starting/first slide is rendered
-        const FirstHeroSlideComponent = HeroSlideComponents[0]
-        expect(FirstHeroSlideComponent.isVisible()).toBeTruthy()
-
-        // Press the right arrow key from its corresponding slick slider button
-        const button = wrapper.find("[data-testid='slideshow__slick-slider-button']")
-        await button.trigger('keydown', {
-          key: 'ArrowRight',
-          code: 'ArrowRight',
-        })
-
-        // Assert the second/last slide is rendered
-        const SecondHeroSlideComponent = HeroSlideComponents[1]
-        expect(SecondHeroSlideComponent.isVisible()).toBeTruthy()
-
-        // Press the right arrow key again to achieve 1 lopp
-        await button.trigger('keydown', {
-          key: 'ArrowRight',
-          code: 'ArrowRight',
-        })
-
-        // Assert the starting/first slide is rendered again
-        expect(FirstHeroSlideComponent.isVisible()).toBeTruthy()
-      })
-
-      test('when the home key is pressed, it displays the first slide, and the first slick slider button is focused', async () => {
-        const slickSliderButtons = wrapper.findAll("[data-testid='slideshow__slick-slider-button']")
-        const firstSlickSliderButton = slickSliderButtons[0]
-        const secondSlickSliderButton = slickSliderButtons[1]
-        const HeroSlideComponents = wrapper.findAllComponents(HeroSlide)
-        const FirstHeroSlideComponent = HeroSlideComponents[0]
-        const SecondHeroSlideComponent = HeroSlideComponents[1]
-
-        // Click on the second slick slider button
-        await secondSlickSliderButton.trigger('click')
-
-        // Focus the second slick slider button
-        await secondSlickSliderButton.element.focus()
-
-        // Assert the second slide is rendered
-        expect(SecondHeroSlideComponent.isVisible()).toBeTruthy()
-
-        // Assert the second slick slider button is focused
-        expect(document.activeElement).toBe(secondSlickSliderButton.element)
-
-        // Press the "home" key
-        await firstSlickSliderButton.trigger('keydown', {
-          key: 'Home',
-          code: 'Home',
-        })
-
-        // Assert the first slide is rendered
-        expect(FirstHeroSlideComponent.isVisible()).toBeTruthy()
-
-        // Assert the first slick slider button is focused
-        expect(document.activeElement).toBe(firstSlickSliderButton.element)
-      })
-
-      test("when the 'end' key is pressed, it displays the last slide, and the last slick slider button is focused", async () => {
-        const slickSliderButtons = wrapper.findAll("[data-testid='slideshow__slick-slider-button']")
-        const firstSlickSliderButton = slickSliderButtons[0]
-        const secondSlickSliderButton = slickSliderButtons[1]
-        const HeroSlideComponents = wrapper.findAllComponents(HeroSlide)
-        const FirstHeroSlideComponent = HeroSlideComponents[0]
-        const SecondHeroSlideComponent = HeroSlideComponents[1]
-
-        // Click and focus on the first slick slider button to ensure the future changes
-        await firstSlickSliderButton.trigger('click')
-        await firstSlickSliderButton.element.focus()
-
-        // Assert the first slide is rendered
-        expect(FirstHeroSlideComponent.isVisible()).toBeTruthy()
-
-        // Assert the first slick slider button is focused
-        expect(document.activeElement).toBe(firstSlickSliderButton.element)
-
-        // Press the "end" key
-        await firstSlickSliderButton.trigger('keydown', {
-          key: 'End',
-          code: 'End',
-        })
-
-        // Assert the last(second) slide is rendered
-        expect(SecondHeroSlideComponent.isVisible()).toBeTruthy()
-
-        // Assert the last(second) slick slider button is focused
-        expect(document.activeElement).toBe(secondSlickSliderButton.element)
-      })
+      // Assert the "aria-label" is rendered with the correct value. A11y exceptional test because there is no text for the button otherwise
+      expect(button.attributes('aria-label')).toBe('Stop automatic slide show')
     })
   })
 
-  describe('Slot:', () => {
-    test('renders the slot content', () => {
-      // Assert the slot content is rendered
-      const slotContent = wrapper.findComponent(mockHeroSlideComponent)
-      expect(slotContent.exists()).toBeTruthy()
+  describe('Playing state is false - Reduce motion state is false', () => {
+    test('renders the autorotation toggle button with necessary information', async () => {
+      // Click the 'pause' button to display the 'play' button
+      const button = wrapper.find("[data-testid='slideshow__autorotation-button']")
+      await button.trigger('click')
 
-      // Assert its "currentIndex" slot props has the correct initial value
-      expect(slotContent.props('currentIndex')).toBe(mockCurrentIndex)
+      // Assert the "play" icon is rendered
+      const icon = wrapper.find("[data-testid='icon-play']")
+      expect(icon.exists()).toBeTruthy()
+
+      // Assert the "aria-label" is rendered with the correct value. A11y exceptional test because there is no text for the button otherwise
+      expect(button.attributes('aria-label')).toBe('Start automatic slide show')
     })
   })
 
   describe('Behaviors:', () => {
-    test('autorotation is active by default and render properly each slide during 1 loop, and check other slides are not visible', async () => {
-      const HeroSlideComponents = wrapper.findAllComponents(HeroSlide)
-      const FirstHeroSlideComponent = HeroSlideComponents[0]
-      const SecondHeroSlideComponent = HeroSlideComponents[1]
+    /*************/
+    /* Slideshow */
+    /*************/
 
-      // Assert the first/starting slide is showned at initial render
-      expect(FirstHeroSlideComponent.isVisible()).toBeTruthy()
-      // Assert the second/last slide is not rendered
-      expect(SecondHeroSlideComponent.isVisible()).toBeFalsy()
+    test('The autorotation is on by default', () => {
+      // Component mounting (playing is true)
+      wrapper = mountSlideshow()
 
-      // Wait 3.5 seconds (Delay between two slides)
-      await new Promise((resolve) => setTimeout(resolve, 3500))
-      // Assert the second/last slide is rendered
-      expect(SecondHeroSlideComponent.isVisible()).toBeTruthy()
-      // Assert the first/starting slide is no longer rendered
-      expect(FirstHeroSlideComponent.isVisible()).toBeFalsy()
+      // Assert the playing is true
+      const icon = wrapper.find("[data-testid='icon-pause']")
+      expect(icon.exists()).toBeTruthy()
+    })
 
-      // Wait 3.5 seconds (Delay between two slides)
-      await new Promise((resolve) => setTimeout(resolve, 3500))
-      // Assert the first/starting slide after a complete loop is rendered
-      expect(FirstHeroSlideComponent.isVisible()).toBeTruthy()
-      // Assert the second/last slide is no longer rendered
-      expect(SecondHeroSlideComponent.isVisible()).toBeFalsy()
-    }, 11000)
+    test(
+      'slideshow renders automatically each slide until achieving 1 loop',
+      async () => {
+        // Find the slides
+        const HeroSlideComponents = wrapper.findAllComponents(HeroSlide)
+
+        // Assert each slide is rendered
+        for (let index = 0; index < HeroSlideComponents.length; index++) {
+          // Wait 3.5 seconds except for the last slide (Delay between two slides)
+          await new Promise((resolve) => setTimeout(resolve, 3500))
+
+          // Assert the slide is rendered
+          expect(
+            HeroSlideComponents[
+              index === HeroSlideComponents.length - 1 ? 0 : index + 1
+            ].attributes('class'),
+          ).toContain('slideshow__slide--active')
+        }
+      },
+      3500 * mockSlidesLength + 1000,
+    )
 
     test('when the user has the reduce motion activated, the autorotation should be pause at initial render', async () => {
       // Enable the reduce motion feature to block animations
@@ -411,13 +226,13 @@ describe('Slideshow.vue', () => {
       const FirstHeroSlideComponent = HeroSlideComponents[0]
 
       // Assert the first/starting slide is showned at initial render
-      expect(FirstHeroSlideComponent.isVisible()).toBeTruthy()
+      expect(FirstHeroSlideComponent.attributes('class')).toContain('slideshow__slide--active')
 
       // Wait 3.5 seconds (Delay between two slides)
       await new Promise((resolve) => setTimeout(resolve, 3500))
 
       // Assert the first/starting slide is still rendered
-      expect(FirstHeroSlideComponent.isVisible()).toBeTruthy()
+      expect(FirstHeroSlideComponent.attributes('class')).toContain('slideshow__slide--active')
     })
 
     test('when the user hovers over the slideshow, the autorotation should stop, then when the mouse leaves the slideshow, the autorotation should resume', async () => {
@@ -427,13 +242,13 @@ describe('Slideshow.vue', () => {
       const SecondHeroSlideComponent = HeroSlideComponents[1]
 
       // Assert the first/starting slide is showned at initial render
-      expect(FirstHeroSlideComponent.isVisible()).toBeTruthy()
+      expect(FirstHeroSlideComponent.attributes('class')).toContain('slideshow__slide--active')
 
       // Wait 3.5 seconds (Delay between two slides)
       await new Promise((resolve) => setTimeout(resolve, 3500))
 
       // Assert the autorotation is on by asserting that the second/last slide is rendered
-      expect(SecondHeroSlideComponent.isVisible()).toBeTruthy()
+      expect(SecondHeroSlideComponent.attributes('class')).toContain('slideshow__slide--active')
 
       // Hover the slideshow
       await slideShow.trigger('mouseenter')
@@ -442,7 +257,7 @@ describe('Slideshow.vue', () => {
       await new Promise((resolve) => setTimeout(resolve, 3500))
 
       // Assert the autorotation has been stopped by asserting that the second/last slide is still rendered
-      expect(SecondHeroSlideComponent.isVisible()).toBeTruthy()
+      expect(SecondHeroSlideComponent.attributes('class')).toContain('slideshow__slide--active')
 
       // Mouse leaves the slideshow
       await slideShow.trigger('mouseleave')
@@ -451,37 +266,8 @@ describe('Slideshow.vue', () => {
       await new Promise((resolve) => setTimeout(resolve, 3500))
 
       // Assert the autorotation has resume by asserting that the next (first/starting) slide is rendered
-      expect(FirstHeroSlideComponent.isVisible()).toBeTruthy()
+      expect(FirstHeroSlideComponent.attributes('class')).toContain('slideshow__slide--active')
     }, 11000)
-
-    test("when user focus a slick slider button, the autorotation is stopped, then start again when the 'play' button is clicked", async () => {
-      const HeroSlideComponents = wrapper.findAllComponents(HeroSlide)
-      const FirstHeroSlideComponent = HeroSlideComponents[0]
-      const SecondHeroSlideComponent = HeroSlideComponents[1]
-
-      // Assert the first/starting slide is rendered
-      expect(FirstHeroSlideComponent.isVisible()).toBeTruthy()
-
-      // Focus the first slick slider button
-      const slickSliderButton = wrapper.find("[data-testid='slideshow__slick-slider-button']")
-      slickSliderButton.trigger('focusin') // we use "focusin" instead of "focus" because in vue test utils, the latter doesn't trigger "focusin"
-
-      // Wait 3.5 seconds (Delay between two slides)
-      await new Promise((resolve) => setTimeout(resolve, 3500))
-
-      // Assert carousel auto-play has been stopped
-      expect(FirstHeroSlideComponent.isVisible()).toBeTruthy()
-
-      // Click the "play" button
-      const autorotationButton = wrapper.find("[data-testid='slideshow__autorotation-button']")
-      await autorotationButton.trigger('click')
-
-      // Wait 3.5 seconds (Delay between two slides)
-      await new Promise((resolve) => setTimeout(resolve, 3500))
-
-      // Assert carousel auto-play has been stopped
-      expect(SecondHeroSlideComponent.isVisible()).toBeTruthy()
-    }, 7500)
 
     test("when user navigates using the 'tab' key, the first slideshow focusable element should be the autorotation button", async () => {
       /* As the "tab" key doesn't move the focus using vue test utils, we prefere to check the focusable element position by their order */
@@ -518,6 +304,92 @@ describe('Slideshow.vue', () => {
       expect(slickSliderPosition).toBeLessThan(slideContentButtonPosition)
     })
 
+    test('renders each previous slide by left swipe', async () => {
+      // Find the elements
+      const slideShow = wrapper.find("[data-testid='slideshow']")
+      const HeroSlideComponents = wrapper.findAllComponents(HeroSlide)
+
+      // Display the last slide to prevent desynchronization between the loop index and the internal currentIndex state
+      await slideShow.trigger('touchstart', {
+        changedTouches: [{ screenX: 100 }],
+      })
+      await slideShow.trigger('touchend', {
+        changedTouches: [{ screenX: 10 }],
+      })
+
+      // Assert each slide is rendered
+      for (let index = HeroSlideComponents.length - 1; index >= 0; index--) {
+        // Swipe left
+        await slideShow.trigger('touchstart', {
+          changedTouches: [{ screenX: 100 }],
+        })
+        await slideShow.trigger('touchend', {
+          changedTouches: [{ screenX: 10 }],
+        })
+
+        // Assert the previous slide is rendered
+        expect(
+          HeroSlideComponents[index === 0 ? HeroSlideComponents.length - 1 : index - 1].attributes(
+            'class',
+          ),
+        ).toContain('slideshow__slide--active')
+      }
+    })
+
+    test('renders each next slide by right swipe', async () => {
+      // Find the elements
+      const slideShow = wrapper.find("[data-testid='slideshow']")
+      const HeroSlideComponents = wrapper.findAllComponents(HeroSlide)
+
+      // Assert each slide is rendered
+      for (let index = 0; index < HeroSlideComponents.length; index++) {
+        // Swipe right
+        await slideShow.trigger('touchstart', {
+          changedTouches: [{ screenX: 10 }],
+        })
+        await slideShow.trigger('touchend', {
+          changedTouches: [{ screenX: 100 }],
+        })
+
+        // Assert the next slide is rendered
+        expect(
+          HeroSlideComponents[index === HeroSlideComponents.length - 1 ? 0 : index + 1].attributes(
+            'class',
+          ),
+        ).toContain('slideshow__slide--active')
+      }
+    })
+
+    /******************************/
+    /* Autorotation toggle button */
+    /******************************/
+
+    test('when the autorotation toggle button is clicked, it stops and starts the slideshow autorotation', async () => {
+      // Find the button
+      const button = wrapper.find("[data-testid='slideshow__autorotation-button']")
+
+      // Click the button
+      await button.trigger('click')
+
+      // Wait 3.5 seconds (Delay between two slides)
+      await new Promise((resolve) => setTimeout(resolve, 3500))
+
+      // Assert the autorotation is stopped
+      const FirstHeroSlideComponent = wrapper.findComponent(HeroSlide)
+      expect(FirstHeroSlideComponent.attributes('class')).toContain('slideshow__slide--active')
+
+      // Click the 'play' button to start again the autorotation
+      await button.trigger('click')
+
+      // Wait 3.5 seconds (Delay between two slides)
+      await new Promise((resolve) => setTimeout(resolve, 3500))
+
+      // Assert the autorotation is playing
+      const HeroSlideComponents = wrapper.findAllComponents(HeroSlide)
+      const SecondHeroSlideComponent = HeroSlideComponents[1]
+      expect(SecondHeroSlideComponent.attributes('class')).toContain('slideshow__slide--active')
+    }, 7500)
+
     test('when a user resumes the autorotation, any focus and hover are ignored', async () => {
       const HeroSlideComponents = wrapper.findAllComponents(HeroSlide)
       const FirstHeroSlideComponent = HeroSlideComponents[0]
@@ -525,7 +397,7 @@ describe('Slideshow.vue', () => {
       const autorotationButton = wrapper.find("[data-testid='slideshow__autorotation-button']")
 
       // Assert the first/starting slide is rendered
-      expect(FirstHeroSlideComponent.isVisible()).toBeTruthy()
+      expect(FirstHeroSlideComponent.attributes('class')).toContain('slideshow__slide--active')
 
       // Pause the slideshow autorotation
       await autorotationButton.trigger('click')
@@ -534,7 +406,7 @@ describe('Slideshow.vue', () => {
       await new Promise((resolve) => setTimeout(resolve, 3500))
 
       // Assert the slideshow is paused
-      expect(FirstHeroSlideComponent.isVisible()).toBeTruthy()
+      expect(FirstHeroSlideComponent.attributes('class')).toContain('slideshow__slide--active')
 
       // Resume the slideshow autorotation
       await autorotationButton.trigger('click')
@@ -543,17 +415,17 @@ describe('Slideshow.vue', () => {
       await new Promise((resolve) => setTimeout(resolve, 3500))
 
       // Assert the slideshow is resumed
-      expect(SecondHeroSlideComponent.isVisible()).toBeTruthy()
+      expect(SecondHeroSlideComponent.attributes('class')).toContain('slideshow__slide--active')
 
       // Focus the first slick slider button
       const firstSlickSliderButton = wrapper.find("[data-testid='slideshow__slick-slider-button']")
-      firstSlickSliderButton.trigger('focusin')
+      firstSlickSliderButton.element.focus()
 
       // Wait 3.5 seconds (Delay between two slides)
       await new Promise((resolve) => setTimeout(resolve, 3500))
 
       // Assert the slideshow is still playing (the next slide is the starting slide)
-      expect(FirstHeroSlideComponent.isVisible()).toBeTruthy()
+      expect(FirstHeroSlideComponent.attributes('class')).toContain('slideshow__slide--active')
 
       // Hover the slideshow
       const slideShow = wrapper.find("[data-testid='slideshow']")
@@ -563,71 +435,153 @@ describe('Slideshow.vue', () => {
       await new Promise((resolve) => setTimeout(resolve, 3500))
 
       // Assert the slideshow is still playing
-      expect(SecondHeroSlideComponent.isVisible()).toBeTruthy()
+      expect(SecondHeroSlideComponent.attributes('class')).toContain('slideshow__slide--active')
     }, 15000)
 
-    test('renders the previous slides by left swipes, until achieving 1 loop', async () => {
-      const slideShow = wrapper.find("[data-testid='slideshow']")
+    /************************/
+    /* Slick slider buttons */
+    /************************/
+
+    test('when each slick slider button is clicked, it displays its slide', async () => {
+      // Find the elements
+      const buttons = wrapper.findAll("[data-testid='slideshow__slick-slider-button']")
+      const HeroSlideComponents = wrapper.findAllComponents(HeroSlide)
+
+      // Assert each button renders its corresponding slide
+      for (let index = 0; index < buttons.length; index++) {
+        // Click the button
+        await buttons[index].trigger('click')
+
+        // Assert the corresponding slide is rendered
+        expect(HeroSlideComponents[index].attributes('class')).toContain('slideshow__slide--active')
+      }
+    })
+
+    test('when the left arrow key is pressed on each slick slider button, it displays the previous slide', async () => {
+      // Find the elements
+      const buttons = wrapper.findAll("[data-testid='slideshow__slick-slider-button']")
+      const HeroSlideComponents = wrapper.findAllComponents(HeroSlide)
+
+      // Display the last slide to prevent desynchronization between the loop index and the internal currentIndex state
+      await buttons[buttons.length - 1].trigger('keydown', {
+        key: 'ArrowLeft',
+        code: 'ArrowLeft',
+      })
+
+      // Assert each button renders its corresponding slide
+      for (let index = buttons.length - 1; 0 >= index; index--) {
+        // Press the left arrow key
+        await buttons[index].trigger('keydown', {
+          key: 'ArrowLeft',
+          code: 'ArrowLeft',
+        })
+
+        // Assert the corresponding slide is rendered
+        expect(
+          HeroSlideComponents[index === 0 ? mockSlidesLength - 1 : index - 1].attributes('class'),
+        ).toContain('slideshow__slide--active')
+      }
+    })
+
+    test('when the right arrow key is pressed on each slick slider button, it displays the next slide', async () => {
+      // Find the elements
+      const buttons = wrapper.findAll("[data-testid='slideshow__slick-slider-button']")
+      const HeroSlideComponents = wrapper.findAllComponents(HeroSlide)
+
+      // Assert each button renders its corresponding slide
+      for (let index = 0; index < buttons.length; index++) {
+        // Press the right arrow key
+        await buttons[index].trigger('keydown', {
+          key: 'ArrowRight',
+          code: 'ArrowRight',
+        })
+
+        // Assert the corresponding slide is rendered
+        expect(
+          HeroSlideComponents[index === mockSlidesLength - 1 ? 0 : index + 1].attributes('class'),
+        ).toContain('slideshow__slide--active')
+      }
+    })
+
+    test('when the home key is pressed on each slick slider button, it displays the first slide, and the first slick slider button is focused', async () => {
+      // Find the buttons
+      const buttons = wrapper.findAll("[data-testid='slideshow__slick-slider-button']")
+      const HeroSlideComponent = wrapper.findComponent(HeroSlide)
+
+      // Assert each button renders the first slide
+      for (let index = 0; index < buttons.length; index++) {
+        // Reset the active element by focusing other button
+        const autorotationButton = wrapper.find("[data-testid='slideshow__autorotation-button']")
+        autorotationButton.element.focus()
+
+        // Press the "home" key
+        await buttons[index].trigger('keydown', {
+          key: 'Home',
+          code: 'Home',
+        })
+
+        // Assert the first slide is rendered
+        expect(HeroSlideComponent.attributes('class')).toContain('slideshow__slide--active')
+
+        // Assert the first slick slider button is focused
+        expect(document.activeElement).toBe(buttons[0].element)
+      }
+    })
+
+    test('when the end key is pressed on each slick slider button, it displays the last slide, and the last slick slider button is focused', async () => {
+      // Find the buttons
+      const buttons = wrapper.findAll("[data-testid='slideshow__slick-slider-button']")
+      const HeroSlideComponents = wrapper.findAllComponents(HeroSlide)
+
+      // Assert each button renders the last slide
+      for (let index = 0; index < buttons.length; index++) {
+        // Reset the active element by focusing other button
+        const autorotationButton = wrapper.find("[data-testid='slideshow__autorotation-button']")
+        autorotationButton.element.focus()
+
+        // Press the "end" key
+        await buttons[index].trigger('keydown', {
+          key: 'End',
+          code: 'End',
+        })
+
+        // Assert the last slide is rendered
+        expect(HeroSlideComponents[HeroSlideComponents.length - 1].attributes('class')).toContain(
+          'slideshow__slide--active',
+        )
+
+        // Assert the last slick slider button is focused
+        expect(document.activeElement).toBe(buttons[buttons.length - 1].element)
+      }
+    })
+
+    test("when user focus a slick slider button, the autorotation is stopped, then start again when the 'play' button is clicked", async () => {
       const HeroSlideComponents = wrapper.findAllComponents(HeroSlide)
       const FirstHeroSlideComponent = HeroSlideComponents[0]
       const SecondHeroSlideComponent = HeroSlideComponents[1]
 
       // Assert the first/starting slide is rendered
-      expect(FirstHeroSlideComponent.isVisible()).toBeTruthy()
+      expect(FirstHeroSlideComponent.attributes('class')).toContain('slideshow__slide--active')
 
-      // Swipe left to the last slide
-      await slideShow.trigger('touchstart', {
-        changedTouches: [{ screenX: 100 }],
-      })
-      await slideShow.trigger('touchend', {
-        changedTouches: [{ screenX: 10 }],
-      })
+      // Focus the first slick slider button
+      const slickSliderButton = wrapper.find("[data-testid='slideshow__slick-slider-button']")
+      slickSliderButton.element.focus()
 
-      // Assert the second/last slide is rendered
-      expect(SecondHeroSlideComponent.isVisible()).toBeTruthy()
+      // Wait 3.5 seconds (Delay between two slides)
+      await new Promise((resolve) => setTimeout(resolve, 3500))
 
-      // Swipe left to the starting slide
-      await slideShow.trigger('touchstart', {
-        changedTouches: [{ screenX: 100 }],
-      })
-      await slideShow.trigger('touchend', {
-        changedTouches: [{ screenX: 10 }],
-      })
+      // Assert carousel playing has been stopped
+      expect(FirstHeroSlideComponent.attributes('class')).toContain('slideshow__slide--active')
 
-      // Assert the first/starting slide is rendered
-      expect(FirstHeroSlideComponent.isVisible()).toBeTruthy()
-    })
+      // Click the "play" button
+      const autorotationButton = wrapper.find("[data-testid='slideshow__autorotation-button']")
+      await autorotationButton.trigger('click')
 
-    test('renders the next slides by next swipes, until achieving 1 loop', async () => {
-      const slideShow = wrapper.find("[data-testid='slideshow']")
-      const HeroSlideComponents = wrapper.findAllComponents(HeroSlide)
-      const FirstHeroSlideComponent = HeroSlideComponents[0]
-      const SecondHeroSlideComponent = HeroSlideComponents[1]
+      // Wait 3.5 seconds (Delay between two slides)
+      await new Promise((resolve) => setTimeout(resolve, 3500))
 
-      // Assert the first/starting slide is rendered
-      expect(FirstHeroSlideComponent.isVisible()).toBeTruthy()
-
-      // Swipe right to the second/last slide
-      await slideShow.trigger('touchstart', {
-        changedTouches: [{ screenX: 10 }],
-      })
-      await slideShow.trigger('touchend', {
-        changedTouches: [{ screenX: 100 }],
-      })
-
-      // Assert the second/last slide is rendered
-      expect(SecondHeroSlideComponent.isVisible()).toBeTruthy()
-
-      // Swipe right to the starting slide
-      await slideShow.trigger('touchstart', {
-        changedTouches: [{ screenX: 10 }],
-      })
-      await slideShow.trigger('touchend', {
-        changedTouches: [{ screenX: 100 }],
-      })
-
-      // Assert the first/starting slide is rendered
-      expect(FirstHeroSlideComponent.isVisible()).toBeTruthy()
-    })
+      // Assert carousel playing has been stopped
+      expect(SecondHeroSlideComponent.attributes('class')).toContain('slideshow__slide--active')
+    }, 7500)
   })
 })

@@ -5,13 +5,16 @@ import BurgerMenuDropdown from './BurgerMenuDropdown.vue'
 import LoadingComponent from './LoadingComponent.vue'
 import ErrorComponent from './ErrorComponent.vue'
 import { useSiteMenuStore } from '@/stores/siteMenu'
+import { useIsBurgerMenuOpen } from '@/stores/isBurgerMenuOpen'
 import { storeToRefs } from 'pinia'
 
-// Get the store instance
+// Get the stores instances
 const siteMenuStore = useSiteMenuStore()
+const isBurgerMenuOpenStore = useIsBurgerMenuOpen()
 
-// Get the store's computeds
+// Get the store's states and computeds
 const { siteMenuData, siteMenuResultFetchStatus } = storeToRefs(siteMenuStore)
+const { toggleBurgerMenu } = isBurgerMenuOpenStore
 
 // Utilities
 function isLink(siteMenuItem: SiteMenuItem): boolean {
@@ -25,7 +28,7 @@ function isDropdown(siteMenuItem: SiteMenuItem): boolean {
 <template>
   <nav
     class="burger-menu"
-    @keydown.escape="$emit('close-burger-menu')"
+    @keydown.escape="toggleBurgerMenu"
     aria-label="Website's mobile navigation burger menu"
     id="burger-menu"
   >

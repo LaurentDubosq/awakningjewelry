@@ -1,44 +1,44 @@
 import { mount } from '@vue/test-utils'
 import MyTransition from '@/components/MyTransition.vue'
-import SiteNavDropdownList from '@/components/SiteNavDropdownList.vue'
-import App from '@/App.vue'
 import { TransitionGroup, Transition } from 'vue' // Allow us to point the Vue's Built-in component
 
 /********************/
 /* 1.Initialization */
 /********************/
 
-const mockTransitionGroupSlotInfoWithDuration = {
-  slot: SiteNavDropdownList,
-  props: {
-    name: 'translateY',
-    group: true,
-    duration: 3500,
-  },
-  stubs: { SiteNavDropdownList: { template: '<div />' } },
-}
-const mockTransitionGroupSlotInfoWithoutDuration = {
-  slot: SiteNavDropdownList,
+const mockSlotComponent = { template: '<div class="mock-slot-content" />' }
+const mockSiteNavDropdownListAnimationOptions = {
+  slot: mockSlotComponent,
   props: {
     name: 'translateY',
     group: true,
   },
-  stubs: { SiteNavDropdownList: { template: '<div />' } },
 }
-const mockTransitionSlotInfo = {
-  slot: App,
+const mockSiteNavDropdownListAnimationOptionsProps = mockSiteNavDropdownListAnimationOptions.props
+const mockBurgerMenuAnimationOptions = {
+  slot: mockSlotComponent,
   props: {
     name: 'marginLeftMinus300px',
     group: false,
   },
-  stubs: { App: { template: '<div />' } },
 }
+const mockBurgerMenuAnimationOptionsProps = mockBurgerMenuAnimationOptions.props
+const mockBurgerMenuDropdownListAnimationOptions = {
+  slot: mockSlotComponent,
+  props: {
+    name: 'margintopMinus100PerCentWithInner',
+    group: true,
+    duration: 300,
+  },
+}
+const mockBurgerMenuDropdownListAnimationOptionsProps =
+  mockBurgerMenuDropdownListAnimationOptions.props
 
 /***********/
 /* 2.Build */
 /***********/
 
-// Component Factory
+// Component Factory (Neutral built-in component) (Utility component)
 function mountComponent({ slot, props, stubs }) {
   return mount(MyTransition, {
     slots: { default: slot },
@@ -53,26 +53,40 @@ function mountComponent({ slot, props, stubs }) {
 /* 3.Test */
 /**********/
 
-describe('MyTransition.vue', () => {
-  let wrapper
+// WARNING : The component has 2 states regarding if we have to use the built-in component TransitionGroup or Transition.
+// There is none used by default. So, as this component is an utility component, we have to check implementation details,
+// such as the built-in animation component used in addition to the slot content.
 
+describe('MyTransition.vue', () => {
   // Smoke test
   test('mounts successfully', () => {
-    // Assert the testing environement is ready for transition group variant
-    wrapper = mountComponent(mockTransitionGroupSlotInfoWithDuration)
+    let wrapper
+
+    /**********************************************************************************************/
+    /* Assert the component is well mounted when the "TransitionGroup" built in component is used */
+    /**********************************************************************************************/
+
+    // Mount the component with the TransitionGroup setup
+    wrapper = mountComponent(mockSiteNavDropdownListAnimationOptions)
+
+    // Assert the wrapper component is well mounted
     expect(wrapper.exists()).toBeTruthy()
 
-    // Assert the testing environement is ready for transition variant
-    wrapper = mountComponent(mockTransitionSlotInfo)
+    /*****************************************************************************************/
+    /* Assert the component is well mounted when the "Transition" built in component is used */
+    /*****************************************************************************************/
+
+    // Mount the component with the Transition setup
+    wrapper = mountComponent(mockBurgerMenuAnimationOptions)
+
+    // Assert the wrapper component is well mounted
     expect(wrapper.exists()).toBeTruthy()
   })
 
-  describe('TransitionGroup.vue', () => {
-    it('is rendered with necessary information, with duration prop', () => {
-      const mockedProps = mockTransitionGroupSlotInfoWithDuration.props
-
+  describe('SiteNavDropdownList.vue animation', () => {
+    test('is renderedable and the component necessary information are well setted', () => {
       // Mounting Component
-      const wrapper = mountComponent(mockTransitionGroupSlotInfoWithDuration)
+      const wrapper = mountComponent(mockSiteNavDropdownListAnimationOptions)
 
       // Find TransitionGroup component
       const TransitionGroupComponent = wrapper.findComponent(TransitionGroup)
@@ -81,46 +95,20 @@ describe('MyTransition.vue', () => {
       expect(TransitionGroupComponent.exists()).toBeTruthy()
 
       // Assert its 'name' prop value is well setted
-      expect(TransitionGroupComponent.props('name')).toBe(mockedProps.name)
-
-      // Assert its 'duration' prop value is well setted
-      expect(TransitionGroupComponent.props('duration')).toBe(mockedProps.duration)
-
-      // Assert its slot content is rendered
-      const slotComponent = TransitionGroupComponent.findComponent(SiteNavDropdownList)
-      expect(slotComponent.exists()).toBeTruthy()
-    })
-
-    it('is rendered with necessary information, but without duration prop', () => {
-      const mockedProps = mockTransitionGroupSlotInfoWithoutDuration.props
-
-      // Mounting Component
-      const wrapper = mountComponent(mockTransitionGroupSlotInfoWithoutDuration)
-
-      // Find TransitionGroup component
-      const TransitionGroupComponent = wrapper.findComponent(TransitionGroup)
-
-      // Assert the TransitionGroup built-in component is rendered
-      expect(TransitionGroupComponent.exists()).toBeTruthy()
-
-      // Assert its 'name' prop value is well setted
-      expect(TransitionGroupComponent.props('name')).toBe(mockedProps.name)
-
-      // Assert its 'duration' prop value has the correct value
-      expect(TransitionGroupComponent.props('duration')).toBeUndefined()
+      expect(TransitionGroupComponent.props('name')).toBe(
+        mockSiteNavDropdownListAnimationOptionsProps.name,
+      )
 
       // Assert its slot content is rendered
-      const slotComponent = TransitionGroupComponent.findComponent(SiteNavDropdownList)
+      const slotComponent = TransitionGroupComponent.findComponent(mockSlotComponent)
       expect(slotComponent.exists()).toBeTruthy()
     })
   })
 
-  describe('Transition.vue', () => {
-    const mockedProps = mockTransitionSlotInfo.props
-
-    test('is rendered with necessary information', () => {
+  describe('BurgerMenu.vue animation', () => {
+    test('is renderedable and the component necessary information are well setted', () => {
       // Mounting Component
-      wrapper = mountComponent(mockTransitionSlotInfo)
+      const wrapper = mountComponent(mockBurgerMenuAnimationOptions)
 
       // Find Transition component
       const TransitionComponent = wrapper.findComponent(Transition)
@@ -129,10 +117,37 @@ describe('MyTransition.vue', () => {
       expect(TransitionComponent.exists()).toBeTruthy()
 
       // Assert its 'name' prop value is well setted
-      expect(TransitionComponent.props('name')).toBe(mockedProps.name)
+      expect(TransitionComponent.props('name')).toBe(mockBurgerMenuAnimationOptionsProps.name)
 
-      // Assert its slot content is well rendered
-      const slotComponent = wrapper.findComponent(App)
+      // Assert its slot content is rendered
+      const slotComponent = TransitionComponent.findComponent(mockSlotComponent)
+      expect(slotComponent.exists()).toBeTruthy()
+    })
+  })
+
+  describe('BurgerMenuDropdownList.vue animation', () => {
+    test('is renderedable and the component necessary information are well setted', () => {
+      // Mounting Component
+      const wrapper = mountComponent(mockBurgerMenuDropdownListAnimationOptions)
+
+      // Find TransitionGroup component
+      const TransitionGroupComponent = wrapper.findComponent(TransitionGroup)
+
+      // Assert the TransitionGroup built-in component is rendered
+      expect(TransitionGroupComponent.exists()).toBeTruthy()
+
+      // Assert its 'name' prop value is well setted
+      expect(TransitionGroupComponent.props('name')).toBe(
+        mockBurgerMenuDropdownListAnimationOptionsProps.name,
+      )
+
+      // Assert its 'duration' prop value is well setted
+      expect(TransitionGroupComponent.props('duration')).toBe(
+        mockBurgerMenuDropdownListAnimationOptionsProps.duration,
+      )
+
+      // Assert its slot content is rendered
+      const slotComponent = TransitionGroupComponent.findComponent(mockSlotComponent)
       expect(slotComponent.exists()).toBeTruthy()
     })
   })

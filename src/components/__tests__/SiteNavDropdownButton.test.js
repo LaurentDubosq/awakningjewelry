@@ -14,7 +14,7 @@ const mockDropdownTitle = mockDropdown.title
 /* 2.Build */
 /***********/
 
-// Component Factory
+// Component Factory (Dropdown close state)
 function mountSiteNavDropdownButton(propsOptions = {}) {
   return mount(SiteNavDropdownButton, {
     props: {
@@ -30,47 +30,61 @@ function mountSiteNavDropdownButton(propsOptions = {}) {
 /* 3.Test */
 /**********/
 
+// WARNING : The component has 2 states regarding its opening status. Open or close. The state by default is close.
+
 describe('SiteNavDropdownButton.vue', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = mountSiteNavDropdownButton()
+    // Component mounting (Dropdown close state)
+    wrapper = mountSiteNavDropdownButton({ isDropdownOpen: false })
   })
 
   // Smoke test
   test('mounts successfully', () => {
+    // Assert the wrapper component is well mounted at initial render
     expect(wrapper.exists()).toBeTruthy()
   })
 
-  test('renders the button with necessary information', () => {
-    const button = wrapper.find("[data-testid='site-nav__dropdown-button']")
+  describe('Initial render - Dropdown close state', () => {
+    test('renders the dropdown toggle button with necessary information', () => {
+      // Find the button
+      const button = wrapper.find("[data-testid='site-nav__dropdown-button']")
 
-    // Assert the button is rendered
-    expect(button.exists()).toBeTruthy()
+      // Assert the button is rendered
+      expect(button.exists()).toBeTruthy()
 
-    // Assert the button's text is rendered
-    expect(button.text()).toContain(mockDropdownText)
+      // Assert the button text is rendered
+      expect(button.text()).toContain(mockDropdownText)
+
+      // Assert the button title is rendered
+      expect(button.attributes('title')).toBe(mockDropdownTitle)
+
+      // Assert the close icon is rendered
+      expect(button.text()).toContain('▼')
+    })
   })
 
-  describe('Behaviors:', () => {
-    test("when the dropdown is open, the '▲' icon is rendered", () => {
-      // Remount the component in the state of an open dropdown
+  describe('Dropdown open state', () => {
+    test('renders the toggle button with necessary information', () => {
+      // Component mounting  (Dropdown open state)
       wrapper = mountSiteNavDropdownButton({ isDropdownOpen: true })
 
       // Assert the open icon is rendered
       const button = wrapper.find("[data-testid='site-nav__dropdown-button']")
       expect(button.text()).toContain('▲')
     })
+  })
 
-    test("when the dropdown is close, the '▼' icon is rendered", () => {
-      const button = wrapper.find("[data-testid='site-nav__dropdown-button']")
-      expect(button.text()).toContain('▼')
+  describe('Behaviors:', () => {
+    test('the dropdown is close by default', () => {
+      // Assert the close icon is rendered
+      expect(wrapper.text()).toContain('▼')
     })
 
-    test('when the button is focused, it commands the dropdown to open', async () => {
-      const button = wrapper.find("[data-testid='site-nav__dropdown-button']")
-
+    test('when the toggle button is focused, it commands the dropdown to open', async () => {
       // Focus the button
+      const button = wrapper.find("[data-testid='site-nav__dropdown-button']")
       await button.trigger('focus')
 
       // Assert the order to open the dropdown has been emitted

@@ -36,6 +36,7 @@ describe('ProductListingItem.vue', () => {
   let wrapper
 
   beforeEach(() => {
+    // Mount the component
     wrapper = mountProductListingItem(ProductListingItem)
   })
 
@@ -44,35 +45,35 @@ describe('ProductListingItem.vue', () => {
     expect(wrapper.exists()).toBeTruthy()
   })
 
-  test('render product with necessary information', () => {
+  test('renders product with necessary information', () => {
     const link = wrapper.findComponent(RouterLinkStub)
     const image = wrapper.find("[data-testid='product-listing__item-image']")
     const title = wrapper.find("[data-testid='product-listing__item-title']")
     const originalPrice = wrapper.find("[ data-testid='product-listing__item-original-price']")
     const discountedPrice = wrapper.find("[ data-testid='product-listing__item-discounted-price']")
 
-    // Assert the link exists
+    // Assert the product has link
     expect(link.exists()).toBeTruthy()
 
-    // Assert the link has the correct url
+    // Assert the link has the correct "url" value
     expect(link.props('to')).toBe(mockProductURL)
 
-    // Assert the image is rendered
+    // Assert its image is rendered
     expect(image.exists()).toBeTruthy()
 
-    // Assert the image has the correct "src" value
+    // Assert its image has the correct "src" value
     expect(image.attributes('src')).toBe(mockProductImageURL)
 
-    // Assert the image has the correct "alt" value
+    // Assert its image has the correct "alt" value
     expect(image.attributes('alt')).toBe(mockProductImageALT)
 
-    // Assert the title is rendered
+    // Assert its title is rendered
     expect(title.text()).toContain(mockProductTitle)
 
-    // Assert the original price is rendered
+    // Assert its original price is rendered
     expect(originalPrice.text()).toContain(mockProductOriginalPrice)
 
-    // Assert the discounted price is rendered
+    // Assert its discounted price is rendered
     expect(discountedPrice.text()).toContain(mockProductDiscountedPrice)
   })
 })

@@ -18,6 +18,7 @@ const DESKTOPBREAKPOINT: string = SASSCONSTANTS.AwakningBreakpointDesktop
     aria-roledescription="slide"
     :aria-label="`Slide ${slideIndex + 1} of ${slidesLength}`"
     :id="`slideshow-${slideIndex + 1}`"
+    data-testid="hero__slide"
   >
     <picture class="hero__slide-picture">
       <source

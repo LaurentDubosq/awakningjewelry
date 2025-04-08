@@ -8,18 +8,18 @@ import frontDataBase from '../../../db.json'
 /********************/
 
 const mockSlide = frontDataBase.heroSlides[0]
+const mockSlideImageMobileURL = mockSlide.images.mobile.url
+const mockSlideImageDesktopURL = mockSlide.images.desktop.url
+const mockSlideImageAlt = mockSlide.images.alt
 const mockSlideSubtitle = mockSlide.subtitle
 const mockSlideTitle = mockSlide.title
 const mockSlideLinkURL = mockSlide.url
-const mockSlideImageAlt = mockSlide.images.alt
-const mockSlideImageMobileURL = mockSlide.images.mobile.url
-const mockSlideImageDesktopURL = mockSlide.images.desktop.url
 
 /***********/
 /* 2.Build */
 /***********/
 
-// Component Factory
+// Component Factory (Neutral environment state)
 function mountHeroSlide() {
   return mount(HeroSlide, {
     props: {
@@ -38,10 +38,15 @@ function mountHeroSlide() {
 /* 3.Test */
 /**********/
 
+// WARNING : The component has 2 states regarding the environment state. Mobile or desktop. There is none used by default.
+// Since environment switching is managed by the HTML itself rather than by Javascript, a single environment configuration
+// is sufficient for both states.
+
 describe('HeroSlide.vue', () => {
   let wrapper
 
   beforeEach(() => {
+    // Mount the component (Neutral environment state)
     wrapper = mountHeroSlide()
   })
 
@@ -66,7 +71,7 @@ describe('HeroSlide.vue', () => {
     // Assert the mobile image has its "alt" value well setted
     expect(img.attributes('alt')).toBe(mockSlideImageAlt)
 
-    // Assert the dekstop image is mounted in the DOM
+    // Assert the dekstop image is rendered
     expect(source.exists()).toBeTruthy()
 
     // Assert the desktop image has its "srcset" value well setted
@@ -82,6 +87,6 @@ describe('HeroSlide.vue', () => {
     expect(link.exists()).toBeTruthy()
 
     // Assert the link(button) has the correct url
-    expect(link.props('to')).toContain(mockSlideLinkURL)
+    expect(link.props('to')).toBe(mockSlideLinkURL)
   })
 })

@@ -1,5 +1,5 @@
 <template>
-  <p class="error-message" role="alert" aria-live="assertive">
+  <p class="error-message" role="alert" aria-live="assertive" data-testid="error-message">
     Loading error, please reload the page.
   </p>
 </template>

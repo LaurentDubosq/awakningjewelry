@@ -11,13 +11,12 @@ const isBurgerMenuOpenStore = useIsBurgerMenuOpen()
 
 // Get the store's states and computeds
 const { isBurgerMenuOpen } = storeToRefs(isBurgerMenuOpenStore)
-const { toggleBurgerMenu } = isBurgerMenuOpenStore
 </script>
 
 <template>
   <div class="site-container">
     <MyTransition name="marginLeftMinus300px" :group="false">
-      <BurgerMenu @close-burger-menu="toggleBurgerMenu" v-show="isBurgerMenuOpen" />
+      <BurgerMenu v-show="isBurgerMenuOpen" />
     </MyTransition>
     <div class="site-content">
       <div class="site-content-container">

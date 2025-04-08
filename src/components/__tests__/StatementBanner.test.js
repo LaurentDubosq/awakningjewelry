@@ -8,27 +8,34 @@ import frontDataBase from '../../../db.json'
 /* 1.Initialization */
 /********************/
 
-const mockStatementResult = {
-  data: frontDataBase.statementMission,
-  status: 'resolved',
+const mockStatementPending = {
+  statement: undefined,
+  fetchStatus: 'pending',
 }
-const mockStatementData = mockStatementResult.data
-const mockStatementStatus = mockStatementResult.status
-const mockStatementTitle = mockStatementData.title
-const mockStatementText = mockStatementData.text
-const mockStatementImageURL = mockStatementData.image.url
-const mockStatementImageAlt = mockStatementData.image.alt
+const mockStatementRejected = {
+  statement: undefined,
+  fetchStatus: 'rejected',
+}
+const mockStatementResolved = {
+  statement: frontDataBase.statementMission,
+  fetchStatus: 'resolved',
+}
+const mockStatement = mockStatementResolved.statement
+const mockStatementTitle = mockStatement.title
+const mockStatementText = mockStatement.text
+const mockStatementImageURL = mockStatement.image.url
+const mockStatementImageAlt = mockStatement.image.alt
 
 /***********/
 /* 2.Build */
 /***********/
 
-// Component Factory
+// Component Factory (Data fetching "Pending" state)
 function mountStatementBanner(props) {
   return mount(StatementBanner, {
     props: {
-      statement: mockStatementData,
-      fetchStatus: mockStatementStatus,
+      statement: mockStatementPending.statement,
+      fetchStatus: mockStatementPending.fetchStatus,
       ...props,
     },
   })
@@ -38,62 +45,64 @@ function mountStatementBanner(props) {
 /* 3.Test */
 /**********/
 
+// WARNING : The component has 3 states regarding the data fetching status. "Pending", "Rejected" and "Resolved". The state by default is "Pending".
+
 describe('StatementBanner.vue', () => {
   let wrapper
 
   beforeEach(() => {
+    // Component mounting (Data fetching "Pending" state)
     wrapper = mountStatementBanner()
   })
 
   // Smoke test
   test('mounts successfully', () => {
+    // Assert the wrapper component is well mounted at initial render
     expect(wrapper.exists()).toBeTruthy()
   })
 
-  test('renders the statement with necessary information', () => {
-    const title = wrapper.find("[data-testid='statement-banner__title']")
-    const text = wrapper.find("[data-testid='statement-banner__text']")
-    const image = wrapper.find("[data-testid='statement-banner__image']")
-
-    // Assert its title is rendered
-    expect(title.text()).toContain(mockStatementTitle)
-
-    // Assert its text is rendered
-    expect(text.text()).toContain(mockStatementText)
-
-    // Assert the image is rendered
-    expect(image.exists()).toBeTruthy()
-
-    // Assert the image "src" attribute is well setted
-    expect(image.attributes('src')).toBe(mockStatementImageURL)
-
-    // Assert the image "alt" attribute is well setted
-    expect(image.attributes('alt')).toBe(mockStatementImageAlt)
-  })
-
-  describe('Behaviors:', () => {
-    test("when the data fetcher status is 'pending', the loading component is rendered", () => {
-      // Remount the component with pending status active
-      wrapper = mountStatementBanner({ fetchStatus: 'pending' })
-
-      // Assert the loading component is rendered
+  describe('Initial render - Data fetching "Pending" state', () => {
+    test('the loader is rendered', async () => {
       const loadingComponent = wrapper.findComponent(LoadingComponent)
       expect(loadingComponent.exists()).toBeTruthy()
     })
+  })
 
-    test("when the data fetcher status is 'resolved', its data is rendered", () => {
-      // Assert that one of its pieces of data is rendered
-      const title = wrapper.find("[data-testid='statement-banner__title']")
-      expect(title.exists()).toBeTruthy()
-    })
+  describe('Data fetching "Rejected" state', () => {
+    test('the error message is rendered', () => {
+      // Mount the component (rejected state)
+      const wrapper = mountStatementBanner(mockStatementRejected)
 
-    test("when the data fetcher status is 'rejected', the error component is rendered", () => {
-      // Remount the component with rejected status active
-      wrapper = mountStatementBanner({ fetchStatus: 'rejected' })
-
-      // Assert the error component is rendered
+      // Assert the error message is rendered
       const errorComponent = wrapper.findComponent(ErrorComponent)
       expect(errorComponent.exists()).toBeTruthy()
+    })
+  })
+
+  describe('Data fetching "Resolved" state', () => {
+    test('renders the statement with necessary information', () => {
+      // Mount the component (resolved state)
+      const wrapper = mountStatementBanner(mockStatementResolved)
+
+      // Assert its title is rendered
+      const title = wrapper.find("[data-testid='statement-banner__title']")
+      expect(title.text()).toContain(mockStatementTitle)
+
+      // Assert its text is rendered
+      const text = wrapper.find("[data-testid='statement-banner__text']")
+      expect(text.text()).toContain(mockStatementText)
+
+      // Find the image
+      const image = wrapper.find("[data-testid='statement-banner__image']")
+
+      // Assert the image is rendered
+      expect(image.exists()).toBeTruthy()
+
+      // Assert the image "src" attribute is well setted
+      expect(image.attributes('src')).toBe(mockStatementImageURL)
+
+      // Assert the image "alt" attribute is well setted
+      expect(image.attributes('alt')).toBe(mockStatementImageAlt)
     })
   })
 })

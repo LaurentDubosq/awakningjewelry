@@ -1,7 +1,5 @@
 import { mount, RouterLinkStub } from '@vue/test-utils'
 import BurgerMenuDropdown from '@/components/BurgerMenuDropdown.vue'
-import BurgerMenuDropdownButton from '@/components/BurgerMenuDropdownButton.vue'
-import BurgerMenuDropdownList from '@/components/BurgerMenuDropdownList.vue'
 import frontDataBase from '../../../db.json'
 import { createTestingPinia } from '@pinia/testing'
 import { defineStore } from 'pinia'
@@ -15,7 +13,8 @@ import { ref } from 'vue'
 
 const mockDropdown = frontDataBase.siteMenu[1]
 const mockDropdownText = mockDropdown.text
-const mockLinks = mockDropdown.subMenu
+const mockDropdownLinks = mockDropdown.subMenu
+const mockDropdownLinksLength = mockDropdownLinks.length
 
 /* Stores */
 
@@ -24,7 +23,7 @@ const mockPinia = createTestingPinia({ stubActions: false })
 
 // Create the stores
 const mockUseIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
-  const isBurgerMenuOpen = ref(true)
+  const isBurgerMenuOpen = ref(false)
   const toggleBurgerMenu = () => {
     isBurgerMenuOpen.value = !isBurgerMenuOpen.value
   }
@@ -32,13 +31,13 @@ const mockUseIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
 })
 
 // Initialize the stores
-mockUseIsBurgerMenuOpenStore()
+const mockIsBurgerMenuOpenStore = mockUseIsBurgerMenuOpenStore()
 
 /***********/
 /* 2.Build */
 /***********/
 
-// Component Factory
+// Component Factory (Dropdown open state)
 function mountBurgerMenuDropdown() {
   return mount(BurgerMenuDropdown, {
     props: { dropdown: mockDropdown },
@@ -55,107 +54,140 @@ function mountBurgerMenuDropdown() {
 /* 3.Test */
 /**********/
 
+// WARNING : The component has 2 states regarding its dropdown opening status. Open or close. The state by default is open.
+
 describe('BurgerMenuDropdown.vue', () => {
   let wrapper
 
   beforeEach(() => {
+    // Component mounting (Dropdown open state)
     wrapper = mountBurgerMenuDropdown()
   })
 
+  afterEach(() => {
+    // Reset the store(s) state(s) to default to ensure a clean environment for each test
+    mockIsBurgerMenuOpenStore.isBurgerMenuOpen = false
+  })
+
   // Smoke test
-  test('mounts successfully', () => {
+  test('mounts successfully', async () => {
+    // Assert the wrapper component is well mounted at initial render
     expect(wrapper.exists()).toBeTruthy()
   })
 
-  test('renders the button component with necessary information', () => {
-    const buttonComponent = wrapper.findComponent(BurgerMenuDropdownButton)
+  describe('Initial render - Dropdown open state', () => {
+    test('renders the dropdown toggle button with necessary information', async () => {
+      // Find the button
+      const button = wrapper.find("[data-testid='burger-menu__dropdown-button']")
 
-    // Assert the button component is rendered
-    expect(buttonComponent.exists()).toBeTruthy()
+      // Assert the button is rendered
+      expect(button.exists()).toBeTruthy()
 
-    // Assert the "text" prop has the correct value
-    expect(buttonComponent.props('text')).toContain(mockDropdownText)
+      // Assert its text is rendered
+      expect(button.text()).toContain(mockDropdownText)
 
-    // Assert the "isDropdownOpen" prop has the correct value
-    expect(buttonComponent.props('isDropdownOpen')).toBe(true)
+      // Assert the open icon is rendered
+      const icon = button.find("[data-testid='icon-sign-minus']")
+      expect(icon.exists()).toBeTruthy()
+    })
+
+    test('renders all links with their necessary information', () => {
+      // Find the links
+      const list = wrapper.find("[data-testid='burger-menu__dropdown-list']")
+      const links = list.findAllComponents(RouterLinkStub)
+
+      // Assert all links are rendered
+      expect(links).toHaveLength(mockDropdownLinksLength)
+
+      // Assert each link is rendered with its necessary information
+      links.forEach((link, index) => {
+        const mockLink = mockDropdownLinks[index]
+        const mockLinkURL = mockLink.url
+        const mockLinkText = mockLink.text
+
+        // Assert the link is rendered
+        expect(link.exists()).toBeTruthy()
+
+        // Assert the link has the correct url
+        expect(link.props('to')).toBe(mockLinkURL)
+
+        // Assert the link's text is well rendered
+        expect(link.text()).toContain(mockLinkText)
+      })
+    })
   })
 
-  test('renders the list component with necessary information', () => {
-    const listComponent = wrapper.findComponent(BurgerMenuDropdownList)
+  describe('Dropdown close state', () => {
+    test('renders the dropdown toggle button with necessary information', async () => {
+      // Close the dropdown
+      const button = wrapper.find("[data-testid='burger-menu__dropdown-button']")
+      await button.trigger('click')
 
-    // Assert the list component is rendered
-    expect(listComponent.exists()).toBeTruthy()
+      // Assert the dropdown is close
+      const list = wrapper.find("[data-testid='burger-menu__dropdown-list']")
+      expect(list.exists()).toBeFalsy()
 
-    // Assert the "links" prop has the correct value
-    expect(listComponent.props('links')).toStrictEqual(mockLinks)
-
-    // Assert the "dropdownText" prop has the correct value
-    expect(listComponent.props('dropdownText')).toBe(mockDropdownText)
+      // Assert the close icon is rendered
+      const icon = button.find("[data-testid='icon-sign-plus']")
+      expect(icon.exists()).toBeTruthy()
+    })
   })
 
   describe('Behaviors:', () => {
-    test('the dropdown is open at initial render', () => {
-      // Find the dropdown list component
-      const listComponent = wrapper.findComponent(BurgerMenuDropdownList)
+    /************/
+    /* Dropdown */
+    /************/
 
-      // Assert the dropdown is open
-      expect(listComponent.exists()).toBeTruthy()
+    test('the dropdown is open by default', () => {
+      const list = wrapper.find("[data-testid='burger-menu__dropdown-list']")
+      expect(list.exists()).toBeTruthy()
     })
 
-    describe('Touch Navigation:', () => {
-      test('when the button is touched, it opens/closes the dropdown', async () => {
-        let ListComponent
+    /**************************/
+    /* Dropdown toggle button */
+    /**************************/
 
-        // Assert the dropdown is open
-        ListComponent = wrapper.findComponent(BurgerMenuDropdownList)
-        expect(ListComponent.exists()).toBeTruthy()
+    test('when the toggle button is touched, it opens/closes the dropdown', async () => {
+      const button = wrapper.find("[data-testid='burger-menu__dropdown-button']")
+      let list
 
-        // Touch the button
-        const button = wrapper.find("[data-testid='burger-menu__dropdown-button']")
-        await button.trigger('click')
+      // Touch the button
+      await button.trigger('click')
 
-        // Assert the dropdown is close
-        expect(ListComponent.exists()).toBeFalsy()
+      // Assert the dropdown is close
+      list = wrapper.find("[data-testid='burger-menu__dropdown-list']")
+      expect(list.exists()).toBeFalsy()
 
-        // Touch the button again
-        await button.trigger('click')
+      // Touch the button again
+      await button.trigger('click')
 
-        // Assert the dropdown is open again
-        ListComponent = wrapper.findComponent(BurgerMenuDropdownList)
-        expect(ListComponent.exists()).toBeTruthy()
-      })
+      // Assert the dropdown is open again
+      list = wrapper.find("[data-testid='burger-menu__dropdown-list']")
+      expect(list.exists()).toBeTruthy()
     })
 
-    describe('Renders:', () => {
-      test('when the dropdown is open, the sign minus icon is rendered', () => {
-        /* We target the icon instead of component because we decided to not have tests for SVG components */
+    /*********/
+    /* Links */
+    /*********/
 
-        // Find the icon
-        const icon = wrapper.find("[data-testid='icon-sign-minus']")
+    test('when each link is touched, it commands the burger menu to close', async () => {
+      // Find the links
+      const list = wrapper.find("[data-testid='burger-menu__dropdown-list']")
+      const links = list.findAllComponents(RouterLinkStub)
 
-        // Assert the icon is rendered
-        expect(icon.exists()).toBeTruthy()
-      })
+      for (let index = 0; index < links.length; index++) {
+        // Reset the burger menu status to open
+        mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
 
-      test('when the dropdown is close, the sign plus icon is rendered', async () => {
-        /* We target the icon instead of component because we decided to not have tests for SVG components */
+        // Assert the burger menu status is open
+        expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
 
-        // Close the dropdown
-        const button = wrapper.find("[data-testid='burger-menu__dropdown-button']")
-        await button.trigger('click')
+        // Touch the link
+        await links[index].trigger('click')
 
-        // Find the list component
-        const ListComponent = wrapper.findComponent(BurgerMenuDropdownList)
-
-        // Assert the dropdown is close
-        expect(ListComponent.exists()).toBeFalsy()
-
-        // Find the icon
-        const icon = wrapper.find("[data-testid='icon-sign-plus']")
-
-        // Assert the icon is rendered
-        expect(icon.exists()).toBeTruthy()
-      })
+        // Assert the burger menu status is close
+        expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
+      }
     })
   })
 })

@@ -30,7 +30,11 @@ const mockRouter = createRouter({
 
 /* Data */
 
-const mockSiteMenuResult = {
+const mockSiteMenuPending = {
+  data: undefined,
+  status: 'pending',
+}
+const mockSiteMenuResolved = {
   data: frontDataBase.siteMenu,
   status: 'resolved',
 }
@@ -42,7 +46,7 @@ const mockPinia = createTestingPinia({ stubActions: false })
 
 // Create the stores
 const mockUseIsOnMobileStore = defineStore('IsOnMobile', () => {
-  const isOnMobile = ref(true)
+  const isOnMobile = ref()
   return { isOnMobile }
 })
 const mockUseIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
@@ -53,7 +57,7 @@ const mockUseIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
   return { isBurgerMenuOpen, toggleBurgerMenu }
 })
 const mockUseSiteMenuStore = defineStore('SiteMenu', () => {
-  const siteMenu = ref(mockSiteMenuResult)
+  const siteMenu = ref(mockSiteMenuPending)
   const siteMenuData = computed(() => siteMenu.value.data)
   const siteMenuResultFetchStatus = computed(() => siteMenu.value.status)
   return {
@@ -66,21 +70,21 @@ const mockUseSiteMenuStore = defineStore('SiteMenu', () => {
 // Initialize the stores
 const mockIsOnMobileStore = mockUseIsOnMobileStore()
 const mockIsBurgerMenuOpenStore = mockUseIsBurgerMenuOpenStore()
-mockUseSiteMenuStore()
+const mockSiteMenuStore = mockUseSiteMenuStore()
 
 /***********/
 /* 2.Build */
 /***********/
 
-// Component Factory
+// Component Factory (Neutral environment state - Burger menu close state - Data fetching "Pending" state)
 function mountApp() {
   return mount(App, {
     attachTo: document.body,
     global: {
       plugins: [mockRouter, mockPinia],
       stubs: {
-        'router-view': true,
         SiteNav,
+        'router-view': true,
       },
     },
   })
@@ -90,241 +94,303 @@ function mountApp() {
 /* 3.Test */
 /**********/
 
+// WARNING : The component has 2 states regarding the environment state. Mobile or desktop. There is none used by default.
+
+// WARNING : The component has 2 states regarding the burger menu status. Open or close. The state by default is close.
+
+// WARNING : The component has 3 states regarding the data fetching status. "Pending", "Rejected" and "Resolved". The state by default is "Pending".
+
 describe('App.vue', () => {
   let wrapper
+  let clickEventTriggeredByEnter
 
   beforeEach(async () => {
-    mockIsOnMobileStore.isOnMobile = true // reset the environment to mobile
-    mockIsBurgerMenuOpenStore.isBurgerMenuOpen = false // reset the burger menu to close status
+    // Component mounting (Neutral environment state - Burger menu close state - Data fetching "Pending" state)
     wrapper = mountApp()
   })
 
   afterEach(() => {
-    wrapper.unmount()
+    // Reset the store(s) state(s) to default to ensure a clean environment for each test
+    mockIsOnMobileStore.isOnMobile = undefined
+    mockIsBurgerMenuOpenStore.isBurgerMenuOpen = false
+    mockSiteMenuStore.siteMenu = mockSiteMenuPending
+
+    // Reset event(s) to avoid alteration over time
+    clickEventTriggeredByEnter = new MouseEvent('click', { detail: 0 })
   })
 
   // Smoke test
-  test('mounts successfully', () => {
+  test('mounts successfully', async () => {
+    // Assert the wrapper component is well mounted at initial render
     expect(wrapper.exists()).toBeTruthy()
   })
 
-  /***************/
-  /* Burger Menu */
-  /***************/
-
-  describe('BurgerMenu.vue', () => {
-    it('is not rendered at initial render', async () => {
-      const BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
-      expect(BurgerMenuComponent.isVisible()).toBeFalsy()
-    })
-
-    describe('Behaviors:', () => {
-      describe('When open:', () => {
-        let BurgerMenuComponent
-
-        beforeEach(async () => {
-          // Open the burger menu
-          mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
-
-          // Find the burger menu component
-          BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
-        })
-
-        it('is rendered with necessary information', async () => {
-          expect(BurgerMenuComponent.isVisible()).toBeTruthy()
-        })
-
-        test('when a link is clicked, it closes the burger menu', async () => {
-          // Assert the burger menu is open
-          expect(BurgerMenuComponent.isVisible()).toBeTruthy()
-
-          // Click a link
-          const link = wrapper.find("[data-testid='burger-menu__link']")
-          await link.trigger('click')
-
-          // Assert the burger menu is close
-          expect(BurgerMenuComponent.isVisible()).toBeFalsy()
-        })
-
-        test('when a dropdown link is clicked, it closes the burger menu', async () => {
-          // Assert the burger menu is open
-          expect(BurgerMenuComponent.isVisible()).toBeTruthy()
-
-          // Click a dropdown link
-          const link = wrapper.find("[data-testid='burger-menu__dropdown-item-link']")
-          await link.trigger('click')
-
-          // Assert the burger menu is close
-          expect(BurgerMenuComponent.isVisible()).toBeFalsy()
-        })
-
-        test('when a focusable element is focused and the Escape key is pressed, it closes the burger menu', async () => {
-          // Assert the burger menu is open
-          expect(BurgerMenuComponent.isVisible()).toBeTruthy()
-
-          // Focus a link
-          const link = wrapper.find("[data-testid='burger-menu__dropdown-item-link']")
-          await link.trigger('focus')
-
-          // Press the Escape key
-          await link.trigger('keydown.escape')
-
-          // Assert the burger menu is close
-          expect(BurgerMenuComponent.isVisible()).toBeFalsy()
-        })
-      })
-    })
-  })
-
-  /***************/
-  /* Site Header */
-  /***************/
-
-  describe('SiteHeader.vue', () => {
-    test('is rendered', () => {
+  describe('Initial render - Neutral environment state - Burger menu close state - Data fetching "Pending" state', () => {
+    test('renders the site header', () => {
       const SiteHeaderComponent = wrapper.findComponent(SiteHeader)
       expect(SiteHeaderComponent.exists()).toBeTruthy()
     })
 
-    describe('Behaviors:', () => {
-      test('when the burger menu is close, it renders the toggle burger icon', () => {
-        const icon = wrapper.find("[data-testid='icon-burger']")
-        expect(icon.exists()).toBeTruthy()
-      })
-
-      test('when the burger menu is open, it renders the toggle cross icon', async () => {
-        // Open the burger menu
-        const button = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
-        await button.trigger('click')
-
-        // Assert the burger menu is open
-        const BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
-        expect(BurgerMenuComponent.isVisible()).toBeTruthy()
-
-        // Assert the cross icon is rendered
-        const icon = wrapper.find("[data-testid='icon-cross']")
-        expect(icon.exists()).toBeTruthy()
-      })
-
-      test('when we click on burger menu toggle icon, open/close the burger menu', async () => {
-        // Find the burger menu toggle button
-        const button = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
-
-        // Click on the button
-        const clickEvent = new MouseEvent('click', { detail: 1 }) // Necessary to customize "detail" option
-        await button.element.dispatchEvent(clickEvent)
-
-        // Find the burger menu component
-        const BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
-
-        // Assert the burger menu is open
-        expect(BurgerMenuComponent.isVisible()).toBeTruthy()
-
-        // Click on the button
-        await button.element.dispatchEvent(clickEvent)
-
-        // Assert the burger menu is close
-        expect(BurgerMenuComponent.isVisible()).toBeFalsy()
-      })
-
-      test('when we press the Enter key on the burger menu toggle button, it opens the burger menu then focus the first focusable element', async () => {
-        // Find the burger menu toggle button
-        const button = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
-
-        // Press Enter on the button to open the burger menu
-        const clickEvent = new MouseEvent('click', { detail: 0 }) // simulate an "enter" key pressed
-        await button.element.dispatchEvent(clickEvent)
-        await nextTick()
-
-        // Find the burger menu component
-        const BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
-
-        // Assert the burger menu is open
-        expect(BurgerMenuComponent.isVisible()).toBeTruthy()
-
-        // Find the first focusable element
-        const focusedElement = BurgerMenuComponent.find('button, a')
-
-        // Assert the first focusable element is focused
-        expect(document.activeElement).toStrictEqual(focusedElement.element)
-      })
-
-      test('when the burger menu is open and the focus is on the burger toggle icon, it closes the burger menu when pressing Enter, then keeps the focus on the toggle', async () => {
-        // Get the burger menu toggle button
-        const button = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
-
-        // Open the burger menu
-        const clickEvent = new MouseEvent('click', { detail: 0 }) // simulate an "enter" key pressed
-        await button.element.dispatchEvent(clickEvent)
-        await nextTick()
-
-        // Find the burger menu component
-        const BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
-
-        // Assert the burger menu is open
-        expect(BurgerMenuComponent.isVisible()).toBeTruthy()
-
-        // Focus the button
-        button.element.focus() // this method forces the focus because the useFocusElement's focus appropriated control
-
-        // Press Enter on the button to close the burger menu
-        await button.element.dispatchEvent(clickEvent)
-        await nextTick()
-
-        // Assert the burger menu is close
-        expect(BurgerMenuComponent.isVisible()).toBeFalsy()
-
-        // Assert the button is still focused
-        expect(document.activeElement).toStrictEqual(button.element)
-      })
-    })
-  })
-
-  /**************/
-  /* RouterView */
-  /**************/
-
-  describe('RouterView built-in component:', () => {
-    test('is rendered', () => {
+    test('implements RouterView built-in component', () => {
       const RouterViewComponent = wrapper.findComponent(RouterView)
       expect(RouterViewComponent.exists()).toBeTruthy()
     })
   })
 
-  /*******/
-  /* App */
-  /*******/
+  describe('Mobile environment state - Burger menu close state - Data fetching "Resolved" state', () => {
+    beforeEach(async () => {
+      // Set the environment to mobile
+      mockIsOnMobileStore.isOnMobile = true
 
-  // Snapshot test
-  test('app component has not been improperly modified', async () => {
-    // Remount the component to focus on App.vue structure (by excluding child components)
-    wrapper = mount(App, {
-      global: {
-        stubs: {
-          BurgerMenu: true,
-          SiteHeader: true,
-          'router-view': true,
-        },
-      },
+      // Set the store data fetching status to "resolved"
+      mockSiteMenuStore.siteMenu = mockSiteMenuResolved
+      await nextTick()
     })
 
-    // Open the burger menu
-    mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
+    describe('Burger menu close state - Data fetching "Resolved" state', () => {
+      test("don't renders the burger menu", () => {
+        // Asser the burger menu is rendered
+        const BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
+        expect(BurgerMenuComponent.isVisible()).toBeFalsy()
+      })
+    })
 
-    expect(wrapper.html()).toMatchInlineSnapshot(`
-      "<div data-v-7a7a37b1="" class="site-container">
-        <transition-stub data-v-7a7a37b1="" name="marginLeftMinus300px" appear="false" persisted="false" css="true">
-          <burger-menu-stub data-v-7a7a37b1="" style="display: none;"></burger-menu-stub>
-        </transition-stub>
-        <div data-v-7a7a37b1="" class="site-content">
-          <div data-v-7a7a37b1="" class="site-content-container">
-            <site-header-stub data-v-7a7a37b1=""></site-header-stub>
-            <main data-v-7a7a37b1="">
-              <router-view-stub data-v-7a7a37b1="" name="default"></router-view-stub>
-            </main>
+    describe('Burger menu open state - Data fetching "Resolved" state', () => {
+      beforeEach(async () => {
+        // Open the burger menu (short way)
+        mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
+        await nextTick()
+      })
+
+      test('renders the burger menu', () => {
+        // Asser the burger menu is rendered
+        const BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
+        expect(BurgerMenuComponent.isVisible()).toBeTruthy()
+      })
+    })
+  })
+
+  describe('Behaviors:', () => {
+    beforeEach(async () => {
+      // Set the environment to mobile
+      mockIsOnMobileStore.isOnMobile = true
+
+      // Set the store data fetching status to "resolved"
+      mockSiteMenuStore.siteMenu = mockSiteMenuResolved
+      await nextTick()
+    })
+
+    /***************/
+    /* Burger menu */
+    /***************/
+
+    test('The burger menu is close by default', async () => {
+      const BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
+      expect(BurgerMenuComponent.isVisible()).toBeFalsy()
+    })
+
+    test('when each burger menu focusable element is focused and the "Escape" key is pressed, it closes the burger menu', async () => {
+      let BurgerMenuComponent
+
+      // Open the burger menu (short way)
+      mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
+      await nextTick()
+
+      // Assert the burger menu is open
+      BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
+      expect(BurgerMenuComponent.isVisible()).toBeTruthy()
+
+      // Finds the focusable elements
+      const focusableElements = BurgerMenuComponent.findAll('button, a')
+
+      // Assert each focusable element close the burger menu
+      for (const element of focusableElements) {
+        // Reset the burger menu to open
+        mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
+        await nextTick()
+
+        // Focus the element
+        element.element.focus() // this method guarantee that the DOM element will be focused
+
+        // Press the "escape" key
+        await element.trigger('keydown.escape')
+
+        // Assert the burger menu is close
+        BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
+        expect(BurgerMenuComponent.isVisible()).toBeFalsy()
+      }
+    })
+
+    /*****************************/
+    /* Burger menu toggle button */
+    /*****************************/
+
+    test('when we touch the burger menu toggle button, it open/close the burger menu', async () => {
+      let burgerMenuToggleButton
+      let BurgerMenuComponent
+
+      // Open the burger menu by a touch
+      burgerMenuToggleButton = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
+      await burgerMenuToggleButton.trigger('click')
+
+      // Assert the burger menu is open
+      BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
+      expect(BurgerMenuComponent.isVisible()).toBeTruthy()
+
+      // Touch on the button again
+      burgerMenuToggleButton = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
+      await burgerMenuToggleButton.trigger('click')
+
+      // Assert the burger menu is close
+      BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
+      expect(BurgerMenuComponent.isVisible()).toBeFalsy()
+    })
+
+    test('when we press the "Enter" key on the burger menu toggle button, it opens the burger menu then focus the first focusable element', async () => {
+      // Open the burger menu by pressing the "enter" key
+      const burgerMenuToggleButton = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
+      burgerMenuToggleButton.element.dispatchEvent(clickEventTriggeredByEnter)
+      await nextTick()
+
+      // Assert the burger menu is open
+      const BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
+      expect(BurgerMenuComponent.isVisible()).toBeTruthy()
+
+      // Assert the first focusable element is focused
+      const firstBurgerMenuFocusableElement = BurgerMenuComponent.find('button, a')
+      expect(document.activeElement).toStrictEqual(firstBurgerMenuFocusableElement.element)
+    })
+
+    test('when the burger menu is open and the focus is on the burger menu toggle button, it closes the burger menu when pressing "Enter", then keeps the focus on the burger menu toggle button', async () => {
+      let BurgerMenuComponent
+
+      // Open the burger menu (short way)
+      mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
+      await nextTick()
+
+      // Assert the burger menu is open
+      BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
+      expect(BurgerMenuComponent.isVisible()).toBeTruthy()
+
+      // Focus the burger menu toggle button (it corresponds to keyboard navigation that ends on the burger menu toggle button)
+      const burgerMenuToggleButton = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
+      burgerMenuToggleButton.element.focus() // this method guarantee that the DOM element will be focused
+
+      // Press "Enter" on the burger menu toggle button again
+      burgerMenuToggleButton.element.dispatchEvent(clickEventTriggeredByEnter)
+      await nextTick()
+
+      // Assert the burger menu is close
+      BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
+      expect(BurgerMenuComponent.isVisible()).toBeFalsy()
+
+      // Assert the burger menu toggle button is still focused
+      expect(document.activeElement).toStrictEqual(burgerMenuToggleButton.element)
+    })
+
+    /*********************/
+    /* Burger menu links */
+    /*********************/
+
+    test('when each burger menu link is touched, it closes the burger menu', async () => {
+      let BurgerMenuComponent
+
+      // Open the burger menu (short way)
+      mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
+      await nextTick()
+
+      // Assert the burger menu is open
+      BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
+      expect(BurgerMenuComponent.isVisible()).toBeTruthy()
+
+      // Find the links
+      const links = wrapper.findAll("[data-testid='burger-menu__link']")
+
+      // Assert each link closes the burger menu
+      for (let index; index < links.length; index++) {
+        // Reopen the burger menu (short way)
+        mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
+        await nextTick()
+
+        // Assert the burger menu is open
+        BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
+        expect(BurgerMenuComponent.isVisible()).toBeTruthy()
+
+        // Touch the link
+        await links[index].trigger('click')
+
+        // Assert the burger menu is close
+        BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
+        expect(BurgerMenuComponent.isVisible()).toBeFalsy()
+      }
+    })
+
+    /******************************/
+    /* Burger menu dropdown links */
+    /******************************/
+
+    test('when each burger menu dropdown link is touched, it closes the burger menu', async () => {
+      let BurgerMenuComponent
+
+      // Open the burger menu (short way)
+      mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
+      await nextTick()
+
+      // Assert the burger menu is open
+      BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
+      expect(BurgerMenuComponent.isVisible()).toBeTruthy()
+
+      // Find the links
+      const links = wrapper.findAll("[data-testid='burger-menu__dropdown-item-link']")
+
+      // Assert each link closes the burger menu
+      for (let index = 0; index < links.length; index++) {
+        // Reopen the burger menu (short way)
+        mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
+        await nextTick()
+
+        // Assert the burger menu is open
+        BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
+        expect(BurgerMenuComponent.isVisible()).toBeTruthy()
+
+        // Touch the link
+        await links[index].trigger('click')
+
+        // Assert the burger menu is close
+        BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
+        expect(BurgerMenuComponent.isVisible()).toBeFalsy()
+      }
+    })
+  })
+
+  describe('Initial render - All child components stubbed:', () => {
+    test('app component has NOT been improperly modified', async () => {
+      // Remount the component to focus on App.vue structure only (by excluding all child components)
+      const wrapper = mount(App, {
+        global: {
+          stubs: {
+            BurgerMenu: true,
+            SiteHeader: true,
+            'router-view': true,
+          },
+        },
+      })
+
+      expect(wrapper.html()).toMatchInlineSnapshot(`
+        "<div data-v-7a7a37b1="" class="site-container">
+          <transition-stub data-v-7a7a37b1="" name="marginLeftMinus300px" appear="false" persisted="false" css="true">
+            <burger-menu-stub data-v-7a7a37b1="" style="display: none;"></burger-menu-stub>
+          </transition-stub>
+          <div data-v-7a7a37b1="" class="site-content">
+            <div data-v-7a7a37b1="" class="site-content-container">
+              <site-header-stub data-v-7a7a37b1=""></site-header-stub>
+              <main data-v-7a7a37b1="">
+                <router-view-stub data-v-7a7a37b1="" name="default"></router-view-stub>
+              </main>
+            </div>
           </div>
-        </div>
-      </div>"
-    `)
+        </div>"
+      `)
+    })
   })
 })

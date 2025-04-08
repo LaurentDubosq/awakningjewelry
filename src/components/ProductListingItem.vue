@@ -7,7 +7,7 @@ const { product } = defineProps<{
 </script>
 
 <template>
-  <li class="product-listing__item">
+  <li class="product-listing__item" data-testid="product-listing__item">
     <RouterLink
       :to="product.url"
       class="product-listing__item-link"

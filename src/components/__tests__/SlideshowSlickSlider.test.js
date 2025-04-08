@@ -5,22 +5,8 @@ import SlideshowSlickSlider from '@/components/SlideshowSlickSlider.vue'
 /* 1.Initialization */
 /********************/
 
-const mockSlidesLength = 2
+const mockSlidesLength = 2 // more than 2 button is not necessary
 const mockCurrentIndex = 0
-const mockHandleClickPayload = { index: 0, focusable: false }
-const mockHandleKeydownArrowWhenIndexAt0Payload = {
-  index: mockSlidesLength - 1,
-  focusable: true,
-}
-const mockHandleKeydownArrowWhenIndexAt1Payload = {
-  index: 0,
-  focusable: true,
-}
-const mockHandleKeydownHomePayload = { index: 0, focusable: true }
-const mockHandleKeydownEndPayload = {
-  index: mockSlidesLength - 1,
-  focusable: true,
-}
 
 /***********/
 /* 2.Build */
@@ -45,6 +31,7 @@ describe('SlideshowSlickSlider.vue', () => {
   let wrapper
 
   beforeEach(() => {
+    // Mount the component
     wrapper = mountSlideshowSlickSlider()
   })
 
@@ -53,23 +40,19 @@ describe('SlideshowSlickSlider.vue', () => {
     expect(wrapper.exists()).toBeTruthy()
   })
 
-  test('is rendered with necessary information', () => {
-    const slickSlider = wrapper.find("[data-testid='slideshow__slick-slider']")
-
-    // Assert the slick slider is rendered
-    expect(slickSlider.exists()).toBeTruthy()
-  })
-
-  test('render all the expected buttons with necessary information', () => {
+  test('render all the buttons with their necessary information', () => {
     const buttons = wrapper.findAll("[data-testid='slideshow__slick-slider-button']")
 
     // Assert all the expected buttons are rendered
     expect(buttons).toHaveLength(mockSlidesLength)
 
-    // Assert each button is rendered with necessary information
+    // Assert each button is rendered with its necessary information
     buttons.forEach((button, index) => {
+      // Assert the button is rendered
+      expect(button.exists()).toBeTruthy()
+
       // Assert the "aria-label" has the correct value
-      expect(button.attributes('aria-label')).toBe(`Slide ${index + 1}`)
+      expect(button.attributes('aria-label')).toBe(`Slide ${index + 1}`) // exceptionally we test an "aria-label" wai-aria attribut because the button has no text
 
       // Assert the active CSS class is used when necessary
       expect(button.classes('slideshow__slick-slider-button--active')).toBe(
@@ -79,143 +62,152 @@ describe('SlideshowSlickSlider.vue', () => {
   })
 
   describe('Behaviors:', () => {
-    test('when a button is clicked, it emits the order to display the selected slide with its payload', async () => {
-      // Click a button
-      const button = wrapper.find("[data-testid='slideshow__slick-slider-button']")
-      await button.trigger('click')
-
-      // Assert the "display-slide" custom event has been emitted
-      expect(wrapper.emitted('display-slide')).toHaveLength(1)
-
-      // Assert its payload has the correct value
-      expect(wrapper.emitted('display-slide')[0][0]).toStrictEqual(mockHandleClickPayload)
-    })
-
-    test('when the left arrow key is pressed, it emits the order to display the prev slide with its payload, until achieving 1 loop', async () => {
-      const button = wrapper.find("[data-testid='slideshow__slick-slider-button']")
-
-      // Press the left arrow key when we are on the first slide/first slick slider button
-      await button.trigger('keydown', {
-        key: 'ArrowLeft',
-        code: 'ArrowLeft',
-      })
-
-      // Assert the "display-slide" custom event has been emitted
-      expect(wrapper.emitted('display-slide')).toHaveLength(1)
-
-      // Assert its payload has the correct value
-      expect(wrapper.emitted('display-slide')[0][0]).toStrictEqual(
-        mockHandleKeydownArrowWhenIndexAt0Payload,
-      )
-
-      // Remount the component with the mockCurrentIndex props setted to the last slide index
-      wrapper = mountSlideshowSlickSlider({ currentIndex: 1 })
-
+    test('when each button is clicked, it commands its corresponding slide to be displayed', async () => {
+      // Find the buttons
       const buttons = wrapper.findAll("[data-testid='slideshow__slick-slider-button']")
-      const lastButton = buttons[buttons.length - 1]
 
-      // Press the left arrow key when we are on the last slide/last slick slider button
-      await lastButton.trigger('keydown', {
-        key: 'ArrowLeft',
-        code: 'ArrowLeft',
-      })
+      // Assert the order to display the corresponding slide has been emitted
+      for (let index = 0; index < buttons.length; index++) {
+        const mockPayload = { index: index, focusable: false }
 
-      // Assert the "display-slide" custom event has been emitted
-      expect(wrapper.emitted('display-slide')).toHaveLength(1)
+        // Click the button
+        await buttons[index].trigger('click')
 
-      // Assert its payload has the correct value
-      expect(wrapper.emitted('display-slide')[0][0]).toStrictEqual(
-        mockHandleKeydownArrowWhenIndexAt1Payload,
-      )
+        // Assert the "display-slide" custom event has been emitted
+        expect(wrapper.emitted('display-slide')).toHaveLength(index + 1)
+
+        // Assert its payload has the correct value
+        expect(wrapper.emitted('display-slide')[index][0]).toStrictEqual(mockPayload)
+      }
     })
 
-    test('when the right arrow key is pressed, it emits the order to display the next slide with its payload, until achieving 1 loop', async () => {
-      const button = wrapper.find("[data-testid='slideshow__slick-slider-button']")
-
-      // Press the right arrow key when we are on the first slide/first slick slider button
-      await button.trigger('keydown', {
-        key: 'ArrowRight',
-        code: 'ArrowRight',
-      })
-
-      // Assert the "display-slide" custom event has been emitted
-      expect(wrapper.emitted('display-slide')).toHaveLength(1)
-
-      // Assert its payload has the correct value
-      expect(wrapper.emitted('display-slide')[0][0]).toStrictEqual(
-        mockHandleKeydownArrowWhenIndexAt0Payload,
-      )
-
-      // Remount the component with the mockCurrentIndex props setted to the last slide index
-      wrapper = mountSlideshowSlickSlider({ currentIndex: 1 })
-
+    test('when the left arrow key is pressed on each button, it commands the previous slide to be displayed', async () => {
+      // Find the buttons
       const buttons = wrapper.findAll("[data-testid='slideshow__slick-slider-button']")
-      const lastButton = buttons[buttons.length - 1]
 
-      // Press the right arrow key when we are on the last slide/last slick slider button
-      await lastButton.trigger('keydown', {
-        key: 'ArrowRight',
-        code: 'ArrowRight',
-      })
+      // Assert the order to display the corresponding slide has been emitted
+      for (let index = 0; index < buttons.length; index++) {
+        const mockPayload = {
+          index: index === 0 ? mockSlidesLength - 1 : index - 1,
+          focusable: true,
+        }
 
-      // Assert the "display-slide" custom event has been emitted
-      expect(wrapper.emitted('display-slide')).toHaveLength(1)
+        // Press the left arrow key
+        await buttons[index].trigger('keydown', {
+          key: 'ArrowLeft',
+          code: 'ArrowLeft',
+        })
 
-      // Assert its payload has the correct value
-      expect(wrapper.emitted('display-slide')[0][0]).toStrictEqual(
-        mockHandleKeydownArrowWhenIndexAt1Payload,
-      )
+        // Assert the "display-slide" custom event has been emitted
+        expect(wrapper.emitted('display-slide')).toHaveLength(index + 1)
+
+        // Assert its payload has the correct value
+        expect(wrapper.emitted('display-slide')[index][0]).toStrictEqual(mockPayload)
+
+        // Update the currentIndex prop for the next iteration
+        await wrapper.setProps({ currentIndex: index === 0 ? mockSlidesLength - 1 : index - 1 })
+      }
     })
 
-    test('when the home key is pressed, it emits the order to display the first slide with its payload', async () => {
-      // Remount the component with the mockCurrentIndex props setted to the last slide index
-      wrapper = mountSlideshowSlickSlider({ currentIndex: 1 })
-
+    test('when the right arrow key is pressed on each button, it commands the next slide to be displayed', async () => {
+      // Find the buttons
       const buttons = wrapper.findAll("[data-testid='slideshow__slick-slider-button']")
-      const lastButton = buttons[buttons.length - 1]
 
-      // Press the "home" key when we are on the last slide/last slick slider button
-      await lastButton.trigger('keydown', {
-        key: 'Home',
-        code: 'Home',
-      })
+      // Assert the order to display the corresponding slide has been emitted
+      for (let index = 0; index < buttons.length; index++) {
+        const mockPayload = {
+          index: index === mockSlidesLength - 1 ? 0 : index + 1,
+          focusable: true,
+        }
 
-      // Assert the "display-slide" custom event has been emitted
-      expect(wrapper.emitted('display-slide')).toHaveLength(1)
+        // Press the right arrow key
+        await buttons[index].trigger('keydown', {
+          key: 'ArrowRight',
+          code: 'ArrowRight',
+        })
 
-      // Assert its payload has the correct value
-      expect(wrapper.emitted('display-slide')[0][0]).toStrictEqual(mockHandleKeydownHomePayload)
+        // Assert the "display-slide" custom event has been emitted
+        expect(wrapper.emitted('display-slide')).toHaveLength(index + 1)
+
+        // Assert its payload has the correct value
+        expect(wrapper.emitted('display-slide')[index][0]).toStrictEqual(mockPayload)
+
+        // Update the currentIndex prop for the next iteration
+        await wrapper.setProps({ currentIndex: index === mockSlidesLength - 1 ? 0 : index + 1 })
+      }
     })
 
-    test("when the 'end' key is pressed, it emits the order to display the last slide with its payload", async () => {
-      const button = wrapper.find("[data-testid='slideshow__slick-slider-button']")
+    test('when the home key is pressed on each button, it commands the first slide to be displayed', async () => {
+      // Find the buttons
+      const buttons = wrapper.findAll("[data-testid='slideshow__slick-slider-button']")
 
-      // Press the "end" key when we are on the first slide/first slick slider button
-      await button.trigger('keydown', {
-        key: 'End',
-        code: 'End',
-      })
+      // Assert the order to display the corresponding slide has been emitted
+      for (let index = 0; index < buttons.length; index++) {
+        const mockPayload = {
+          index: 0,
+          focusable: true,
+        }
 
-      // Assert the "display-slide" custom event has been emitted
-      expect(wrapper.emitted('display-slide')).toHaveLength(1)
+        // Press the "home" key
+        await buttons[index].trigger('keydown', {
+          key: 'Home',
+          code: 'Home',
+        })
 
-      // Assert its payload has the correct value
-      expect(wrapper.emitted('display-slide')[0][0]).toStrictEqual(mockHandleKeydownEndPayload)
+        // Assert the "display-slide" custom event has been emitted
+        expect(wrapper.emitted('display-slide')).toHaveLength(index + 1)
+
+        // Assert its payload has the correct value
+        expect(wrapper.emitted('display-slide')[index][0]).toStrictEqual(mockPayload)
+      }
     })
 
-    test('when a slick slider button is focused, its slick slider parent receives the CSS focus indicator, then when the slick slider button is blur, the slick slider parent loses the CSS class', async () => {
-      // Focus on a slick slider button
-      const button = wrapper.find("[data-testid='slideshow__slick-slider-button']")
-      await button.trigger('focus')
+    test("when the 'end' key is pressed on each button, it commands the last slide to be displayed", async () => {
+      // Find the buttons
+      const buttons = wrapper.findAll("[data-testid='slideshow__slick-slider-button']")
 
-      // Assert the slick slider receives the focus indicator
-      expect(wrapper.classes('focus-visible')).toBeTruthy()
+      // Assert the order to display the corresponding slide has been emitted
+      for (let index = 0; index < buttons.length; index++) {
+        const mockPayload = {
+          index: mockSlidesLength - 1,
+          focusable: true,
+        }
 
-      // Blur on this slick slider button
-      await button.trigger('blur')
+        // Press the "end" key
+        await buttons[index].trigger('keydown', {
+          key: 'End',
+          code: 'End',
+        })
 
-      // Assert the slick slider receives the focus indicator
-      expect(wrapper.classes('focus-visible')).toBeFalsy()
+        // Assert the "display-slide" custom event has been emitted
+        expect(wrapper.emitted('display-slide')).toHaveLength(index + 1)
+
+        // Assert its payload has the correct value
+        expect(wrapper.emitted('display-slide')[index][0]).toStrictEqual(mockPayload)
+      }
+    })
+
+    test('when any button is focused, the slick slider receives the CSS focus indicator', async () => {
+      // Find the buttons
+      const buttons = wrapper.findAll("[data-testid='slideshow__slick-slider-button']")
+
+      // Assert any button focused focuses the slick slider
+      for (let index = 0; index < buttons.length; index++) {
+        // Assert the slick slider don't have a focus indicator
+        expect(wrapper.classes('focus-visible')).toBeFalsy()
+
+        // Focus the button
+        await buttons[index].trigger('focus')
+
+        // Assert the slick slider has received the focus indicator
+        expect(wrapper.classes('focus-visible')).toBeTruthy()
+
+        // Blur on the button
+        await buttons[index].trigger('blur')
+
+        // Assert the slick slider don't have a focus indicator for the next iteration
+        expect(wrapper.classes('focus-visible')).toBeFalsy()
+      }
     })
   })
 })

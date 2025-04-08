@@ -24,6 +24,7 @@ describe('NotFound.vue', () => {
   let wrapper
 
   beforeEach(() => {
+    // Mount the component
     wrapper = mountNotFound()
   })
 
@@ -32,17 +33,23 @@ describe('NotFound.vue', () => {
     expect(wrapper.exists()).toBeTruthy()
   })
 
-  test('the component has not been improperly modified', () => {
-    expect(wrapper.html()).toMatchInlineSnapshot(`
-      "<div class="not-found-container wrapper">
-        <h1>Not Found</h1>
-        <p> Oops, we couldn't find that page. Try going <a>home</a></p>
-      </div>"
-    `)
+  test('renders the title page', () => {
+    const title = wrapper.find('h1')
+    expect(title.text()).toBe('Not Found')
   })
 
-  test('its redirection link has the correct url', () => {
+  test('renders the message', () => {
+    expect(wrapper.text()).toContain("Oops, we couldn't find that page. Try going home.")
+  })
+
+  test('renders the redirection link with necessary information', () => {
+    // Find the link
     const link = wrapper.findComponent(RouterLinkStub)
+
+    // Assert the text is rendered
+    expect(link.text()).toContain('home')
+
+    // Assert the link has the correct url
     expect(link.props('to')).toBe('/')
   })
 })

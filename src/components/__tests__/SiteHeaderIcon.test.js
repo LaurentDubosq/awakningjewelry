@@ -8,18 +8,18 @@ import frontDataBase from '../../../db.json'
 /********************/
 
 const mockSiteMenu = frontDataBase['siteMenu']
-const mockLink = mockSiteMenu[4]
+const mockLink = mockSiteMenu[4] // object corresponding to "My Account" link
 const mockLinkAlternativeText = mockLink.text
 
 /***********/
 /* 2.Build */
 /***********/
 
-// Component Factory
-function mountSiteHeaderIcon(options = {}) {
+// Component Factory (Utility component)
+function mountSiteHeaderIcon() {
   return mount(SiteHeaderIcon, {
     props: { alternativeText: mockLinkAlternativeText },
-    ...options,
+    slots: { default: IconPerson },
   })
 }
 
@@ -31,6 +31,7 @@ describe('SiteHeaderIcon Component:', () => {
   let wrapper
 
   beforeEach(() => {
+    // Component Factory (Utility component)
     wrapper = mountSiteHeaderIcon()
   })
 
@@ -40,16 +41,12 @@ describe('SiteHeaderIcon Component:', () => {
   })
 
   test('renders the icon with necessary information', () => {
-    wrapper = mountSiteHeaderIcon({
-      slots: { default: IconPerson },
-    })
-    const alternativeText = wrapper.find("[data-testid='site-header__icon-text']")
-    const icon = wrapper.find("[data-testid='icon-person']") // we target the icon instead of component because we decided to not have tests for SVG components
+    // Assert the icon is rendered
+    const icon = wrapper.find("[data-testid='icon-person']")
+    expect(icon.exists()).toBeTruthy()
 
     // Assert the alternative text is rendered
+    const alternativeText = wrapper.find("[data-testid='site-header__icon-text']")
     expect(alternativeText.text()).toContain(mockLinkAlternativeText)
-
-    // Assert the icon is rendered
-    expect(icon.exists()).toBeTruthy()
   })
 })

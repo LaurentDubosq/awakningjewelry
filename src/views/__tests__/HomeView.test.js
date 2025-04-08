@@ -1,15 +1,15 @@
-import { flushPromises, mount, RouterLinkStub } from '@vue/test-utils'
+import { mount, RouterLinkStub } from '@vue/test-utils'
 import HomeView from '@/views/HomeView.vue'
 import Hero from '@/components/Hero.vue'
 import StatementBanner from '@/components/StatementBanner.vue'
 import CollectionListing from '@/components/CollectionListing.vue'
-import CollectionListingItem from '@/components/CollectionListingItem.vue'
 import ProductListing from '@/components/ProductListing.vue'
-import ProductListingItem from '@/components/ProductListingItem.vue'
+import LoadingComponent from '@/components/LoadingComponent.vue'
+import ErrorComponent from '@/components/ErrorComponent.vue'
 import frontDataBase from '../../../db.json'
 import { defineStore } from 'pinia'
 import { createTestingPinia } from '@pinia/testing'
-import { computed, ref } from 'vue'
+import { computed, nextTick, ref } from 'vue'
 
 /********************/
 /* 1.Initialization */
@@ -17,24 +17,55 @@ import { computed, ref } from 'vue'
 
 /* Data */
 
-const mockStatementBannerResult = {
-  data: frontDataBase.statementMission,
-  status: 'resolved',
+const mockStatementPending = {
+  statement: undefined,
+  fetchStatus: 'pending',
 }
-const mockStatementBannerData = mockStatementBannerResult.data
-const mockStatementBannerStatus = mockStatementBannerResult.status
-const mockCollectionsByGenderResult = {
-  data: frontDataBase.collectionsByGender,
-  status: 'resolved',
+const mockStatementRejected = {
+  statement: undefined,
+  fetchStatus: 'rejected',
 }
-const mockCollectionsByGenderData = mockCollectionsByGenderResult.data
-const mockCollectionsByGenderStatus = mockCollectionsByGenderResult.status
-const mockPromotionsResult = {
-  data: frontDataBase.promotions,
-  status: 'resolved',
+const mockStatementResolved = {
+  statement: frontDataBase.statementMission,
+  fetchStatus: 'resolved',
 }
-const mockPromotionsData = mockPromotionsResult.data
-const mockPromotionsStatus = mockPromotionsResult.status
+const mockStatement = mockStatementResolved.statement
+const mockStatementTitle = mockStatement.title
+const mockStatementText = mockStatement.text
+const mockStatementImageURL = mockStatement.image.url
+const mockStatementImageAlt = mockStatement.image.alt
+
+const mockCollectionsTitle = 'By Gender'
+const mockCollectionsPending = {
+  collections: undefined,
+  fetchStatus: 'pending',
+}
+const mockCollectionsRejected = {
+  collections: undefined,
+  fetchStatus: 'rejected',
+}
+const mockCollectionsResolved = {
+  collections: frontDataBase.collectionsByGender,
+  fetchStatus: 'resolved',
+}
+const mockCollections = mockCollectionsResolved.collections
+const mockCollectionsLength = mockCollections.length
+
+const mockProductsTitle = 'Promotions'
+const mockProductsPending = {
+  products: undefined,
+  fetchStatus: 'pending',
+}
+const mockProductsRejected = {
+  products: undefined,
+  fetchStatus: 'rejected',
+}
+const mockProductsResolved = {
+  products: frontDataBase.promotions,
+  fetchStatus: 'resolved',
+}
+const mockProducts = mockProductsResolved.products
+const mockProductsLength = mockProducts.length
 
 /* Stores */
 
@@ -43,11 +74,11 @@ const mockPinia = createTestingPinia({ stubActions: false })
 
 // Create the stores
 const mockUseStatementMissionResultStore = defineStore('StatementMissionResult', () => {
-  const statementMissionResult = ref(mockStatementBannerResult)
-  const statementMissionData = computed(() => statementMissionResult.value.data)
-  const statementMissionFetchStatus = computed(() => statementMissionResult.value.status)
-  const updateStatementMissionResult = (newStatementMissionResult) => {
-    statementMissionResult.value = newStatementMissionResult
+  const statementMissionResult = ref(mockStatementPending)
+  const statementMissionData = computed(() => statementMissionResult.value.statement)
+  const statementMissionFetchStatus = computed(() => statementMissionResult.value.fetchStatus)
+  const updateStatementMissionResult = (newState) => {
+    statementMissionResult.value = newState
   }
   return {
     statementMissionResult,
@@ -58,11 +89,11 @@ const mockUseStatementMissionResultStore = defineStore('StatementMissionResult',
 })
 
 const mockUseCollectionsByGenderResultStore = defineStore('CollectionsByGenderResult', () => {
-  const collectionsByGenderResult = ref(mockCollectionsByGenderResult)
-  const collectionsByGenderData = computed(() => collectionsByGenderResult.value.data)
-  const collectionsByGenderFetchStatus = computed(() => collectionsByGenderResult.value.status)
-  const updateCollectionsByGenderResult = (newCollectionsByGenderResult) => {
-    collectionsByGenderResult.value = newCollectionsByGenderResult
+  const collectionsByGenderResult = ref(mockCollectionsPending)
+  const collectionsByGenderData = computed(() => collectionsByGenderResult.value.collections)
+  const collectionsByGenderFetchStatus = computed(() => collectionsByGenderResult.value.fetchStatus)
+  const updateCollectionsByGenderResult = (newState) => {
+    collectionsByGenderResult.value = newState
   }
   return {
     collectionsByGenderResult,
@@ -73,11 +104,11 @@ const mockUseCollectionsByGenderResultStore = defineStore('CollectionsByGenderRe
 })
 
 const mockUsePromotionsResultStore = defineStore('PromotionsResult', () => {
-  const promotionsResult = ref(mockPromotionsResult)
-  const promotionsResultData = computed(() => promotionsResult.value.data)
-  const promotionsResultFetchStatus = computed(() => promotionsResult.value.status)
-  const updatePromotionsResult = (newPromotionsResult) => {
-    promotionsResult.value = newPromotionsResult
+  const promotionsResult = ref(mockProductsPending)
+  const promotionsResultData = computed(() => promotionsResult.value.products)
+  const promotionsResultFetchStatus = computed(() => promotionsResult.value.fetchStatus)
+  const updatePromotionsResult = (newState) => {
+    promotionsResult.value = newState
   }
   return {
     promotionsResult,
@@ -88,15 +119,15 @@ const mockUsePromotionsResultStore = defineStore('PromotionsResult', () => {
 })
 
 // Initialize the stores
-mockUseStatementMissionResultStore()
-mockUseCollectionsByGenderResultStore()
-mockUsePromotionsResultStore()
+const mockStatementMissionResultStore = mockUseStatementMissionResultStore()
+const mockCollectionsByGenderResultStore = mockUseCollectionsByGenderResultStore()
+const mockPromotionsResultStore = mockUsePromotionsResultStore()
 
 /***********/
 /* 2.Build */
 /***********/
 
-// Component Factory
+// Component Factory (Data fetching "Pending" state)
 function mountHomeview() {
   return mount(HomeView, {
     global: {
@@ -113,53 +144,103 @@ function mountHomeview() {
 /* 3.Test */
 /**********/
 
+// WARNING : The component has 3 states regarding the data fetching status for all child components. "Pending", "Rejected" and "Resolved". The state by default is "Pending".
+
 describe('HomeView.vue', () => {
   let wrapper
 
   beforeEach(async () => {
+    // Component mounting (Data fetching "Pending" state)
     wrapper = mountHomeview()
   })
 
+  afterEach(() => {
+    // Reset the store(s) state(s) to default to ensure a clean environment for each test
+    mockStatementMissionResultStore.statementMissionResult = mockStatementPending
+    mockCollectionsByGenderResultStore.collectionsByGenderResult = mockCollectionsPending
+    mockPromotionsResultStore.promotionsResult = mockProductsPending
+  })
+
   // Smoke test
-  test('mounts successfully', () => {
+  test('mounts successfully', async () => {
+    // Assert the wrapper component is well mounted at initial render
     expect(wrapper.exists()).toBeTruthy()
   })
 
-  describe('Hero.vue', () => {
-    test('is rendered', async () => {
-      // Wait after the Hero.vue async import has been resolved
-      await flushPromises()
-
-      // Assert the Hero component is rendered
+  describe('Initial render - Data fetching "Pending" state', () => {
+    test('hero feature is rendered', async () => {
       const HeroComponent = wrapper.findComponent(Hero)
       expect(HeroComponent.exists()).toBeTruthy()
     })
+
+    test('renders the collection listing title', () => {
+      const title = wrapper.find("[data-testid='collection-listing__title']")
+      expect(title.text()).toContain(mockCollectionsTitle)
+    })
+
+    test('renders the product listing title', () => {
+      const title = wrapper.find("[data-testid='product-listing__title']")
+      expect(title.text()).toContain(mockProductsTitle)
+    })
+
+    test('the loaders are rendered', async () => {
+      // Statement Banner
+      const StatementBannerComponent = wrapper.findComponent(StatementBanner)
+      const StatementBannerLoadingComponent =
+        StatementBannerComponent.findComponent(LoadingComponent)
+      expect(StatementBannerLoadingComponent.exists()).toBeTruthy()
+
+      // Collection Listing
+      const CollectionListingComponent = wrapper.findComponent(CollectionListing)
+      const CollectionListingLoadingComponent =
+        CollectionListingComponent.findComponent(LoadingComponent)
+      expect(CollectionListingLoadingComponent.exists()).toBeTruthy()
+
+      // Product Listing
+      const ProductListingComponent = wrapper.findComponent(ProductListing)
+      const ProductListingLoadingComponent = ProductListingComponent.findComponent(LoadingComponent)
+      expect(ProductListingLoadingComponent.exists()).toBeTruthy()
+    })
   })
 
-  describe('StatementBanner.vue', () => {
-    let StatementBannerComponent
-    const mockStatement = mockStatementBannerData
-    const mockStatementTitle = mockStatement.title
-    const mockStatementText = mockStatement.text
-    const mockStatementImageURL = mockStatement.image.url
-    const mockStatementImageAlt = mockStatement.image.alt
+  describe('Data fetching "Rejected" state', () => {
+    test('the error messages are rendered', async () => {
+      // Set the stores data fetching status to rejected
+      mockStatementMissionResultStore.statementMissionResult = mockStatementRejected
+      mockCollectionsByGenderResultStore.collectionsByGenderResult = mockCollectionsRejected
+      mockPromotionsResultStore.promotionsResult = mockProductsRejected
+      await nextTick()
 
-    beforeEach(() => {
-      StatementBannerComponent = wrapper.findComponent(StatementBanner)
+      // Statement Banner
+      const StatementBannerComponent = wrapper.findComponent(StatementBanner)
+      const StatementBannerErrorComponent = StatementBannerComponent.findComponent(ErrorComponent)
+      expect(StatementBannerErrorComponent.exists()).toBeTruthy()
+
+      // Collection Listing
+      const CollectionListingComponent = wrapper.findComponent(CollectionListing)
+      const CollectionListingErrorComponent =
+        CollectionListingComponent.findComponent(ErrorComponent)
+      expect(CollectionListingErrorComponent.exists()).toBeTruthy()
+
+      // Product Listing
+      const ProductListingComponent = wrapper.findComponent(ProductListing)
+      const ProductListingErrorComponent = ProductListingComponent.findComponent(ErrorComponent)
+      expect(ProductListingErrorComponent.exists()).toBeTruthy()
+    })
+  })
+
+  describe('Data fetching "Resolved" state', () => {
+    beforeEach(async () => {
+      // Set the stores data fetching status to resolved
+      mockStatementMissionResultStore.statementMissionResult = mockStatementResolved
+      mockCollectionsByGenderResultStore.collectionsByGenderResult = mockCollectionsResolved
+      mockPromotionsResultStore.promotionsResult = mockProductsResolved
+      await nextTick()
     })
 
-    test('is rendered with necessary information', () => {
-      // Assert the component is rendered
-      expect(StatementBannerComponent.exists()).toBeTruthy()
-
-      // Assert its "statement" prop has the correct value
-      expect(StatementBannerComponent.props('statement')).toMatchObject(mockStatementBannerData)
-
-      // Assert its "fetchStatus" prop has the correct value
-      expect(StatementBannerComponent.props('fetchStatus')).toMatchObject(mockStatementBannerStatus)
-    })
-
-    test('renders its data', () => {
+    test('statement mission is rendered with its necessary information', () => {
+      // Find the elements
+      const StatementBannerComponent = wrapper.findComponent(StatementBanner)
       const title = StatementBannerComponent.find("[data-testid='statement-banner__title']")
       const text = StatementBannerComponent.find("[data-testid='statement-banner__text']")
       const image = StatementBannerComponent.find("[data-testid='statement-banner__image']")
@@ -170,140 +251,76 @@ describe('HomeView.vue', () => {
       // Assert its text is rendered
       expect(text.text()).toContain(mockStatementText)
 
-      // Assert the image "src" attribute has the correct value
+      // Assert the image is rendered
+      expect(image.exists()).toBeTruthy()
+
+      // Assert the image "src" attribute is well setted
       expect(image.attributes('src')).toBe(mockStatementImageURL)
 
-      // Assert the image "alt" attribute has the correct value
+      // Assert the image "alt" attribute is well setted
       expect(image.attributes('alt')).toBe(mockStatementImageAlt)
     })
-  })
 
-  describe('CollectionListing.vue', () => {
-    let CollectionListingComponent
-    const mockTitle = 'By Gender'
-    const mockCollections = mockCollectionsByGenderData
-    const mockCollectionsLength = mockCollections.length
-
-    beforeEach(() => {
-      CollectionListingComponent = wrapper.findComponent(CollectionListing)
-    })
-
-    test('is rendered with necessary information', () => {
-      // Assert the component is rendered
-      expect(CollectionListingComponent.exists()).toBeTruthy()
-
-      // Assert its "title" prop value has the correct value
-      expect(CollectionListingComponent.props('title')).toBe(mockTitle)
-
-      // Assert its "collections" prop value has the correct value
-      expect(CollectionListingComponent.props('collections')).toMatchObject(
-        mockCollectionsByGenderData,
+    test('collections are rendered with their necessary information', () => {
+      // Find the elements
+      const CollectionListingComponent = wrapper.findComponent(CollectionListing)
+      const collections = CollectionListingComponent.findAll(
+        "[data-testid='collection-listing__item']",
       )
 
-      // Assert its "fetchStatus" prop value has the correct value
-      expect(CollectionListingComponent.props('fetchStatus')).toMatchObject(
-        mockCollectionsByGenderStatus,
-      )
-    })
+      // Assert that all collections are rendered
+      expect(collections).toHaveLength(mockCollectionsLength)
 
-    test('renders its data', () => {
-      /*************************/
-      /* CollectionListing.vue */
-      /*************************/
-
-      const title = CollectionListingComponent.find("[data-testid='collection-listing__title']")
-      const CollectionListingItemComponents =
-        CollectionListingComponent.findAllComponents(CollectionListingItem)
-
-      // Assert the title is rendered
-      expect(title.text()).toContain(mockTitle)
-
-      // Assert all the CollectionListingItem component has been rendered
-      expect(CollectionListingItemComponents).toHaveLength(mockCollectionsLength)
-
-      /*****************************/
-      /* CollectionListingItem.vue */
-      /*****************************/
-
-      // Assert any collection data is rendered
-      CollectionListingItemComponents.forEach((CollectionListingItemComponent, index) => {
-        const link = CollectionListingItemComponent.findComponent(RouterLinkStub)
-        const img = CollectionListingItemComponent.find(
-          "[data-testid='collection-listing__item-img']",
-        )
-        const title = CollectionListingItemComponent.find(
-          "[data-testid='collection-listing__item-title']",
-        )
+      // Assert any collection is rendered with necessary information
+      collections.forEach((collection, index) => {
+        const link = collection.findComponent(RouterLinkStub)
+        const img = collection.find("[data-testid='collection-listing__item-img']")
+        const title = collection.find("[data-testid='collection-listing__item-title']")
         const mockCollection = mockCollections[index]
         const mockCollectionURL = mockCollection.url
         const mockCollectionImageURL = mockCollection.image.url
         const mockCollectionTitle = mockCollection.title
 
-        // Assert the link has the correct url
+        // Assert the collection has a link
+        expect(link.exists()).toBeTruthy()
+
+        // Assert the link has the correct "url" value
         expect(link.props('to')).toBe(mockCollectionURL)
+
+        // Assert its img is rendered
+        expect(img.exists()).toBeTruthy()
 
         // Assert its image has the correct "src" value
         expect(img.attributes('src')).toBe(mockCollectionImageURL)
+
+        // Assert its image has its "alt" attribut empty
+        expect(img.attributes('alt')).toBe('')
 
         // Assert its title is rendered
         expect(title.text()).toContain(mockCollectionTitle)
       })
     })
-  })
 
-  describe('ProductListing.vue', () => {
-    let ProductListingComponent
-    const mockTitle = 'Promotions'
-    const mockPromotions = mockPromotionsData
-    const mockPromotionsLength = mockPromotions.length
+    test('products are rendered with their necessary information', () => {
+      // Find the elements
+      const ProductListingComponent = wrapper.findComponent(ProductListing)
 
-    beforeEach(() => {
-      ProductListingComponent = wrapper.findComponent(ProductListing)
-    })
+      // Find the products elements
+      const products = ProductListingComponent.findAll("[data-testid='product-listing__item']")
 
-    test('is rendered with necessary information', () => {
-      // Assert the component is rendered
-      expect(ProductListingComponent.exists()).toBeTruthy()
+      // Assert all the products are rendered
+      expect(products).toHaveLength(mockProductsLength)
 
-      // Assert its "title" prop has the correct value
-      expect(ProductListingComponent.props('title')).toBe(mockTitle)
-
-      // Assert its "products" prop has the correct value
-      expect(ProductListingComponent.props('products')).toMatchObject(mockPromotions)
-
-      // Assert its "fetchStatus" prop has the correct value
-      expect(ProductListingComponent.props('fetchStatus')).toMatchObject(mockPromotionsStatus)
-    })
-
-    test('renders its data', () => {
-      /**********************/
-      /* ProductListing.vue */
-      /**********************/
-
-      const title = ProductListingComponent.find("[data-testid='product-listing__title']")
-      const ProductListingItemComponents =
-        ProductListingComponent.findAllComponents(ProductListingItem)
-
-      // Assert the title is rendered
-      expect(title.text()).toContain(mockTitle)
-
-      // Assert all the ProductListingComponent component has been rendered
-      expect(ProductListingItemComponents).toHaveLength(mockPromotionsLength)
-
-      /**************************/
-      /* ProductListingItem.vue */
-      /**************************/
-
-      // Assert any product(promotion) is rendered with necessary information
-      ProductListingItemComponents.forEach((Product, index) => {
-        const link = Product.findComponent(RouterLinkStub)
-        const image = Product.find("[data-testid='product-listing__item-image']")
-        const title = Product.find("[data-testid='product-listing__item-title']")
-        const originalPrice = Product.find("[ data-testid='product-listing__item-original-price']")
-        const discountedPrice = Product.find(
+      // Assert any product is rendered with necessary information
+      products.forEach((product, index) => {
+        const link = product.findComponent(RouterLinkStub)
+        const image = product.find("[data-testid='product-listing__item-image']")
+        const title = product.find("[data-testid='product-listing__item-title']")
+        const originalPrice = product.find("[ data-testid='product-listing__item-original-price']")
+        const discountedPrice = product.find(
           "[ data-testid='product-listing__item-discounted-price']",
         )
-        const mockProduct = mockPromotions[index]
+        const mockProduct = mockProducts[index]
         const mockProductURL = mockProduct.url
         const mockProductImageURL = mockProduct.image.url
         const mockProductImageALT = mockProduct.image.alt
@@ -311,22 +328,28 @@ describe('HomeView.vue', () => {
         const mockProductOriginalPrice = mockProduct.price
         const mockProductDiscountedPrice = mockProduct.promotionalPrice
 
-        // Assert the link has the correct url
+        // Assert the product has a link
+        expect(link.exists()).toBeTruthy()
+
+        // Assert the link has the correct "url" value
         expect(link.props('to')).toBe(mockProductURL)
 
-        // Assert the image has the correct "src" value
+        // Assert its image is rendered
+        expect(image.exists()).toBeTruthy()
+
+        // Assert its image has the correct "src" value
         expect(image.attributes('src')).toBe(mockProductImageURL)
 
-        // Assert the image has the correct "alt" value
+        // Assert its image has the correct "alt" value
         expect(image.attributes('alt')).toBe(mockProductImageALT)
 
-        // Assert the title is rendered
+        // Assert its title is rendered
         expect(title.text()).toContain(mockProductTitle)
 
-        // Assert the original price is rendered
+        // Assert its original price is rendered
         expect(originalPrice.text()).toContain(mockProductOriginalPrice)
 
-        // Assert the discounted price is rendered
+        // Assert its discounted price is rendered
         expect(discountedPrice.text()).toContain(mockProductDiscountedPrice)
       })
     })

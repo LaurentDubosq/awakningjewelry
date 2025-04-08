@@ -1,4 +1,4 @@
-import { mount, RouterLinkStub } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import BurgerMenu from '@/components/BurgerMenu.vue'
 import BurgerMenuLink from '@/components/BurgerMenuLink.vue'
 import BurgerMenuDropdown from '@/components/BurgerMenuDropdown.vue'
@@ -7,20 +7,44 @@ import ErrorComponent from '@/components/ErrorComponent.vue'
 import frontDataBase from '../../../db.json'
 import { createTestingPinia } from '@pinia/testing'
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, ref, defineComponent, nextTick } from 'vue'
+import { createRouter, createWebHistory } from 'vue-router'
+import { afterEach, beforeEach } from 'vitest'
 
 /********************/
 /* 1.Initialization */
 /********************/
 
+/* Router */
+
+const mockRouter = createRouter({
+  history: createWebHistory(),
+  routes: [
+    {
+      path: '/:pathMatch(.*)*',
+      component: defineComponent({
+        template: '<div>Mocked Component</div>',
+      }),
+    },
+  ],
+})
+
 /* Data */
 
-const mockSiteMenuResult = {
+const mockSiteMenuPending = {
+  data: undefined,
+  status: 'pending',
+}
+const mockSiteMenuRejected = {
+  data: undefined,
+  status: 'rejected',
+}
+const mockSiteMenuResolved = {
   data: frontDataBase.siteMenu,
   status: 'resolved',
 }
-const mockSiteMenuData = mockSiteMenuResult.data
-const mockSiteMenuDataLength = mockSiteMenuData.length
+const mockSiteMenu = mockSiteMenuResolved.data
+const mockSiteMenuLength = mockSiteMenu.length
 
 /* Stores */
 
@@ -36,7 +60,7 @@ const mockUseIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
   return { isBurgerMenuOpen, toggleBurgerMenu }
 })
 const mockUseSiteMenuStore = defineStore('SiteMenu', () => {
-  const siteMenu = ref(mockSiteMenuResult)
+  const siteMenu = ref(mockSiteMenuPending)
   const siteMenuData = computed(() => siteMenu.value.data)
   const siteMenuResultFetchStatus = computed(() => siteMenu.value.status)
   return {
@@ -47,21 +71,28 @@ const mockUseSiteMenuStore = defineStore('SiteMenu', () => {
 })
 
 // Initialize the stores
-mockUseIsBurgerMenuOpenStore()
+const mockIsBurgerMenuOpenStore = mockUseIsBurgerMenuOpenStore()
 const mockSiteMenuStore = mockUseSiteMenuStore()
+
+/* Utilities */
+
+function isLink(item) {
+  return item.findComponent(BurgerMenuLink).exists()
+}
+function isDropdown(item) {
+  return item.findComponent(BurgerMenuDropdown).exists()
+}
 
 /***********/
 /* 2.Build */
 /***********/
 
-// Component Factory
+// Component Factory (Data fetching "Pending" state - Dropdown open state)
 function mountBurgerMenu() {
   return mount(BurgerMenu, {
+    attachTo: document.body,
     global: {
-      plugins: [mockPinia],
-      stubs: {
-        RouterLink: RouterLinkStub,
-      },
+      plugins: [mockRouter, mockPinia],
     },
   })
 }
@@ -70,147 +101,302 @@ function mountBurgerMenu() {
 /* 3.Test */
 /**********/
 
+// WARNING : The component has 3 states regarding the store data fetching status. "Pending", "Rejected" and "Resolved". The state by default is "Pending".
+
+// WARNING : The component has 2 states regarding its dropdown opening status. Open or close. The state by default is open.
+
 describe('BurgerMenu.vue', () => {
   let wrapper
 
   beforeEach(() => {
-    mockSiteMenuStore.siteMenu = { ...mockSiteMenuStore.siteMenu, status: 'resolved' } // reset the data fetching status to resolved
+    // Component mounting (Data fetching "Pending" state - Dropdown open state)
     wrapper = mountBurgerMenu()
   })
 
+  afterEach(() => {
+    // Reset the store(s) state(s) to default to ensure a clean environment for each test
+    mockSiteMenuStore.siteMenu = mockSiteMenuPending
+    mockUseIsBurgerMenuOpenStore.isBurgerMenuOpen = false
+  })
+
   // Smoke test
-  test('mounts successfully', () => {
+  test('mounts successfully', async () => {
+    // Assert the wrapper component is well mounted at initial render
     expect(wrapper.exists()).toBeTruthy()
   })
 
-  test('renders all the expected navigation items with necessary information', () => {
-    // Assert that all the expected navigation items are rendered
-    const items = wrapper.findAll("[data-testid='burger-menu__item']")
-    expect(items).toHaveLength(mockSiteMenuDataLength)
-
-    // Assert that each item is rendered with its necessary information
-    items.forEach((item, index) => {
-      // Utilities
-      function isLink() {
-        return item.findComponent(BurgerMenuLink).exists()
-      }
-      function isDropdown() {
-        return item.findComponent(BurgerMenuDropdown).exists()
-      }
-
-      if (isLink()) {
-        const BurgerMenuLinkComponent = item.findComponent(BurgerMenuLink)
-        const link = BurgerMenuLinkComponent.findComponent(RouterLinkStub)
-        const mockLink = mockSiteMenuData[index]
-        const mockLinkURL = mockLink.url
-        const mockLinkText = mockLink.text
-
-        // Assert the BurgerMenuLink component is rendered
-        expect(BurgerMenuLinkComponent.exists()).toBeTruthy()
-
-        // Assert the component "link" prop has the correct value
-        expect(BurgerMenuLinkComponent.props('link')).toMatchObject(mockLink)
-
-        /**********************/
-        /* BurgerMenuLink.vue */
-        /**********************/
-
-        // Assert the link has the correct url
-        expect(link.props('to')).toBe(mockLinkURL)
-
-        // Assert the link text is rendered
-        expect(link.text()).toContain(mockLinkText)
-      } else if (isDropdown()) {
-        const BurgerMenuDropdownComponent = item.findComponent(BurgerMenuDropdown)
-        const button = item.find("[data-testid='burger-menu__dropdown-button']")
-        const items = item.findAll("[data-testid='burger-menu__dropdown-item']")
-        const mockDropdown = mockSiteMenuData[index]
-        const mockDropdownText = mockDropdown.text
-        const mockDropdownItems = mockDropdown.subMenu
-        const mockDropdownItemsLength = mockDropdownItems.length
-
-        // Assert the BurgerMenuDropdown component is rendered
-        expect(BurgerMenuDropdownComponent.exists()).toBeTruthy()
-
-        // Assert the component "dropdown" prop has the correct value
-        expect(BurgerMenuDropdownComponent.props('dropdown')).toMatchObject(mockDropdown)
-
-        /********************************/
-        /* BurgerMenuDropdownButton.vue */
-        /********************************/
-
-        // Assert the dropdown button text is rendered
-        expect(button.text()).toContain(mockDropdownText)
-
-        /******************************/
-        /* BurgerMenuDropdownList.vue */
-        /******************************/
-
-        // Assert all the dropdown links are rendered
-        expect(items).toHaveLength(mockDropdownItemsLength)
-
-        /******************************/
-        /* BurgerMenuDropdownItem.vue */
-        /******************************/
-
-        // Assert each link is rendered with its necessary information
-        items.forEach((item, index) => {
-          const link = item.findComponent(RouterLinkStub)
-          const mockLink = mockDropdownItems[index]
-          const mockLinkURL = mockLink.url
-          const mockLinkText = mockLink.text
-
-          // Assert the link has the correct url
-          expect(link.props('to')).toBe(mockLinkURL)
-
-          // Assert the link text is rendered
-          expect(link.text()).toContain(mockLinkText)
-        })
-      }
-    })
-  })
-
-  describe('Behaviors:', () => {
-    test('when a burger menu link is focus and the escape key is pressed, it commands the burger menu to close', async () => {
-      // Focus a burger menu link
-      const link = wrapper.findComponent(RouterLinkStub)
-      await link.trigger('focus')
-
-      // Press the escape key
-      await link.trigger('keydown.escape')
-
-      // Assert the order to close the burger menu has been emitted
-      expect(wrapper.emitted('close-burger-menu')).toHaveLength(1)
-    })
-
-    test("when the data fetcher status is 'pending', the loading component is rendered", () => {
-      // Set the data fetching status to pending
-      mockSiteMenuStore.siteMenu = { ...mockSiteMenuStore.siteMenu, status: 'pending' } // reset the data fetching status to pending
-
-      // Remount the component with pending status active
-      wrapper = mountBurgerMenu()
-
-      // Assert the loading component is rendered
+  describe('Initial render - Data fetching "Pending" state', () => {
+    test('the loader animation is rendered', async () => {
       const loadingComponent = wrapper.findComponent(LoadingComponent)
       expect(loadingComponent.exists()).toBeTruthy()
     })
+  })
 
-    test("when the data fetcher status is 'resolved', its data is rendered", () => {
-      // Assert that one of its pieces of data is rendered
-      const firstItem = wrapper.find("[data-testid='burger-menu__item']")
-      expect(firstItem.exists()).toBeTruthy()
-    })
+  describe('Data fetching "Rejected" state', () => {
+    test('the error message is rendered', async () => {
+      // Set the store data fetching status to rejected
+      mockSiteMenuStore.siteMenu = mockSiteMenuRejected
+      await nextTick()
 
-    test("when the data fetcher status is 'rejected', the error component is rendered", () => {
-      // Set the data fetching status to rejected
-      mockSiteMenuStore.siteMenu = { ...mockSiteMenuStore.siteMenu, status: 'rejected' } // reset the data fetching status to rejected
-
-      // Remount the component with rejected status active
-      wrapper = mountBurgerMenu()
-
-      // Assert the error component is rendered
+      // Assert the error message is rendered
       const errorComponent = wrapper.findComponent(ErrorComponent)
       expect(errorComponent.exists()).toBeTruthy()
+    })
+  })
+
+  describe('Data fetching "Resolved" state - Dropdown open state', async () => {
+    beforeEach(async () => {
+      // Set the store data fetching status to resolved
+      mockSiteMenuStore.siteMenu = mockSiteMenuResolved
+      await nextTick()
+    })
+
+    test('renders all navigation items with necessary information', async () => {
+      // Find the navigation items
+      const items = wrapper.findAll("[data-testid='burger-menu__item']")
+
+      // Assert all navigation items are rendered
+      expect(items).toHaveLength(mockSiteMenuLength)
+
+      // Assert each item is rendered with its necessary information
+      for (let index = 0; index < items.length; index++) {
+        if (isLink(items[index])) {
+          const link = items[index].find("[data-testid='burger-menu__link']")
+          const mockLink = mockSiteMenu[index]
+          const mockLinkURL = mockLink.url
+          const mockLinkText = mockLink.text
+
+          // Assert the link exists
+          expect(link.exists()).toBeTruthy()
+
+          // Assert the link has the correct url
+          expect(link.attributes('href')).toBe(mockLinkURL)
+
+          // Assert the link text is rendered
+          expect(link.text()).toContain(mockLinkText)
+        } else if (isDropdown(items[index])) {
+          const dropdown = items[index].find("[data-testid='burger-menu__dropdown']")
+          const button = dropdown.find("[data-testid='burger-menu__dropdown-button']")
+          let buttonIcon
+          let links
+
+          const mockDropdown = mockSiteMenu[index]
+          const mockDropdownText = mockDropdown.text
+          const mockDropdownItems = mockDropdown.subMenu
+          const mockDropdownItemsLength = mockDropdownItems.length
+
+          /* TOGGLE BUTTON */
+
+          // Assert the button is rendered
+          expect(button.exists()).toBeTruthy()
+
+          // Assert the button text is rendered
+          expect(button.text()).toContain(mockDropdownText)
+
+          /****************************************/
+          /* Initial Render - Dropdown open state */
+          /****************************************/
+
+          /* TOGGLE BUTTON */
+
+          // Assert the open icon is rendered
+          buttonIcon = button.find("[data-testid='icon-sign-minus']")
+          expect(buttonIcon.exists()).toBeTruthy()
+
+          /* LINKS */
+
+          // Find the links
+          links = dropdown.findAll("[data-testid='burger-menu__dropdown-item-link']")
+
+          // Assert all links are rendered
+          expect(links).toHaveLength(mockDropdownItemsLength)
+
+          // Assert each link is rendered with its necessary information
+          links.forEach((link, index) => {
+            const mockLink = mockDropdownItems[index]
+            const mockLinkURL = mockLink.url
+            const mockLinkText = mockLink.text
+
+            // Assert the link is rendered
+            expect(link.exists()).toBeTruthy()
+
+            // Assert the link has the correct url
+            expect(link.attributes('href')).toBe(mockLinkURL)
+
+            // Assert the link's text is well rendered
+            expect(link.text()).toContain(mockLinkText)
+          })
+
+          /************************/
+          /* Dropdown close state */
+          /************************/
+
+          // Close the dropdown
+          await button.trigger('click')
+
+          /* TOGGLE BUTTON */
+
+          // Assert the close icon is rendered
+          buttonIcon = button.find("[data-testid='icon-sign-plus']")
+          expect(buttonIcon.exists()).toBeTruthy()
+
+          // Reset(open) the dropdown for following assertions
+          await button.trigger('click')
+        }
+      }
+    })
+
+    describe('Behaviors:', () => {
+      test('each navigation item behaves like it should', async () => {
+        // Find the navigation items
+        const items = wrapper.findAll("[data-testid='burger-menu__item']")
+
+        // Assert each navigation item behaves like is should
+        for (let index = 0; index < items.length; index++) {
+          if (isLink(items[index])) {
+            let link
+
+            /******************************************************************/
+            /* when the link is touched, it commands the burger menu to close */
+            /******************************************************************/
+
+            // Set the burger menu status to open
+            mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
+
+            // Assert the burger menu status is open
+            expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
+
+            // Touch the link
+            link = items[index].find("[data-testid='burger-menu__link']")
+            await link.trigger('click')
+
+            // Assert the burger menu status is close
+            expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
+
+            /************************************************************************************************/
+            /* when the link is focused and we press the "escape key", it commands the burger menu to close */
+            /************************************************************************************************/
+
+            // Set the burger menu status to open
+            mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
+
+            // Focus the link
+            link = items[index].find("[data-testid='burger-menu__link']")
+            link.element.focus() // this method guarantee that the DOM element will be focused
+
+            // Press the "escape" key
+            await link.trigger('keydown.escape')
+
+            // Assert the burger menu status is close
+            expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
+          } else if (isDropdown(items[index])) {
+            const dropdown = items[index].find("[data-testid='burger-menu__dropdown']")
+            let button
+            let links
+            let list
+
+            /***********************************/
+            /* the dropdown is open by default */
+            /***********************************/
+
+            // Assert the dropdown is open
+            list = dropdown.find("[data-testid='burger-menu__dropdown-list']")
+            expect(list.exists()).toBeTruthy()
+
+            /****************************************************************************/
+            /* when the dropdown toggle button is touched, it opens/closes the dropdown */
+            /****************************************************************************/
+
+            // Assert the dropdown is open
+            list = dropdown.find("[data-testid='burger-menu__dropdown-list']")
+            expect(list.exists()).toBeTruthy()
+
+            // Touch the button
+            button = dropdown.find("[data-testid='burger-menu__dropdown-button']")
+            await button.trigger('click')
+
+            // Assert the dropdown is close
+            list = dropdown.find("[data-testid='burger-menu__dropdown-list']")
+            expect(list.exists()).toBeFalsy()
+
+            // Touch the button again
+            button = dropdown.find("[data-testid='burger-menu__dropdown-button']")
+            await button.trigger('click')
+
+            // Assert the dropdown is open
+            list = dropdown.find("[data-testid='burger-menu__dropdown-list']")
+            expect(list.exists()).toBeTruthy()
+
+            /******************************************************************************************************************/
+            /* when the dropdown toggle button is focused and we press the "escape key", it commands the burger menu to close */
+            /******************************************************************************************************************/
+
+            // Set the burger menu status to open
+            mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
+
+            // Focus the button
+            button = dropdown.find("[data-testid='burger-menu__dropdown-button']")
+            button.element.focus() // this method guarantee that the DOM element will be focused
+
+            // Press the "escape" key
+            await button.trigger('keydown.escape')
+
+            // Assert the burger menu status is close
+            expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
+
+            /****************************************************************************/
+            /* when each dropdown link is touched, it commands the burger menu to close */
+            /****************************************************************************/
+
+            // Set the burger menu status to open
+            mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
+
+            // Find the links
+            links = dropdown.findAll("[data-testid='burger-menu__dropdown-item-link']")
+
+            for (let index = 0; index < links.length; index++) {
+              // Set the burger menu status to open
+              mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
+
+              // Assert the burger menu status is open
+              expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
+
+              // Touch the link
+              await links[index].trigger('click')
+
+              // Assert the burger menu status is close
+              expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
+            }
+
+            /**********************************************************************************************************/
+            /* when each dropdown link is focused and we press the "escape key", it commands the burger menu to close */
+            /**********************************************************************************************************/
+
+            // Set the burger menu status to open
+            mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
+
+            // Find the links
+            links = dropdown.findAll("[data-testid='burger-menu__dropdown-item-link']")
+
+            for (let index = 0; index < links.length; index++) {
+              // Set the burger menu status to open
+              mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
+
+              // Assert the burger menu status is open
+              expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
+
+              // Focus the link
+              links[index].element.focus() // this method guarantee that the DOM element will be focused
+
+              // Press the "escape" key
+              await links[index].trigger('keydown.escape')
+
+              // Assert the burger menu status is close
+              expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
+            }
+          }
+        }
+      })
     })
   })
 })

@@ -1,16 +1,37 @@
 import { mount, RouterLinkStub } from '@vue/test-utils'
 import BurgerMenuDropdownList from '@/components/BurgerMenuDropdownList.vue'
-import BurgerMenuDropdownItem from '@/components/BurgerMenuDropdownItem.vue'
 import frontDataBase from '../../../db.json'
+import { createTestingPinia } from '@pinia/testing'
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
 /********************/
 /* 1.Initialization */
 /********************/
 
+/* Data */
+
 const mockSiteMenu = frontDataBase['siteMenu']
 const mockDropdownText = mockSiteMenu[1].text
 const mockLinks = mockSiteMenu[1].subMenu
 const mockLinksLength = mockLinks.length
+
+/* Stores */
+
+// Initialize a testing pinia instance
+const mockPinia = createTestingPinia({ stubActions: false })
+
+// Create the stores
+const mockUseIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
+  const isBurgerMenuOpen = ref(false)
+  const toggleBurgerMenu = () => {
+    isBurgerMenuOpen.value = !isBurgerMenuOpen.value
+  }
+  return { isBurgerMenuOpen, toggleBurgerMenu }
+})
+
+// Initialize the stores
+const mockIsBurgerMenuOpenStore = mockUseIsBurgerMenuOpenStore()
 
 /***********/
 /* 2.Build */
@@ -21,20 +42,27 @@ function mountBurgerMenuDropdownList() {
   return mount(BurgerMenuDropdownList, {
     props: { links: mockLinks, dropdownText: mockDropdownText },
     global: {
-      stubs: { BurgerMenuDropdownItem: true, RouterLink: RouterLinkStub },
+      plugins: [mockPinia],
+      stubs: { RouterLink: RouterLinkStub },
     },
   })
 }
 
 /**********/
-/* 4.Test */
+/* 3.Test */
 /**********/
 
 describe('BurgerMenuDropdownList.vue', () => {
   let wrapper
 
   beforeEach(() => {
+    // Component mounting
     wrapper = mountBurgerMenuDropdownList()
+  })
+
+  afterEach(() => {
+    // Reset the store(s) state(s) to default to ensure a clean environment for each test
+    mockIsBurgerMenuOpenStore.isBurgerMenuOpen = false
   })
 
   // Smoke test
@@ -42,17 +70,49 @@ describe('BurgerMenuDropdownList.vue', () => {
     expect(wrapper.exists()).toBeTruthy()
   })
 
-  test('renders all its expected items with necessary information', () => {
-    const itemComponents = wrapper.findAllComponents(BurgerMenuDropdownItem)
+  test('renders all links with their necessary information', () => {
+    // Find the links
+    const links = wrapper.findAllComponents(RouterLinkStub)
 
-    // Assert all the expected item's component are rendered
-    expect(itemComponents).toHaveLength(mockLinksLength)
+    // Assert all links are rendered
+    expect(links).toHaveLength(mockLinksLength)
 
-    // Assert that each item component has its data well setted as prop
-    itemComponents.forEach((itemComponent, index) => {
+    // Assert each link is rendered with its necessary information
+    links.forEach((link, index) => {
       const mockLink = mockLinks[index]
-      // Assert the 'link' prop has the correct value
-      expect(itemComponent.props('link')).toMatchObject(mockLink)
+      const mockLinkURL = mockLink.url
+      const mockLinkText = mockLink.text
+
+      // Assert the link is rendered
+      expect(link.exists()).toBeTruthy()
+
+      // Assert the link has the correct url
+      expect(link.props('to')).toBe(mockLinkURL)
+
+      // Assert the link's text is well rendered
+      expect(link.text()).toContain(mockLinkText)
+    })
+  })
+
+  describe('Behaviors:', () => {
+    test('when each link is touched, it commands the burger menu to close', async () => {
+      // Find the links
+      const links = wrapper.findAllComponents(RouterLinkStub)
+
+      // Assert each link touched command the burger menu to close
+      for (let index = 0; index < links.length; index++) {
+        // Reset the burger menu status to open
+        mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
+
+        // Assert the burger menu status is open
+        expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
+
+        // Touch the link
+        await links[index].trigger('click')
+
+        // Assert the burger menu status is close
+        expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
+      }
     })
   })
 })

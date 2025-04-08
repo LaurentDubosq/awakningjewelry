@@ -1,11 +1,8 @@
-import { flushPromises, mount } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import BurgerMenuToggle from '../BurgerMenuToggle.vue'
-import IconBurger from '../icons/IconBurger.vue'
-import IconCross from '../icons/IconCross.vue'
-import SiteHeaderIcon from '../SiteHeaderIcon.vue'
 import { createTestingPinia } from '@pinia/testing'
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { nextTick, ref } from 'vue'
 
 /********************/
 /* 1.Initialization */
@@ -30,7 +27,7 @@ const mockIsBurgerMenuOpenStore = mockUseIsBurgerMenuOpenStore()
 /* 2.Build */
 /***********/
 
-// Component factory
+// Component factory (Burger menu close state)
 function mountBurgerMenuToggle() {
   return mount(BurgerMenuToggle, {
     plugins: [mockPinia],
@@ -41,103 +38,129 @@ function mountBurgerMenuToggle() {
 /* 3.Test */
 /**********/
 
+// WARNING : The component has 2 states regarding the burger menu status. Open or close. The state by default is close.
+
 describe('BurgerMenuToggle.vue', () => {
   let wrapper
+  let clickEventTriggeredByEnter
 
   beforeEach(() => {
-    mockIsBurgerMenuOpenStore.isBurgerMenuOpen = false // reset the burger menu to close status
+    // Component mounting (Burger menu close state)
     wrapper = mountBurgerMenuToggle()
+  })
+
+  afterEach(() => {
+    // Reset the store(s) state(s) to default to ensure a clean environment for each test
+    mockIsBurgerMenuOpenStore.isBurgerMenuOpen = false
+
+    // Reset custom event to avoid alteration over time
+    clickEventTriggeredByEnter = new MouseEvent('click', { detail: 0 })
+
+    // Reset function call count
+    vi.clearAllMocks()
   })
 
   // Smoke Test
   test('mounts successfully', () => {
+    // Assert the wrapper component is well mounted at initial render
     expect(wrapper.exists()).toBeTruthy()
   })
 
-  test('renders the burger icon with necessary information, when the burger menu is close', () => {
-    const SiteHeaderIconComponent = wrapper.findComponent(SiteHeaderIcon)
-    const IconBurgerComponent = wrapper.findComponent(IconBurger)
+  describe('Initial render - Burger menu close state', () => {
+    test('renders the toggle button with necessary information', () => {
+      // Assert the button is rendered
+      const button = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
+      expect(button.exists()).toBeTruthy()
 
-    // Assert the SiteHeaderIconComponent is rendered
-    expect(SiteHeaderIconComponent.exists()).toBeTruthy()
+      // Assert the burger icon is rendered
+      const icon = button.find("[data-testid='icon-burger']")
+      expect(icon.exists()).toBeTruthy()
 
-    // Assert the "alternativeText" prop has the correct value
-    expect(SiteHeaderIconComponent.props('alternativeText')).toContain('Open burger menu')
-
-    // Assert the IconBurger component is rendered
-    expect(IconBurgerComponent.exists()).toBeTruthy()
-
-    /**********************/
-    /* SiteHeaderIcon.vue */
-    /**********************/
-
-    const icon = wrapper.find("[data-testid='icon-burger']")
-
-    // Assert the icon is rendered
-    expect(icon.exists()).toBeTruthy()
+      // Assert the alternative text is rendered
+      const alternativeText = button.find("[data-testid='site-header__icon-text']")
+      expect(alternativeText.text()).toContain('Open burger menu')
+    })
   })
 
-  test('renders the cross icon with necessary information, when the burger menu is open', async () => {
-    // Open the burger menu
-    mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
+  describe('Burger menu open state', () => {
+    test('renders the toggle button with necessary information', async () => {
+      // Set the burger menu status as open
+      mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
+      await nextTick()
 
-    // Wait until the burger menu is opened
-    await flushPromises()
+      // Assert the cross icon is rendered
+      const icon = wrapper.find("[data-testid='icon-cross']")
+      expect(icon.exists()).toBeTruthy()
 
-    // Find the SiteHeaderIconComponent
-    const SiteHeaderIconComponent = wrapper.findComponent(SiteHeaderIcon)
-
-    // Assert the SiteHeaderIconComponent is rendered
-    expect(SiteHeaderIconComponent.exists()).toBeTruthy()
-
-    // Assert the "alternativeText" prop has the correct value
-    expect(SiteHeaderIconComponent.props('alternativeText')).toContain('Close burger menu')
-
-    // Find the IconCross component
-    const IconCrossComponent = wrapper.findComponent(IconCross)
-
-    // Assert the IconCross component is rendered
-    expect(IconCrossComponent.exists()).toBeTruthy()
-
-    /**********************/
-    /* SiteHeaderIcon.vue */
-    /**********************/
-
-    const icon = wrapper.find("[data-testid='icon-cross']")
-
-    // Assert the icon is rendered
-    expect(icon.exists()).toBeTruthy()
+      // Assert the alternative text is rendered
+      const alternativeText = wrapper.find("[data-testid='site-header__icon-text']")
+      expect(alternativeText.text()).toContain('Close burger menu')
+    })
   })
 
   describe('Behaviors:', () => {
-    test('when the button is clicked, it commands the burger menu to toggle', async () => {
-      // Assert that the store indicates the burger menu is open
-      expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
+    /***************/
+    /* Burger menu */
+    /***************/
 
-      // Click on the button
-      const button = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
-      const clickEvent = new MouseEvent('click', { detail: 1 }) // simulate a button click
-      await button.element.dispatchEvent(clickEvent)
-
-      // Assert that the store indicates the burger menu is close
-      expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
+    test('the burger menu is close by default', () => {
+      // Assert the burger menu opener icon is rendered
+      const icon = wrapper.find("[data-testid='icon-burger']")
+      expect(icon.exists()).toBeTruthy()
     })
 
-    test('when we press the Enter key on the button, it commands the burger menu to toggle', async () => {
-      // Assert that the store indicates the burger menu is open
+    /*****************************/
+    /* Burger menu toggle button */
+    /*****************************/
+
+    test('when the toggle button is touched 2 times, it commands the burger menu to open and close', async () => {
+      // Assert the burger menu status is close
       expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
 
-      // Click on the button
+      // Find the button
       const button = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
-      const clickEvent = new MouseEvent('click', { detail: 0 }) // simulate an "enter" key pressed
-      await button.element.dispatchEvent(clickEvent)
 
-      // Assert that the store indicates the burger menu is close
+      // Touch on the button
+      await button.trigger('click')
+
+      // Assert the burger menu status is open
       expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
+
+      // Touch on the button again
+      await button.trigger('click')
+
+      // Assert the burger menu status is close
+      expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
+    })
+
+    test('when we press the "Enter" key on the opening button, it commands the burger menu to open, then it commands the focus on the first burger menu focusable element', async () => {
+      // Assert the burger menu status is close
+      expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
+
+      // Commands the burger menu to open by pressing the "enter" key
+      const button = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
+      await button.element.dispatchEvent(clickEventTriggeredByEnter)
+
+      // Assert the burger menu status is open
+      expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
+
+      // Assert the commands to focus the first focusable burger menu element has been ordered
+      expect(mockIsBurgerMenuOpenStore.toggleBurgerMenu).toHaveBeenCalledTimes(1)
+    })
+
+    test('when we press the "Enter" key on the closing button, it commands the burger menu to close', async () => {
+      // Set the burger menu status as open
+      mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
+
+      // Assert the burger menu status is open
+      expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
+
+      // Commands the burger menu to close by pressing the "enter" key
+      const button = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
+      await button.element.dispatchEvent(clickEventTriggeredByEnter)
+
+      // Assert the burger menu status is close
+      expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
     })
   })
-
-  /* Note : This component should focus on the first burger menu item when the burger menu is opened using the 'Enter' key.
-  However, this test cannot be executed because the targeted element is not accessible from this component.
-  Therefore, an integration test should be written in the App.vue test file for this purpose. */
 })

@@ -23,7 +23,7 @@ const mockPinia = createTestingPinia({ stubActions: false })
 
 // Create the stores
 const mockUseIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
-  const isBurgerMenuOpen = ref(true)
+  const isBurgerMenuOpen = ref(false)
   const toggleBurgerMenu = () => {
     isBurgerMenuOpen.value = !isBurgerMenuOpen.value
   }
@@ -38,9 +38,9 @@ const mockIsBurgerMenuOpenStore = mockUseIsBurgerMenuOpenStore()
 /***********/
 
 // Component Factory
-function mountBurgerMenuDropdownItem(propsOptions = {}) {
+function mountBurgerMenuDropdownItem() {
   return mount(BurgerMenuDropdownItem, {
-    props: { link: mockLink, ...propsOptions },
+    props: { link: mockLink },
     global: {
       plugins: [mockPinia],
       stubs: { RouterLink: RouterLinkStub },
@@ -49,16 +49,20 @@ function mountBurgerMenuDropdownItem(propsOptions = {}) {
 }
 
 /**********/
-/* 4.Test */
+/* 3.Test */
 /**********/
 
 describe('BurgerMenuDropdownItem.vue', () => {
   let wrapper
-  let link
 
   beforeEach(() => {
+    // Component mounting
     wrapper = mountBurgerMenuDropdownItem()
-    link = wrapper.findComponent(RouterLinkStub)
+  })
+
+  afterEach(() => {
+    // Reset the store(s) state(s) to default to ensure a clean environment for each test
+    mockIsBurgerMenuOpenStore.isBurgerMenuOpen = false
   })
 
   // Smoke test
@@ -67,11 +71,14 @@ describe('BurgerMenuDropdownItem.vue', () => {
   })
 
   test('renders the link with necessary information', () => {
+    // Find the link
+    const link = wrapper.findComponent(RouterLinkStub)
+
     // Assert the link is rendered
     expect(link.exists()).toBeTruthy()
 
     // Assert the link has the correct url
-    expect(link.props('to')).toContain(mockLinkURL)
+    expect(link.props('to')).toBe(mockLinkURL)
 
     // Assert the link's text is well rendered
     expect(link.text()).toContain(mockLinkText)
@@ -79,13 +86,17 @@ describe('BurgerMenuDropdownItem.vue', () => {
 
   describe('Behaviors:', () => {
     test('when the link is touched, it commands the dropdown to close', async () => {
-      // Assert that the store indicates the burger menu is open
+      // Set the burger menu status to open
+      mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
+
+      // Assert the burger menu status is open
       expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
 
       // Touch the link
+      const link = wrapper.findComponent(RouterLinkStub)
       await link.trigger('click')
 
-      // Assert that the store indicates the burger menu is close
+      // Assert the burger menu status is close
       expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
     })
   })

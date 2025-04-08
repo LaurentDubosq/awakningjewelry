@@ -2,7 +2,7 @@
 import { TransitionGroup, Transition } from 'vue'
 
 const { name, group } = defineProps<{
-  name: string
+  name: 'translateY' | 'marginLeftMinus300px' | 'margintopMinus100PerCentWithInner'
   group: boolean
   duration?: number
 }>()

@@ -23,6 +23,6 @@ const { links, dropdownText } = defineProps<{
 
 <style scoped lang="scss">
 .burger-menu__dropdown-list-wrapper {
-  overflow: hidden; // Necessary for the proper functioning of the transition
+  overflow: hidden; // necessary for the proper functioning of the transition
 }
 </style>

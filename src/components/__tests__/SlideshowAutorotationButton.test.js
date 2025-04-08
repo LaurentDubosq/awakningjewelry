@@ -1,13 +1,11 @@
 import { mount } from '@vue/test-utils'
 import SlideshowAutorotationButton from '@/components/SlideshowAutorotationButton.vue'
-import IconPause from '@/components/icons/IconPause.vue'
-import IconPlay from '@/components/icons/IconPlay.vue'
 
 /***********/
 /* 1.Build */
 /***********/
 
-// Component Factory
+// Component Factory (Playing state is true)
 const mountSlideshowAutorotationButton = (props = {}) => {
   return mount(SlideshowAutorotationButton, {
     props: { isPlaying: true, ...props },
@@ -18,74 +16,70 @@ const mountSlideshowAutorotationButton = (props = {}) => {
 /* 2.Test */
 /**********/
 
+// WARNING : The component has 2 states regarding the slideshow playing status. True or false. The state by default is true.
+
 describe('SlideshowAutorotationButton.vue', () => {
   let wrapper
 
+  beforeEach(() => {
+    // Component mounting (Playing state is true)
+    wrapper = mountSlideshowAutorotationButton()
+  })
+
   // Smoke Test
   test('mounts successfully', () => {
-    wrapper = mountSlideshowAutorotationButton()
+    // Assert the wrapper component is well mounted at initial render
     expect(wrapper.exists()).toBeTruthy()
   })
 
-  describe('Pause Icon Variant', () => {
-    beforeEach(() => {
-      wrapper = mountSlideshowAutorotationButton()
-    })
-
-    test("renders the 'pause' button with necessary information", () => {
+  describe('Initial render - Playing state is true', () => {
+    test('renders the autoration toggle button with necessary information', () => {
       const button = wrapper.find("[data-testid='slideshow__autorotation-button']")
-      const IconPauseComponent = wrapper.findComponent(IconPause)
+      const icon = wrapper.find("[data-testid='icon-pause']")
 
       // Assert the button is rendered
       expect(button.exists()).toBeTruthy()
 
-      // Assert the "pause" icon component is rendered
-      expect(IconPauseComponent.exists()).toBeTruthy()
+      // Assert the "pause" icon is rendered
+      expect(icon.exists()).toBeTruthy()
 
-      // Assert the "aria-label" is rendered with the correct value
+      // Assert the "aria-label" is rendered with the correct value. A11y exceptional test because there is no text for the button otherwise
       expect(button.attributes('aria-label')).toBe('Stop automatic slide show')
-    })
-
-    describe('Behaviors:', () => {
-      test("when the 'pause' button is clicked, it emits the order to stop the autorotation of the slideshow", async () => {
-        // Click the pause button
-        const button = wrapper.find("[data-testid='slideshow__autorotation-button']")
-        await button.trigger('click')
-
-        // Assert the custom event has been emitted
-        expect(wrapper.emitted('stop-autoplay')).toHaveLength(1)
-      })
     })
   })
 
-  describe('Play Icon Variant', () => {
-    beforeEach(() => {
+  describe('Playing state is false', () => {
+    test('renders the autoration toggle button with necessary information', () => {
+      // Component mounting (Playing state is false)
       wrapper = mountSlideshowAutorotationButton({ isPlaying: false })
-    })
 
-    test("renders the 'play' button with necessary information", () => {
+      // Assert the "play" icon is rendered
+      const icon = wrapper.find("[data-testid='icon-play']")
+      expect(icon.exists()).toBeTruthy()
+
+      // Assert the "aria-label" is rendered with the correct value. A11y exceptional test because there is no text for the button otherwise
       const button = wrapper.find("[data-testid='slideshow__autorotation-button']")
-      const IconPlayComponent = wrapper.findComponent(IconPlay)
-
-      // Assert the button is rendered
-      expect(button.exists()).toBeTruthy()
-
-      // Assert the "play" icon component is rendered
-      expect(IconPlayComponent.exists()).toBeTruthy()
-
-      // Assert the "aria-label" is rendered with the correct value
       expect(button.attributes('aria-label')).toBe('Start automatic slide show')
     })
+  })
 
-    describe('Behaviors:', () => {
-      test("when the 'play' button is clicked, it emits the order to start the autorotation of the slideshow", async () => {
-        // Click the play button
-        const button = wrapper.find("[data-testid='slideshow__autorotation-button']")
-        await button.trigger('click')
+  describe('Behaviors:', () => {
+    test('The autorotation is on by default', () => {
+      // Component mounting (autoplay is on)
+      const wrapper = mountSlideshowAutorotationButton()
 
-        // Assert the custom event has been emitted
-        expect(wrapper.emitted('start-autoplay')).toHaveLength(1)
-      })
+      // Assert the autoplay is on
+      const icon = wrapper.find("[data-testid='icon-pause']")
+      expect(icon.exists()).toBeTruthy()
+    })
+
+    test('when the autoration toggle button is clicked, it commands the autorotation to pause or play', async () => {
+      // Click the pause button
+      const button = wrapper.find("[data-testid='slideshow__autorotation-button']")
+      await button.trigger('click')
+
+      // Assert the custom event has been emitted
+      expect(wrapper.emitted('stop-autoplay')).toHaveLength(1)
     })
   })
 })

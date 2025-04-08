@@ -35,6 +35,7 @@ describe('CollectionListingItem.vue', () => {
   let wrapper
 
   beforeEach(() => {
+    // Component mounting
     wrapper = mountCollectionListingItem()
   })
 
