@@ -8,8 +8,13 @@ import {
   promotionsURL,
   pagesMetaDataUrl,
   siteMenuUrl,
+  newsletterSignupWordingURL,
 } from '@/data/dataFetchersURL'
-import type { StatementBanner, HeroSlideType } from '@/types/components.d.ts'
+import type {
+  StatementBanner,
+  HeroSlideType,
+  NewsletterSignupWording,
+} from '@/types/components.d.ts'
 import type { Collection, ProductSummary } from '@/types/global.d.ts'
 import { useFetch } from '@/composables/useFetch'
 import { useFetchWithState } from '@/composables/useFetchWithState'
@@ -43,3 +48,11 @@ export const getPromotions = (): UseFetchWithStateReturn<ProductSummary[]> => {
   const result: UseFetchWithStateReturn<ProductSummary[]> = useFetchWithState(promotionsURL)
   return result
 }
+
+export const getNewsletterSignupWordingAsyncResult =
+  (): UseFetchWithStateReturn<NewsletterSignupWording> => {
+    const result: UseFetchWithStateReturn<NewsletterSignupWording> = useFetchWithState(
+      newsletterSignupWordingURL,
+    )
+    return result
+  }

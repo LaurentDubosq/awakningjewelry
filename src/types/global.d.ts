@@ -23,3 +23,16 @@ export interface ProductSummaryImage {
   url: string
   alt: string
 }
+
+/* Input */
+interface InputSuccessResult {
+  success: true
+  error?: false
+  message: string
+}
+
+interface InputErrorResult {
+  success?: false
+  error: true
+  message: string
+}

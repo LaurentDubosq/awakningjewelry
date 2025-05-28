@@ -1,6 +1,7 @@
 import { mount, RouterLinkStub } from '@vue/test-utils'
 import HomeView from '@/views/HomeView.vue'
 import Hero from '@/components/Hero.vue'
+import NewsletterSignup from '@/components/NewsletterSignup.vue'
 import StatementBanner from '@/components/StatementBanner.vue'
 import CollectionListing from '@/components/CollectionListing.vue'
 import ProductListing from '@/components/ProductListing.vue'
@@ -181,6 +182,11 @@ describe('HomeView.vue', () => {
     test('renders the product listing title', () => {
       const title = wrapper.find("[data-testid='product-listing__title']")
       expect(title.text()).toContain(mockProductsTitle)
+    })
+
+    test('newsletter signup feature is rendered', async () => {
+      const NewsletterSignupComponent = wrapper.findComponent(NewsletterSignup)
+      expect(NewsletterSignupComponent.exists()).toBeTruthy()
     })
 
     test('the loaders are rendered', async () => {

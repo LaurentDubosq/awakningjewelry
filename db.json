@@ -165,5 +165,18 @@
       "promotionalPrice": "$30.39",
       "url": "/collections/108-unisex-mala-beads/products/unisex-mala-clarity-of-mind-of-life-tree-108-natural-picasso-marble-beads"
     }
-  ]
+  ],
+  "newsletterSignupWording": {
+    "title": "Subscribe To Our Newsletter",
+    "description": "Be notified of our private promotions, sales and new products",
+    "inputPlaceholder": "Your email",
+    "inputTitle": "Your email",
+    "label": "Your email (required)",
+    "buttonText": "subscribe",
+    "consentNote": "By clicking the \"Subscribe\" button, you agree to our ",
+    "consentNoteLinkText": "privacy policy",
+    "unsubscriptionNote": "Unsubscribe at any time by using the unsubscribe links at the bottom of our emails or by ",
+    "unsubscriptionNoteLinkText": "contacting us"
+  },
+  "newsletterSubscribers": []
 }

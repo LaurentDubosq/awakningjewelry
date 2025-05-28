@@ -17,3 +17,6 @@ export const collectionsByGenderURL: string = `${LAYOUT_API_BASE_URL}/collection
 
 /* Promotions */
 export const promotionsURL: string = `${LAYOUT_API_BASE_URL}/promotions`
+
+/* NewsletterSignupWording */
+export const newsletterSignupWordingURL: string = `${LAYOUT_API_BASE_URL}/newsletterSignupWording`

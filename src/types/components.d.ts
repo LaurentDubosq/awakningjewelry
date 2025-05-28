@@ -1,4 +1,9 @@
-import type { Collection, Product } from '../types/global.d.js'
+import type {
+  Collection,
+  Product,
+  InputSuccessResult,
+  InputErrorResult,
+} from '../types/global.d.js'
 
 /* SiteMenu */
 export interface SiteMenuItem {
@@ -61,3 +66,19 @@ export interface DisplaySlidePayload {
   index: number
   focusable: boolean
 }
+
+/* NewsletterSignup */
+export interface NewsletterSignupWording {
+  title: string
+  description: string
+  inputPlaceholder: string
+  inputTitle: string
+  label: string
+  buttonText: string
+  consentNote: string
+  consentNoteLinkText: string
+  unsubscriptionNote: string
+  unsubscriptionNoteLinkText: string
+}
+
+export type NewsletterSignupResponse = InputSuccessResult | InputErrorResult

@@ -27,8 +27,19 @@ hr {
   margin: 20px auto;
 }
 
+input,
+textarea,
+select {
+  font-style: italic;
+  font-size: 1.125rem;
+}
+
 a:hover {
   opacity: 0.75;
+}
+
+.link-text {
+  text-decoration: underline;
 }
 
 .btn {

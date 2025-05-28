@@ -3,6 +3,7 @@ import Hero from '@/components/Hero.vue'
 import StatementBanner from '@/components/StatementBanner.vue'
 import CollectionListing from '@/components/CollectionListing.vue'
 import ProductListing from '@/components/ProductListing.vue'
+import NewsletterSignup from '@/components/NewsletterSignup.vue'
 import { storeToRefs } from 'pinia'
 import { useStatementMissionResultStore } from '@/stores/statementMission'
 import { useCollectionsByGenderResultStore } from '@/stores/collectionsByGender'
@@ -34,6 +35,7 @@ const { promotionsResultData, promotionsResultFetchStatus } = storeToRefs(promot
       :products="promotionsResultData"
       :fetchStatus="promotionsResultFetchStatus"
     />
+    <NewsletterSignup />
   </div>
 </template>
 
