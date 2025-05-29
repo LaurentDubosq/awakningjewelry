@@ -9,8 +9,8 @@ export const siteMenuUrl: string = `${LAYOUT_API_BASE_URL}/siteMenu`
 /* HeroSlides */
 export const heroSlidesURL: string = `${LAYOUT_API_BASE_URL}/heroSlides`
 
-/* StatementMission */
-export const statementMissionURL: string = `${LAYOUT_API_BASE_URL}/statementMission`
+/* StatementMissionWording */
+export const statementMissionWordingURL: string = `${LAYOUT_API_BASE_URL}/statementMissionWording`
 
 /* CollectionsByGender */
 export const collectionsByGenderURL: string = `${LAYOUT_API_BASE_URL}/collectionsByGender`

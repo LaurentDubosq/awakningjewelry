@@ -3,7 +3,7 @@ import type { SiteMenuItem } from '@/types/components.d.ts'
 import type { UseFetchWithStateReturn } from '@/types/fetch'
 import {
   collectionsByGenderURL,
-  statementMissionURL,
+  statementMissionWordingURL,
   heroSlidesURL,
   promotionsURL,
   pagesMetaDataUrl,
@@ -11,7 +11,7 @@ import {
   newsletterSignupWordingURL,
 } from '@/data/dataFetchersURL'
 import type {
-  StatementBanner,
+  StatementBannerWording,
   HeroSlideType,
   NewsletterSignupWording,
 } from '@/types/components.d.ts'
@@ -34,10 +34,13 @@ export const getHeroSlides = (): UseFetchWithStateReturn<HeroSlideType[]> => {
   return result
 }
 
-export const getStatementMission = (): UseFetchWithStateReturn<StatementBanner> => {
-  const result: UseFetchWithStateReturn<StatementBanner> = useFetchWithState(statementMissionURL)
-  return result
-}
+export const getStatementMissionWordingAsyncResult =
+  (): UseFetchWithStateReturn<StatementBannerWording> => {
+    const result: UseFetchWithStateReturn<StatementBannerWording> = useFetchWithState(
+      statementMissionWordingURL,
+    )
+    return result
+  }
 
 export const getCollectionsByGender = (): UseFetchWithStateReturn<Collection[]> => {
   const result: UseFetchWithStateReturn<Collection[]> = useFetchWithState(collectionsByGenderURL)

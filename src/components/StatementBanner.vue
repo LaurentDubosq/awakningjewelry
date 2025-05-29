@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import type { StatementBanner } from '@/types/components'
+import type { StatementBannerWording } from '@/types/components'
 import type { FetchStatus } from '@/types/fetch'
 import LoadingComponent from './LoadingComponent.vue'
 import ErrorComponent from './ErrorComponent.vue'
 
 /* As the component can be used multiple times in the application, its parent has the responsibility to fetch the data */
-const { statement, fetchStatus } = defineProps<{
-  statement?: StatementBanner
-  fetchStatus?: FetchStatus
+const { wording, wordingFetchStatus } = defineProps<{
+  wording?: StatementBannerWording
+  wordingFetchStatus?: FetchStatus
 }>()
 </script>
 
@@ -17,31 +17,31 @@ const { statement, fetchStatus } = defineProps<{
     aria-roledescription="statement banner"
     aria-labelledby="statement-banner__title"
   >
-    <template v-if="fetchStatus === 'resolved'">
+    <template v-if="wordingFetchStatus === 'resolved'">
       <h2
         class="statement-banner__title"
         id="statement-banner__title"
-        aria-describedby="statement-banner__text"
+        aria-describedby="statement-banner__statement"
         data-testid="statement-banner__title"
       >
-        {{ statement?.title }}
+        {{ wording?.title }}
       </h2>
       <p
-        class="statement-banner__text"
-        id="statement-banner__text"
-        data-testid="statement-banner__text"
+        class="statement-banner__statement"
+        id="statement-banner__statement"
+        data-testid="statement-banner__statement"
       >
-        {{ statement?.text }}
+        {{ wording?.statement }}
       </p>
       <img
-        :src="statement?.image.url"
-        :alt="statement?.image.alt"
+        :src="wording?.image.url"
+        :alt="wording?.image.alt"
         class="statement-banner__image"
         data-testid="statement-banner__image"
       />
     </template>
-    <LoadingComponent v-if="fetchStatus === 'pending'" />
-    <ErrorComponent v-if="fetchStatus === 'rejected'" />
+    <LoadingComponent v-if="wordingFetchStatus === 'pending'" />
+    <ErrorComponent v-if="wordingFetchStatus === 'rejected'" />
   </section>
 </template>
 
@@ -62,7 +62,7 @@ const { statement, fetchStatus } = defineProps<{
     font-style: italic;
   }
 
-  &__text {
+  &__statement {
     max-width: 400px;
     text-align: center;
     text-transform: uppercase;

@@ -8,23 +8,23 @@ import frontDataBase from '../../../db.json'
 /* 1.Initialization */
 /********************/
 
-const mockStatementPending = {
-  statement: undefined,
-  fetchStatus: 'pending',
+const mockWordingPendingResult = {
+  wording: undefined,
+  wordingFetchStatus: 'pending',
 }
-const mockStatementRejected = {
-  statement: undefined,
-  fetchStatus: 'rejected',
+const mockWordingRejectedResult = {
+  wording: undefined,
+  wordingFetchStatus: 'rejected',
 }
-const mockStatementResolved = {
-  statement: frontDataBase.statementMission,
-  fetchStatus: 'resolved',
+const mockWordingResolvedResult = {
+  wording: frontDataBase.statementMissionWording,
+  wordingFetchStatus: 'resolved',
 }
-const mockStatement = mockStatementResolved.statement
-const mockStatementTitle = mockStatement.title
-const mockStatementText = mockStatement.text
-const mockStatementImageURL = mockStatement.image.url
-const mockStatementImageAlt = mockStatement.image.alt
+const mockWording = mockWordingResolvedResult.wording
+const mockWordingTitle = mockWording.title
+const mockWordingStatement = mockWording.statement
+const mockWordingImageURL = mockWording.image.url
+const mockWordingImageAlt = mockWording.image.alt
 
 /***********/
 /* 2.Build */
@@ -34,8 +34,8 @@ const mockStatementImageAlt = mockStatement.image.alt
 function mountStatementBanner(props) {
   return mount(StatementBanner, {
     props: {
-      statement: mockStatementPending.statement,
-      fetchStatus: mockStatementPending.fetchStatus,
+      wording: mockWordingPendingResult.wording,
+      wordingFetchStatus: mockWordingPendingResult.wordingFetchStatus,
       ...props,
     },
   })
@@ -71,7 +71,7 @@ describe('StatementBanner.vue', () => {
   describe('Data fetching "Rejected" state', () => {
     test('the error message is rendered', () => {
       // Mount the component (rejected state)
-      const wrapper = mountStatementBanner(mockStatementRejected)
+      const wrapper = mountStatementBanner(mockWordingRejectedResult)
 
       // Assert the error message is rendered
       const errorComponent = wrapper.findComponent(ErrorComponent)
@@ -82,15 +82,15 @@ describe('StatementBanner.vue', () => {
   describe('Data fetching "Resolved" state', () => {
     test('renders the statement with necessary information', () => {
       // Mount the component (resolved state)
-      const wrapper = mountStatementBanner(mockStatementResolved)
+      const wrapper = mountStatementBanner(mockWordingResolvedResult)
 
       // Assert its title is rendered
       const title = wrapper.find("[data-testid='statement-banner__title']")
-      expect(title.text()).toContain(mockStatementTitle)
+      expect(title.text()).toContain(mockWordingTitle)
 
       // Assert its text is rendered
-      const text = wrapper.find("[data-testid='statement-banner__text']")
-      expect(text.text()).toContain(mockStatementText)
+      const text = wrapper.find("[data-testid='statement-banner__statement']")
+      expect(text.text()).toContain(mockWordingStatement)
 
       // Find the image
       const image = wrapper.find("[data-testid='statement-banner__image']")
@@ -99,10 +99,10 @@ describe('StatementBanner.vue', () => {
       expect(image.exists()).toBeTruthy()
 
       // Assert the image "src" attribute is well setted
-      expect(image.attributes('src')).toBe(mockStatementImageURL)
+      expect(image.attributes('src')).toBe(mockWordingImageURL)
 
       // Assert the image "alt" attribute is well setted
-      expect(image.attributes('alt')).toBe(mockStatementImageAlt)
+      expect(image.attributes('alt')).toBe(mockWordingImageAlt)
     })
   })
 })

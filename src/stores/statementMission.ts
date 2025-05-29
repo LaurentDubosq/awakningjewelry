@@ -1,38 +1,33 @@
 import { ref, type Ref, type ComputedRef, computed, unref } from 'vue'
-import type { StatementBanner } from '@/types/components'
+import type { StatementBannerWording } from '@/types/components'
 import type { UseFetchWithStateReturn, FetchStatus } from '@/types/fetch'
 import { defineStore } from 'pinia'
-import { getStatementMission } from '@/data/dataFetchers'
+import { getStatementMissionWordingAsyncResult } from '@/data/dataFetchers'
 
-export const useStatementMissionResultStore = defineStore('StatementMissionResult', () => {
-  // States
-  const statementMissionResult: Ref<undefined | UseFetchWithStateReturn<StatementBanner>> = ref()
+export const useStatementMissionWordingResultStore = defineStore(
+  'StatementMissionWordingResult',
+  () => {
+    // States
+    const wordingFetchResult: Ref<undefined | UseFetchWithStateReturn<StatementBannerWording>> =
+      ref()
 
-  // Computeds
-  const statementMissionData: ComputedRef<StatementBanner | undefined> = computed(() =>
-    unref(statementMissionResult.value?.data),
-  )
+    // Computeds
+    const wording: ComputedRef<StatementBannerWording | undefined> = computed(() =>
+      unref(wordingFetchResult.value?.data),
+    )
 
-  const statementMissionFetchStatus: ComputedRef<FetchStatus | undefined> = computed(() =>
-    unref(statementMissionResult.value?.status),
-  )
+    const wordingFetchStatus: ComputedRef<FetchStatus | undefined> = computed(() =>
+      unref(wordingFetchResult.value?.status),
+    )
 
-  // Methods
-  const updateStatementMissionResult = (
-    newStatementMissionResult: UseFetchWithStateReturn<StatementBanner>,
-  ) => {
-    statementMissionResult.value = newStatementMissionResult
-  }
+    // API Call - Data fetching with data caching
+    if (!wordingFetchResult.value) {
+      wordingFetchResult.value = getStatementMissionWordingAsyncResult()
+    }
 
-  // API Call - Data fetching with data caching
-  if (!statementMissionResult.value) {
-    statementMissionResult.value = getStatementMission()
-  }
-
-  return {
-    statementMissionResult,
-    statementMissionData,
-    statementMissionFetchStatus,
-    updateStatementMissionResult,
-  }
-})
+    return {
+      wording,
+      wordingFetchStatus,
+    }
+  },
+)

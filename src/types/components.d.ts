@@ -38,13 +38,13 @@ export interface HeroSlideImage {
   url: string
 }
 
-/* StatementBanner */
-export interface StatementBanner {
+/* StatementBannerWording */
+export interface StatementBannerWording {
   title: string
-  text: string
-  image: StatementBannerImage
+  statement: string
+  image: StatementBannerWordingImage
 }
-export interface StatementBannerImage {
+export interface StatementBannerWordingImage {
   url: string
   alt: string
 }

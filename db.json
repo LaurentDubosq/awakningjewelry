@@ -108,9 +108,9 @@
       "url": "/collections/women-buddhist-elegance-bracelets"
     }
   ],
-  "statementMission": {
+  "statementMissionWording": {
     "title": "Our mission:",
-    "text": "Make you feel empowered and stimulated by connecting you to your spiritual values",
+    "statement": "Make you feel empowered and stimulated by connecting you to your spiritual values",
     "image": {
       "url": "./favicon-white-transparent.png",
       "alt": ""
