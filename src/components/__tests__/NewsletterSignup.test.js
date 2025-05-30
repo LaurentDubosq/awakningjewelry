@@ -42,16 +42,16 @@ const mockRouter = createRouter({
 /* Data */
 
 const mockWordingPendingResult = {
-  data: undefined,
-  fetchStatus: 'pending',
+  wording: undefined,
+  wordingfetchStatus: 'pending',
 }
 const mockWordingRejectedResult = {
-  data: undefined,
-  fetchStatus: 'rejected',
+  wording: undefined,
+  wordingfetchStatus: 'rejected',
 }
 const mockWordingResolvedResult = {
-  data: frontDataBase.newsletterSignupWording,
-  fetchStatus: 'resolved',
+  wording: frontDataBase.newsletterSignupWording,
+  wordingfetchStatus: 'resolved',
 }
 const mockWording = frontDataBase.newsletterSignupWording
 const mockWordingTitle = mockWording.title
@@ -73,8 +73,8 @@ const mockPinia = createTestingPinia()
 // Create the store(s)
 const mockUseWordingResultStore = defineStore('NewsletterSignupWordingResult', () => {
   const wordingFetchResult = ref(mockWordingPendingResult)
-  const wording = computed(() => wordingFetchResult.value?.data)
-  const wordingFetchStatus = computed(() => wordingFetchResult.value?.fetchStatus)
+  const wording = computed(() => wordingFetchResult.value?.wording)
+  const wordingFetchStatus = computed(() => wordingFetchResult.value?.wordingfetchStatus)
   return { wordingFetchResult, wording, wordingFetchStatus }
 })
 
@@ -99,7 +99,7 @@ function mountNewsletterSignup() {
 /* 4.Test */
 /**********/
 
-// WARNING : The component has 3 states regarding the data fetching status. "Pending", "Rejected" and "Resolved". The state by default is "Pending".
+// WARNING : The component has 3 states regarding the wording fetching status. "Pending", "Rejected" and "Resolved". The state by default is "Pending".
 
 describe('NewsletterSignup', () => {
   let wrapper
@@ -132,7 +132,7 @@ describe('NewsletterSignup', () => {
 
   describe('Data fetching "Rejected" state', () => {
     test('the error message is rendered', async () => {
-      // Set the store data fetching status to rejected
+      // Set the store wording fetching status to rejected
       mockWordingResultStore.wordingFetchResult = mockWordingRejectedResult
       await nextTick()
 
@@ -144,7 +144,7 @@ describe('NewsletterSignup', () => {
 
   describe('Data fetching "Resolved" state', async () => {
     beforeEach(async () => {
-      // Set the store data fetching status to resolved
+      // Set the store wording fetching status to resolved
       mockWordingResultStore.wordingFetchResult = mockWordingResolvedResult
       await nextTick()
     })
