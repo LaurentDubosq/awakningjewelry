@@ -4,8 +4,10 @@ import StatementBanner from '@/components/StatementBanner.vue'
 import CollectionListing from '@/components/CollectionListing.vue'
 import ProductListing from '@/components/ProductListing.vue'
 import NewsletterSignup from '@/components/NewsletterSignup.vue'
+import QuoteBanner from '@/components/QuoteBanner.vue'
 import { storeToRefs } from 'pinia'
 import { useStatementMissionWordingResultStore } from '@/stores/statementMission'
+import { useFounderQuoteBannerContentResultStore } from '@/stores/quoteFounder'
 import { useCollectionsByGenderResultStore } from '@/stores/collectionsByGender'
 import { usePromotionsResultStore } from '@/stores/promotions'
 
@@ -13,6 +15,7 @@ import { usePromotionsResultStore } from '@/stores/promotions'
 const statementMissionWordingResultStore = useStatementMissionWordingResultStore()
 const collectionsByGenderStore = useCollectionsByGenderResultStore()
 const promotionsStore = usePromotionsResultStore()
+const founderQuoteBannerContentResultStore = useFounderQuoteBannerContentResultStore()
 
 // Get the store's states and computeds
 const { wording: statementMissionWording, wordingFetchStatus: statementMissionWordingFetchStatus } =
@@ -20,6 +23,10 @@ const { wording: statementMissionWording, wordingFetchStatus: statementMissionWo
 const { collectionsByGenderData, collectionsByGenderFetchStatus } =
   storeToRefs(collectionsByGenderStore)
 const { promotionsResultData, promotionsResultFetchStatus } = storeToRefs(promotionsStore)
+const {
+  content: founderQuoteBannerContent,
+  contentFetchState: founderQuoteBannerContentFetchState,
+} = storeToRefs(founderQuoteBannerContentResultStore)
 </script>
 
 <template>
@@ -40,6 +47,10 @@ const { promotionsResultData, promotionsResultFetchStatus } = storeToRefs(promot
       :fetchStatus="promotionsResultFetchStatus"
     />
     <NewsletterSignup />
+    <QuoteBanner
+      :content="founderQuoteBannerContent"
+      :contentFetchState="founderQuoteBannerContentFetchState"
+    />
   </div>
 </template>
 

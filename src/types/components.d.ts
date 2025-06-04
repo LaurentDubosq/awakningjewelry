@@ -38,7 +38,7 @@ export interface HeroSlideImage {
   url: string
 }
 
-/* StatementBannerWording */
+/* StatementBanner wording */
 export interface StatementBannerWording {
   title: string
   statement: string
@@ -67,7 +67,7 @@ export interface DisplaySlidePayload {
   focusable: boolean
 }
 
-/* NewsletterSignup */
+/* NewsletterSignup wording */
 export interface NewsletterSignupWording {
   title: string
   description: string
@@ -82,3 +82,18 @@ export interface NewsletterSignupWording {
 }
 
 export type NewsletterSignupResponse = InputSuccessResult | InputErrorResult
+
+/* QuoteBanner content */
+export interface QuoteBannerContent {
+  backgroundIMGMobile: string
+  backgroundIMGMobileLandscape: string
+  backgroundIMGDesktop: string
+  backgroundIMGDesktopLarge: string
+  quote: string
+  author: string
+  authorIMG: string
+  authorIMGAlt: string
+  authorIMGTitle: string
+  linkText: string
+  linkURL: string
+}

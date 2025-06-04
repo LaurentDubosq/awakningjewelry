@@ -34,6 +34,12 @@ select {
   font-size: 1.125rem;
 }
 
+blockquote {
+  font-style: italic;
+  line-height: 1.385;
+  text-align: center;
+}
+
 a:hover {
   opacity: 0.75;
 }
@@ -55,6 +61,11 @@ a:hover {
 .btn--primary {
   background-color: $AwakningColorBlack;
   color: $AwakningColorWhite;
+}
+
+.btn--primary-inverted {
+  background-color: $AwakningColorWhite;
+  color: $AwakningColorBlack;
 }
 
 /* Utility Classes */

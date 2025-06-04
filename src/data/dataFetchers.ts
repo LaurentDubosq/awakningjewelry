@@ -1,5 +1,4 @@
 import type { PageMetaData } from '@/types/router.d.ts'
-import type { SiteMenuItem } from '@/types/components.d.ts'
 import type { UseFetchWithStateReturn } from '@/types/fetch'
 import {
   collectionsByGenderURL,
@@ -9,11 +8,14 @@ import {
   pagesMetaDataUrl,
   siteMenuUrl,
   newsletterSignupWordingURL,
+  founderQuoteBannerContentURL,
 } from '@/data/dataFetchersURL'
 import type {
+  SiteMenuItem,
   StatementBannerWording,
   HeroSlideType,
   NewsletterSignupWording,
+  QuoteBannerContent,
 } from '@/types/components.d.ts'
 import type { Collection, ProductSummary } from '@/types/global.d.ts'
 import { useFetch } from '@/composables/useFetch'
@@ -56,6 +58,14 @@ export const getNewsletterSignupWordingAsyncResult =
   (): UseFetchWithStateReturn<NewsletterSignupWording> => {
     const result: UseFetchWithStateReturn<NewsletterSignupWording> = useFetchWithState(
       newsletterSignupWordingURL,
+    )
+    return result
+  }
+
+export const getFounderQuoteBannerContentAsyncResult =
+  (): UseFetchWithStateReturn<QuoteBannerContent> => {
+    const result: UseFetchWithStateReturn<QuoteBannerContent> = useFetchWithState(
+      founderQuoteBannerContentURL,
     )
     return result
   }

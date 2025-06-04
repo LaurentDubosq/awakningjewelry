@@ -20,3 +20,6 @@ export const promotionsURL: string = `${LAYOUT_API_BASE_URL}/promotions`
 
 /* NewsletterSignupWording */
 export const newsletterSignupWordingURL: string = `${LAYOUT_API_BASE_URL}/newsletterSignupWording`
+
+/* FounderQuoteBannerContent */
+export const founderQuoteBannerContentURL: string = `${LAYOUT_API_BASE_URL}/founderQuoteBannerContent`
