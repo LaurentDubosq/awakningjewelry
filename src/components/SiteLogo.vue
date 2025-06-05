@@ -24,7 +24,7 @@
   width: 81px;
 }
 
-@media screen and (min-width: $AwakningBreakpointDesktop) {
+@media screen and (min-width: $BreakpointDesktop) {
   .site-logo {
     width: 115px;
   }

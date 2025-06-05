@@ -274,7 +274,7 @@ const startAutoPlayExplicitly = () => {
   align-items: center;
   padding: 0 15px;
   position: relative;
-  @media screen and (min-width: $AwakningBreakpointDesktop) {
+  @media screen and (min-width: $BreakpointDesktop) {
     padding: 0;
   }
 
@@ -293,7 +293,7 @@ const startAutoPlayExplicitly = () => {
   z-index: 0;
   transition: opacity 1s ease;
   padding: 0 15px;
-  @media screen and (min-width: $AwakningBreakpointDesktop) {
+  @media screen and (min-width: $BreakpointDesktop) {
     padding: 0;
   }
 }

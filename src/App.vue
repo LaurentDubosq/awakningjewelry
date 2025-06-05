@@ -40,11 +40,11 @@ const { isBurgerMenuOpen } = storeToRefs(isBurgerMenuOpenStore)
   overflow: hidden;
 
   &-container {
-    min-width: $AwakningBreakpointMobileMinWidth; // Allow the content to be overflowing on mobile when burger menu is open
+    min-width: $BreakpointMobileMinWidth; // Allow the content to be overflowing on mobile when burger menu is open
   }
 }
 
-@media screen and (min-width: $AwakningBreakpointDesktop) {
+@media screen and (min-width: $BreakpointDesktop) {
   .site-content {
     overflow: visible;
   }

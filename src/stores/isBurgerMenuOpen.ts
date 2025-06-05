@@ -24,7 +24,7 @@ export const useIsBurgerMenuOpen = defineStore('IsBurgerMenuOpen', () => {
   /***************************************************************/
 
   // Get the desktop breakpoint value from design system
-  const DESKTOPBREAKPOINT: number = Number(SASSCONSTANTS.AwakningBreakpointDesktop.slice(0, -2))
+  const DESKTOPBREAKPOINT: number = Number(SASSCONSTANTS.BreakpointDesktop.slice(0, -2))
 
   // Logic to close the burger menu when we resize the window width from mobile to desktop.
   function closeBurgerMenuOnDesktop() {

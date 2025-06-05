@@ -86,7 +86,7 @@ const handleKeydown = (event: KeyboardEvent) => {
   padding: 4px;
   display: flex;
   gap: 10px;
-  @media screen and (min-width: $AwakningBreakpointDesktop) {
+  @media screen and (min-width: $BreakpointDesktop) {
     bottom: 20px;
   }
 

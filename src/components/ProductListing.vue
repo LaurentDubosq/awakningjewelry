@@ -39,7 +39,7 @@ const { title, products, fetchStatus } = defineProps<{
 
 .product-listing {
   margin: 45px 0;
-  @media screen and (min-width: $AwakningBreakpointDesktop) {
+  @media screen and (min-width: $BreakpointDesktop) {
     margin: 90px 0;
   }
 
@@ -51,7 +51,7 @@ const { title, products, fetchStatus } = defineProps<{
 
   &__separator {
     margin-bottom: 30px;
-    @media screen and (min-width: $AwakningBreakpointDesktop) {
+    @media screen and (min-width: $BreakpointDesktop) {
       margin-bottom: 50px;
     }
   }

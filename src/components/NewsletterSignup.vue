@@ -113,7 +113,7 @@ const handleSubmit = async () => {
   background-color: $AwakningColorVeryLightGray;
   padding: 30px 0;
 
-  @media screen and (min-width: $AwakningBreakpointDesktop) {
+  @media screen and (min-width: $BreakpointDesktop) {
     padding: 60px 0;
   }
 
@@ -123,7 +123,7 @@ const handleSubmit = async () => {
     text-align: center;
     margin-bottom: 15px;
 
-    @media screen and (min-width: $AwakningBreakpointDesktop) {
+    @media screen and (min-width: $BreakpointDesktop) {
       margin-bottom: 12px;
     }
   }
@@ -133,7 +133,7 @@ const handleSubmit = async () => {
     text-align: center;
     margin-bottom: 42px;
 
-    @media screen and (min-width: $AwakningBreakpointDesktop) {
+    @media screen and (min-width: $BreakpointDesktop) {
       margin-bottom: 50px;
     }
   }

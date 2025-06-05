@@ -8,7 +8,7 @@ const { slide, slidesLength, slideIndex, isActive } = defineProps<{
   slideIndex: number
   isActive: boolean
 }>()
-const DESKTOPBREAKPOINT: string = SASSCONSTANTS.AwakningBreakpointDesktop
+const DESKTOPBREAKPOINT: string = SASSCONSTANTS.BreakpointDesktop
 </script>
 
 <template>
@@ -69,7 +69,7 @@ const DESKTOPBREAKPOINT: string = SASSCONSTANTS.AwakningBreakpointDesktop
   &-image {
     width: 100%;
     max-width: 640px;
-    @media screen and (min-width: $AwakningBreakpointDesktop) {
+    @media screen and (min-width: $BreakpointDesktop) {
       max-width: 100%;
     }
   }
@@ -78,7 +78,7 @@ const DESKTOPBREAKPOINT: string = SASSCONSTANTS.AwakningBreakpointDesktop
     text-align: center;
     margin-top: 2rem;
     margin-bottom: 3rem;
-    @media screen and (min-width: $AwakningBreakpointDesktop) {
+    @media screen and (min-width: $BreakpointDesktop) {
       position: absolute;
       top: 36%;
       margin: 0;
@@ -91,7 +91,7 @@ const DESKTOPBREAKPOINT: string = SASSCONSTANTS.AwakningBreakpointDesktop
     text-transform: uppercase;
     letter-spacing: 0.1em;
     line-height: 1.25;
-    @media screen and (min-width: $AwakningBreakpointDesktop) {
+    @media screen and (min-width: $BreakpointDesktop) {
       font-size: 1.125rem;
     }
   }
@@ -100,7 +100,7 @@ const DESKTOPBREAKPOINT: string = SASSCONSTANTS.AwakningBreakpointDesktop
     margin: 10px 0 20px 0;
     font-size: 3.125rem;
     line-height: 1.25;
-    @media screen and (min-width: $AwakningBreakpointDesktop) {
+    @media screen and (min-width: $BreakpointDesktop) {
       font-size: 4rem;
     }
   }
