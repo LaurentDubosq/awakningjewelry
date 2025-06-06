@@ -44,6 +44,7 @@ const { title, products, fetchStatus } = defineProps<{
   }
 
   &__title {
+    color: $AwakningColorPrimary;
     font-size: 1.875rem;
     line-height: 1.4;
     text-align: center;

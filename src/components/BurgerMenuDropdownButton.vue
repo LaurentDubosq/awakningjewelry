@@ -8,7 +8,7 @@ const { text, isDropdownOpen } = defineProps<{
   isDropdownOpen: boolean
 }>()
 
-const COLORWHITE: string = SASSCONSTANTS.AwakningColorWhite // Set plus/minus icon color from design system
+const AwakningPermanentColorWhite: string = SASSCONSTANTS.AwakningPermanentColorWhite // Set plus/minus icon color from design system
 const textLowered = text.toLowerCase()
 </script>
 
@@ -23,8 +23,8 @@ const textLowered = text.toLowerCase()
   >
     {{ text }}
     <span class="burger-menu__dropdown-button-icon-wrapper" aria-hidden="true">
-      <IconSignMinus width="27" :color="COLORWHITE" v-if="isDropdownOpen" />
-      <IconSignPlus width="27" :color="COLORWHITE" v-else />
+      <IconSignMinus width="27" :color="AwakningPermanentColorWhite" v-if="isDropdownOpen" />
+      <IconSignPlus width="27" :color="AwakningPermanentColorWhite" v-else />
     </span>
   </button>
 </template>

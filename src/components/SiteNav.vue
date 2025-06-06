@@ -32,7 +32,12 @@ function isAccountLink(item: SiteMenuItem): boolean {
       <template v-if="siteMenuResultFetchStatus === 'resolved'">
         <li class="site-nav__item" data-testid="site-nav__item" v-for="menuItem in siteMenuData">
           <SiteNavLink :link="menuItem" v-if="isLink(menuItem)">
-            <IconPerson v-if="isAccountLink(menuItem)" width="27" aria-hidden="true" />
+            <IconPerson
+              class="site-nav__item-icon"
+              v-if="isAccountLink(menuItem)"
+              width="27"
+              aria-hidden="true"
+            />
           </SiteNavLink>
           <SiteNavDropdown :dropdown="menuItem" v-else-if="isDropdown(menuItem)" />
         </li>
@@ -44,6 +49,8 @@ function isAccountLink(item: SiteMenuItem): boolean {
 </template>
 
 <style scoped lang="scss">
+@use '@/assets/styles/_constants' as *;
+
 .site-nav__list {
   display: flex;
   justify-content: space-between;
@@ -51,5 +58,9 @@ function isAccountLink(item: SiteMenuItem): boolean {
 }
 .site-nav__item {
   position: relative;
+
+  &-icon {
+    fill: $AwakningColorPrimary;
+  }
 }
 </style>

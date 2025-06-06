@@ -49,12 +49,12 @@ const { wording, wordingFetchStatus } = defineProps<{
 @use '@/assets/styles/_constants.scss' as *;
 
 .statement-banner {
-  background-color: $AwakningColorBlack;
+  background-color: $AwakningColorPrimary;
   padding: 30px 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: $AwakningColorWhite;
+  color: $AwakningColorSecondary;
   font-family: $AwakningFontArapey;
 
   &__title {

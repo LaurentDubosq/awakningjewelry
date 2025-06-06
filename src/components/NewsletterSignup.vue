@@ -110,7 +110,7 @@ const handleSubmit = async () => {
 @use '@/assets/styles/_constants.scss' as *;
 
 .newsletter-signup {
-  background-color: $AwakningColorVeryLightGray;
+  background-color: $AwakningColorBackgroundMuted;
   padding: 30px 0;
 
   @media screen and (min-width: $BreakpointDesktop) {
@@ -139,7 +139,7 @@ const handleSubmit = async () => {
   }
 
   &__form {
-    background-color: $AwakningColorWhite;
+    background-color: $AwakningColorBackground;
     padding: 10px;
     max-width: 520px;
     margin: 0 auto 30px;
@@ -161,16 +161,16 @@ const handleSubmit = async () => {
   }
 
   &__form-message-success {
-    background-color: $AwakningColorBackgroundSuccess;
-    border: 1px solid $AwakningColorGreen;
-    color: $AwakningColorGreen;
+    background-color: $AwakningPermanentColorBackgroundSuccess;
+    border: 1px solid $AwakningPermanentColorSuccess;
+    color: $AwakningPermanentColorSuccess;
   }
 
   &__form-message-error {
     margin-top: 10px;
-    background-color: $AwakningColorBackgroundError;
-    border: 1px solid $AwakningColorError;
-    color: $AwakningColorError;
+    background-color: $AwakningPermanentColorBackgroundError;
+    border: 1px solid $AwakningPermanentColorError;
+    color: $AwakningPermanentColorError;
   }
 
   &__mention {

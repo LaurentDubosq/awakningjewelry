@@ -40,7 +40,7 @@ const textLowered = text.toLowerCase()
   align-items: center;
 
   &--open {
-    background-color: $AwakningColorWhite;
+    background-color: $AwakningColorSecondary;
     box-shadow: $AwakningBoxShadow;
 
     &::after {
@@ -50,7 +50,7 @@ const textLowered = text.toLowerCase()
         100% - ($siteNavLinkPaddingX * 2)
       ); // calculate the width by fetching the padding defined on "site-nav__link--text" element
       height: 1px;
-      background-color: $AwakningColorBlack;
+      background-color: $AwakningColorPrimary;
       bottom: 0;
       z-index: 1;
     }

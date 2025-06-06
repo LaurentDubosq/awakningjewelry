@@ -32,7 +32,7 @@ const { toggleBurgerMenu } = isBurgerMenuOpenStore
   display: block;
   padding: 15px;
   font-size: 1.375rem;
-  color: $AwakningColorWhite;
+  color: $AwakningPermanentColorWhite;
 }
 .burger-menu__link:focus-visible {
   outline-offset: -3px;

@@ -54,10 +54,18 @@ async function handleClick(event: MouseEvent | KeyboardEvent) {
     data-testid="site-header__burger-menu-toggle"
   >
     <SiteHeaderIcon alternativeText="Close burger menu" v-if="isBurgerMenuOpen">
-      <IconCross width="27" aria-hidden="true" />
+      <IconCross class="burger-menu-toggle__icon" width="27" aria-hidden="true" />
     </SiteHeaderIcon>
     <SiteHeaderIcon alternativeText="Open burger menu" v-else>
-      <IconBurger width="27" aria-hidden="true" />
+      <IconBurger class="burger-menu-toggle__icon" width="27" aria-hidden="true" />
     </SiteHeaderIcon>
   </button>
 </template>
+
+<style scoped lang="scss">
+@use '@/assets/styles/_constants.scss' as *;
+
+.burger-menu-toggle__icon {
+  fill: $AwakningColorPrimary;
+}
+</style>

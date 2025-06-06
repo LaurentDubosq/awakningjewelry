@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import IconPause from './icons/IconPause.vue'
 import IconPlay from './icons/IconPlay.vue'
+import sassConstants from '@/assets/styles/_constants.module.scss'
 
 const { isPlaying } = defineProps<{
   isPlaying: boolean
 }>()
+
+const AwakningColorSecondary = sassConstants.AwakningColorSecondary
 </script>
 
 <template>
@@ -23,7 +26,7 @@ const { isPlaying } = defineProps<{
         <component
           :is="isPlaying ? IconPause : IconPlay"
           width="18"
-          color="white"
+          :color="AwakningColorSecondary"
           aria-hidden="true"
         />
       </KeepAlive>
@@ -32,6 +35,8 @@ const { isPlaying } = defineProps<{
 </template>
 
 <style scoped lang="scss">
+@use '@/assets/styles/_constants.scss' as *;
+
 .slideshow__autorotation-button {
   width: 50px;
   height: 50px;
@@ -47,7 +52,7 @@ const { isPlaying } = defineProps<{
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.75);
+    background-color: $AwakningColorPrimary;
     border-radius: 5px;
   }
 }

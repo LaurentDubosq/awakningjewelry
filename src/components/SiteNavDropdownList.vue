@@ -26,7 +26,7 @@ const { links, dropdownText } = defineProps<{
   position: absolute;
   min-width: 100%; // Allows width to match content minimum and container minimum at the same time
   padding: 10px 0;
-  background: $AwakningColorWhite;
+  background: $AwakningColorSecondary;
   box-shadow: $AwakningBoxShadow;
   font-style: italic;
 }

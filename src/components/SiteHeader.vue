@@ -46,12 +46,12 @@ const { isOnMobile } = storeToRefs(isOnMobileStore)
             v-if="isOnMobile"
           >
             <SiteHeaderIcon alternativeText="Account">
-              <IconPerson width="27" aria-hidden="true" />
+              <IconPerson class="site-header__icon" width="27" aria-hidden="true" />
             </SiteHeaderIcon>
           </RouterLink>
           <RouterLink to="/cart" title="Go to cart" data-testid="site-header__cart-link">
             <SiteHeaderIcon alternativeText="Cart">
-              <IconCart width="27" aria-hidden="true" />
+              <IconCart class="site-header__icon" width="27" aria-hidden="true" />
             </SiteHeaderIcon>
           </RouterLink>
         </div>
@@ -87,6 +87,10 @@ const { isOnMobile } = storeToRefs(isOnMobileStore)
     display: flex;
     justify-content: flex-end;
     margin-right: -15px;
+  }
+
+  &__icon {
+    fill: $AwakningColorPrimary;
   }
 }
 </style>

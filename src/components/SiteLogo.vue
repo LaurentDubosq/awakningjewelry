@@ -22,6 +22,7 @@
 .site-logo {
   display: block;
   width: 81px;
+  fill: $AwakningColorPrimary;
 }
 
 @media screen and (min-width: $BreakpointDesktop) {

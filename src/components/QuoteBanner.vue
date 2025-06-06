@@ -36,7 +36,7 @@ const { content, contentFetchState } = defineProps<{
           </figcaption>
         </figure>
         <RouterLink
-          class="quote-banner__link btn btn--primary-inverted"
+          class="quote-banner__link btn"
           :to="content!.linkURL"
           data-testid="quote-banner__link"
           >{{ content?.linkText }}</RouterLink
@@ -53,7 +53,7 @@ const { content, contentFetchState } = defineProps<{
 
 .quote-banner {
   padding: 30px 55px;
-  color: $AwakningColorWhite;
+  color: $AwakningPermanentColorWhite;
   background-color: #59574f;
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.651), rgba(0, 0, 0, 0.6)),
@@ -111,6 +111,11 @@ const { content, contentFetchState } = defineProps<{
   &__author {
     font-style: italic;
     text-align: center;
+  }
+
+  &__link {
+    background-color: $AwakningPermanentColorWhite;
+    color: #1f2021;
   }
 }
 </style>

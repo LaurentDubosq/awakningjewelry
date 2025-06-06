@@ -27,20 +27,19 @@ const { product } = defineProps<{
         <h3 class="product-listing__item-title" data-testid="product-listing__item-title">
           {{ product.title }}
         </h3>
-        <div class="product-listing__item-price" data-testid="product-listing__item-price">
-          <span
-            class="price--strikethrough"
+        <p class="product-listing__item-price" data-testid="product-listing__item-price">
+          <del
             aria-description="Original price"
             data-testid="product-listing__item-original-price"
-            >{{ product.price }}</span
+            >{{ product.price }}</del
           >
           <span
-            class="price--discounted"
+            class="product-listing__item-price-discounted"
             aria-description="Discounted price"
             data-testid="product-listing__item-discounted-price"
             >{{ product.promotionalPrice }}</span
           >
-        </div>
+        </p>
       </div>
     </RouterLink>
   </li>
@@ -56,7 +55,7 @@ const { product } = defineProps<{
 
   &-image-wrapper {
     width: 100%;
-    background-color: $AwakningColorVeryLightGray;
+    background-color: $AwakningColorBackgroundMuted;
     padding: 20px 0;
     @media screen and (min-width: 600px) {
       width: auto;
@@ -79,6 +78,7 @@ const { product } = defineProps<{
   }
 
   &-title {
+    color: $AwakningColorPrimary;
     font-family: $AwakningFontArapey;
     font-size: 1.25rem;
     font-style: italic;
@@ -92,6 +92,11 @@ const { product } = defineProps<{
     font-weight: 400;
     letter-spacing: 0.1rem;
     text-align: center;
+  }
+
+  &-price-discounted {
+    color: $AwakningPermanentColorPromotions;
+    margin-left: 0.3125rem;
   }
 }
 </style>

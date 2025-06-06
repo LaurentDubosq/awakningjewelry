@@ -5,17 +5,17 @@ $BreakpointDesktop: 769px;
 $BreakpointDesktopLarge: 1280px;
 
 /* Colors */
-$AwakningColorBlack: #1f2021;
-$AwakningColorBlackHover: #3d3f41;
-$AwakningColorBlackNeglected: #616161;
-$AwakningColorBrightRed: #cc2b2b;
-$AwakningColorDarkRed: #a92424;
-$AwakningColorError: red;
-$AwakningColorGreen: #358734;
-$AwakningColorVeryLightGray: #f6f6f6;
-$AwakningColorWhite: #ffffff;
-$AwakningColorBackgroundError: #feebeb;
-$AwakningColorBackgroundSuccess: #ebfef0;
+$AwakningColorBackground: #ffffff;
+$AwakningColorBackgroundMuted: #f6f6f6;
+$AwakningColorPrimary: #1f2021;
+$AwakningColorSecondary: #ffffff;
+$AwakningPermanentColorBackgroundSuccess: #ebfef0;
+$AwakningPermanentColorBackgroundError: #feebeb;
+$AwakningPermanentColorPromotions: #cc2b2b;
+$AwakningPermanentColorSuccess: #358734;
+$AwakningPermanentColorError: red;
+$AwakningPermanentColorBlack: #1f2021;
+$AwakningPermanentColorWhite: #ffffff;
 
 /* Fonts */
 $AwakningFontMontserrat: 'Montserrat', sans-serif;

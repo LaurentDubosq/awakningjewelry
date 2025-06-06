@@ -80,6 +80,7 @@ const handleKeydown = (event: KeyboardEvent) => {
 
 <style scoped lang="scss">
 @use '@/assets/styles/_constants' as *;
+
 .slideshow__slick-slider {
   z-index: 2;
   position: absolute;
@@ -94,7 +95,7 @@ const handleKeydown = (event: KeyboardEvent) => {
     display: block;
     width: 10px;
     height: 10px;
-    border: 2px solid black;
+    border: 2px solid $AwakningColorPrimary;
     border-radius: 10px;
   }
   &-button:hover {
@@ -104,7 +105,7 @@ const handleKeydown = (event: KeyboardEvent) => {
     transition: all 0.2s ease;
   }
   &-button--active {
-    background-color: black;
+    background-color: $AwakningColorPrimary;
   }
 }
 </style>

@@ -19,8 +19,8 @@
   &__animation {
     width: 20px;
     height: 20px;
-    border: 2px solid $AwakningColorBlack;
-    border-bottom-color: $AwakningColorWhite;
+    border: 2px solid $AwakningPermanentColorBlack;
+    border-bottom-color: $AwakningPermanentColorWhite;
     border-radius: 50%;
     display: inline-block;
     animation: rotation 1s linear infinite;

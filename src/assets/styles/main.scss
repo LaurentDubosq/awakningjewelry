@@ -2,7 +2,8 @@
 @use './constants' as *;
 
 body {
-  color: $AwakningColorBlack;
+  color: $AwakningColorPrimary;
+  background-color: $AwakningColorBackground;
   font-family: $AwakningFontArapey;
   font-size: 16px;
   line-height: 1.563;
@@ -23,7 +24,7 @@ svg {
 hr {
   width: 50px;
   height: 1px;
-  background-color: $AwakningColorBlack;
+  background-color: $AwakningColorPrimary;
   margin: 20px auto;
 }
 
@@ -38,6 +39,10 @@ blockquote {
   font-style: italic;
   line-height: 1.385;
   text-align: center;
+}
+
+del {
+  text-decoration: line-through;
 }
 
 a:hover {
@@ -59,13 +64,13 @@ a:hover {
 }
 
 .btn--primary {
-  background-color: $AwakningColorBlack;
-  color: $AwakningColorWhite;
+  background-color: $AwakningColorPrimary;
+  color: $AwakningColorSecondary;
 }
 
-.btn--primary-inverted {
-  background-color: $AwakningColorWhite;
-  color: $AwakningColorBlack;
+.btn--secondary {
+  background-color: $AwakningColorSecondary;
+  color: $AwakningColorPrimary;
 }
 
 /* Utility Classes */
@@ -73,16 +78,6 @@ a:hover {
   max-width: 1050px;
   margin: 0 auto;
   padding: 0 15px;
-}
-
-.price--strikethrough {
-  color: $AwakningColorBlackNeglected;
-  text-decoration: line-through;
-}
-
-.price--discounted {
-  color: $AwakningColorGreen;
-  margin-left: 0.3125rem;
 }
 
 // Hide an element without affecting its accessibility or search engine parser consideration
