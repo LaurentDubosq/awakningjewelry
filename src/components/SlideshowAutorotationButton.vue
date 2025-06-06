@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import IconPause from './icons/IconPause.vue'
 import IconPlay from './icons/IconPlay.vue'
-import sassConstants from '@/assets/styles/_constants.module.scss'
 
 const { isPlaying } = defineProps<{
   isPlaying: boolean
 }>()
-
-const AwakningColorSecondary = sassConstants.AwakningColorSecondary
 </script>
 
 <template>
@@ -24,9 +21,9 @@ const AwakningColorSecondary = sassConstants.AwakningColorSecondary
     <div class="slideshow__autorotation-button-icon-background">
       <KeepAlive>
         <component
+          class="slideshow__autorotation-button-icon"
           :is="isPlaying ? IconPause : IconPlay"
           width="18"
-          :color="AwakningColorSecondary"
           aria-hidden="true"
         />
       </KeepAlive>
@@ -54,6 +51,10 @@ const AwakningColorSecondary = sassConstants.AwakningColorSecondary
     align-items: center;
     background-color: $AwakningColorPrimary;
     border-radius: 5px;
+  }
+
+  &-icon {
+    fill: $AwakningColorSecondary;
   }
 }
 </style>
