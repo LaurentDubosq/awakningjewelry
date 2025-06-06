@@ -12,7 +12,7 @@ import { storeToRefs } from 'pinia'
 const siteMenuStore = useSiteMenuStore()
 
 // Get the store's computeds
-const { siteMenuData, siteMenuResultFetchStatus } = storeToRefs(siteMenuStore)
+const { siteMenuData, siteMenuResultFetchState } = storeToRefs(siteMenuStore)
 
 // Utilities
 function isLink(item: SiteMenuItem): boolean {
@@ -29,7 +29,7 @@ function isAccountLink(item: SiteMenuItem): boolean {
 <template>
   <nav class="site-nav" aria-label="Website's desktop navigation bar" data-testid="site-nav">
     <ul class="site-nav__list" aria-label="Website's desktop navigation bar">
-      <template v-if="siteMenuResultFetchStatus === 'resolved'">
+      <template v-if="siteMenuResultFetchState === 'fulfilled'">
         <li class="site-nav__item" data-testid="site-nav__item" v-for="menuItem in siteMenuData">
           <SiteNavLink :link="menuItem" v-if="isLink(menuItem)">
             <IconPerson
@@ -42,8 +42,8 @@ function isAccountLink(item: SiteMenuItem): boolean {
           <SiteNavDropdown :dropdown="menuItem" v-else-if="isDropdown(menuItem)" />
         </li>
       </template>
-      <LoadingComponent v-if="siteMenuResultFetchStatus === 'pending'" />
-      <ErrorComponent v-if="siteMenuResultFetchStatus === 'rejected'" />
+      <LoadingComponent v-if="siteMenuResultFetchState === 'pending'" />
+      <ErrorComponent v-if="siteMenuResultFetchState === 'rejected'" />
     </ul>
   </nav>
 </template>

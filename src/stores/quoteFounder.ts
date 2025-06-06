@@ -1,6 +1,6 @@
 import { ref, type Ref, type ComputedRef, computed, unref } from 'vue'
 import type { QuoteBannerContent } from '@/types/components'
-import type { UseFetchWithStateReturn, FetchStatus } from '@/types/fetch'
+import type { UseFetchWithStateReturn, FetchState } from '@/types/fetch'
 import { defineStore } from 'pinia'
 import { getFounderQuoteBannerContentAsyncResult } from '@/data/dataFetchers'
 
@@ -15,7 +15,7 @@ export const useFounderQuoteBannerContentResultStore = defineStore(
       unref(contentFetchResult.value?.data),
     )
 
-    const contentFetchState: ComputedRef<FetchStatus | undefined> = computed(() =>
+    const contentFetchState: ComputedRef<FetchState | undefined> = computed(() =>
       unref(contentFetchResult.value?.status),
     )
 

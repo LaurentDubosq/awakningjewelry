@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import type { QuoteBannerContent } from '@/types/components'
-import type { FetchStatus } from '@/types/fetch'
+import type { FetchState } from '@/types/fetch'
 import LoadingComponent from './LoadingComponent.vue'
 import ErrorComponent from './ErrorComponent.vue'
 
 const { content, contentFetchState } = defineProps<{
   content?: QuoteBannerContent
-  contentFetchState?: FetchStatus
+  contentFetchState?: FetchState
 }>()
 </script>
 
 <template>
   <section class="quote-banner" aria-label="Founder Quote" data-testid="quote-banner">
-    <template v-if="contentFetchState === 'resolved'">
+    <template v-if="contentFetchState === 'fulfilled'">
       <div class="quote-banner__content">
         <figure class="quote-banner__figure">
           <blockquote class="quote-banner__blockquote">

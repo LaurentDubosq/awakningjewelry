@@ -11,17 +11,17 @@ import frontDataBase from '../../../db.json'
 const mockTitle = 'By gender'
 const mockCollectionsPending = {
   collections: undefined,
-  fetchStatus: 'pending',
+  fetchState: 'pending',
 }
 const mockCollectionsRejected = {
   collections: undefined,
-  fetchStatus: 'rejected',
+  fetchState: 'rejected',
 }
-const mockCollectionsResolved = {
+const mockCollectionsFulfilled = {
   collections: frontDataBase.collectionsByGender,
-  fetchStatus: 'resolved',
+  fetchState: 'fulfilled',
 }
-const mockCollections = mockCollectionsResolved.collections
+const mockCollections = mockCollectionsFulfilled.collections
 const mockCollectionsLength = mockCollections.length
 
 /***********/
@@ -34,7 +34,7 @@ function mountCollectionListing(props) {
     props: {
       title: mockTitle,
       collections: mockCollectionsPending.collections,
-      fetchStatus: mockCollectionsPending.fetchStatus,
+      fetchState: mockCollectionsPending.fetchState,
       ...props,
     },
     global: { stubs: { RouterLink: RouterLinkStub } },
@@ -45,7 +45,7 @@ function mountCollectionListing(props) {
 /* 3.Test */
 /**********/
 
-// WARNING : The component has 3 states regarding the data fetching status. "Pending", "Rejected" and "Resolved". The state by default is "Pending".
+// WARNING : The component has 3 states regarding the data fetching status. "Pending", "Rejected" and "Fulfilled". The state by default is "Pending".
 
 describe('CollectionListing.vue', () => {
   let wrapper
@@ -84,10 +84,10 @@ describe('CollectionListing.vue', () => {
     })
   })
 
-  describe('Data fetching "Resolved" state', () => {
+  describe('Data fetching "Fulfilled" state', () => {
     test('renders all collections with necessary information', () => {
-      // Mount the component (resolved state)
-      const wrapper = mountCollectionListing(mockCollectionsResolved)
+      // Mount the component (fulfilled state)
+      const wrapper = mountCollectionListing(mockCollectionsFulfilled)
 
       // Find the collections elements
       const collections = wrapper.findAll("[data-testid='collection-listing__item']")

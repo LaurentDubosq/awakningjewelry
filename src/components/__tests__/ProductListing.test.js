@@ -11,17 +11,17 @@ import frontDataBase from '../../../db.json'
 const mockTitle = 'Promotions'
 const mockProductsPending = {
   products: undefined,
-  fetchStatus: 'pending',
+  fetchState: 'pending',
 }
 const mockProductsRejected = {
   products: undefined,
-  fetchStatus: 'rejected',
+  fetchState: 'rejected',
 }
-const mockProductsResolved = {
+const mockProductsFulfilled = {
   products: frontDataBase.promotions,
-  fetchStatus: 'resolved',
+  fetchState: 'fulfilled',
 }
-const mockProducts = mockProductsResolved.products
+const mockProducts = mockProductsFulfilled.products
 const mockProductsLength = mockProducts.length
 
 /***********/
@@ -34,7 +34,7 @@ function mountProductListing(props) {
     props: {
       title: mockTitle,
       products: mockProductsPending.products,
-      fetchStatus: mockProductsPending.fetchStatus,
+      fetchState: mockProductsPending.fetchState,
       ...props,
     },
     global: { stubs: { RouterLink: RouterLinkStub } },
@@ -45,7 +45,7 @@ function mountProductListing(props) {
 /* 3.Test */
 /**********/
 
-// WARNING : The component has 3 states regarding the data fetching status. "Pending", "Rejected" and "Resolved". The state by default is "Pending".
+// WARNING : The component has 3 states regarding the data fetching status. "Pending", "Rejected" and "Fulfilled". The state by default is "Pending".
 
 describe('ProductListing.vue', () => {
   let wrapper
@@ -84,10 +84,10 @@ describe('ProductListing.vue', () => {
     })
   })
 
-  describe('Data fetching "Resolved" state', () => {
+  describe('Data fetching "Fulfilled" state', () => {
     test('renders all the products with necessary information', () => {
-      // Mount the component (resolved state)
-      const wrapper = mountProductListing(mockProductsResolved)
+      // Mount the component (fulfilled state)
+      const wrapper = mountProductListing(mockProductsFulfilled)
 
       // Find the products elements
       const products = wrapper.findAll("[data-testid='product-listing__item']")

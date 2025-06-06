@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import type { Collection } from '@/types/global.d.ts'
 import CollectionListingItem from './CollectionListingItem.vue'
-import type { FetchStatus } from '@/types/fetch'
+import type { FetchState } from '@/types/fetch'
 import LoadingComponent from './LoadingComponent.vue'
 import ErrorComponent from './ErrorComponent.vue'
 
-const { title, collections, fetchStatus } = defineProps<{
+const { title, collections, fetchState } = defineProps<{
   title: string
   collections?: Collection[]
-  fetchStatus?: FetchStatus
+  fetchState?: FetchState
 }>()
 </script>
 
@@ -20,11 +20,11 @@ const { title, collections, fetchStatus } = defineProps<{
       </h2>
       <hr class="collection-listing__separator" />
       <ul class="collection-listing__list" aria-label="Collections">
-        <template v-if="fetchStatus === 'resolved'">
+        <template v-if="fetchState === 'fulfilled'">
           <CollectionListingItem v-for="collection in collections" :collection />
         </template>
-        <LoadingComponent v-if="fetchStatus === 'pending'" />
-        <ErrorComponent v-if="fetchStatus === 'rejected'" />
+        <LoadingComponent v-if="fetchState === 'pending'" />
+        <ErrorComponent v-if="fetchState === 'rejected'" />
       </ul>
     </div>
   </section>

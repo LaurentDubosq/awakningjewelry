@@ -1,6 +1,6 @@
 import { ref, type Ref, type ComputedRef, computed, unref } from 'vue'
 import type { Collection } from '@/types/global.d.ts'
-import type { UseFetchWithStateReturn, FetchStatus } from '@/types/fetch'
+import type { UseFetchWithStateReturn, FetchState } from '@/types/fetch'
 import { defineStore } from 'pinia'
 import { getCollectionsByGender } from '@/data/dataFetchers'
 
@@ -13,7 +13,7 @@ export const useCollectionsByGenderResultStore = defineStore('CollectionsByGende
     unref(collectionsByGenderResult.value?.data),
   )
 
-  const collectionsByGenderFetchStatus: ComputedRef<FetchStatus | undefined> = computed(() =>
+  const collectionsByGenderFetchState: ComputedRef<FetchState | undefined> = computed(() =>
     unref(collectionsByGenderResult.value?.status),
   )
 
@@ -32,7 +32,7 @@ export const useCollectionsByGenderResultStore = defineStore('CollectionsByGende
   return {
     collectionsByGenderResult,
     collectionsByGenderData,
-    collectionsByGenderFetchStatus,
+    collectionsByGenderFetchState,
     updateCollectionsByGenderResult,
   }
 })

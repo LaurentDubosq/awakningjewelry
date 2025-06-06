@@ -21,17 +21,17 @@ import { computed, nextTick, ref } from 'vue'
 
 const mockStatementMissionWordingPendingResult = {
   wording: undefined,
-  wordingFetchStatus: 'pending',
+  wordingFetchState: 'pending',
 }
 const mockStatementMissionWordingRejectedResult = {
   wording: undefined,
-  wordingFetchStatus: 'rejected',
+  wordingFetchState: 'rejected',
 }
-const mockStatementMissionWordingResolvedResult = {
+const mockStatementMissionWordingFulfilledResult = {
   wording: frontDataBase.statementMissionWording,
-  wordingFetchStatus: 'resolved',
+  wordingFetchState: 'fulfilled',
 }
-const mockStatementMissionWording = mockStatementMissionWordingResolvedResult.wording
+const mockStatementMissionWording = mockStatementMissionWordingFulfilledResult.wording
 const mockStatementMissionWordingTitle = mockStatementMissionWording.title
 const mockStatementMissionWordingStatement = mockStatementMissionWording.statement
 const mockStatementMissionWordingImageURL = mockStatementMissionWording.image.url
@@ -40,33 +40,33 @@ const mockStatementMissionWordingImageAlt = mockStatementMissionWording.image.al
 const mockCollectionsTitle = 'By Gender'
 const mockCollectionsPending = {
   collections: undefined,
-  fetchStatus: 'pending',
+  fetchState: 'pending',
 }
 const mockCollectionsRejected = {
   collections: undefined,
-  fetchStatus: 'rejected',
+  fetchState: 'rejected',
 }
-const mockCollectionsResolved = {
+const mockCollectionsFulfilled = {
   collections: frontDataBase.collectionsByGender,
-  fetchStatus: 'resolved',
+  fetchState: 'fulfilled',
 }
-const mockCollections = mockCollectionsResolved.collections
+const mockCollections = mockCollectionsFulfilled.collections
 const mockCollectionsLength = mockCollections.length
 
 const mockProductsTitle = 'Promotions'
 const mockProductsPending = {
   products: undefined,
-  fetchStatus: 'pending',
+  fetchState: 'pending',
 }
 const mockProductsRejected = {
   products: undefined,
-  fetchStatus: 'rejected',
+  fetchState: 'rejected',
 }
-const mockProductsResolved = {
+const mockProductsFulfilled = {
   products: frontDataBase.promotions,
-  fetchStatus: 'resolved',
+  fetchState: 'fulfilled',
 }
-const mockProducts = mockProductsResolved.products
+const mockProducts = mockProductsFulfilled.products
 const mockProductsLength = mockProducts.length
 
 const mockFounderQuoteBannerContentPendingResult = {
@@ -77,9 +77,9 @@ const mockFounderQuoteBannerContentRejectedResult = {
   content: undefined,
   contentFetchState: 'rejected',
 }
-const mockFounderQuoteBannerContentResolvedResult = {
+const mockFounderQuoteBannerContentFulfilledResult = {
   content: frontDataBase.founderQuoteBannerContent,
-  contentFetchState: 'resolved',
+  contentFetchState: 'fulfilled',
 }
 const mockFounderQuoteBannerContent = frontDataBase.founderQuoteBannerContent
 const mockFounderQuoteBannerContentQuote = mockFounderQuoteBannerContent.quote
@@ -101,11 +101,11 @@ const mockUseStatementMissionWordingResultStore = defineStore(
   () => {
     const wordingFetchResult = ref(mockStatementMissionWordingPendingResult)
     const wording = computed(() => wordingFetchResult.value.wording)
-    const wordingFetchStatus = computed(() => wordingFetchResult.value.wordingFetchStatus)
+    const wordingFetchState = computed(() => wordingFetchResult.value.wordingFetchState)
     return {
       wordingFetchResult,
       wording,
-      wordingFetchStatus,
+      wordingFetchState,
     }
   },
 )
@@ -113,14 +113,14 @@ const mockUseStatementMissionWordingResultStore = defineStore(
 const mockUseCollectionsByGenderResultStore = defineStore('CollectionsByGenderResult', () => {
   const collectionsByGenderResult = ref(mockCollectionsPending)
   const collectionsByGenderData = computed(() => collectionsByGenderResult.value.collections)
-  const collectionsByGenderFetchStatus = computed(() => collectionsByGenderResult.value.fetchStatus)
+  const collectionsByGenderFetchState = computed(() => collectionsByGenderResult.value.fetchState)
   const updateCollectionsByGenderResult = (newState) => {
     collectionsByGenderResult.value = newState
   }
   return {
     collectionsByGenderResult,
     collectionsByGenderData,
-    collectionsByGenderFetchStatus,
+    collectionsByGenderFetchState,
     updateCollectionsByGenderResult,
   }
 })
@@ -128,14 +128,14 @@ const mockUseCollectionsByGenderResultStore = defineStore('CollectionsByGenderRe
 const mockUsePromotionsResultStore = defineStore('PromotionsResult', () => {
   const promotionsResult = ref(mockProductsPending)
   const promotionsResultData = computed(() => promotionsResult.value.products)
-  const promotionsResultFetchStatus = computed(() => promotionsResult.value.fetchStatus)
+  const promotionsResultFetchState = computed(() => promotionsResult.value.fetchState)
   const updatePromotionsResult = (newState) => {
     promotionsResult.value = newState
   }
   return {
     promotionsResult,
     promotionsResultData,
-    promotionsResultFetchStatus,
+    promotionsResultFetchState,
     updatePromotionsResult,
   }
 })
@@ -177,7 +177,7 @@ function mountHomeview() {
 /* 3.Test */
 /**********/
 
-// WARNING : The component has 3 states regarding the data fetching status for all child components. "Pending", "Rejected" and "Resolved". The state by default is "Pending".
+// WARNING : The component has 3 states regarding the data fetching status for all child components. "Pending", "Rejected" and "Fulfilled". The state by default is "Pending".
 
 describe('HomeView.vue', () => {
   let wrapper
@@ -283,15 +283,15 @@ describe('HomeView.vue', () => {
     })
   })
 
-  describe('Data fetching "Resolved" state', () => {
+  describe('Data fetching "Fulfilled" state', () => {
     beforeEach(async () => {
-      // Set the stores data fetching status to resolved
+      // Set the stores data fetching status to fulfilled
       mockStatementMissionWordingResultStore.wordingFetchResult =
-        mockStatementMissionWordingResolvedResult
-      mockCollectionsByGenderResultStore.collectionsByGenderResult = mockCollectionsResolved
-      mockPromotionsResultStore.promotionsResult = mockProductsResolved
+        mockStatementMissionWordingFulfilledResult
+      mockCollectionsByGenderResultStore.collectionsByGenderResult = mockCollectionsFulfilled
+      mockPromotionsResultStore.promotionsResult = mockProductsFulfilled
       mockFounderQuoteBannerContentResultStore.contentFetchResult =
-        mockFounderQuoteBannerContentResolvedResult
+        mockFounderQuoteBannerContentFulfilledResult
       await nextTick()
     })
 

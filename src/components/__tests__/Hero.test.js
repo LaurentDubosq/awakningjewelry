@@ -32,11 +32,11 @@ const mockHeroSlidesRejected = {
   data: undefined,
   status: 'rejected',
 }
-const mockHeroSlidesResolved = {
+const mockHeroSlidesFulfilled = {
   data: frontDataBase.heroSlides,
-  status: 'resolved',
+  status: 'fulfilled',
 }
-const mockHeroSlides = mockHeroSlidesResolved.data
+const mockHeroSlides = mockHeroSlidesFulfilled.data
 const mockHeroSlidesLength = mockHeroSlides.length
 const mockCurrentIndex = 0 // mock of the currentIndex internal state
 
@@ -50,8 +50,8 @@ const mockUseHeroSlidesResultStore = defineStore('HeroSlidesResult', () => {
   const heroSlidesResult = ref(mockHeroSlidesPending)
   const heroSlidesData = computed(() => heroSlidesResult.value?.data)
   const heroSlidesDataLength = computed(() => heroSlidesData.value?.length)
-  const heroSlidesFetchStatus = computed(() => heroSlidesResult.value?.status)
-  return { heroSlidesResult, heroSlidesData, heroSlidesDataLength, heroSlidesFetchStatus }
+  const heroSlidesFetchState = computed(() => heroSlidesResult.value?.status)
+  return { heroSlidesResult, heroSlidesData, heroSlidesDataLength, heroSlidesFetchState }
 })
 
 const mockUseIsReducedMotionStore = defineStore('IsReducedMotion', () => {
@@ -88,7 +88,7 @@ function mountHero() {
 /* 4.Test */
 /**********/
 
-// WARNING : The component has 3 states regarding the data fetching status. "Pending", "Rejected" and "Resolved". The state by default is "Pending".
+// WARNING : The component has 3 states regarding the data fetching status. "Pending", "Rejected" and "Fulfilled". The state by default is "Pending".
 
 // WARNING : The component has 2 states regarding the slideshow playing status. True or false. The state by default is true.
 
@@ -133,10 +133,10 @@ describe('Hero.vue', () => {
     })
   })
 
-  describe('Data fetching "Resolved" state - Slideshow playing state is true - Reduce motion state is false', async () => {
+  describe('Data fetching "Fulfilled" state - Slideshow playing state is true - Reduce motion state is false', async () => {
     beforeEach(async () => {
-      // Set the store data fetching status to resolved
-      mockHeroSlidesResultStore.heroSlidesResult = mockHeroSlidesResolved
+      // Set the store data fetching status to fulfilled
+      mockHeroSlidesResultStore.heroSlidesResult = mockHeroSlidesFulfilled
       await nextTick()
     })
 

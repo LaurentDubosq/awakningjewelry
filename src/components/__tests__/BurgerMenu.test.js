@@ -39,11 +39,11 @@ const mockSiteMenuRejected = {
   data: undefined,
   status: 'rejected',
 }
-const mockSiteMenuResolved = {
+const mockSiteMenuFulfilled = {
   data: frontDataBase.siteMenu,
-  status: 'resolved',
+  status: 'fulfilled',
 }
-const mockSiteMenu = mockSiteMenuResolved.data
+const mockSiteMenu = mockSiteMenuFulfilled.data
 const mockSiteMenuLength = mockSiteMenu.length
 
 /* Stores */
@@ -62,11 +62,11 @@ const mockUseIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
 const mockUseSiteMenuStore = defineStore('SiteMenu', () => {
   const siteMenu = ref(mockSiteMenuPending)
   const siteMenuData = computed(() => siteMenu.value.data)
-  const siteMenuResultFetchStatus = computed(() => siteMenu.value.status)
+  const siteMenuResultFetchState = computed(() => siteMenu.value.status)
   return {
     siteMenu,
     siteMenuData,
-    siteMenuResultFetchStatus,
+    siteMenuResultFetchState,
   }
 })
 
@@ -101,7 +101,7 @@ function mountBurgerMenu() {
 /* 3.Test */
 /**********/
 
-// WARNING : The component has 3 states regarding the store data fetching status. "Pending", "Rejected" and "Resolved". The state by default is "Pending".
+// WARNING : The component has 3 states regarding the store data fetching status. "Pending", "Rejected" and "Fulfilled". The state by default is "Pending".
 
 // WARNING : The component has 2 states regarding its dropdown opening status. Open or close. The state by default is open.
 
@@ -144,10 +144,10 @@ describe('BurgerMenu.vue', () => {
     })
   })
 
-  describe('Data fetching "Resolved" state - Dropdown open state', async () => {
+  describe('Data fetching "Fulfilled" state - Dropdown open state', async () => {
     beforeEach(async () => {
-      // Set the store data fetching status to resolved
-      mockSiteMenuStore.siteMenu = mockSiteMenuResolved
+      // Set the store data fetching status to fulfilled
+      mockSiteMenuStore.siteMenu = mockSiteMenuFulfilled
       await nextTick()
     })
 

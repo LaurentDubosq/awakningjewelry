@@ -18,9 +18,9 @@ const mockContentRejectedResult = {
   content: undefined,
   contentFetchState: 'rejected',
 }
-const mockContentResolvedResult = {
+const mockContentFulfilledResult = {
   content: frontDataBase.founderQuoteBannerContent,
-  contentFetchState: 'resolved',
+  contentFetchState: 'fulfilled',
 }
 const mockContent = frontDataBase.founderQuoteBannerContent
 const mockContentQuote = mockContent.quote
@@ -55,7 +55,7 @@ function mountQuoteBanner(props) {
 /* 3.Test */
 /**********/
 
-// WARNING : The component has 3 states regarding the content fetching status. "Pending", "Rejected" and "Resolved". The state by default is "Pending".
+// WARNING : The component has 3 states regarding the content fetching status. "Pending", "Rejected" and "Fulfilled". The state by default is "Pending".
 
 describe('QuoteBanner', () => {
   let wrapper
@@ -89,10 +89,10 @@ describe('QuoteBanner', () => {
     })
   })
 
-  describe('Content fetching "Resolved" state', async () => {
+  describe('Content fetching "Fulfilled" state', async () => {
     beforeEach(async () => {
-      // Mount the component (resolved state)
-      wrapper = mountQuoteBanner(mockContentResolvedResult)
+      // Mount the component (fulfilled state)
+      wrapper = mountQuoteBanner(mockContentFulfilledResult)
     })
 
     test('renders the quote', () => {

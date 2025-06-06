@@ -18,11 +18,11 @@ const promotionsStore = usePromotionsResultStore()
 const founderQuoteBannerContentResultStore = useFounderQuoteBannerContentResultStore()
 
 // Get the store's states and computeds
-const { wording: statementMissionWording, wordingFetchStatus: statementMissionWordingFetchStatus } =
+const { wording: statementMissionWording, wordingFetchState: statementMissionWordingFetchState } =
   storeToRefs(statementMissionWordingResultStore)
-const { collectionsByGenderData, collectionsByGenderFetchStatus } =
+const { collectionsByGenderData, collectionsByGenderFetchState } =
   storeToRefs(collectionsByGenderStore)
-const { promotionsResultData, promotionsResultFetchStatus } = storeToRefs(promotionsStore)
+const { promotionsResultData, promotionsResultFetchState } = storeToRefs(promotionsStore)
 const {
   content: founderQuoteBannerContent,
   contentFetchState: founderQuoteBannerContentFetchState,
@@ -34,17 +34,17 @@ const {
     <Hero />
     <StatementBanner
       :wording="statementMissionWording"
-      :wordingFetchStatus="statementMissionWordingFetchStatus"
+      :wordingFetchState="statementMissionWordingFetchState"
     />
     <CollectionListing
       title="By Gender"
       :collections="collectionsByGenderData"
-      :fetchStatus="collectionsByGenderFetchStatus"
+      :fetchState="collectionsByGenderFetchState"
     />
     <ProductListing
       title="Promotions"
       :products="promotionsResultData"
-      :fetchStatus="promotionsResultFetchStatus"
+      :fetchState="promotionsResultFetchState"
     />
     <NewsletterSignup />
     <QuoteBanner

@@ -1,6 +1,6 @@
 import { ref, type Ref, type ComputedRef, computed, unref } from 'vue'
 import type { ProductSummary } from '@/types/global.d.ts'
-import type { UseFetchWithStateReturn, FetchStatus } from '@/types/fetch'
+import type { UseFetchWithStateReturn, FetchState } from '@/types/fetch'
 import { defineStore } from 'pinia'
 import { getPromotions } from '@/data/dataFetchers'
 
@@ -13,7 +13,7 @@ export const usePromotionsResultStore = defineStore('PromotionsResult', () => {
     unref(promotionsResult.value?.data),
   )
 
-  const promotionsResultFetchStatus: ComputedRef<FetchStatus | undefined> = computed(() =>
+  const promotionsResultFetchState: ComputedRef<FetchState | undefined> = computed(() =>
     unref(promotionsResult.value?.status),
   )
 
@@ -32,7 +32,7 @@ export const usePromotionsResultStore = defineStore('PromotionsResult', () => {
   return {
     promotionsResult,
     promotionsResultData,
-    promotionsResultFetchStatus,
+    promotionsResultFetchState,
     updatePromotionsResult,
   }
 })

@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import type { StatementBannerWording } from '@/types/components'
-import type { FetchStatus } from '@/types/fetch'
+import type { FetchState } from '@/types/fetch'
 import LoadingComponent from './LoadingComponent.vue'
 import ErrorComponent from './ErrorComponent.vue'
 
 /* As the component can be used multiple times in the application, its parent has the responsibility to fetch the data */
-const { wording, wordingFetchStatus } = defineProps<{
+const { wording, wordingFetchState } = defineProps<{
   wording?: StatementBannerWording
-  wordingFetchStatus?: FetchStatus
+  wordingFetchState?: FetchState
 }>()
 </script>
 
@@ -17,7 +17,7 @@ const { wording, wordingFetchStatus } = defineProps<{
     aria-roledescription="statement banner"
     aria-labelledby="statement-banner__title"
   >
-    <template v-if="wordingFetchStatus === 'resolved'">
+    <template v-if="wordingFetchState === 'fulfilled'">
       <h2
         class="statement-banner__title"
         id="statement-banner__title"
@@ -40,8 +40,8 @@ const { wording, wordingFetchStatus } = defineProps<{
         data-testid="statement-banner__image"
       />
     </template>
-    <LoadingComponent v-if="wordingFetchStatus === 'pending'" />
-    <ErrorComponent v-if="wordingFetchStatus === 'rejected'" />
+    <LoadingComponent v-if="wordingFetchState === 'pending'" />
+    <ErrorComponent v-if="wordingFetchState === 'rejected'" />
   </section>
 </template>
 

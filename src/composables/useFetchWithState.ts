@@ -1,6 +1,6 @@
 import { ref, type Ref } from 'vue'
 import type { UseFetchWithStateReturn } from '@/types/fetch'
-import type { FetchStatus } from '@/types/fetch'
+import type { FetchState } from '@/types/fetch'
 
 // Composable to fetch external data returning them with a dynamic request statut
 export const useFetchWithState = <T>(
@@ -8,7 +8,7 @@ export const useFetchWithState = <T>(
   options?: RequestInit,
 ): UseFetchWithStateReturn<T> => {
   const data: Ref<T | undefined> = ref()
-  const status: Ref<FetchStatus> = ref('pending')
+  const status: Ref<FetchState> = ref('pending')
 
   const fetchData = async () => {
     try {
@@ -16,7 +16,7 @@ export const useFetchWithState = <T>(
 
       if (response.ok) {
         data.value = await response.json()
-        status.value = 'resolved'
+        status.value = 'fulfilled'
       } else {
         const errorMessage = `${response.status} - ${response.statusText}`
         throw new Error(errorMessage)

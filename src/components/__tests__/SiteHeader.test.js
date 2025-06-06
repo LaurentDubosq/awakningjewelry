@@ -189,7 +189,7 @@ describe('SiteHeader.vue', () => {
       // Reset the environment to desktop
       mockIsOnMobileStore.isOnMobile = false
 
-      // Wait after the SiteNav async import has been resolved
+      // Wait after the SiteNav async import has been fulfilled
       await flushPromises()
     })
 

@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import type { FetchStatus } from '@/types/fetch'
+import type { FetchState } from '@/types/fetch'
 import type { ProductSummary } from '@/types/global.d.ts'
 import ProductListingItem from './ProductListingItem.vue'
 import LoadingComponent from './LoadingComponent.vue'
 import ErrorComponent from './ErrorComponent.vue'
 
-const { title, products, fetchStatus } = defineProps<{
+const { title, products, fetchState } = defineProps<{
   title: string
   products?: ProductSummary[]
-  fetchStatus?: FetchStatus
+  fetchState?: FetchState
 }>()
 </script>
 
@@ -24,11 +24,11 @@ const { title, products, fetchStatus } = defineProps<{
       </h2>
       <hr class="product-listing__separator" />
       <ul class="product-listing__list" aria-label="Products">
-        <template v-if="fetchStatus === 'resolved'">
+        <template v-if="fetchState === 'fulfilled'">
           <ProductListingItem v-for="product in products" :product />
         </template>
-        <LoadingComponent v-if="fetchStatus === 'pending'" />
-        <ErrorComponent v-if="fetchStatus === 'rejected'" />
+        <LoadingComponent v-if="fetchState === 'pending'" />
+        <ErrorComponent v-if="fetchState === 'rejected'" />
       </ul>
     </div>
   </section>

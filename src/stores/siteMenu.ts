@@ -1,6 +1,6 @@
 import { getSiteMenu } from '@/data/dataFetchers'
 import type { SiteMenuItem } from '@/types/components'
-import type { FetchStatus } from '@/types/fetch'
+import type { FetchState } from '@/types/fetch'
 import type { UseFetchWithStateReturn } from '@/types/fetch'
 import { defineStore } from 'pinia'
 import { computed, ref, unref, type Ref, type ComputedRef } from 'vue'
@@ -14,7 +14,7 @@ export const useSiteMenuStore = defineStore('SiteMenu', () => {
     unref(siteMenu.value?.data),
   )
 
-  const siteMenuResultFetchStatus: ComputedRef<FetchStatus | undefined> = computed(() =>
+  const siteMenuResultFetchState: ComputedRef<FetchState | undefined> = computed(() =>
     unref(siteMenu.value?.status),
   )
 
@@ -26,6 +26,6 @@ export const useSiteMenuStore = defineStore('SiteMenu', () => {
   return {
     siteMenu,
     siteMenuData,
-    siteMenuResultFetchStatus,
+    siteMenuResultFetchState,
   }
 })

@@ -10,17 +10,17 @@ import frontDataBase from '../../../db.json'
 
 const mockWordingPendingResult = {
   wording: undefined,
-  wordingFetchStatus: 'pending',
+  wordingFetchState: 'pending',
 }
 const mockWordingRejectedResult = {
   wording: undefined,
-  wordingFetchStatus: 'rejected',
+  wordingFetchState: 'rejected',
 }
-const mockWordingResolvedResult = {
+const mockWordingFulfilledResult = {
   wording: frontDataBase.statementMissionWording,
-  wordingFetchStatus: 'resolved',
+  wordingFetchState: 'fulfilled',
 }
-const mockWording = mockWordingResolvedResult.wording
+const mockWording = mockWordingFulfilledResult.wording
 const mockWordingTitle = mockWording.title
 const mockWordingStatement = mockWording.statement
 const mockWordingImageURL = mockWording.image.url
@@ -35,7 +35,7 @@ function mountStatementBanner(props) {
   return mount(StatementBanner, {
     props: {
       wording: mockWordingPendingResult.wording,
-      wordingFetchStatus: mockWordingPendingResult.wordingFetchStatus,
+      wordingFetchState: mockWordingPendingResult.wordingFetchState,
       ...props,
     },
   })
@@ -45,7 +45,7 @@ function mountStatementBanner(props) {
 /* 3.Test */
 /**********/
 
-// WARNING : The component has 3 states regarding the data fetching status. "Pending", "Rejected" and "Resolved". The state by default is "Pending".
+// WARNING : The component has 3 states regarding the data fetching status. "Pending", "Rejected" and "Fulfilled". The state by default is "Pending".
 
 describe('StatementBanner.vue', () => {
   let wrapper
@@ -79,10 +79,10 @@ describe('StatementBanner.vue', () => {
     })
   })
 
-  describe('Data fetching "Resolved" state', () => {
+  describe('Data fetching "Fulfilled" state', () => {
     test('renders the statement with necessary information', () => {
-      // Mount the component (resolved state)
-      const wrapper = mountStatementBanner(mockWordingResolvedResult)
+      // Mount the component (fulfilled state)
+      const wrapper = mountStatementBanner(mockWordingFulfilledResult)
 
       // Assert its title is rendered
       const title = wrapper.find("[data-testid='statement-banner__title']")

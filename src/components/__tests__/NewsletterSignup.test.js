@@ -43,15 +43,15 @@ const mockRouter = createRouter({
 
 const mockWordingPendingResult = {
   wording: undefined,
-  wordingfetchStatus: 'pending',
+  wordingfetchState: 'pending',
 }
 const mockWordingRejectedResult = {
   wording: undefined,
-  wordingfetchStatus: 'rejected',
+  wordingfetchState: 'rejected',
 }
-const mockWordingResolvedResult = {
+const mockWordingFulfilledResult = {
   wording: frontDataBase.newsletterSignupWording,
-  wordingfetchStatus: 'resolved',
+  wordingfetchState: 'fulfilled',
 }
 const mockWording = frontDataBase.newsletterSignupWording
 const mockWordingTitle = mockWording.title
@@ -74,8 +74,8 @@ const mockPinia = createTestingPinia()
 const mockUseWordingResultStore = defineStore('NewsletterSignupWordingResult', () => {
   const wordingFetchResult = ref(mockWordingPendingResult)
   const wording = computed(() => wordingFetchResult.value?.wording)
-  const wordingFetchStatus = computed(() => wordingFetchResult.value?.wordingfetchStatus)
-  return { wordingFetchResult, wording, wordingFetchStatus }
+  const wordingFetchState = computed(() => wordingFetchResult.value?.wordingfetchState)
+  return { wordingFetchResult, wording, wordingFetchState }
 })
 
 // Initialize the store(s)
@@ -99,7 +99,7 @@ function mountNewsletterSignup() {
 /* 4.Test */
 /**********/
 
-// WARNING : The component has 3 states regarding the wording fetching status. "Pending", "Rejected" and "Resolved". The state by default is "Pending".
+// WARNING : The component has 3 states regarding the wording fetching status. "Pending", "Rejected" and "Fulfilled". The state by default is "Pending".
 
 describe('NewsletterSignup', () => {
   let wrapper
@@ -142,10 +142,10 @@ describe('NewsletterSignup', () => {
     })
   })
 
-  describe('Data fetching "Resolved" state', async () => {
+  describe('Data fetching "Fulfilled" state', async () => {
     beforeEach(async () => {
-      // Set the store wording fetching status to resolved
-      mockWordingResultStore.wordingFetchResult = mockWordingResolvedResult
+      // Set the store wording fetching status to fulfilled
+      mockWordingResultStore.wordingFetchResult = mockWordingFulfilledResult
       await nextTick()
     })
 

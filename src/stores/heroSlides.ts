@@ -1,6 +1,6 @@
 import { ref, type Ref, type ComputedRef, computed, unref } from 'vue'
 import type { HeroSlideType } from '@/types/components'
-import type { UseFetchWithStateReturn, FetchStatus } from '@/types/fetch'
+import type { UseFetchWithStateReturn, FetchState } from '@/types/fetch'
 import { defineStore } from 'pinia'
 import { getHeroSlides } from '@/data/dataFetchers'
 
@@ -15,7 +15,7 @@ export const useHeroSlidesResultStore = defineStore('HeroSlidesResult', () => {
   const heroSlidesDataLength: ComputedRef<number | undefined> = computed(
     () => heroSlidesData.value?.length,
   )
-  const heroSlidesFetchStatus: ComputedRef<FetchStatus | undefined> = computed(() =>
+  const heroSlidesFetchState: ComputedRef<FetchState | undefined> = computed(() =>
     unref(heroSlidesResult.value?.status),
   )
 
@@ -33,7 +33,7 @@ export const useHeroSlidesResultStore = defineStore('HeroSlidesResult', () => {
     heroSlidesResult,
     heroSlidesData,
     heroSlidesDataLength,
-    heroSlidesFetchStatus,
+    heroSlidesFetchState,
     updateHeroSlidesResult,
   }
 })

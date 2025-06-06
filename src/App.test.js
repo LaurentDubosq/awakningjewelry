@@ -34,9 +34,9 @@ const mockSiteMenuPending = {
   data: undefined,
   status: 'pending',
 }
-const mockSiteMenuResolved = {
+const mockSiteMenuFulfilled = {
   data: frontDataBase.siteMenu,
-  status: 'resolved',
+  status: 'fulfilled',
 }
 
 /* Stores */
@@ -59,11 +59,11 @@ const mockUseIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
 const mockUseSiteMenuStore = defineStore('SiteMenu', () => {
   const siteMenu = ref(mockSiteMenuPending)
   const siteMenuData = computed(() => siteMenu.value.data)
-  const siteMenuResultFetchStatus = computed(() => siteMenu.value.status)
+  const siteMenuResultFetchState = computed(() => siteMenu.value.status)
   return {
     siteMenu,
     siteMenuData,
-    siteMenuResultFetchStatus,
+    siteMenuResultFetchState,
   }
 })
 
@@ -98,7 +98,7 @@ function mountApp() {
 
 // WARNING : The component has 2 states regarding the burger menu status. Open or close. The state by default is close.
 
-// WARNING : The component has 3 states regarding the data fetching status. "Pending", "Rejected" and "Resolved". The state by default is "Pending".
+// WARNING : The component has 3 states regarding the data fetching status. "Pending", "Rejected" and "Fulfilled". The state by default is "Pending".
 
 describe('App.vue', () => {
   let wrapper
@@ -137,17 +137,17 @@ describe('App.vue', () => {
     })
   })
 
-  describe('Mobile environment state - Burger menu close state - Data fetching "Resolved" state', () => {
+  describe('Mobile environment state - Burger menu close state - Data fetching "Fulfilled" state', () => {
     beforeEach(async () => {
       // Set the environment to mobile
       mockIsOnMobileStore.isOnMobile = true
 
-      // Set the store data fetching status to "resolved"
-      mockSiteMenuStore.siteMenu = mockSiteMenuResolved
+      // Set the store data fetching status to "fulfilled"
+      mockSiteMenuStore.siteMenu = mockSiteMenuFulfilled
       await nextTick()
     })
 
-    describe('Burger menu close state - Data fetching "Resolved" state', () => {
+    describe('Burger menu close state - Data fetching "Fulfilled" state', () => {
       test("don't renders the burger menu", () => {
         // Asser the burger menu is rendered
         const BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
@@ -155,7 +155,7 @@ describe('App.vue', () => {
       })
     })
 
-    describe('Burger menu open state - Data fetching "Resolved" state', () => {
+    describe('Burger menu open state - Data fetching "Fulfilled" state', () => {
       beforeEach(async () => {
         // Open the burger menu (short way)
         mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
@@ -175,8 +175,8 @@ describe('App.vue', () => {
       // Set the environment to mobile
       mockIsOnMobileStore.isOnMobile = true
 
-      // Set the store data fetching status to "resolved"
-      mockSiteMenuStore.siteMenu = mockSiteMenuResolved
+      // Set the store data fetching status to "fulfilled"
+      mockSiteMenuStore.siteMenu = mockSiteMenuFulfilled
       await nextTick()
     })
 

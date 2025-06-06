@@ -9,7 +9,7 @@ import type { InputErrorResult, InputSuccessResult } from '@/types/global'
 
 /* Component Data Fetching */
 const wordingResultStore = useNewsletterSignupWordingResultStore()
-const { wording, wordingFetchStatus } = storeToRefs(wordingResultStore)
+const { wording, wordingFetchState } = storeToRefs(wordingResultStore)
 
 /* Component Interactivities */
 const email: Ref<string> = ref('')
@@ -23,7 +23,7 @@ const handleSubmit = async () => {
 <template>
   <section class="newsletter-signup" aria-labelledby="newsletter-signup__title">
     <div class="wrapper">
-      <template v-if="wordingFetchStatus === 'resolved'">
+      <template v-if="wordingFetchState === 'fulfilled'">
         <h2 class="newsletter-signup__title" data-testid="newsletter-signup__title">
           {{ wording?.title }}
         </h2>
@@ -100,8 +100,8 @@ const handleSubmit = async () => {
           >.
         </p>
       </template>
-      <LoadingComponent v-if="wordingFetchStatus === 'pending'" />
-      <ErrorComponent v-if="wordingFetchStatus === 'rejected'" />
+      <LoadingComponent v-if="wordingFetchState === 'pending'" />
+      <ErrorComponent v-if="wordingFetchState === 'rejected'" />
     </div>
   </section>
 </template>

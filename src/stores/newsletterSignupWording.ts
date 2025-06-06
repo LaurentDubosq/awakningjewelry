@@ -1,6 +1,6 @@
 import { ref, type Ref, type ComputedRef, computed, unref } from 'vue'
 import type { NewsletterSignupWording } from '@/types/components'
-import type { UseFetchWithStateReturn, FetchStatus } from '@/types/fetch'
+import type { UseFetchWithStateReturn, FetchState } from '@/types/fetch'
 import { defineStore } from 'pinia'
 import { getNewsletterSignupWordingAsyncResult } from '@/data/dataFetchers'
 
@@ -15,7 +15,7 @@ export const useNewsletterSignupWordingResultStore = defineStore(
     const wording: ComputedRef<NewsletterSignupWording | undefined> = computed(() =>
       unref(wordingFetchResult.value?.data),
     )
-    const wordingFetchStatus: ComputedRef<FetchStatus | undefined> = computed(() =>
+    const wordingFetchState: ComputedRef<FetchState | undefined> = computed(() =>
       unref(wordingFetchResult.value?.status),
     )
 
@@ -26,7 +26,7 @@ export const useNewsletterSignupWordingResultStore = defineStore(
 
     return {
       wording,
-      wordingFetchStatus,
+      wordingFetchState,
     }
   },
 )

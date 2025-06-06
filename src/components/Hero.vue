@@ -13,7 +13,7 @@ const heroSlidesStore = useHeroSlidesResultStore()
 const {
   heroSlidesData: slides,
   heroSlidesDataLength: slidesLength,
-  heroSlidesFetchStatus: fetchStatus,
+  heroSlidesFetchState: fetchState,
 } = storeToRefs(heroSlidesStore)
 </script>
 
@@ -23,7 +23,7 @@ const {
     aria-roledescription="carousel"
     aria-label="Highlighted our product categories"
   >
-    <template v-if="fetchStatus === 'resolved'">
+    <template v-if="fetchState === 'fulfilled'">
       <Slideshow :slidesLength v-if="slidesLength" v-slot="{ currentIndex }">
         <template v-for="(slide, index) in slides" :key="slide.id">
           <HeroSlide
@@ -37,7 +37,7 @@ const {
         </template>
       </Slideshow>
     </template>
-    <LoadingComponent v-if="fetchStatus === 'pending'" />
-    <ErrorComponent v-if="fetchStatus === 'rejected'" />
+    <LoadingComponent v-if="fetchState === 'pending'" />
+    <ErrorComponent v-if="fetchState === 'rejected'" />
   </section>
 </template>
