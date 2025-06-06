@@ -1,6 +1,9 @@
 @use './reset';
 @use './constants' as *;
 
+/* ======================
+   Markup
+   ====================== */
 body {
   color: $AwakningColorPrimary;
   background-color: $AwakningColorBackground;
@@ -15,10 +18,6 @@ h2 {
 
 h3 {
   font-family: $AwakningFontMontserrat;
-}
-
-svg {
-  display: block;
 }
 
 hr {
@@ -41,18 +40,31 @@ blockquote {
   text-align: center;
 }
 
+/* Ease horizontal alignment with sibling elements */
+svg {
+  display: block;
+}
+
+/* Restore the strikethrough text */
 del {
   text-decoration: line-through;
 }
 
-a:hover {
-  opacity: 0.75;
+/* Remove unwanted space */
+picture {
+  font-size: 0;
 }
 
+/* ======================
+   Text classes
+   ====================== */
 .link-text {
   text-decoration: underline;
 }
 
+/* ======================
+   Design system classes
+   ====================== */
 .btn {
   padding: 12px 20px;
   font-family: $AwakningFontMontserrat;
@@ -73,14 +85,19 @@ a:hover {
   color: $AwakningColorPrimary;
 }
 
-/* Utility Classes */
+/* ======================
+   Layout classes
+   ====================== */
 .wrapper {
   max-width: 1050px;
   margin: 0 auto;
   padding: 0 15px;
 }
 
-// Hide an element without affecting its accessibility or search engine parser consideration
+/* ======================
+   Accessibility classes
+   ====================== */
+/* Hide an element without affecting its accessibility or search engine parser consideration */
 .sr-only {
   position: absolute;
   width: 10px;
@@ -91,4 +108,10 @@ a:hover {
   clip: rect(0, 0, 0, 0);
   border: 0;
   left: 0;
+}
+
+/* Reset the focus indicator for keyboard navigation only */
+*:focus-visible,
+.focus-visible {
+  outline: 3px solid #007bff;
 }

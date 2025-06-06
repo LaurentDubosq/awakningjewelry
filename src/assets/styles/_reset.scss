@@ -112,18 +112,3 @@ meter {
 ::-webkit-details-marker {
   display: none;
 }
-
-/***
-    Added by Awakning Team
-***/
-
-/* Remove unwanted space */
-picture {
-  font-size: 0;
-}
-
-// Reset the focus indicator for keyboard navigation only
-*:focus-visible,
-.focus-visible {
-  outline: 3px solid #007bff;
-}
