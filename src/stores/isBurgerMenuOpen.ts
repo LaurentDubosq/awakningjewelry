@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { onMounted, onUnmounted, ref, type Ref } from 'vue'
 import SASSCONSTANTS from '@/assets/styles/_constants.module.scss'
 
-export const useIsBurgerMenuOpen = defineStore('IsBurgerMenuOpen', () => {
+export const useIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
   // States
   const isBurgerMenuOpen: Ref<boolean> = ref(false)
 

@@ -5,12 +5,12 @@ import BurgerMenuDropdown from './BurgerMenuDropdown.vue'
 import LoadingComponent from './LoadingComponent.vue'
 import ErrorComponent from './ErrorComponent.vue'
 import { useSiteMenuStore } from '@/stores/siteMenu'
-import { useIsBurgerMenuOpen } from '@/stores/isBurgerMenuOpen'
+import { useIsBurgerMenuOpenStore } from '@/stores/isBurgerMenuOpen'
 import { storeToRefs } from 'pinia'
 
 // Get the stores instances
 const siteMenuStore = useSiteMenuStore()
-const isBurgerMenuOpenStore = useIsBurgerMenuOpen()
+const isBurgerMenuOpenStore = useIsBurgerMenuOpenStore()
 
 // Get the store's states and computeds
 const { siteMenuData, siteMenuResultFetchStatus } = storeToRefs(siteMenuStore)

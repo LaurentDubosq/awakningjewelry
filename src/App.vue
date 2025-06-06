@@ -3,11 +3,11 @@ import { RouterView } from 'vue-router'
 import SiteHeader from './components/SiteHeader.vue'
 import BurgerMenu from './components/BurgerMenu.vue'
 import MyTransition from './components/MyTransition.vue'
-import { useIsBurgerMenuOpen } from './stores/isBurgerMenuOpen'
+import { useIsBurgerMenuOpenStore } from './stores/isBurgerMenuOpen'
 import { storeToRefs } from 'pinia'
 
 // Get the stores instances
-const isBurgerMenuOpenStore = useIsBurgerMenuOpen()
+const isBurgerMenuOpenStore = useIsBurgerMenuOpenStore()
 
 // Get the store's states and computeds
 const { isBurgerMenuOpen } = storeToRefs(isBurgerMenuOpenStore)

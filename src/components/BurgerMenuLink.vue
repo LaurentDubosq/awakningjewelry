@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useIsBurgerMenuOpen } from '@/stores/isBurgerMenuOpen'
+import { useIsBurgerMenuOpenStore } from '@/stores/isBurgerMenuOpen'
 import type { SiteMenuItem } from '@/types/components'
 
 const { link } = defineProps<{
@@ -7,7 +7,7 @@ const { link } = defineProps<{
 }>()
 
 // Get the stores instances
-const isBurgerMenuOpenStore = useIsBurgerMenuOpen()
+const isBurgerMenuOpenStore = useIsBurgerMenuOpenStore()
 
 // Get the store's states and computeds
 const { toggleBurgerMenu } = isBurgerMenuOpenStore

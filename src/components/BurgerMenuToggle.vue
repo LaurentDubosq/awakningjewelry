@@ -4,11 +4,11 @@ import { useFocusElement } from '@/composables/useFocusElement'
 import SiteHeaderIcon from './SiteHeaderIcon.vue'
 import IconBurger from './icons/IconBurger.vue'
 import IconCross from './icons/IconCross.vue'
-import { useIsBurgerMenuOpen } from '@/stores/isBurgerMenuOpen'
+import { useIsBurgerMenuOpenStore } from '@/stores/isBurgerMenuOpen'
 import { storeToRefs } from 'pinia'
 
 // Get the stores instances
-const isBurgerMenuOpenStore = useIsBurgerMenuOpen()
+const isBurgerMenuOpenStore = useIsBurgerMenuOpenStore()
 
 // Get the store's states and computeds
 const { isBurgerMenuOpen } = storeToRefs(isBurgerMenuOpenStore)
