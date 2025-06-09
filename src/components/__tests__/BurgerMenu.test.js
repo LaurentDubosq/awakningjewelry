@@ -218,7 +218,7 @@ describe('BurgerMenu.vue', () => {
             const mockLinkText = mockLink.text
 
             // Assert the link is rendered
-            expect(link.exists()).toBeTruthy()
+            expect(link.isVisible()).toBeTruthy()
 
             // Assert the link has the correct url
             expect(link.attributes('href')).toBe(mockLinkURL)
@@ -301,7 +301,7 @@ describe('BurgerMenu.vue', () => {
 
             // Assert the dropdown is open
             list = dropdown.find("[data-testid='burger-menu__dropdown-list']")
-            expect(list.exists()).toBeTruthy()
+            expect(list.isVisible()).toBeTruthy()
 
             /****************************************************************************/
             /* when the dropdown toggle button is touched, it opens/closes the dropdown */
@@ -309,7 +309,7 @@ describe('BurgerMenu.vue', () => {
 
             // Assert the dropdown is open
             list = dropdown.find("[data-testid='burger-menu__dropdown-list']")
-            expect(list.exists()).toBeTruthy()
+            expect(list.isVisible()).toBeTruthy()
 
             // Touch the button
             button = dropdown.find("[data-testid='burger-menu__dropdown-button']")
@@ -317,7 +317,7 @@ describe('BurgerMenu.vue', () => {
 
             // Assert the dropdown is close
             list = dropdown.find("[data-testid='burger-menu__dropdown-list']")
-            expect(list.exists()).toBeFalsy()
+            expect(list.isVisible()).toBeFalsy()
 
             // Touch the button again
             button = dropdown.find("[data-testid='burger-menu__dropdown-button']")
@@ -325,7 +325,7 @@ describe('BurgerMenu.vue', () => {
 
             // Assert the dropdown is open
             list = dropdown.find("[data-testid='burger-menu__dropdown-list']")
-            expect(list.exists()).toBeTruthy()
+            expect(list.isVisible()).toBeTruthy()
 
             /******************************************************************************************************************/
             /* when the dropdown toggle button is focused and we press the "escape key", it commands the burger menu to close */

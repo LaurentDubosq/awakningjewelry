@@ -40,7 +40,7 @@ const mockIsBurgerMenuOpenStore = mockUseIsBurgerMenuOpenStore()
 // Component Factory
 function mountBurgerMenuDropdownList() {
   return mount(BurgerMenuDropdownList, {
-    props: { links: mockLinks, dropdownText: mockDropdownText },
+    props: { links: mockLinks, id: mockDropdownText },
     global: {
       plugins: [mockPinia],
       stubs: { RouterLink: RouterLinkStub },

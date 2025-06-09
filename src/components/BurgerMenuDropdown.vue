@@ -22,8 +22,8 @@ const isDropdownOpen: Ref<boolean> = ref(true)
     <MyTransition name="vertical-top-slide" :group="true" :duration="300">
       <BurgerMenuDropdownList
         :links="dropdown.subMenu"
-        :dropdownText="dropdown.text"
-        v-if="isDropdownOpen && dropdown.subMenu"
+        :id="dropdown.text"
+        v-show="isDropdownOpen && dropdown.subMenu"
       />
     </MyTransition>
   </div>

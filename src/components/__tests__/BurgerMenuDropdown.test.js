@@ -40,6 +40,7 @@ const mockIsBurgerMenuOpenStore = mockUseIsBurgerMenuOpenStore()
 // Component Factory (Dropdown open state)
 function mountBurgerMenuDropdown() {
   return mount(BurgerMenuDropdown, {
+    attachTo: document.body,
     props: { dropdown: mockDropdown },
     global: {
       plugins: [mockPinia],
@@ -106,7 +107,7 @@ describe('BurgerMenuDropdown.vue', () => {
         const mockLinkText = mockLink.text
 
         // Assert the link is rendered
-        expect(link.exists()).toBeTruthy()
+        expect(link.isVisible()).toBeTruthy()
 
         // Assert the link has the correct url
         expect(link.props('to')).toBe(mockLinkURL)
@@ -125,7 +126,7 @@ describe('BurgerMenuDropdown.vue', () => {
 
       // Assert the dropdown is close
       const list = wrapper.find("[data-testid='burger-menu__dropdown-list']")
-      expect(list.exists()).toBeFalsy()
+      expect(list.isVisible()).toBeFalsy()
 
       // Assert the close icon is rendered
       const icon = button.find("[data-testid='icon-sign-plus']")
@@ -140,7 +141,7 @@ describe('BurgerMenuDropdown.vue', () => {
 
     test('the dropdown is open by default', () => {
       const list = wrapper.find("[data-testid='burger-menu__dropdown-list']")
-      expect(list.exists()).toBeTruthy()
+      expect(list.isVisible()).toBeTruthy()
     })
 
     /**************************/
@@ -156,14 +157,14 @@ describe('BurgerMenuDropdown.vue', () => {
 
       // Assert the dropdown is close
       list = wrapper.find("[data-testid='burger-menu__dropdown-list']")
-      expect(list.exists()).toBeFalsy()
+      expect(list.isVisible()).toBeFalsy()
 
       // Touch the button again
       await button.trigger('click')
 
       // Assert the dropdown is open again
       list = wrapper.find("[data-testid='burger-menu__dropdown-list']")
-      expect(list.exists()).toBeTruthy()
+      expect(list.isVisible()).toBeTruthy()
     })
 
     /*********/
