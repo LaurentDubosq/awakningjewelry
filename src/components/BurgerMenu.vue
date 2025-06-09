@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SiteMenuItem } from '@/types/components'
+import type { SiteMenuDropdown, SiteMenuLink } from '@/types/components'
 import BurgerMenuLink from './BurgerMenuLink.vue'
 import BurgerMenuDropdown from './BurgerMenuDropdown.vue'
 import LoadingComponent from './LoadingComponent.vue'
@@ -17,11 +17,13 @@ const { siteMenuData, siteMenuResultFetchState } = storeToRefs(siteMenuStore)
 const { toggleBurgerMenu } = isBurgerMenuOpenStore
 
 // Utilities
-function isLink(siteMenuItem: SiteMenuItem): boolean {
-  return !siteMenuItem.subMenu
+function isLink(siteMenuItem: SiteMenuLink | SiteMenuDropdown): siteMenuItem is SiteMenuLink {
+  return ['textLink', 'iconLink'].includes(siteMenuItem.type)
 }
-function isDropdown(siteMenuItem: SiteMenuItem): boolean {
-  return !!siteMenuItem.subMenu
+function isDropdown(
+  siteMenuItem: SiteMenuLink | SiteMenuDropdown,
+): siteMenuItem is SiteMenuDropdown {
+  return siteMenuItem.type === 'dropdown'
 }
 </script>
 

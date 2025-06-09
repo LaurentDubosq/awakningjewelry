@@ -11,7 +11,7 @@ import {
   founderQuoteBannerContentURL,
 } from '@/data/dataFetchersURL'
 import type {
-  SiteMenuItem,
+  SiteMenu,
   StatementBannerWording,
   HeroSlideType,
   NewsletterSignupWording,
@@ -26,8 +26,8 @@ export const getPagesMetaData = async (): Promise<PageMetaData[] | undefined> =>
   return result
 }
 
-export const getSiteMenu = (): UseFetchWithStateReturn<SiteMenuItem[]> => {
-  const result: UseFetchWithStateReturn<SiteMenuItem[]> = useFetchWithState(siteMenuUrl)
+export const getSiteMenu = (): UseFetchWithStateReturn<SiteMenu> => {
+  const result: UseFetchWithStateReturn<SiteMenu> = useFetchWithState(siteMenuUrl)
   return result
 }
 

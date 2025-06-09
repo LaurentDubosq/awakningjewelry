@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { SiteSubMenuItem } from '@/types/components'
+import type { SiteMenuDropdownSubMenuLink } from '@/types/components'
 import { closeSiteNavDropdownKey } from '@/utils/injectionkeys'
 import { inject } from 'vue'
 
 const { link } = defineProps<{
-  link: SiteSubMenuItem
+  link: SiteMenuDropdownSubMenuLink
 }>()
 
 const closeDropdown: (() => void) | undefined = inject(closeSiteNavDropdownKey)

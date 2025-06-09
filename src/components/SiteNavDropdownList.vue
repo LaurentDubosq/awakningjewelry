@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { SiteSubMenuItem } from '@/types/components'
+import type { SiteMenuDropdownSubMenu } from '@/types/components'
 import SiteNavDropdownItem from './SiteNavDropdownItem.vue'
 
 const { links, dropdownText } = defineProps<{
-  links: SiteSubMenuItem[]
+  links: SiteMenuDropdownSubMenu
   dropdownText: string
 }>()
 </script>

@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { SiteMenuItem } from '@/types/components'
+import type { SiteMenuDropdown } from '@/types/components'
 import { ref, type Ref } from 'vue'
 import BurgerMenuDropdownButton from './BurgerMenuDropdownButton.vue'
 import BurgerMenuDropdownList from './BurgerMenuDropdownList.vue'
 import MyTransition from './MyTransition.vue'
 
 const { dropdown } = defineProps<{
-  dropdown: SiteMenuItem
+  dropdown: SiteMenuDropdown
 }>()
 
 const isDropdownOpen: Ref<boolean> = ref(true)

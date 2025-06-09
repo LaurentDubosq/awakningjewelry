@@ -2,7 +2,7 @@
   "siteMenu": [
     {
       "id": 1,
-      "type": "text",
+      "type": "textLink",
       "text": "About",
       "url": "/pages/about-us",
       "title": "Discover us"
@@ -33,24 +33,24 @@
     },
     {
       "id": 3,
-      "type": "text",
+      "type": "textLink",
       "text": "Promotions",
       "url": "/collections/private-promotions",
       "title": "Acces current promotions"
     },
     {
       "id": 4,
-      "type": "text",
+      "type": "textLink",
       "text": "Faqs & Contact",
       "url": "/pages/faq-and-contact",
       "title": "Get help"
     },
     {
       "id": 5,
-      "type": "icon",
+      "type": "iconLink",
+      "name": "account",
       "text": "Account",
       "url": "/account",
-      "name": "account",
       "title": "Go to my account"
     }
   ],

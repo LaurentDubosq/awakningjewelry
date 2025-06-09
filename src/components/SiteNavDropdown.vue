@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SiteMenuItem } from '@/types/components'
+import type { SiteMenuDropdown } from '@/types/components'
 import { provide, ref, type Ref } from 'vue'
 import MyTransition from './MyTransition.vue'
 import { closeSiteNavDropdownKey } from '@/utils/injectionkeys'
@@ -8,7 +8,7 @@ import SiteNavDropdownList from './SiteNavDropdownList.vue'
 import useExecuteOnFocusLeave from '@/composables/useExecuteOnFocusLeave'
 
 const { dropdown } = defineProps<{
-  dropdown: SiteMenuItem
+  dropdown: SiteMenuDropdown
 }>()
 
 const isDropdownOpen: Ref<boolean> = ref(false)

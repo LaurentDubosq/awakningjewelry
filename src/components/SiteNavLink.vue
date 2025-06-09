@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { SiteMenuItem } from '@/types/components'
+import type { SiteMenuLink } from '@/types/components'
 import SiteHeaderIcon from './SiteHeaderIcon.vue'
 
 const { link } = defineProps<{
-  link: SiteMenuItem
+  link: SiteMenuLink
 }>()
 </script>
 
@@ -12,21 +12,21 @@ const { link } = defineProps<{
     :class="[
       'site-nav__link',
       {
-        'site-nav__link--text': link.type === 'text',
-        'site-nav__link--icon': link.type === 'icon',
+        'site-nav__link--text': link.type === 'textLink',
+        'site-nav__link--icon': link.type === 'iconLink',
       },
     ]"
     :to="link.url"
     :title="link.title"
     :data-testid="
-      (link.type === 'text' && 'site-nav__link--text') ||
-      (link.type === 'icon' && 'site-nav__link--icon')
+      (link.type === 'textLink' && 'site-nav__link--text') ||
+      (link.type === 'iconLink' && 'site-nav__link--icon')
     "
   >
-    <template v-if="link.type === 'text'">
+    <template v-if="link.type === 'textLink'">
       {{ link.text }}
     </template>
-    <template v-else-if="link.type === 'icon'">
+    <template v-else-if="link.type === 'iconLink'">
       <SiteHeaderIcon :alternativeText="link.text">
         <slot />
       </SiteHeaderIcon>

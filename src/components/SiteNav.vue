@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SiteMenuItem } from '@/types/components'
+import type { SiteMenuDropdown, SiteMenuLink } from '@/types/components'
 import IconPerson from './icons/IconPerson.vue'
 import SiteNavLink from './SiteNavLink.vue'
 import SiteNavDropdown from './SiteNavDropdown.vue'
@@ -15,14 +15,17 @@ const siteMenuStore = useSiteMenuStore()
 const { siteMenuData, siteMenuResultFetchState } = storeToRefs(siteMenuStore)
 
 // Utilities
-function isLink(item: SiteMenuItem): boolean {
-  return item.type === 'icon' || item.type === 'text'
+function isLink(siteMenuItem: SiteMenuLink | SiteMenuDropdown): siteMenuItem is SiteMenuLink {
+  return ['textLink', 'iconLink'].includes(siteMenuItem.type)
 }
-function isDropdown(item: SiteMenuItem): boolean {
-  return item.type === 'dropdown'
+function isAccountLink(siteMenuItem: SiteMenuLink | SiteMenuDropdown): boolean {
+  if (isLink(siteMenuItem)) {
+    return siteMenuItem.name === 'account'
+  }
+  return false
 }
-function isAccountLink(item: SiteMenuItem): boolean {
-  return item.name === 'account'
+function isDropdown(siteMenuItem: SiteMenuLink | SiteMenuDropdown): siteMenuItem is SiteMenuLink {
+  return siteMenuItem.type === 'dropdown'
 }
 </script>
 
@@ -30,16 +33,20 @@ function isAccountLink(item: SiteMenuItem): boolean {
   <nav class="site-nav" aria-label="Website's desktop navigation bar" data-testid="site-nav">
     <ul class="site-nav__list" aria-label="Website's desktop navigation bar">
       <template v-if="siteMenuResultFetchState === 'fulfilled'">
-        <li class="site-nav__item" data-testid="site-nav__item" v-for="menuItem in siteMenuData">
-          <SiteNavLink :link="menuItem" v-if="isLink(menuItem)">
+        <li
+          class="site-nav__item"
+          data-testid="site-nav__item"
+          v-for="siteMenuItem in siteMenuData"
+        >
+          <SiteNavLink :link="siteMenuItem" v-if="isLink(siteMenuItem)">
             <IconPerson
               class="site-nav__item-icon"
-              v-if="isAccountLink(menuItem)"
+              v-if="isAccountLink(siteMenuItem)"
               width="27"
               aria-hidden="true"
             />
           </SiteNavLink>
-          <SiteNavDropdown :dropdown="menuItem" v-else-if="isDropdown(menuItem)" />
+          <SiteNavDropdown :dropdown="siteMenuItem" v-else-if="isDropdown(siteMenuItem)" />
         </li>
       </template>
       <LoadingComponent v-if="siteMenuResultFetchState === 'pending'" />

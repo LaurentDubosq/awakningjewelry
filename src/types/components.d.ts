@@ -6,20 +6,29 @@ import type {
 } from '../types/global.d.js'
 
 /* SiteMenu */
-export interface SiteMenuItem {
+export type SiteMenu = Array<SiteMenuLink | SiteMenuDropdown>
+export interface SiteMenuLink {
+  id: number
+  type: 'textLink' | 'iconLink'
+  name?: string
+  text: string
+  url: string
+  title: string
+}
+export interface SiteMenuDropdown {
   id: number
   type: string
   text: string
   url: string
-  name?: string
-  subMenu?: Array<SiteSubMenuItem>
   title: string
+  subMenu: Array<SiteSubMenuItem>
 }
-export interface SiteSubMenuItem {
+export interface SiteMenuDropdownSubMenuLink {
   id: number
   text: string
   url: string
 }
+export type SiteMenuDropdownSubMenu = Array<SiteMenuDropdownSubMenuLink>
 
 /* Hero */
 export interface HeroSlideType {
