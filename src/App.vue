@@ -15,7 +15,7 @@ const { isBurgerMenuOpen } = storeToRefs(isBurgerMenuOpenStore)
 
 <template>
   <div class="site-container">
-    <MyTransition name="marginLeftMinus300px" :group="false">
+    <MyTransition name="horizontal-left-slide" :group="false">
       <BurgerMenu v-show="isBurgerMenuOpen" />
     </MyTransition>
     <div class="site-content">

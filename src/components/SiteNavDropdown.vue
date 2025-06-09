@@ -39,7 +39,7 @@ provide(closeSiteNavDropdownKey, closeDropdown)
       :isDropdownOpen
       @open-dropdown="openDropdown"
     />
-    <MyTransition name="translateY" :group="true">
+    <MyTransition name="vertical-top-subtle-slide" :group="true">
       <SiteNavDropdownList
         :links="dropdown.subMenu"
         :dropdownText="dropdown.text"

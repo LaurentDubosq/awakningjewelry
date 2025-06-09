@@ -378,7 +378,7 @@ describe('App.vue', () => {
 
       expect(wrapper.html()).toMatchInlineSnapshot(`
         "<div data-v-7a7a37b1="" class="site-container">
-          <transition-stub data-v-7a7a37b1="" name="marginLeftMinus300px" appear="false" persisted="false" css="true">
+          <transition-stub data-v-7a7a37b1="" name="horizontal-left-slide" appear="false" persisted="false" css="true">
             <burger-menu-stub data-v-7a7a37b1="" style="display: none;"></burger-menu-stub>
           </transition-stub>
           <div data-v-7a7a37b1="" class="site-content">

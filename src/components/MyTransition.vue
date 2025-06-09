@@ -2,7 +2,7 @@
 import { TransitionGroup, Transition } from 'vue'
 
 const { name, group } = defineProps<{
-  name: 'translateY' | 'marginLeftMinus300px' | 'margintopMinus100PerCentWithInner'
+  name: 'vertical-top-subtle-slide' | 'horizontal-left-slide' | 'vertical-top-slide'
   group: boolean
   duration?: number
 }>()
@@ -15,35 +15,35 @@ const { name, group } = defineProps<{
 <style lang="scss">
 @use '@/assets/styles/_constants' as *;
 
-/* translateY */
-.translateY-enter-active {
+/* Vertical subtle slide (top edge) */
+.vertical-top-subtle-slide-enter-active {
   transition: all 0.3s ease;
 }
-.translateY-leave-active {
+.vertical-top-subtle-slide-leave-active {
   transition: all;
 }
-.translateY-enter-from,
-.translateY-leave-to {
+.vertical-top-subtle-slide-enter-from,
+.vertical-top-subtle-slide-leave-to {
   transform: translateY(-15px);
 }
 
-/* marginLeftMinus300px */
-.marginLeftMinus300px-enter-active,
-.marginLeftMinus300px-leave-active {
+/* Horizontal slide (left edge) */
+.horizontal-left-slide-enter-active,
+.horizontal-left-slide-leave-active {
   transition: all 0.3s ease;
 }
-.marginLeftMinus300px-enter-from,
-.marginLeftMinus300px-leave-to {
+.horizontal-left-slide-enter-from,
+.horizontal-left-slide-leave-to {
   margin-left: -300px;
 }
 
-/* margintopMinus100PerCentWithInner */
-.margintopMinus100PerCentWithInner-enter-active .transition,
-.margintopMinus100PerCentWithInner-leave-active .transition {
+/* Vertical slide (top edge) */
+.vertical-top-slide-enter-active .transition,
+.vertical-top-slide-leave-active .transition {
   transition: all 0.3s ease;
 }
-.margintopMinus100PerCentWithInner-enter-from .transition,
-.margintopMinus100PerCentWithInner-leave-to .transition {
+.vertical-top-slide-enter-from .transition,
+.vertical-top-slide-leave-to .transition {
   margin-top: -100%;
 }
 </style>

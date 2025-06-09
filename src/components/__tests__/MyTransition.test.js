@@ -10,7 +10,7 @@ const mockSlotComponent = { template: '<div class="mock-slot-content" />' }
 const mockSiteNavDropdownListAnimationOptions = {
   slot: mockSlotComponent,
   props: {
-    name: 'translateY',
+    name: 'vertical-top-subtle-slide',
     group: true,
   },
 }
@@ -18,7 +18,7 @@ const mockSiteNavDropdownListAnimationOptionsProps = mockSiteNavDropdownListAnim
 const mockBurgerMenuAnimationOptions = {
   slot: mockSlotComponent,
   props: {
-    name: 'marginLeftMinus300px',
+    name: 'horizontal-left-slide',
     group: false,
   },
 }
@@ -26,7 +26,7 @@ const mockBurgerMenuAnimationOptionsProps = mockBurgerMenuAnimationOptions.props
 const mockBurgerMenuDropdownListAnimationOptions = {
   slot: mockSlotComponent,
   props: {
-    name: 'margintopMinus100PerCentWithInner',
+    name: 'vertical-top-slide',
     group: true,
     duration: 300,
   },
