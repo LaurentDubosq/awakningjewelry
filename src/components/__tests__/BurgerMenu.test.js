@@ -60,13 +60,13 @@ const mockUseIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
   return { isBurgerMenuOpen, toggleBurgerMenu }
 })
 const mockUseSiteMenuStore = defineStore('SiteMenu', () => {
-  const siteMenu = ref(mockSiteMenuPending)
-  const siteMenuData = computed(() => siteMenu.value.data)
-  const siteMenuResultFetchState = computed(() => siteMenu.value.status)
+  const siteMenuResult = ref(mockSiteMenuPending)
+  const siteMenu = computed(() => siteMenuResult.value.data)
+  const siteMenuFetchState = computed(() => siteMenuResult.value.status)
   return {
+    siteMenuResult,
     siteMenu,
-    siteMenuData,
-    siteMenuResultFetchState,
+    siteMenuFetchState,
   }
 })
 
@@ -115,7 +115,7 @@ describe('BurgerMenu.vue', () => {
 
   afterEach(() => {
     // Reset the store(s) state(s) to default to ensure a clean environment for each test
-    mockSiteMenuStore.siteMenu = mockSiteMenuPending
+    mockSiteMenuStore.siteMenuResult = mockSiteMenuPending
     mockUseIsBurgerMenuOpenStore.isBurgerMenuOpen = false
   })
 
@@ -135,7 +135,7 @@ describe('BurgerMenu.vue', () => {
   describe('Data fetching "Rejected" state', () => {
     test('the error message is rendered', async () => {
       // Set the store data fetching status to rejected
-      mockSiteMenuStore.siteMenu = mockSiteMenuRejected
+      mockSiteMenuStore.siteMenuResult = mockSiteMenuRejected
       await nextTick()
 
       // Assert the error message is rendered
@@ -147,7 +147,7 @@ describe('BurgerMenu.vue', () => {
   describe('Data fetching "Fulfilled" state - Dropdown open state', async () => {
     beforeEach(async () => {
       // Set the store data fetching status to fulfilled
-      mockSiteMenuStore.siteMenu = mockSiteMenuFulfilled
+      mockSiteMenuStore.siteMenuResult = mockSiteMenuFulfilled
       await nextTick()
     })
 

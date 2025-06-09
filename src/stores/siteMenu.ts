@@ -7,25 +7,25 @@ import { computed, ref, unref, type Ref, type ComputedRef } from 'vue'
 
 export const useSiteMenuStore = defineStore('SiteMenu', () => {
   // States
-  const siteMenu: Ref<UseFetchWithStateReturn<SiteMenu> | undefined> = ref()
+  const siteMenuResult: Ref<UseFetchWithStateReturn<SiteMenu> | undefined> = ref()
 
   // Computeds
-  const siteMenuData: ComputedRef<SiteMenu | undefined> = computed(() =>
-    unref(siteMenu.value?.data),
+  const siteMenu: ComputedRef<SiteMenu | undefined> = computed(() =>
+    unref(siteMenuResult.value?.data),
   )
 
-  const siteMenuResultFetchState: ComputedRef<FetchState | undefined> = computed(() =>
-    unref(siteMenu.value?.status),
+  const siteMenuFetchState: ComputedRef<FetchState | undefined> = computed(() =>
+    unref(siteMenuResult.value?.status),
   )
 
   // API Call - Data fetching with data caching
-  if (!siteMenu.value) {
-    siteMenu.value = getSiteMenu()
+  if (!siteMenuResult.value) {
+    siteMenuResult.value = getSiteMenu()
   }
 
   return {
+    siteMenuResult,
     siteMenu,
-    siteMenuData,
-    siteMenuResultFetchState,
+    siteMenuFetchState,
   }
 })

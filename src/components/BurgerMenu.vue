@@ -13,7 +13,7 @@ const siteMenuStore = useSiteMenuStore()
 const isBurgerMenuOpenStore = useIsBurgerMenuOpenStore()
 
 // Get the store's states and computeds
-const { siteMenuData, siteMenuResultFetchState } = storeToRefs(siteMenuStore)
+const { siteMenu, siteMenuFetchState } = storeToRefs(siteMenuStore)
 const { toggleBurgerMenu } = isBurgerMenuOpenStore
 
 // Utilities
@@ -35,18 +35,18 @@ function isDropdown(
     id="burger-menu"
   >
     <ul class="burger-menu__list">
-      <template v-if="siteMenuResultFetchState === 'fulfilled'">
+      <template v-if="siteMenuFetchState === 'fulfilled'">
         <li
           class="burger-menu__item"
           data-testid="burger-menu__item"
-          v-for="siteMenuItem of siteMenuData"
+          v-for="siteMenuItem of siteMenu"
         >
           <BurgerMenuLink :link="siteMenuItem" v-if="isLink(siteMenuItem)" />
           <BurgerMenuDropdown :dropdown="siteMenuItem" v-else-if="isDropdown(siteMenuItem)" />
         </li>
       </template>
-      <LoadingComponent v-if="siteMenuResultFetchState === 'pending'" />
-      <ErrorComponent v-if="siteMenuResultFetchState === 'rejected'" />
+      <LoadingComponent v-if="siteMenuFetchState === 'pending'" />
+      <ErrorComponent v-if="siteMenuFetchState === 'rejected'" />
     </ul>
   </nav>
 </template>

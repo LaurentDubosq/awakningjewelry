@@ -12,7 +12,7 @@ import { storeToRefs } from 'pinia'
 const siteMenuStore = useSiteMenuStore()
 
 // Get the store's computeds
-const { siteMenuData, siteMenuResultFetchState } = storeToRefs(siteMenuStore)
+const { siteMenu, siteMenuFetchState } = storeToRefs(siteMenuStore)
 
 // Utilities
 function isLink(siteMenuItem: SiteMenuLink | SiteMenuDropdown): siteMenuItem is SiteMenuLink {
@@ -32,12 +32,8 @@ function isDropdown(siteMenuItem: SiteMenuLink | SiteMenuDropdown): siteMenuItem
 <template>
   <nav class="site-nav" aria-label="Website's desktop navigation bar" data-testid="site-nav">
     <ul class="site-nav__list" aria-label="Website's desktop navigation bar">
-      <template v-if="siteMenuResultFetchState === 'fulfilled'">
-        <li
-          class="site-nav__item"
-          data-testid="site-nav__item"
-          v-for="siteMenuItem in siteMenuData"
-        >
+      <template v-if="siteMenuFetchState === 'fulfilled'">
+        <li class="site-nav__item" data-testid="site-nav__item" v-for="siteMenuItem in siteMenu">
           <SiteNavLink :link="siteMenuItem" v-if="isLink(siteMenuItem)">
             <IconPerson
               class="site-nav__item-icon"
@@ -49,8 +45,8 @@ function isDropdown(siteMenuItem: SiteMenuLink | SiteMenuDropdown): siteMenuItem
           <SiteNavDropdown :dropdown="siteMenuItem" v-else-if="isDropdown(siteMenuItem)" />
         </li>
       </template>
-      <LoadingComponent v-if="siteMenuResultFetchState === 'pending'" />
-      <ErrorComponent v-if="siteMenuResultFetchState === 'rejected'" />
+      <LoadingComponent v-if="siteMenuFetchState === 'pending'" />
+      <ErrorComponent v-if="siteMenuFetchState === 'rejected'" />
     </ul>
   </nav>
 </template>
