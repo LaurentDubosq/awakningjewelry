@@ -7,22 +7,26 @@ const { text, isDropdownOpen } = defineProps<{
   isDropdownOpen: boolean
 }>()
 
-const textLowered = text.toLowerCase()
+const id = text.toLowerCase()
 </script>
 
 <template>
   <button
     class="burger-menu__dropdown-button burger-menu__link"
+    :id="`burger-menu__dropdown-button-${id}`"
     @click="$emit('toggle-dropdown')"
     :aria-expanded="isDropdownOpen ? 'true' : 'false'"
-    :aria-controls="`burger-menu__dropdown-list-${textLowered}`"
-    :id="`burger-menu__dropdown-button-${textLowered}`"
+    :aria-controls="`burger-menu__dropdown-list-${id}`"
     data-testid="burger-menu__dropdown-button"
   >
     {{ text }}
-    <span class="burger-menu__dropdown-button-icon-wrapper" aria-hidden="true">
-      <IconSignMinus class="burger-menu__dropdown-button-icon" width="27" v-if="isDropdownOpen" />
-      <IconSignPlus class="burger-menu__dropdown-button-icon" width="27" v-else />
+    <span
+      class="burger-menu__dropdown-button-icon-wrapper"
+      aria-hidden="true"
+      data-testid="burger-menu__dropdown-button-icon-wrapper"
+    >
+      <IconSignMinus class="burger-menu__dropdown-button-icon" width="27" v-show="isDropdownOpen" />
+      <IconSignPlus class="burger-menu__dropdown-button-icon" width="27" v-show="!isDropdownOpen" />
     </span>
   </button>
 </template>
@@ -34,7 +38,7 @@ const textLowered = text.toLowerCase()
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%; // Force width to 100% because the native button display (inline-block) remains despite display flex
+  width: 100%;
 
   &-icon {
     fill: $AwakningPermanentColorWhite;

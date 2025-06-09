@@ -87,9 +87,13 @@ describe('BurgerMenuDropdown.vue', () => {
       // Assert its text is rendered
       expect(button.text()).toContain(mockDropdownText)
 
+      // Assert the open/close icon state is ignored by assistive technologies
+      const iconWrapper = button.find("[data-testid='burger-menu__dropdown-button-icon-wrapper']")
+      expect(iconWrapper.attributes('aria-hidden')).toBe('true')
+
       // Assert the open icon is rendered
       const icon = button.find("[data-testid='icon-sign-minus']")
-      expect(icon.exists()).toBeTruthy()
+      expect(icon.isVisible()).toBeTruthy()
     })
 
     test('renders all links with their necessary information', () => {
@@ -130,7 +134,7 @@ describe('BurgerMenuDropdown.vue', () => {
 
       // Assert the close icon is rendered
       const icon = button.find("[data-testid='icon-sign-plus']")
-      expect(icon.exists()).toBeTruthy()
+      expect(icon.isVisible()).toBeTruthy()
     })
   })
 

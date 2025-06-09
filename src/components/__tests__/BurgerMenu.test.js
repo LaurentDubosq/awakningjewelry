@@ -193,6 +193,12 @@ describe('BurgerMenu.vue', () => {
           // Assert the button text is rendered
           expect(button.text()).toContain(mockDropdownText)
 
+          // Assert the open/close icon state is ignored by assistive technologies
+          const iconWrapper = button.find(
+            "[data-testid='burger-menu__dropdown-button-icon-wrapper']",
+          )
+          expect(iconWrapper.attributes('aria-hidden')).toBe('true')
+
           /****************************************/
           /* Initial Render - Dropdown open state */
           /****************************************/
@@ -201,7 +207,7 @@ describe('BurgerMenu.vue', () => {
 
           // Assert the open icon is rendered
           buttonIcon = button.find("[data-testid='icon-sign-minus']")
-          expect(buttonIcon.exists()).toBeTruthy()
+          expect(buttonIcon.isVisible()).toBeTruthy()
 
           /* LINKS */
 
@@ -238,7 +244,7 @@ describe('BurgerMenu.vue', () => {
 
           // Assert the close icon is rendered
           buttonIcon = button.find("[data-testid='icon-sign-plus']")
-          expect(buttonIcon.exists()).toBeTruthy()
+          expect(buttonIcon.isVisible()).toBeTruthy()
 
           // Reset(open) the dropdown for following assertions
           await button.trigger('click')

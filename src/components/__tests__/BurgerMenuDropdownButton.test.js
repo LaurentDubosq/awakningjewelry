@@ -16,6 +16,7 @@ const mockDropdownText = mockDropdown.text
 // Component Factory (Dropdown open state)
 function mountBurgerMenuDropdownButton(propsOptions = {}) {
   return mount(BurgerMenuDropdownButton, {
+    attachTo: document.body,
     props: {
       text: mockDropdownText,
       isDropdownOpen: true,
@@ -55,9 +56,13 @@ describe('BurgerMenuDropdownButton.vue', () => {
       // Assert its text is rendered
       expect(button.text()).toContain(mockDropdownText)
 
+      // Assert the open/close icon state is ignored by assistive technologies
+      const iconWrapper = button.find("[data-testid='burger-menu__dropdown-button-icon-wrapper']")
+      expect(iconWrapper.attributes('aria-hidden')).toBe('true')
+
       // Assert the open icon is rendered
       const icon = button.find("[data-testid='icon-sign-minus']")
-      expect(icon.exists()).toBeTruthy()
+      expect(icon.isVisible()).toBeTruthy()
     })
   })
 
@@ -69,7 +74,7 @@ describe('BurgerMenuDropdownButton.vue', () => {
       // Assert the close icon is rendered
       const button = wrapper.find("[data-testid='burger-menu__dropdown-button']")
       const icon = button.find("[data-testid='icon-sign-plus']")
-      expect(icon.exists()).toBeTruthy()
+      expect(icon.isVisible()).toBeTruthy()
     })
   })
 
