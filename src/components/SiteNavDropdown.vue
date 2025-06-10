@@ -33,17 +33,12 @@ provide(closeSiteNavDropdownKey, closeDropdown)
     @keydown.escape="closeDropdown"
     data-testid="site-nav__dropdown"
   >
-    <SiteNavDropdownButton
-      :text="dropdown.text"
-      :title="dropdown.title"
-      :isDropdownOpen
-      @open-dropdown="openDropdown"
-    />
+    <SiteNavDropdownButton v-bind="dropdown.button" :isDropdownOpen @open-dropdown="openDropdown" />
     <MyTransition name="vertical-top-subtle-slide" :group="true">
       <SiteNavDropdownList
-        :links="dropdown.subMenu"
-        :dropdownText="dropdown.text"
-        v-if="isDropdownOpen && dropdown.subMenu"
+        :links="dropdown.links"
+        :id="dropdown.button.text"
+        v-if="isDropdownOpen && dropdown.links"
       />
     </MyTransition>
   </div>

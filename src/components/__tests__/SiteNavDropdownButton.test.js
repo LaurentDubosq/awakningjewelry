@@ -7,8 +7,8 @@ import frontDataBase from '../../../db.json'
 /********************/
 
 const mockDropdown = frontDataBase.siteMenu[1]
-const mockDropdownText = mockDropdown.text
-const mockDropdownTitle = mockDropdown.title
+const mockDropdownText = mockDropdown.button.text
+const mockDropdownTitle = mockDropdown.button.title
 
 /***********/
 /* 2.Build */

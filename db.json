@@ -10,10 +10,11 @@
     {
       "id": 2,
       "type": "dropdown",
-      "text": "Shop",
-      "url": "",
-      "title": "Explore our products",
-      "subMenu": [
+      "button": {
+        "text": "Shop",
+        "title": "Explore our products"
+      },
+      "links": [
         {
           "id": 1,
           "text": "Charm Bracelets",

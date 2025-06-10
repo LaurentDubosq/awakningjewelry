@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { SiteMenuDropdownSubMenu } from '@/types/components'
+import type { SiteMenuDropdownLinks } from '@/types/components'
 import BurgerMenuDropdownItem from './BurgerMenuDropdownItem.vue'
 
 const { links, id } = defineProps<{
-  links: SiteMenuDropdownSubMenu
+  links: SiteMenuDropdownLinks
   id: string
 }>()
 </script>

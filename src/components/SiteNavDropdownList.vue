@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import type { SiteMenuDropdownSubMenu } from '@/types/components'
+import type { SiteMenuDropdownLinks } from '@/types/components'
 import SiteNavDropdownItem from './SiteNavDropdownItem.vue'
 
-const { links, dropdownText } = defineProps<{
-  links: SiteMenuDropdownSubMenu
-  dropdownText: string
+const { links, id } = defineProps<{
+  links: SiteMenuDropdownLinks
+  id: string
 }>()
 </script>
 
 <template>
   <ul
     class="site-nav__dropdown-list"
-    :id="`site-nav__dropdown-list-${dropdownText.toLowerCase()}`"
-    :aria-labelledby="`site-nav__dropdown-button-${dropdownText.toLowerCase()}`"
+    :id="`site-nav__dropdown-list-${id.toLowerCase()}`"
+    :aria-labelledby="`site-nav__dropdown-button-${id.toLowerCase()}`"
     data-testid="site-nav__dropdown-list"
   >
     <SiteNavDropdownItem :link v-for="link in links" />

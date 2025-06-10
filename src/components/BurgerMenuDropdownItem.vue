@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useIsBurgerMenuOpenStore } from '@/stores/isBurgerMenuOpen'
-import type { SiteMenuDropdownSubMenuLink } from '@/types/components'
+import type { SiteMenuDropdownLink } from '@/types/components'
 
 const { link } = defineProps<{
-  link: SiteMenuDropdownSubMenuLink
+  link: SiteMenuDropdownLink
 }>()
 
 // Get the stores instances

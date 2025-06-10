@@ -8,9 +8,9 @@ import frontDataBase from '../../../db.json'
 /********************/
 
 const mockSiteMenu = frontDataBase['siteMenu']
-const mockLink = mockSiteMenu[1].subMenu[0]
-const mockLinkText = mockSiteMenu[1].subMenu[0].text
-const mockLinkURL = mockSiteMenu[1].subMenu[0].url
+const mockLink = mockSiteMenu[1].links[0]
+const mockLinkText = mockLink.text
+const mockLinkURL = mockLink.url
 const mockCloseSiteNavDropdown = vi.fn()
 
 /***********/

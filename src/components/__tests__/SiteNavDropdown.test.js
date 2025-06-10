@@ -27,9 +27,10 @@ const mockRouter = createRouter({
 
 const mockSiteMenu = frontDataBase['siteMenu']
 const mockDropdown = mockSiteMenu[1]
-const mockDropdownText = mockDropdown.text
-const mockDropdownTitle = mockDropdown.title
-const mockDropdownLinks = mockDropdown.subMenu
+const mockDropdownButton = mockDropdown.button
+const mockDropdownButtonText = mockDropdownButton.text
+const mockDropdownButtonTitle = mockDropdownButton.title
+const mockDropdownLinks = mockDropdown.links
 
 /***********/
 /* 2.Build */
@@ -75,10 +76,10 @@ describe('SiteNavDropdown.vue', () => {
       expect(button.exists()).toBeTruthy()
 
       // Assert its text is rendered
-      expect(button.text()).toContain(mockDropdownText)
+      expect(button.text()).toContain(mockDropdownButtonText)
 
       // Assert its title is rendered
-      expect(button.attributes('title')).toBe(mockDropdownTitle)
+      expect(button.attributes('title')).toBe(mockDropdownButtonTitle)
 
       // Assert the close icon is rendered
       expect(button.text()).toContain('▼')

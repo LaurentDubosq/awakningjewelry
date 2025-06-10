@@ -199,9 +199,9 @@ describe('SiteNav.vue', () => {
           let list = dropdown.find("[data-testid='site-nav__dropdown-list']")
 
           const mockDropdown = mockSiteMenu[index]
-          const mockDropdownButtonText = mockDropdown.text
-          const mockDropdownButtonTitle = mockDropdown.title
-          const mockLinks = mockDropdown.subMenu
+          const mockDropdownButtonText = mockDropdown.button.text
+          const mockDropdownButtonTitle = mockDropdown.button.title
+          const mockDropdownLinks = mockDropdown.links
 
           /* TOGGLE BUTTON */
 
@@ -245,11 +245,11 @@ describe('SiteNav.vue', () => {
 
           // Assert all links are rendered
           const links = list.findAll("[data-testid='site-nav__dropdown-item-link']")
-          expect(links).toHaveLength(mockLinks.length)
+          expect(links).toHaveLength(mockDropdownLinks.length)
 
           // Assert that each link is rendered with necessary information
           links.forEach((link, index) => {
-            const mockLink = mockLinks[index]
+            const mockLink = mockDropdownLinks[index]
             const mockLinkText = mockLink.text
             const mockLinkURL = mockLink.url
 

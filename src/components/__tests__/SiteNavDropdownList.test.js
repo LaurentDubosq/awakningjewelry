@@ -8,8 +8,9 @@ import frontDataBase from '../../../db.json'
 /********************/
 
 const mockSiteMenu = frontDataBase['siteMenu']
-const mockDropdownText = mockSiteMenu[1].text
-const mockDropdownLinks = mockSiteMenu[1].subMenu
+const mockDropdown = mockSiteMenu[1]
+const mockDropdownButtonText = mockDropdown.button.text
+const mockDropdownLinks = mockDropdown.links
 const mockDropdownLinksLength = mockDropdownLinks.length
 const mockCloseSiteNavDropdown = vi.fn()
 
@@ -20,7 +21,7 @@ const mockCloseSiteNavDropdown = vi.fn()
 // Component Factory
 function mountSiteNavDropdownList() {
   return mount(SiteNavDropdownList, {
-    props: { links: mockDropdownLinks, dropdownText: mockDropdownText },
+    props: { links: mockDropdownLinks, id: mockDropdownButtonText },
     global: {
       provide: { [closeSiteNavDropdownKey]: mockCloseSiteNavDropdown },
       stubs: { RouterLink: RouterLinkStub },

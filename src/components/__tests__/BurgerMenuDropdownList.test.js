@@ -12,8 +12,9 @@ import { ref } from 'vue'
 /* Data */
 
 const mockSiteMenu = frontDataBase['siteMenu']
-const mockDropdownText = mockSiteMenu[1].text
-const mockLinks = mockSiteMenu[1].subMenu
+const mockDropdown = mockSiteMenu[1]
+const mockButtonText = mockDropdown.button.text
+const mockLinks = mockDropdown.links
 const mockLinksLength = mockLinks.length
 
 /* Stores */
@@ -40,7 +41,7 @@ const mockIsBurgerMenuOpenStore = mockUseIsBurgerMenuOpenStore()
 // Component Factory
 function mountBurgerMenuDropdownList() {
   return mount(BurgerMenuDropdownList, {
-    props: { links: mockLinks, id: mockDropdownText },
+    props: { links: mockLinks, id: mockButtonText },
     global: {
       plugins: [mockPinia],
       stubs: { RouterLink: RouterLinkStub },

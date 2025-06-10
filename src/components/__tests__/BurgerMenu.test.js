@@ -181,9 +181,9 @@ describe('BurgerMenu.vue', () => {
           let links
 
           const mockDropdown = mockSiteMenu[index]
-          const mockDropdownText = mockDropdown.text
-          const mockDropdownItems = mockDropdown.subMenu
-          const mockDropdownItemsLength = mockDropdownItems.length
+          const mockDropdownButtonText = mockDropdown.button.text
+          const mockDropdownLinks = mockDropdown.links
+          const mockDropdownLinksLength = mockDropdownLinks.length
 
           /* TOGGLE BUTTON */
 
@@ -191,7 +191,7 @@ describe('BurgerMenu.vue', () => {
           expect(button.exists()).toBeTruthy()
 
           // Assert the button text is rendered
-          expect(button.text()).toContain(mockDropdownText)
+          expect(button.text()).toContain(mockDropdownButtonText)
 
           // Assert the open/close icon state is ignored by assistive technologies
           const iconWrapper = button.find(
@@ -215,11 +215,11 @@ describe('BurgerMenu.vue', () => {
           links = dropdown.findAll("[data-testid='burger-menu__dropdown-item-link']")
 
           // Assert all links are rendered
-          expect(links).toHaveLength(mockDropdownItemsLength)
+          expect(links).toHaveLength(mockDropdownLinksLength)
 
           // Assert each link is rendered with its necessary information
           links.forEach((link, index) => {
-            const mockLink = mockDropdownItems[index]
+            const mockLink = mockDropdownLinks[index]
             const mockLinkURL = mockLink.url
             const mockLinkText = mockLink.text
 

@@ -12,8 +12,8 @@ import { ref } from 'vue'
 /* Data */
 
 const mockDropdown = frontDataBase.siteMenu[1]
-const mockDropdownText = mockDropdown.text
-const mockDropdownLinks = mockDropdown.subMenu
+const mockDropdownButtonText = mockDropdown.button.text
+const mockDropdownLinks = mockDropdown.links
 const mockDropdownLinksLength = mockDropdownLinks.length
 
 /* Stores */
@@ -85,7 +85,7 @@ describe('BurgerMenuDropdown.vue', () => {
       expect(button.exists()).toBeTruthy()
 
       // Assert its text is rendered
-      expect(button.text()).toContain(mockDropdownText)
+      expect(button.text()).toContain(mockDropdownButtonText)
 
       // Assert the open/close icon state is ignored by assistive technologies
       const iconWrapper = button.find("[data-testid='burger-menu__dropdown-button-icon-wrapper']")

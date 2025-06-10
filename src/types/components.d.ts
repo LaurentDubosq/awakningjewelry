@@ -18,17 +18,19 @@ export interface SiteMenuLink {
 export interface SiteMenuDropdown {
   id: number
   type: string
-  text: string
-  url: string
-  title: string
-  subMenu: Array<SiteSubMenuItem>
+  button: SiteMenuDropdownButton
+  links: SiteMenuDropdownLinks
 }
-export interface SiteMenuDropdownSubMenuLink {
+export interface SiteMenuDropdownButton {
+  text: string
+  title: string
+}
+export interface SiteMenuDropdownLink {
   id: number
   text: string
   url: string
 }
-export type SiteMenuDropdownSubMenu = Array<SiteMenuDropdownSubMenuLink>
+export type SiteMenuDropdownLinks = Array<SiteMenuDropdownLink>
 
 /* Hero */
 export interface HeroSlideType {

@@ -15,15 +15,15 @@ const isDropdownOpen: Ref<boolean> = ref(true)
 <template>
   <div class="burger-menu__dropdown" data-testid="burger-menu__dropdown">
     <BurgerMenuDropdownButton
-      :text="dropdown.text"
+      :text="dropdown.button.text"
       :isDropdownOpen
       @toggle-dropdown="isDropdownOpen = !isDropdownOpen"
     />
     <MyTransition name="vertical-top-slide" :group="true" :duration="300">
       <BurgerMenuDropdownList
-        :links="dropdown.subMenu"
-        :id="dropdown.text"
-        v-show="isDropdownOpen && dropdown.subMenu"
+        :links="dropdown.links"
+        :id="dropdown.button.text"
+        v-show="isDropdownOpen && dropdown.links"
       />
     </MyTransition>
   </div>
