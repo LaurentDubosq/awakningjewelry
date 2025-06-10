@@ -6,14 +6,16 @@ const { links, id } = defineProps<{
   links: SiteMenuDropdownLinks
   id: string
 }>()
+
+const idLowered = id.toLowerCase()
 </script>
 
 <template>
   <div class="burger-menu__dropdown-list-wrapper">
     <ul
       class="burger-menu__dropdown-list transition"
-      :id="`burger-menu__dropdown-list-${id.toLowerCase()}`"
-      :aria-labelledby="`burger-menu__dropdown-button-${id.toLowerCase()}`"
+      :id="`burger-menu__dropdown-list-${idLowered}`"
+      :aria-labelledby="`burger-menu__dropdown-button-${idLowered}`"
       data-testid="burger-menu__dropdown-list"
     >
       <BurgerMenuDropdownItem :link v-for="link in links" />
