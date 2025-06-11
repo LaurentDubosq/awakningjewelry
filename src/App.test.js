@@ -230,7 +230,7 @@ describe('App.vue', () => {
       let BurgerMenuComponent
 
       // Open the burger menu by a touch
-      burgerMenuToggleButton = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
+      burgerMenuToggleButton = wrapper.find("[data-testid='burger-menu-toggle-button']")
       await burgerMenuToggleButton.trigger('click')
 
       // Assert the burger menu is open
@@ -238,7 +238,7 @@ describe('App.vue', () => {
       expect(BurgerMenuComponent.isVisible()).toBeTruthy()
 
       // Touch on the button again
-      burgerMenuToggleButton = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
+      burgerMenuToggleButton = wrapper.find("[data-testid='burger-menu-toggle-button']")
       await burgerMenuToggleButton.trigger('click')
 
       // Assert the burger menu is close
@@ -248,7 +248,7 @@ describe('App.vue', () => {
 
     test('when we press the "Enter" key on the burger menu toggle button, it opens the burger menu then focus the first focusable element', async () => {
       // Open the burger menu by pressing the "enter" key
-      const burgerMenuToggleButton = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
+      const burgerMenuToggleButton = wrapper.find("[data-testid='burger-menu-toggle-button']")
       burgerMenuToggleButton.element.dispatchEvent(clickEventTriggeredByEnter)
       await nextTick()
 
@@ -273,7 +273,7 @@ describe('App.vue', () => {
       expect(BurgerMenuComponent.isVisible()).toBeTruthy()
 
       // Focus the burger menu toggle button (it corresponds to keyboard navigation that ends on the burger menu toggle button)
-      const burgerMenuToggleButton = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
+      const burgerMenuToggleButton = wrapper.find("[data-testid='burger-menu-toggle-button']")
       burgerMenuToggleButton.element.focus() // this method guarantee that the DOM element will be focused
 
       // Press "Enter" on the burger menu toggle button again

@@ -69,7 +69,7 @@ describe('BurgerMenuToggle.vue', () => {
   describe('Initial render - Burger menu close state', () => {
     test('renders the toggle button with necessary information', () => {
       // Assert the button is rendered
-      const button = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
+      const button = wrapper.find("[data-testid='burger-menu-toggle-button']")
       expect(button.exists()).toBeTruthy()
 
       // Assert the burger icon is rendered
@@ -118,7 +118,7 @@ describe('BurgerMenuToggle.vue', () => {
       expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
 
       // Find the button
-      const button = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
+      const button = wrapper.find("[data-testid='burger-menu-toggle-button']")
 
       // Touch on the button
       await button.trigger('click')
@@ -138,7 +138,7 @@ describe('BurgerMenuToggle.vue', () => {
       expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
 
       // Commands the burger menu to open by pressing the "enter" key
-      const button = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
+      const button = wrapper.find("[data-testid='burger-menu-toggle-button']")
       await button.element.dispatchEvent(clickEventTriggeredByEnter)
 
       // Assert the burger menu status is open
@@ -156,7 +156,7 @@ describe('BurgerMenuToggle.vue', () => {
       expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
 
       // Commands the burger menu to close by pressing the "enter" key
-      const button = wrapper.find("[data-testid='site-header__burger-menu-toggle']")
+      const button = wrapper.find("[data-testid='burger-menu-toggle-button']")
       await button.element.dispatchEvent(clickEventTriggeredByEnter)
 
       // Assert the burger menu status is close
