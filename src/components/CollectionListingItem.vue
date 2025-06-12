@@ -9,9 +9,8 @@ const { collection } = defineProps<{
 <template>
   <li class="collection-listing__item" data-testid="collection-listing__item">
     <RouterLink
-      :to="collection.url"
       class="collection-listing__item-link"
-      :aria-label="`Explore ${collection.title} collection`"
+      :to="collection.url"
       :title="`Explore ${collection.title} collection`"
       data-testid="collection-listing__link"
     >
@@ -42,7 +41,7 @@ const { collection } = defineProps<{
 
   &-link {
     position: relative;
-    display: block;
+    display: inline-block;
   }
 
   &-img {

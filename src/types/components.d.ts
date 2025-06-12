@@ -1,5 +1,5 @@
 import type {
-  Collection,
+  Collections,
   Product,
   InputSuccessResult,
   InputErrorResult,
@@ -63,7 +63,7 @@ export interface StatementBannerWordingImage {
 /* CollectionListing */
 export interface CollectionListing {
   title: string
-  collections: Collection[]
+  collections: Collections
 }
 
 /* ProductListing */

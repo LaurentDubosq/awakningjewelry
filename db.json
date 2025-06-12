@@ -117,24 +117,27 @@
       "alt": ""
     }
   },
-  "collectionsByGender": [
-    {
-      "image": {
-        "url": "https://cdn.shopify.com/s/files/1/2275/5667/files/woman-model-urban-adventurer.avif",
-        "alt": ""
+  "collectionListingByGender": {
+    "title": "By gender",
+    "collections": [
+      {
+        "image": {
+          "url": "https://cdn.shopify.com/s/files/1/2275/5667/files/woman-model-urban-adventurer.avif",
+          "alt": ""
+        },
+        "title": "Women",
+        "url": "/collections/women"
       },
-      "title": "Women",
-      "url": "/collections/women"
-    },
-    {
-      "image": {
-        "url": "https://cdn.shopify.com/s/files/1/2275/5667/files/man-model-urban.avif",
-        "alt": ""
-      },
-      "title": "Men",
-      "url": "/collections/men"
-    }
-  ],
+      {
+        "image": {
+          "url": "https://cdn.shopify.com/s/files/1/2275/5667/files/man-model-urban.avif",
+          "alt": ""
+        },
+        "title": "Men",
+        "url": "/collections/men"
+      }
+    ]
+  },
   "promotions": [
     {
       "title": "Infinite Wisdom of the Tree of Life Charm Bracelet",

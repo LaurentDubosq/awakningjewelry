@@ -37,21 +37,24 @@ const mockStatementMissionWordingStatement = mockStatementMissionWording.stateme
 const mockStatementMissionWordingImageURL = mockStatementMissionWording.image.url
 const mockStatementMissionWordingImageAlt = mockStatementMissionWording.image.alt
 
-const mockCollectionsTitle = 'By Gender'
-const mockCollectionsPending = {
-  collections: undefined,
-  fetchState: 'pending',
+const mockCollectionListingByGenderPending = {
+  content: undefined,
+  contentFetchState: 'pending',
 }
-const mockCollectionsRejected = {
-  collections: undefined,
-  fetchState: 'rejected',
+const mockCollectionListingByGenderRejected = {
+  content: undefined,
+  contentFetchState: 'rejected',
 }
-const mockCollectionsFulfilled = {
-  collections: frontDataBase.collectionsByGender,
-  fetchState: 'fulfilled',
+const mockCollectionListingByGenderFulfilled = {
+  content: frontDataBase.collectionListingByGender,
+  contentFetchState: 'fulfilled',
 }
-const mockCollections = mockCollectionsFulfilled.collections
-const mockCollectionsLength = mockCollections.length
+const mockCollectionListingByGender = mockCollectionListingByGenderFulfilled.content
+const mockCollectionListingByGenderTitle = mockCollectionListingByGender.title
+const mockCollectionListingByGenderFeatureLabel = `Explore our collections ${mockCollectionListingByGenderTitle}`
+const mockCollectionListingByGenderCollections = mockCollectionListingByGender.collections
+const mockCollectionListingByGenderCollectionsLength =
+  mockCollectionListingByGenderCollections.length
 
 const mockProductsTitle = 'Promotions'
 const mockProductsPending = {
@@ -110,18 +113,14 @@ const mockUseStatementMissionWordingResultStore = defineStore(
   },
 )
 
-const mockUseCollectionsByGenderResultStore = defineStore('CollectionsByGenderResult', () => {
-  const collectionsByGenderResult = ref(mockCollectionsPending)
-  const collectionsByGenderData = computed(() => collectionsByGenderResult.value.collections)
-  const collectionsByGenderFetchState = computed(() => collectionsByGenderResult.value.fetchState)
-  const updateCollectionsByGenderResult = (newState) => {
-    collectionsByGenderResult.value = newState
-  }
+const mockUseCollectionListingByGenderStore = defineStore('CollectionListingByGender', () => {
+  const fetchResult = ref(mockCollectionListingByGenderPending)
+  const content = computed(() => fetchResult.value.content)
+  const contentFetchState = computed(() => fetchResult.value.contentFetchState)
   return {
-    collectionsByGenderResult,
-    collectionsByGenderData,
-    collectionsByGenderFetchState,
-    updateCollectionsByGenderResult,
+    fetchResult,
+    content,
+    contentFetchState,
   }
 })
 
@@ -152,7 +151,7 @@ const mockUseFounderQuoteBannerContentResultStore = defineStore(
 
 // Initialize the stores
 const mockStatementMissionWordingResultStore = mockUseStatementMissionWordingResultStore()
-const mockCollectionsByGenderResultStore = mockUseCollectionsByGenderResultStore()
+const mockCollectionListingByGenderStore = mockUseCollectionListingByGenderStore()
 const mockPromotionsResultStore = mockUsePromotionsResultStore()
 const mockFounderQuoteBannerContentResultStore = mockUseFounderQuoteBannerContentResultStore()
 
@@ -191,7 +190,7 @@ describe('HomeView.vue', () => {
     // Reset the store(s) state(s) to default to ensure a clean environment for each test
     mockStatementMissionWordingResultStore.wordingFetchResult =
       mockStatementMissionWordingPendingResult
-    mockCollectionsByGenderResultStore.collectionsByGenderResult = mockCollectionsPending
+    mockCollectionListingByGenderStore.fetchResult = mockCollectionListingByGenderPending
     mockPromotionsResultStore.promotionsResult = mockProductsPending
     mockFounderQuoteBannerContentResultStore.contentFetchResult =
       mockFounderQuoteBannerContentPendingResult
@@ -207,11 +206,6 @@ describe('HomeView.vue', () => {
     test('hero feature is rendered', async () => {
       const HeroComponent = wrapper.findComponent(Hero)
       expect(HeroComponent.exists()).toBeTruthy()
-    })
-
-    test('renders the collection listing title', () => {
-      const title = wrapper.find("[data-testid='collection-listing__title']")
-      expect(title.text()).toContain(mockCollectionsTitle)
     })
 
     test('renders the product listing title', () => {
@@ -254,7 +248,7 @@ describe('HomeView.vue', () => {
       // Set the stores data fetching status to rejected
       mockStatementMissionWordingResultStore.wordingFetchResult =
         mockStatementMissionWordingRejectedResult
-      mockCollectionsByGenderResultStore.collectionsByGenderResult = mockCollectionsRejected
+      mockCollectionListingByGenderStore.fetchResult = mockCollectionListingByGenderRejected
       mockPromotionsResultStore.promotionsResult = mockProductsRejected
       mockFounderQuoteBannerContentResultStore.contentFetchResult =
         mockFounderQuoteBannerContentRejectedResult
@@ -288,7 +282,7 @@ describe('HomeView.vue', () => {
       // Set the stores data fetching status to fulfilled
       mockStatementMissionWordingResultStore.wordingFetchResult =
         mockStatementMissionWordingFulfilledResult
-      mockCollectionsByGenderResultStore.collectionsByGenderResult = mockCollectionsFulfilled
+      mockCollectionListingByGenderStore.fetchResult = mockCollectionListingByGenderFulfilled
       mockPromotionsResultStore.promotionsResult = mockProductsFulfilled
       mockFounderQuoteBannerContentResultStore.contentFetchResult =
         mockFounderQuoteBannerContentFulfilledResult
@@ -318,22 +312,33 @@ describe('HomeView.vue', () => {
       expect(image.attributes('alt')).toBe(mockStatementMissionWordingImageAlt)
     })
 
-    test('collections are rendered with their necessary information', () => {
-      // Find the elements
+    test('collection listing is rendered with its necessary information', () => {
+      // Assert the feature label for accessibility is rendered
+      const section = wrapper.find("[data-testid='collection-listing']")
+      expect(section.attributes('aria-label')).toBe(mockCollectionListingByGenderFeatureLabel)
+
+      // Assert the title is rendered
+      const title = wrapper.find("[data-testid='collection-listing__title']")
+      expect(title.text()).toContain(mockCollectionListingByGenderTitle)
+
+      // Assert the title is not rendered for screen readers
+      expect(title.attributes('aria-hidden')).toBe('true')
+
+      // Find the collections elements
       const CollectionListingComponent = wrapper.findComponent(CollectionListing)
       const collections = CollectionListingComponent.findAll(
         "[data-testid='collection-listing__item']",
       )
 
       // Assert that all collections are rendered
-      expect(collections).toHaveLength(mockCollectionsLength)
+      expect(collections).toHaveLength(mockCollectionListingByGenderCollectionsLength)
 
       // Assert any collection is rendered with necessary information
       collections.forEach((collection, index) => {
         const link = collection.findComponent(RouterLinkStub)
         const img = collection.find("[data-testid='collection-listing__item-img']")
         const title = collection.find("[data-testid='collection-listing__item-title']")
-        const mockCollection = mockCollections[index]
+        const mockCollection = mockCollectionListingByGenderCollections[index]
         const mockCollectionURL = mockCollection.url
         const mockCollectionImageURL = mockCollection.image.url
         const mockCollectionTitle = mockCollection.title
@@ -343,6 +348,9 @@ describe('HomeView.vue', () => {
 
         // Assert the link has the correct "url" value
         expect(link.props('to')).toBe(mockCollectionURL)
+
+        // Assert the link has the correct "title" value
+        expect(link.attributes('title')).toBe(`Explore ${mockCollectionTitle} collection`)
 
         // Assert its img is rendered
         expect(img.exists()).toBeTruthy()

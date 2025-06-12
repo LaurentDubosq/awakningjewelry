@@ -1,38 +1,29 @@
 import { ref, type Ref, type ComputedRef, computed, unref } from 'vue'
-import type { Collection } from '@/types/global.d.ts'
 import type { UseFetchWithStateReturn, FetchState } from '@/types/fetch'
 import { defineStore } from 'pinia'
-import { getCollectionsByGender } from '@/data/dataFetchers'
+import { getCollectionListingByGender } from '@/data/dataFetchers'
+import type { CollectionListing } from '@/types/components'
 
-export const useCollectionsByGenderResultStore = defineStore('CollectionsByGenderResult', () => {
+export const useCollectionListingByGenderStore = defineStore('CollectionListingByGender', () => {
   // States
-  const collectionsByGenderResult: Ref<undefined | UseFetchWithStateReturn<Collection[]>> = ref()
+  const fetchResult: Ref<undefined | UseFetchWithStateReturn<CollectionListing>> = ref()
 
   // Computeds
-  const collectionsByGenderData: ComputedRef<Collection[] | undefined> = computed(() =>
-    unref(collectionsByGenderResult.value?.data),
+  const content: ComputedRef<CollectionListing | undefined> = computed(() =>
+    unref(fetchResult.value?.data),
   )
 
-  const collectionsByGenderFetchState: ComputedRef<FetchState | undefined> = computed(() =>
-    unref(collectionsByGenderResult.value?.status),
+  const contentFetchState: ComputedRef<FetchState | undefined> = computed(() =>
+    unref(fetchResult.value?.status),
   )
-
-  // Methods
-  const updateCollectionsByGenderResult = (
-    newCollectionsByGenderResult: UseFetchWithStateReturn<Collection[]>,
-  ) => {
-    collectionsByGenderResult.value = newCollectionsByGenderResult
-  }
 
   // API Call - Data fetching with data caching
-  if (!collectionsByGenderResult.value) {
-    collectionsByGenderResult.value = getCollectionsByGender()
+  if (!fetchResult.value) {
+    fetchResult.value = getCollectionListingByGender()
   }
 
   return {
-    collectionsByGenderResult,
-    collectionsByGenderData,
-    collectionsByGenderFetchState,
-    updateCollectionsByGenderResult,
+    content,
+    contentFetchState,
   }
 })

@@ -6,7 +6,7 @@ import frontDataBase from '../../../db.json'
 /* 1.Initialization */
 /********************/
 
-const mockCollection = frontDataBase.collectionsByGender[0]
+const mockCollection = frontDataBase.collectionListingByGender.collections[0]
 const mockCollectionURL = mockCollection.url
 const mockCollectionImageURL = mockCollection.image.url
 const mockCollectionTitle = mockCollection.title
@@ -54,6 +54,9 @@ describe('CollectionListingItem.vue', () => {
 
     // Assert the link has the correct "url" value
     expect(link.props('to')).toBe(mockCollectionURL)
+
+    // Assert the link has the correct "title" value
+    expect(link.attributes('title')).toBe(`Explore ${mockCollectionTitle} collection`)
 
     // Assert its img is rendered
     expect(img.exists()).toBeTruthy()

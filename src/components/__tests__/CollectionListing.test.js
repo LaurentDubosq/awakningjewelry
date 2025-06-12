@@ -8,21 +8,23 @@ import frontDataBase from '../../../db.json'
 /* 1.Initialization */
 /********************/
 
-const mockTitle = 'By gender'
-const mockCollectionsPending = {
-  collections: undefined,
-  fetchState: 'pending',
+const mockContentPending = {
+  content: undefined,
+  contentFetchState: 'pending',
 }
-const mockCollectionsRejected = {
-  collections: undefined,
-  fetchState: 'rejected',
+const mockContentRejected = {
+  content: undefined,
+  contentFetchState: 'rejected',
 }
-const mockCollectionsFulfilled = {
-  collections: frontDataBase.collectionsByGender,
-  fetchState: 'fulfilled',
+const mockContentFulfilled = {
+  content: frontDataBase.collectionListingByGender,
+  contentFetchState: 'fulfilled',
 }
-const mockCollections = mockCollectionsFulfilled.collections
-const mockCollectionsLength = mockCollections.length
+const mockContent = mockContentFulfilled.content
+const mockContentTitle = mockContent.title
+const mockContentFeatureLabel = `Explore our collections ${mockContentTitle}`
+const mockContentCollections = mockContent.collections
+const mockContentCollectionsLength = mockContentCollections.length
 
 /***********/
 /* 2.Build */
@@ -32,9 +34,8 @@ const mockCollectionsLength = mockCollections.length
 function mountCollectionListing(props) {
   return mount(CollectionListing, {
     props: {
-      title: mockTitle,
-      collections: mockCollectionsPending.collections,
-      fetchState: mockCollectionsPending.fetchState,
+      content: mockContentPending.content,
+      contentFetchState: mockContentPending.contentFetchState,
       ...props,
     },
     global: { stubs: { RouterLink: RouterLinkStub } },
@@ -62,11 +63,6 @@ describe('CollectionListing.vue', () => {
   })
 
   describe('Initial render - Data fetching "Pending" state', () => {
-    test('renders its title', () => {
-      const title = wrapper.find("[data-testid='collection-listing__title']")
-      expect(title.text()).toContain(mockTitle)
-    })
-
     test('the loader animation is rendered', async () => {
       const loadingComponent = wrapper.findComponent(LoadingComponent)
       expect(loadingComponent.exists()).toBeTruthy()
@@ -76,7 +72,7 @@ describe('CollectionListing.vue', () => {
   describe('Data fetching "Rejected" state', () => {
     test('the error message is rendered', () => {
       // Mount the component (rejected state)
-      const wrapper = mountCollectionListing(mockCollectionsRejected)
+      const wrapper = mountCollectionListing(mockContentRejected)
 
       // Assert the error message is rendered
       const errorComponent = wrapper.findComponent(ErrorComponent)
@@ -85,22 +81,39 @@ describe('CollectionListing.vue', () => {
   })
 
   describe('Data fetching "Fulfilled" state', () => {
-    test('renders all collections with necessary information', () => {
+    beforeEach(() => {
       // Mount the component (fulfilled state)
-      const wrapper = mountCollectionListing(mockCollectionsFulfilled)
+      wrapper = mountCollectionListing(mockContentFulfilled)
+    })
 
+    test('renders the feature label for accessibility', () => {
+      const section = wrapper.find("[data-testid='collection-listing']")
+      expect(section.attributes('aria-label')).toBe(mockContentFeatureLabel)
+    })
+
+    test('renders its title', () => {
+      const title = wrapper.find("[data-testid='collection-listing__title']")
+      expect(title.text()).toContain(mockContentTitle)
+    })
+
+    test("don't renders the title for screen readers", () => {
+      const title = wrapper.find("[data-testid='collection-listing__title']")
+      expect(title.attributes('aria-hidden')).toBe('true')
+    })
+
+    test('renders all collections with necessary information', () => {
       // Find the collections elements
       const collections = wrapper.findAll("[data-testid='collection-listing__item']")
 
       // Assert that all collections are rendered
-      expect(collections).toHaveLength(mockCollectionsLength)
+      expect(collections).toHaveLength(mockContentCollectionsLength)
 
       // Assert any collection is rendered with necessary information
       collections.forEach((collection, index) => {
         const link = collection.findComponent(RouterLinkStub)
         const img = collection.find("[data-testid='collection-listing__item-img']")
         const title = collection.find("[data-testid='collection-listing__item-title']")
-        const mockCollection = mockCollections[index]
+        const mockCollection = mockContentCollections[index]
         const mockCollectionURL = mockCollection.url
         const mockCollectionImageURL = mockCollection.image.url
         const mockCollectionTitle = mockCollection.title
@@ -110,6 +123,9 @@ describe('CollectionListing.vue', () => {
 
         // Assert the link has the correct "url" value
         expect(link.props('to')).toBe(mockCollectionURL)
+
+        // Assert the link has the correct "title" value
+        expect(link.attributes('title')).toBe(`Explore ${mockCollectionTitle} collection`)
 
         // Assert its img is rendered
         expect(img.exists()).toBeTruthy()

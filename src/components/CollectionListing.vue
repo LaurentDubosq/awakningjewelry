@@ -1,30 +1,41 @@
 <script setup lang="ts">
-import type { Collection } from '@/types/global.d.ts'
 import CollectionListingItem from './CollectionListingItem.vue'
 import type { FetchState } from '@/types/fetch'
 import LoadingComponent from './LoadingComponent.vue'
 import ErrorComponent from './ErrorComponent.vue'
+import type { CollectionListing } from '@/types/components'
+import { computed } from 'vue'
 
-const { title, collections, fetchState } = defineProps<{
-  title: string
-  collections?: Collection[]
-  fetchState?: FetchState
+const props = defineProps<{
+  content?: CollectionListing
+  contentFetchState?: FetchState
 }>()
+
+const title = computed(() => props.content?.title)
+const collections = computed(() => props.content?.collections)
 </script>
 
 <template>
-  <section class="collection-listing" :aria-label="`Explore our collections ${title}`">
+  <section
+    class="collection-listing"
+    :aria-label="`Explore our collections ${title}`"
+    data-testid="collection-listing"
+  >
     <div class="wrapper">
-      <h2 class="collection-listing__title" data-testid="collection-listing__title">
+      <h2
+        class="collection-listing__title"
+        aria-hidden="true"
+        data-testid="collection-listing__title"
+      >
         {{ title }}
       </h2>
       <hr class="collection-listing__separator" />
       <ul class="collection-listing__list" aria-label="Collections">
-        <template v-if="fetchState === 'fulfilled'">
+        <template v-if="contentFetchState === 'fulfilled'">
           <CollectionListingItem v-for="collection in collections" :collection />
         </template>
-        <LoadingComponent v-if="fetchState === 'pending'" />
-        <ErrorComponent v-if="fetchState === 'rejected'" />
+        <LoadingComponent v-if="contentFetchState === 'pending'" />
+        <ErrorComponent v-if="contentFetchState === 'rejected'" />
       </ul>
     </div>
   </section>
@@ -34,9 +45,9 @@ const { title, collections, fetchState } = defineProps<{
 @use '@/assets/styles/_constants.scss' as *;
 
 .collection-listing {
-  margin: 45px 0;
+  padding: 45px 0;
   @media screen and (min-width: $BreakpointDesktop) {
-    margin: 90px 0;
+    padding: 90px 0;
   }
 
   &__title {

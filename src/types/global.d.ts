@@ -10,6 +10,8 @@ export interface CollectionImage {
   alt: string
 }
 
+export type Collections = Array<Collection>
+
 /* Product */
 export interface ProductSummary {
   title: string

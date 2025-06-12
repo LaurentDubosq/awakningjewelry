@@ -1,7 +1,7 @@
 import type { PageMetaData } from '@/types/router.d.ts'
 import type { UseFetchWithStateReturn } from '@/types/fetch'
 import {
-  collectionsByGenderURL,
+  collectionListingByGenderURL,
   statementMissionWordingURL,
   heroSlidesURL,
   promotionsURL,
@@ -16,8 +16,9 @@ import type {
   HeroSlideType,
   NewsletterSignupWording,
   QuoteBannerContent,
+  CollectionListing,
 } from '@/types/components.d.ts'
-import type { Collection, ProductSummary } from '@/types/global.d.ts'
+import type { ProductSummary } from '@/types/global.d.ts'
 import { useFetch } from '@/composables/useFetch'
 import { useFetchWithState } from '@/composables/useFetchWithState'
 
@@ -44,8 +45,10 @@ export const getStatementMissionWordingAsyncResult =
     return result
   }
 
-export const getCollectionsByGender = (): UseFetchWithStateReturn<Collection[]> => {
-  const result: UseFetchWithStateReturn<Collection[]> = useFetchWithState(collectionsByGenderURL)
+export const getCollectionListingByGender = (): UseFetchWithStateReturn<CollectionListing> => {
+  const result: UseFetchWithStateReturn<CollectionListing> = useFetchWithState(
+    collectionListingByGenderURL,
+  )
   return result
 }
 

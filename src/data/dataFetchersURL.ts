@@ -12,8 +12,8 @@ export const heroSlidesURL: string = `${LAYOUT_API_BASE_URL}/heroSlides`
 /* StatementMissionWording */
 export const statementMissionWordingURL: string = `${LAYOUT_API_BASE_URL}/statementMissionWording`
 
-/* CollectionsByGender */
-export const collectionsByGenderURL: string = `${LAYOUT_API_BASE_URL}/collectionsByGender`
+/* CollectionListingByGender */
+export const collectionListingByGenderURL: string = `${LAYOUT_API_BASE_URL}/collectionListingByGender`
 
 /* Promotions */
 export const promotionsURL: string = `${LAYOUT_API_BASE_URL}/promotions`
