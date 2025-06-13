@@ -1,7 +1,0 @@
-# Above App
-
-- for each page "meta-data" >> check <title> and <meta description> are well rendered >> E2E Cypress Test
-
-    # SiteHeader
-
-    - "rightContainerElementWidth" variable >> change its value from a mobile window's width to a desktop window's width and still be equal to the burger icon wrapper element flex-basis value >> E2E Cypress Test
