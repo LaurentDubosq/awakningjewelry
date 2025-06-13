@@ -53,7 +53,7 @@ const { content, contentFetchState } = defineProps<{
 
 .quote-banner {
   padding: 30px 55px;
-  color: $AwakningPermanentColorWhite;
+  color: $AwakningColorSecondary;
   background-color: #59574f;
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.651), rgba(0, 0, 0, 0.6)),
@@ -114,7 +114,7 @@ const { content, contentFetchState } = defineProps<{
   }
 
   &__link {
-    background-color: $AwakningPermanentColorWhite;
+    background-color: $AwakningColorSecondary;
     color: #1f2021;
   }
 }

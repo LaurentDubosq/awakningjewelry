@@ -8,7 +8,7 @@
 @use '@/assets/styles/_constants.scss' as *;
 
 .error-message {
-  color: $AwakningPermanentColorError;
+  color: $AwakningColorError;
   margin: 0 5px;
 }
 </style>

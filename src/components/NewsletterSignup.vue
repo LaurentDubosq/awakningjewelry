@@ -161,16 +161,16 @@ const handleSubmit = async () => {
   }
 
   &__form-message-success {
-    background-color: $AwakningPermanentColorBackgroundSuccess;
-    border: 1px solid $AwakningPermanentColorSuccess;
-    color: $AwakningPermanentColorSuccess;
+    background-color: $AwakningColorBackgroundSuccess;
+    border: 1px solid $AwakningColorSuccess;
+    color: $AwakningColorSuccess;
   }
 
   &__form-message-error {
     margin-top: 10px;
-    background-color: $AwakningPermanentColorBackgroundError;
-    border: 1px solid $AwakningPermanentColorError;
-    color: $AwakningPermanentColorError;
+    background-color: $AwakningColorBackgroundError;
+    border: 1px solid $AwakningColorError;
+    color: $AwakningColorError;
   }
 
   &__mention {

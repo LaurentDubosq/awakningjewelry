@@ -95,7 +95,7 @@ const { product } = defineProps<{
   }
 
   &-price-discounted {
-    color: $AwakningPermanentColorPromotions;
+    color: $AwakningColorPromotions;
     margin-left: 0.3125rem;
   }
 }

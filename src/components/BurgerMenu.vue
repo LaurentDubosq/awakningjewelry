@@ -56,7 +56,7 @@ function isDropdown(
 
 .burger-menu {
   flex: 0 1 300px;
-  background-color: $AwakningPermanentColorBlack;
+  background-color: $AwakningColorPrimary;
   padding-top: 15px;
   height: 100vh;
   overflow: auto;

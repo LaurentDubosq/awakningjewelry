@@ -54,12 +54,12 @@ const { collection } = defineProps<{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: $AwakningPermanentColorWhite;
+    color: $AwakningColorSecondary;
     font-family: $AwakningFontArapey;
     font-size: 1.625rem;
     font-weight: 400;
     font-style: italic;
-    text-shadow: $AwakningPermanentColorWhite 1px 0 10px;
+    text-shadow: $AwakningColorSecondary 1px 0 10px;
     @media screen and (min-width: 400px) {
       font-size: 2.125rem;
     }

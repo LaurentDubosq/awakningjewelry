@@ -41,7 +41,7 @@ const id = text.toLowerCase()
   width: 100%;
 
   &-icon {
-    fill: $AwakningPermanentColorWhite;
+    fill: $AwakningColorSecondary;
   }
 }
 </style>
