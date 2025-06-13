@@ -56,13 +56,6 @@ picture {
 }
 
 /* ======================
-   Text classes
-   ====================== */
-.link-text {
-  text-decoration: underline;
-}
-
-/* ======================
    Design system classes
    ====================== */
 .btn {
@@ -83,6 +76,13 @@ picture {
 .btn--secondary {
   background-color: $AwakningColorSecondary;
   color: $AwakningColorPrimary;
+}
+
+/* ======================
+   Text classes
+   ====================== */
+.link-text {
+  text-decoration: underline;
 }
 
 /* ======================
