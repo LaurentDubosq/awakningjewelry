@@ -34,7 +34,7 @@ const { isOnMobile } = storeToRefs(isOnMobileStore)
 /*******************/
 
 // Store the index corresponding to the displayed slide
-const currentIndex: Ref<number> = ref(0)
+const activeIndex: Ref<number> = ref(0)
 // Store the autorotation slideshow statut
 const isPlaying: Ref<boolean> = ref(true)
 // Stores the user's command to stop auto-rotation
@@ -148,7 +148,7 @@ const handleDisplaySlide = (event: DisplaySlidePayload) => {
   stopAutoPlayExplicitly()
 
   // Display the expected slide
-  currentIndex.value = event.index
+  activeIndex.value = event.index
 
   // Focus on the slide's slick slider button for keyboard navigation only
   if (event.focusable) {
@@ -169,17 +169,17 @@ const stopAutoPlay = () => {
 }
 
 const displayPrevSlide = () => {
-  if (currentIndex.value > 0) {
-    currentIndex.value--
+  if (activeIndex.value > 0) {
+    activeIndex.value--
   } else {
-    currentIndex.value = slidesLength - 1
+    activeIndex.value = slidesLength - 1
   }
 }
 const displayNextSlide = () => {
-  if (currentIndex.value >= slidesLength - 1) {
-    currentIndex.value = 0
+  if (activeIndex.value >= slidesLength - 1) {
+    activeIndex.value = 0
   } else {
-    currentIndex.value++
+    activeIndex.value++
   }
 }
 
@@ -257,11 +257,11 @@ const startAutoPlayExplicitly = () => {
     </div>
     <SlideshowSlickSlider
       :slidesLength
-      :currentIndex
+      :activeIndex
       @displaySlide="handleDisplaySlide"
       :style="slickSliderStyle"
     />
-    <slot :currentIndex />
+    <slot :activeIndex />
   </div>
 </template>
 

@@ -1,39 +1,30 @@
 import { ref, type Ref, type ComputedRef, computed, unref } from 'vue'
-import type { HeroSlideType } from '@/types/components'
+import type { HeroSlides } from '@/types/components'
 import type { UseFetchWithStateReturn, FetchState } from '@/types/fetch'
 import { defineStore } from 'pinia'
 import { getHeroSlides } from '@/data/dataFetchers'
 
-export const useHeroSlidesResultStore = defineStore('HeroSlidesResult', () => {
+export const useHeroSlidesStore = defineStore('HeroSlides', () => {
   // States
-  const heroSlidesResult: Ref<undefined | UseFetchWithStateReturn<HeroSlideType[]>> = ref()
+  const fetchResult: Ref<undefined | UseFetchWithStateReturn<HeroSlides>> = ref()
 
   // Computeds
-  const heroSlidesData: ComputedRef<HeroSlideType[] | undefined> = computed(() =>
-    unref(heroSlidesResult.value?.data),
+  const heroSlides: ComputedRef<HeroSlides | undefined> = computed(() =>
+    unref(fetchResult.value?.data),
   )
-  const heroSlidesDataLength: ComputedRef<number | undefined> = computed(
-    () => heroSlidesData.value?.length,
-  )
+  const heroSlidesLength: ComputedRef<number | undefined> = computed(() => heroSlides.value?.length)
   const heroSlidesFetchState: ComputedRef<FetchState | undefined> = computed(() =>
-    unref(heroSlidesResult.value?.status),
+    unref(fetchResult.value?.status),
   )
-
-  // Methods
-  const updateHeroSlidesResult = (newSlidesResult: UseFetchWithStateReturn<HeroSlideType[]>) => {
-    heroSlidesResult.value = newSlidesResult
-  }
 
   // API Call - Data fetching with data caching
-  if (!heroSlidesResult.value) {
-    heroSlidesResult.value = getHeroSlides()
+  if (!fetchResult.value) {
+    fetchResult.value = getHeroSlides()
   }
 
   return {
-    heroSlidesResult,
-    heroSlidesData,
-    heroSlidesDataLength,
+    heroSlides,
+    heroSlidesLength,
     heroSlidesFetchState,
-    updateHeroSlidesResult,
   }
 })

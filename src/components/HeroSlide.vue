@@ -8,7 +8,9 @@ const { slide, slidesLength, slideIndex, isActive } = defineProps<{
   slideIndex: number
   isActive: boolean
 }>()
-const DESKTOPBREAKPOINT: string = SASSCONSTANTS.BreakpointDesktop
+const BREAKPOINTMOBILELANDSCAPE: string = SASSCONSTANTS.BreakpointMobileLandscape
+const BREAKPOINTDESKTOP: string = SASSCONSTANTS.BreakpointDesktop
+const BREAKPOINTDESKTOPLARGE: string = SASSCONSTANTS.BreakpointDesktopLarge
 </script>
 
 <template>
@@ -22,14 +24,24 @@ const DESKTOPBREAKPOINT: string = SASSCONSTANTS.BreakpointDesktop
   >
     <picture class="hero__slide-picture">
       <source
-        :media="`(min-width: ${DESKTOPBREAKPOINT})`"
-        :srcset="slide.images.desktop.url"
+        :media="`(min-width: ${BREAKPOINTDESKTOPLARGE})`"
+        :srcset="slide.images.desktopLarge"
+        data-testid="hero__slide-image-desktop-large"
+      />
+      <source
+        :media="`(min-width: ${BREAKPOINTDESKTOP})`"
+        :srcset="slide.images.desktop"
         data-testid="hero__slide-image-desktop"
       />
+      <source
+        :media="`(min-width: ${BREAKPOINTMOBILELANDSCAPE})`"
+        :srcset="slide.images.mobileLandscape"
+        data-testid="hero__slide-image-mobile-landscape"
+      />
       <img
-        :src="slide.images.mobile.url"
-        :alt="slide.images.alt"
         class="hero__slide-image"
+        :src="slide.images.mobile"
+        :alt="slide.images.alt"
         data-testid="hero__slide-image"
       />
     </picture>
@@ -41,8 +53,8 @@ const DESKTOPBREAKPOINT: string = SASSCONSTANTS.BreakpointDesktop
         {{ slide.title }}
       </h2>
       <RouterLink
-        :to="slide.url"
         class="btn btn--primary"
+        :to="slide.url"
         :tabindex="isActive ? undefined : -1"
         data-testid="hero__slide-link"
       >
@@ -62,8 +74,10 @@ const DESKTOPBREAKPOINT: string = SASSCONSTANTS.BreakpointDesktop
   width: 100%;
 
   &-picture {
-    width: 100%;
     text-align: center;
+    @media screen and (min-width: $BreakpointDesktop) {
+      width: 100%;
+    }
   }
 
   &-image {
@@ -80,7 +94,8 @@ const DESKTOPBREAKPOINT: string = SASSCONSTANTS.BreakpointDesktop
     margin-bottom: 3rem;
     @media screen and (min-width: $BreakpointDesktop) {
       position: absolute;
-      top: 36%;
+      top: 50%;
+      transform: translateY(-50%);
       margin: 0;
       padding: 0;
     }

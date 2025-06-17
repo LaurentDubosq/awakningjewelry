@@ -26,13 +26,13 @@ vi.mock('@/composables/useGetClientHeightAtElementResize', () => {
 
 const mockSlides = frontDataBase.heroSlides.slice(0, 2) // only two slides are enough to perform the tests
 const mockSlidesLength = mockSlides.length
-const mockCurrentIndex = 0
+const mockActiveIndex = 0
 
 /* Slot */
 
 // In order to test the dynamic behavior of Slideshow.vue, we need a dummy component to mock the slot with a dynamic content (here 2 slides)
 const mockHeroSlideComponent = defineComponent({
-  props: ['currentIndex'],
+  props: ['activeIndex'],
   data() {
     return {
       mockSlides,
@@ -46,11 +46,11 @@ const mockHeroSlideComponent = defineComponent({
     <template v-for="(slide, index) in mockSlides" :key="slide.id">
       <HeroSlide
         class="slideshow__slide"
-        :class="{ 'slideshow__slide--active': index === currentIndex }"
+        :class="{ 'slideshow__slide--active': index === activeIndex }"
         :slide
         :slidesLength="mockSlidesLength"
         :slideIndex="index"
-        :isActive="index === currentIndex"
+        :isActive="index === activeIndex"
       />
     </template>
   `,
@@ -86,7 +86,7 @@ function mountSlideshow() {
     attachTo: document.body,
     props: { slidesLength: mockSlidesLength },
     slots: {
-      default: ({ currentIndex }) => h(mockHeroSlideComponent, { currentIndex }), // send the local currentIndex variable to mockHeroSlideComponent component as props
+      default: ({ activeIndex }) => h(mockHeroSlideComponent, { activeIndex }), // send the local activeIndex variable to mockHeroSlideComponent component as props
     },
     global: {
       plugins: [mockPinia],
@@ -144,7 +144,7 @@ describe('Slideshow.vue', () => {
 
         // Assert the active CSS class is used when necessary
         expect(button.classes('slideshow__slick-slider-button--active')).toBe(
-          index === mockCurrentIndex,
+          index === mockActiveIndex,
         )
       })
     })
@@ -309,7 +309,7 @@ describe('Slideshow.vue', () => {
       const slideShow = wrapper.find("[data-testid='slideshow']")
       const HeroSlideComponents = wrapper.findAllComponents(HeroSlide)
 
-      // Display the last slide to prevent desynchronization between the loop index and the internal currentIndex state
+      // Display the last slide to prevent desynchronization between the loop index and the internal activeIndex state
       await slideShow.trigger('touchstart', {
         changedTouches: [{ screenX: 100 }],
       })
@@ -462,7 +462,7 @@ describe('Slideshow.vue', () => {
       const buttons = wrapper.findAll("[data-testid='slideshow__slick-slider-button']")
       const HeroSlideComponents = wrapper.findAllComponents(HeroSlide)
 
-      // Display the last slide to prevent desynchronization between the loop index and the internal currentIndex state
+      // Display the last slide to prevent desynchronization between the loop index and the internal activeIndex state
       await buttons[buttons.length - 1].trigger('keydown', {
         key: 'ArrowLeft',
         code: 'ArrowLeft',

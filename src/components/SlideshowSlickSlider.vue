@@ -4,7 +4,7 @@ import { ref, type Ref } from 'vue'
 
 const props = defineProps<{
   slidesLength: number
-  currentIndex: number
+  activeIndex: number
 }>()
 const emit = defineEmits<{
   'display-slide': [DisplaySlidePayload]
@@ -16,8 +16,8 @@ const handleKeydown = (event: KeyboardEvent) => {
   if (event.key === 'ArrowLeft') {
     let payload
 
-    if (props.currentIndex > 0) {
-      payload = { index: props.currentIndex - 1, focusable: true }
+    if (props.activeIndex > 0) {
+      payload = { index: props.activeIndex - 1, focusable: true }
     } else {
       payload = { index: props.slidesLength - 1, focusable: true }
     }
@@ -26,8 +26,8 @@ const handleKeydown = (event: KeyboardEvent) => {
   } else if (event.key === 'ArrowRight') {
     let payload
 
-    if (props.currentIndex < props.slidesLength - 1) {
-      payload = { index: props.currentIndex + 1, focusable: true }
+    if (props.activeIndex < props.slidesLength - 1) {
+      payload = { index: props.activeIndex + 1, focusable: true }
     } else {
       payload = { index: 0, focusable: true }
     }
@@ -59,7 +59,7 @@ const handleKeydown = (event: KeyboardEvent) => {
     <button
       class="slideshow__slick-slider-button"
       :class="{
-        'slideshow__slick-slider-button--active': index === currentIndex,
+        'slideshow__slick-slider-button--active': index === activeIndex,
       }"
       v-for="(slide, index) in slidesLength"
       @mousedown.prevent
@@ -69,9 +69,9 @@ const handleKeydown = (event: KeyboardEvent) => {
       @blur="isSlickSliderFocused = false"
       role="tab"
       :aria-label="`Slide ${index + 1}`"
-      :aria-selected="index === currentIndex ? 'true' : 'false'"
+      :aria-selected="index === activeIndex ? 'true' : 'false'"
       :aria-controls="`slideshow-${index + 1}`"
-      :tabindex="index === currentIndex ? undefined : -1"
+      :tabindex="index === activeIndex ? undefined : -1"
       :title="`Display slide ${index + 1}`"
       data-testid="slideshow__slick-slider-button"
     />

@@ -8,8 +8,10 @@ import frontDataBase from '../../../db.json'
 /********************/
 
 const mockSlide = frontDataBase.heroSlides[0]
-const mockSlideImageMobileURL = mockSlide.images.mobile.url
-const mockSlideImageDesktopURL = mockSlide.images.desktop.url
+const mockSlideImageMobileURL = mockSlide.images.mobile
+const mockSlideImageMobileLandscapeURL = mockSlide.images.mobileLandscape
+const mockSlideImageDesktopURL = mockSlide.images.desktop
+const mockSlideImageDesktopLargeURL = mockSlide.images.desktopLarge
 const mockSlideImageAlt = mockSlide.images.alt
 const mockSlideSubtitle = mockSlide.subtitle
 const mockSlideTitle = mockSlide.title
@@ -57,7 +59,9 @@ describe('HeroSlide.vue', () => {
 
   test('renders the slide with necessary information', () => {
     const img = wrapper.find("[data-testid='hero__slide-image']")
-    const source = wrapper.find("[data-testid='hero__slide-image-desktop']")
+    const sourceMobileLandscape = wrapper.find("[data-testid='hero__slide-image-mobile-landscape']")
+    const sourceDesktop = wrapper.find("[data-testid='hero__slide-image-desktop']")
+    const sourceDesktopLarge = wrapper.find("[data-testid='hero__slide-image-desktop-large']")
     const subtitle = wrapper.find("[data-testid='hero__slide-subtitle']")
     const title = wrapper.find("[data-testid='hero__slide-title']")
     const link = wrapper.findComponent(RouterLinkStub)
@@ -71,11 +75,17 @@ describe('HeroSlide.vue', () => {
     // Assert the mobile image has its "alt" value well setted
     expect(img.attributes('alt')).toBe(mockSlideImageAlt)
 
-    // Assert the dekstop image is rendered
-    expect(source.exists()).toBeTruthy()
+    // Assert the mobile landscape image is rendered
+    expect(sourceMobileLandscape.exists()).toBeTruthy()
+    expect(sourceMobileLandscape.attributes('srcset')).toBe(mockSlideImageMobileLandscapeURL)
 
-    // Assert the desktop image has its "srcset" value well setted
-    expect(source.attributes('srcset')).toBe(mockSlideImageDesktopURL)
+    // Assert the dekstop image is rendered
+    expect(sourceDesktop.exists()).toBeTruthy()
+    expect(sourceDesktop.attributes('srcset')).toBe(mockSlideImageDesktopURL)
+
+    // Assert the dekstop large image is rendered
+    expect(sourceDesktopLarge.exists()).toBeTruthy()
+    expect(sourceDesktopLarge.attributes('srcset')).toBe(mockSlideImageDesktopLargeURL)
 
     // Assert the subtitle is rendered
     expect(subtitle.text()).toContain(mockSlideSubtitle)

@@ -25,20 +25,20 @@ vi.mock('@/composables/useGetClientHeightAtElementResize', () => {
 
 /* Data */
 const mockHeroSlidesPending = {
-  data: undefined,
-  status: 'pending',
+  slides: undefined,
+  slidesFetchState: 'pending',
 }
 const mockHeroSlidesRejected = {
-  data: undefined,
-  status: 'rejected',
+  slides: undefined,
+  slidesFetchState: 'rejected',
 }
 const mockHeroSlidesFulfilled = {
-  data: frontDataBase.heroSlides,
-  status: 'fulfilled',
+  slides: frontDataBase.heroSlides,
+  slidesFetchState: 'fulfilled',
 }
-const mockHeroSlides = mockHeroSlidesFulfilled.data
+const mockHeroSlides = mockHeroSlidesFulfilled.slides
 const mockHeroSlidesLength = mockHeroSlides.length
-const mockCurrentIndex = 0 // mock of the currentIndex internal state
+const mockActiveIndex = 0 // mock of the activeIndex internal state
 
 /* Stores */
 
@@ -46,12 +46,12 @@ const mockCurrentIndex = 0 // mock of the currentIndex internal state
 const mockPinia = createTestingPinia()
 
 // Create the stores
-const mockUseHeroSlidesResultStore = defineStore('HeroSlidesResult', () => {
-  const heroSlidesResult = ref(mockHeroSlidesPending)
-  const heroSlidesData = computed(() => heroSlidesResult.value?.data)
-  const heroSlidesDataLength = computed(() => heroSlidesData.value?.length)
-  const heroSlidesFetchState = computed(() => heroSlidesResult.value?.status)
-  return { heroSlidesResult, heroSlidesData, heroSlidesDataLength, heroSlidesFetchState }
+const mockUseHeroSlidesStore = defineStore('HeroSlides', () => {
+  const fetchResult = ref(mockHeroSlidesPending)
+  const heroSlides = computed(() => fetchResult.value?.slides)
+  const heroSlidesLength = computed(() => heroSlides.value?.length)
+  const heroSlidesFetchState = computed(() => fetchResult.value?.slidesFetchState)
+  return { fetchResult, heroSlides, heroSlidesLength, heroSlidesFetchState }
 })
 
 const mockUseIsReducedMotionStore = defineStore('IsReducedMotion', () => {
@@ -65,7 +65,7 @@ const mockUseIsOnMobileStore = defineStore('IsOnMobile', () => {
 })
 
 // Initialize the stores
-const mockHeroSlidesResultStore = mockUseHeroSlidesResultStore()
+const mockHeroSlidesStore = mockUseHeroSlidesStore()
 const mockIsReducedMotionStore = mockUseIsReducedMotionStore()
 mockUseIsOnMobileStore()
 
@@ -104,7 +104,7 @@ describe('Hero.vue', () => {
 
   afterEach(() => {
     // Reset the store(s) state(s) to default to ensure a clean environment for each test
-    mockHeroSlidesResultStore.heroSlidesResult = mockHeroSlidesPending
+    mockHeroSlidesStore.fetchResult = mockHeroSlidesPending
     mockIsReducedMotionStore.isReducedMotion = false
   })
 
@@ -124,7 +124,7 @@ describe('Hero.vue', () => {
   describe('Data fetching "Rejected" state', () => {
     test('the error message is rendered', async () => {
       // Set the store data fetching status to rejected
-      mockHeroSlidesResultStore.heroSlidesResult = mockHeroSlidesRejected
+      mockHeroSlidesStore.fetchResult = mockHeroSlidesRejected
       await nextTick()
 
       // Assert the error message is rendered
@@ -136,8 +136,13 @@ describe('Hero.vue', () => {
   describe('Data fetching "Fulfilled" state - Slideshow playing state is true - Reduce motion state is false', async () => {
     beforeEach(async () => {
       // Set the store data fetching status to fulfilled
-      mockHeroSlidesResultStore.heroSlidesResult = mockHeroSlidesFulfilled
+      mockHeroSlidesStore.fetchResult = mockHeroSlidesFulfilled
       await nextTick()
+    })
+
+    test('renders the feature accessibility label', () => {
+      const section = wrapper.find("[data-testid='hero']")
+      expect(section.attributes('aria-label')).toContain('Highlighted our product categories')
     })
 
     test('the slideshow slides are rendered', () => {
@@ -148,14 +153,20 @@ describe('Hero.vue', () => {
       // Assert each slide is rendered with its necessary information
       slides.forEach((slide, index) => {
         const img = slide.find("[data-testid='hero__slide-image']")
-        const source = slide.find("[data-testid='hero__slide-image-desktop']")
+        const sourceMobileLandscape = slide.find(
+          "[data-testid='hero__slide-image-mobile-landscape']",
+        )
+        const sourceDesktop = slide.find("[data-testid='hero__slide-image-desktop']")
+        const sourceDesktopLarge = slide.find("[data-testid='hero__slide-image-desktop-large']")
         const subtitle = slide.find("[data-testid='hero__slide-subtitle']")
         const title = slide.find("[data-testid='hero__slide-title']")
         const link = slide.findComponent(RouterLinkStub)
 
         const mockSlide = mockHeroSlides[index]
-        const mockSlideImageMobileURL = mockSlide.images.mobile.url
-        const mockSlideImageDesktopURL = mockSlide.images.desktop.url
+        const mockSlideImageMobileURL = mockSlide.images.mobile
+        const mockSlideImageMobileLandscapeURL = mockSlide.images.mobileLandscape
+        const mockSlideImageDesktopURL = mockSlide.images.desktop
+        const mockSlideImageDesktopLargeURL = mockSlide.images.desktopLarge
         const mockSlideImageAlt = mockSlide.images.alt
         const mockSlideSubtitle = mockSlide.subtitle
         const mockSlideTitle = mockSlide.title
@@ -170,11 +181,17 @@ describe('Hero.vue', () => {
         // Assert the mobile image has its "alt" value well setted
         expect(img.attributes('alt')).toBe(mockSlideImageAlt)
 
-        // Assert the dekstop image is rendered
-        expect(source.exists()).toBeTruthy()
+        // Assert the mobile landscape image is rendered
+        expect(sourceMobileLandscape.exists()).toBeTruthy()
+        expect(sourceMobileLandscape.attributes('srcset')).toBe(mockSlideImageMobileLandscapeURL)
 
-        // Assert the desktop image has its "srcset" value well setted
-        expect(source.attributes('srcset')).toBe(mockSlideImageDesktopURL)
+        // Assert the dekstop image is rendered
+        expect(sourceDesktop.exists()).toBeTruthy()
+        expect(sourceDesktop.attributes('srcset')).toBe(mockSlideImageDesktopURL)
+
+        // Assert the dekstop large image is rendered
+        expect(sourceDesktopLarge.exists()).toBeTruthy()
+        expect(sourceDesktopLarge.attributes('srcset')).toBe(mockSlideImageDesktopLargeURL)
 
         // Assert the subtitle is rendered
         expect(subtitle.text()).toContain(mockSlideSubtitle)
@@ -206,7 +223,7 @@ describe('Hero.vue', () => {
 
         // Assert the active CSS class is used when necessary
         expect(button.classes('slideshow__slick-slider-button--active')).toBe(
-          index === mockCurrentIndex,
+          index === mockActiveIndex,
         )
       })
     })
@@ -376,7 +393,7 @@ describe('Hero.vue', () => {
         const slideShow = wrapper.find("[data-testid='slideshow']")
         const HeroSlideComponents = wrapper.findAllComponents(HeroSlide)
 
-        // Display the last slide to prevent desynchronization between the loop index and the internal currentIndex state
+        // Display the last slide to prevent desynchronization between the loop index and the internal activeIndex state
         await slideShow.trigger('touchstart', {
           changedTouches: [{ screenX: 100 }],
         })
@@ -532,7 +549,7 @@ describe('Hero.vue', () => {
         const buttons = wrapper.findAll("[data-testid='slideshow__slick-slider-button']")
         const HeroSlideComponents = wrapper.findAllComponents(HeroSlide)
 
-        // Display the last slide to prevent desynchronization between the loop index and the internal currentIndex state
+        // Display the last slide to prevent desynchronization between the loop index and the internal activeIndex state
         await buttons[buttons.length - 1].trigger('keydown', {
           key: 'ArrowLeft',
           code: 'ArrowLeft',

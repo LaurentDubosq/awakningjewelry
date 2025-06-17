@@ -33,6 +33,7 @@ export interface SiteMenuDropdownLink {
 export type SiteMenuDropdownLinks = Array<SiteMenuDropdownLink>
 
 /* Hero */
+export type HeroSlides = Array<HeroSlideType>
 export interface HeroSlideType {
   id: number
   images: HeroSlideImages
@@ -41,12 +42,11 @@ export interface HeroSlideType {
   url: string
 }
 export interface HeroSlideImages {
-  mobile: HeroSlideImage
-  desktop: HeroSlideImage
+  mobile: string
+  mobileLandscape: string
+  desktop: string
+  desktopLarge: string
   alt: string
-}
-export interface HeroSlideImage {
-  url: string
 }
 
 /* StatementBanner wording */

@@ -6,7 +6,7 @@ import SlideshowSlickSlider from '@/components/SlideshowSlickSlider.vue'
 /********************/
 
 const mockSlidesLength = 2 // more than 2 button is not necessary
-const mockCurrentIndex = 0
+const mockActiveIndex = 0
 
 /***********/
 /* 2.Build */
@@ -17,7 +17,7 @@ const mountSlideshowSlickSlider = (props) => {
   return mount(SlideshowSlickSlider, {
     props: {
       slidesLength: mockSlidesLength,
-      currentIndex: mockCurrentIndex,
+      activeIndex: mockActiveIndex,
       ...props,
     },
   })
@@ -56,7 +56,7 @@ describe('SlideshowSlickSlider.vue', () => {
 
       // Assert the active CSS class is used when necessary
       expect(button.classes('slideshow__slick-slider-button--active')).toBe(
-        index === mockCurrentIndex,
+        index === mockActiveIndex,
       )
     })
   })
@@ -104,8 +104,8 @@ describe('SlideshowSlickSlider.vue', () => {
         // Assert its payload has the correct value
         expect(wrapper.emitted('display-slide')[index][0]).toStrictEqual(mockPayload)
 
-        // Update the currentIndex prop for the next iteration
-        await wrapper.setProps({ currentIndex: index === 0 ? mockSlidesLength - 1 : index - 1 })
+        // Update the activeIndex prop for the next iteration
+        await wrapper.setProps({ activeIndex: index === 0 ? mockSlidesLength - 1 : index - 1 })
       }
     })
 
@@ -132,8 +132,8 @@ describe('SlideshowSlickSlider.vue', () => {
         // Assert its payload has the correct value
         expect(wrapper.emitted('display-slide')[index][0]).toStrictEqual(mockPayload)
 
-        // Update the currentIndex prop for the next iteration
-        await wrapper.setProps({ currentIndex: index === mockSlidesLength - 1 ? 0 : index + 1 })
+        // Update the activeIndex prop for the next iteration
+        await wrapper.setProps({ activeIndex: index === mockSlidesLength - 1 ? 0 : index + 1 })
       }
     })
 

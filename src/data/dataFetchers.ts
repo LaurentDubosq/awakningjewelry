@@ -13,10 +13,10 @@ import {
 import type {
   SiteMenu,
   StatementBannerWording,
-  HeroSlideType,
   NewsletterSignupWording,
   QuoteBannerContent,
   CollectionListing,
+  HeroSlides,
 } from '@/types/components.d.ts'
 import type { ProductSummary } from '@/types/global.d.ts'
 import { useFetch } from '@/composables/useFetch'
@@ -32,8 +32,8 @@ export const getSiteMenu = (): UseFetchWithStateReturn<SiteMenu> => {
   return result
 }
 
-export const getHeroSlides = (): UseFetchWithStateReturn<HeroSlideType[]> => {
-  const result: UseFetchWithStateReturn<HeroSlideType[]> = useFetchWithState(heroSlidesURL)
+export const getHeroSlides = (): UseFetchWithStateReturn<HeroSlides> => {
+  const result: UseFetchWithStateReturn<HeroSlides> = useFetchWithState(heroSlidesURL)
   return result
 }
 

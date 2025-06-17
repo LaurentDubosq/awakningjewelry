@@ -66,14 +66,12 @@
     {
       "id": 1,
       "images": {
-        "mobile": {
-          "url": "https://cdn.shopify.com/s/files/1/2275/5667/files/inclusiveness-true-love-charm-bracelet-of-awakning-buddhist-jewelry-640w.avif"
-        },
-        "desktop": {
-          "url": "https://cdn.shopify.com/s/files/1/2275/5667/files/inclusiveness-true-love-charm-bracelet-of-awakning-buddhist-jewelry-1600w.avif"
-        },
-        "alt": "Inclusiveness of True Love 925 Silver Plated Charm Bracelet"
+        "mobile": "https://cdn.shopify.com/s/files/1/2275/5667/files/inclusiveness-true-love-charm-bracelet-of-awakning-buddhist-jewelry-480w.avif",
+        "mobileLandscape": "https://cdn.shopify.com/s/files/1/2275/5667/files/inclusiveness-true-love-charm-bracelet-of-awakning-buddhist-jewelry-640w.avif",
+        "desktop": "https://cdn.shopify.com/s/files/1/2275/5667/files/inclusiveness-true-love-charm-bracelet-of-awakning-buddhist-jewelry-1279w.avif",
+        "desktopLarge": "https://cdn.shopify.com/s/files/1/2275/5667/files/inclusiveness-true-love-charm-bracelet-of-awakning-buddhist-jewelry-1600w.avif"
       },
+      "imageAlt": "Inclusiveness of True Love 925 Silver Plated Charm Bracelet",
       "subtitle": "Ward off misperceptions",
       "title": "Charm Bracelets",
       "url": "/collections/women-buddhist-charm-bracelets"
@@ -81,14 +79,12 @@
     {
       "id": 2,
       "images": {
-        "mobile": {
-          "url": "https://cdn.shopify.com/s/files/1/2275/5667/files/buddha-courage-108-mala-beads-of-awakning-buddhist-jewelry-640w.avif"
-        },
-        "desktop": {
-          "url": "https://cdn.shopify.com/s/files/1/2275/5667/files/buddha-courage-108-mala-beads-of-awakning-buddhist-jewelry-1600w.avif"
-        },
-        "alt": "Unisex Mala Buddha Courage 108 Natural Tiger's Eye Beads"
+        "mobile": "https://cdn.shopify.com/s/files/1/2275/5667/files/buddha-courage-108-mala-beads-of-awakning-buddhist-jewelry-480w.avif",
+        "mobileLandscape": "https://cdn.shopify.com/s/files/1/2275/5667/files/buddha-courage-108-mala-beads-of-awakning-buddhist-jewelry-640w.avif",
+        "desktop": "https://cdn.shopify.com/s/files/1/2275/5667/files/buddha-courage-108-mala-beads-of-awakning-buddhist-jewelry-1279w.avif",
+        "desktopLarge": "https://cdn.shopify.com/s/files/1/2275/5667/files/buddha-courage-108-mala-beads-of-awakning-buddhist-jewelry-1600w.avif"
       },
+      "imageAlt": "Unisex Mala Buddha Courage 108 Natural Tiger's Eye Beads",
       "subtitle": "Develop yourself internally",
       "title": "108 Beads Malas",
       "url": "/collections/108-unisex-mala-beads"
@@ -96,14 +92,12 @@
     {
       "id": 3,
       "images": {
-        "mobile": {
-          "url": "https://cdn.shopify.com/s/files/1/2275/5667/files/supreme-serenity-of-life-s-tree-of-awakning-buddhist-jewelry-640w.avif"
-        },
-        "desktop": {
-          "url": "https://cdn.shopify.com/s/files/1/2275/5667/files/supreme-serenity-of-life-s-tree-of-awakning-buddhist-jewelry-1600w.avif"
-        },
-        "alt": "Supreme Serenity of Life's Tree 925 Sterling Silver Elegance Bracelet"
+        "mobile": "https://cdn.shopify.com/s/files/1/2275/5667/files/supreme-serenity-of-life-s-tree-of-awakning-buddhist-jewelry-480w.avif",
+        "mobileLandscape": "https://cdn.shopify.com/s/files/1/2275/5667/files/supreme-serenity-of-life-s-tree-of-awakning-buddhist-jewelry-640w.avif",
+        "desktop": "https://cdn.shopify.com/s/files/1/2275/5667/files/supreme-serenity-of-life-s-tree-of-awakning-buddhist-jewelry-1279w.avif",
+        "desktopLarge": "https://cdn.shopify.com/s/files/1/2275/5667/files/supreme-serenity-of-life-s-tree-of-awakning-buddhist-jewelry-1600w.avif"
       },
+      "imageAlt": "Supreme Serenity of Life's Tree 925 Sterling Silver Elegance Bracelet",
       "subtitle": "Accomplish Yourself",
       "title": "Elegance Bracelets",
       "url": "/collections/women-buddhist-elegance-bracelets"

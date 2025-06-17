@@ -3,16 +3,16 @@ import Slideshow from './Slideshow.vue'
 import HeroSlide from './HeroSlide.vue'
 import LoadingComponent from './LoadingComponent.vue'
 import ErrorComponent from './ErrorComponent.vue'
-import { useHeroSlidesResultStore } from '@/stores/heroSlides'
+import { useHeroSlidesStore } from '@/stores/heroSlides'
 import { storeToRefs } from 'pinia'
 
 // Get the store instance
-const heroSlidesStore = useHeroSlidesResultStore()
+const heroSlidesStore = useHeroSlidesStore()
 
 // Get the store's states and computeds
 const {
-  heroSlidesData: slides,
-  heroSlidesDataLength: slidesLength,
+  heroSlides: slides,
+  heroSlidesLength: slidesLength,
   heroSlidesFetchState: fetchState,
 } = storeToRefs(heroSlidesStore)
 </script>
@@ -22,17 +22,18 @@ const {
     class="hero"
     aria-roledescription="carousel"
     aria-label="Highlighted our product categories"
+    data-testid="hero"
   >
     <template v-if="fetchState === 'fulfilled'">
-      <Slideshow :slidesLength v-if="slidesLength" v-slot="{ currentIndex }">
+      <Slideshow :slidesLength v-if="slidesLength" v-slot="{ activeIndex }">
         <template v-for="(slide, index) in slides" :key="slide.id">
           <HeroSlide
             class="slideshow__slide"
-            :class="{ 'slideshow__slide--active': index === currentIndex }"
+            :class="{ 'slideshow__slide--active': index === activeIndex }"
             :slide
             :slidesLength
             :slideIndex="index"
-            :isActive="index === currentIndex"
+            :isActive="index === activeIndex"
           />
         </template>
       </Slideshow>
