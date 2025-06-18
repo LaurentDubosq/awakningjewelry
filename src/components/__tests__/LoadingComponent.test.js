@@ -23,7 +23,10 @@ describe('LoadingComponent.vue', async () => {
     const loader = wrapper.find("[data-testid='loader__animation']")
     expect(loader.exists()).toBeTruthy()
 
-    // Assert the alternative text is rendered
+    // Assert the animation in not rendered for assistive technologies
+    expect(loader.attributes('aria-hidden')).toBe('true')
+
+    // Assert the alternative text is rendered for assistive technologies and search engines
     const alternativeText = wrapper.find("[data-testid='loader__alternative-text']")
     expect(alternativeText.exists()).toBeTruthy()
   })
