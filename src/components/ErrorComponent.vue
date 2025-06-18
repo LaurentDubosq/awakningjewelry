@@ -10,5 +10,6 @@
 .error-message {
   color: $AwakningColorError;
   margin: 0 5px;
+  text-align: center;
 }
 </style>
