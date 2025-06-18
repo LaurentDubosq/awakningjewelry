@@ -30,13 +30,13 @@ const collections = computed(() => props.content?.collections)
         {{ title }}
       </h2>
       <hr class="collection-listing__separator" />
-      <ul class="collection-listing__list" aria-label="Collections">
-        <template v-if="contentFetchState === 'fulfilled'">
+      <template v-if="contentFetchState === 'fulfilled'">
+        <ul class="collection-listing__list" aria-label="Collections">
           <CollectionListingItem v-for="collection in collections" :collection />
-        </template>
-        <LoadingComponent v-if="contentFetchState === 'pending'" />
-        <ErrorComponent v-if="contentFetchState === 'rejected'" />
-      </ul>
+        </ul>
+      </template>
+      <LoadingComponent v-if="contentFetchState === 'pending'" />
+      <ErrorComponent v-if="contentFetchState === 'rejected'" />
     </div>
   </section>
 </template>
