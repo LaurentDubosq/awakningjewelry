@@ -57,13 +57,12 @@ export const getPromotions = (): UseFetchWithStateReturn<ProductSummary[]> => {
   return result
 }
 
-export const getNewsletterSignupWordingAsyncResult =
-  (): UseFetchWithStateReturn<NewsletterSignupWording> => {
-    const result: UseFetchWithStateReturn<NewsletterSignupWording> = useFetchWithState(
-      newsletterSignupWordingURL,
-    )
-    return result
-  }
+export const getNewsletterSignupWording = (): UseFetchWithStateReturn<NewsletterSignupWording> => {
+  const result: UseFetchWithStateReturn<NewsletterSignupWording> = useFetchWithState(
+    newsletterSignupWordingURL,
+  )
+  return result
+}
 
 export const getFounderQuoteBannerContentAsyncResult =
   (): UseFetchWithStateReturn<QuoteBannerContent> => {

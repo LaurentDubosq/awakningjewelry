@@ -1,27 +1,35 @@
 <script setup lang="ts">
 import LoadingComponent from './LoadingComponent.vue'
 import ErrorComponent from './ErrorComponent.vue'
-import { useNewsletterSignupWordingResultStore } from '@/stores/newsletterSignupWording'
+import { useNewsletterSignupWordingStore } from '@/stores/newsletterSignupWording'
 import { storeToRefs } from 'pinia'
 import { ref, type Ref } from 'vue'
 import { subscribeToNewsletter } from '@/services/newsletterSignup'
-import type { InputErrorResult, InputSuccessResult } from '@/types/global'
+import type { NewsletterSignupResult } from '@/types/global'
 
 /* Component Data Fetching */
-const wordingResultStore = useNewsletterSignupWordingResultStore()
-const { wording, wordingFetchState } = storeToRefs(wordingResultStore)
+const newsletterSignupWordingStore = useNewsletterSignupWordingStore()
+const { wording, wordingFetchState } = storeToRefs(newsletterSignupWordingStore)
 
 /* Component Interactivities */
 const email: Ref<string> = ref('')
-const signupResult: Ref<undefined | InputSuccessResult | InputErrorResult> = ref()
+const signupResult: Ref<undefined | NewsletterSignupResult> = ref()
 
 const handleSubmit = async () => {
   signupResult.value = await subscribeToNewsletter(email.value)
 }
+
+// Utilities
+const hasSignupSucceeded = () => {
+  return signupResult.value?.status === 'success'
+}
+const hasSignupFailed = () => {
+  return signupResult.value?.status === 'error'
+}
 </script>
 
 <template>
-  <section class="newsletter-signup" aria-labelledby="newsletter-signup__title">
+  <section class="newsletter-signup" aria-label="Newsletter signup" data-testid="newsletter-signup">
     <div class="wrapper">
       <template v-if="wordingFetchState === 'fulfilled'">
         <h2 class="newsletter-signup__title" data-testid="newsletter-signup__title">
@@ -32,12 +40,12 @@ const handleSubmit = async () => {
         </p>
         <form
           class="newsletter-signup__form"
-          data-testid="newsletter-signup__form"
           @submit.prevent="handleSubmit()"
+          data-testid="newsletter-signup__form"
         >
           <div
             class="newsletter-signup__form-inner-container"
-            v-if="!signupResult?.success"
+            v-if="!hasSignupSucceeded()"
             data-testid="newsletter-signup__form-inner-container"
           >
             <label
@@ -53,8 +61,10 @@ const handleSubmit = async () => {
               v-model="email"
               :placeholder="wording?.inputPlaceholder"
               :title="wording?.inputTitle"
-              :aria-invalid="signupResult?.error"
-              :aria-describedby="signupResult?.message && 'newsletter-signup__form-message'"
+              :aria-invalid="hasSignupFailed()"
+              :aria-describedby="
+                signupResult?.message ? 'newsletter-signup__form-message' : undefined
+              "
               autocorrect="off"
               autocapitalize="off"
               autocomplete="email"
@@ -74,8 +84,8 @@ const handleSubmit = async () => {
             id="newsletter-signup__form-message"
             v-if="signupResult?.message"
             :class="{
-              'newsletter-signup__form-message-success': signupResult?.success,
-              'newsletter-signup__form-message-error': signupResult?.error,
+              'newsletter-signup__form-message-success': hasSignupSucceeded(),
+              'newsletter-signup__form-message-error': hasSignupFailed(),
             }"
             role="alert"
             data-testid="newsletter-signup__form-message"

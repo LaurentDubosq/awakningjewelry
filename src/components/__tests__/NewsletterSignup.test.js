@@ -41,15 +41,15 @@ const mockRouter = createRouter({
 
 /* Data */
 
-const mockWordingPendingResult = {
+const mockWordingPending = {
   wording: undefined,
   wordingfetchState: 'pending',
 }
-const mockWordingRejectedResult = {
+const mockWordingRejected = {
   wording: undefined,
   wordingfetchState: 'rejected',
 }
-const mockWordingFulfilledResult = {
+const mockWordingFulfilled = {
   wording: frontDataBase.newsletterSignupWording,
   wordingfetchState: 'fulfilled',
 }
@@ -71,15 +71,15 @@ const mockWordingUnsubscriptionNoteLinkText = mockWording.unsubscriptionNoteLink
 const mockPinia = createTestingPinia()
 
 // Create the store(s)
-const mockUseWordingResultStore = defineStore('NewsletterSignupWordingResult', () => {
-  const wordingFetchResult = ref(mockWordingPendingResult)
-  const wording = computed(() => wordingFetchResult.value?.wording)
-  const wordingFetchState = computed(() => wordingFetchResult.value?.wordingfetchState)
-  return { wordingFetchResult, wording, wordingFetchState }
+const mockUseWordingStore = defineStore('NewsletterSignupWording', () => {
+  const fetchResult = ref(mockWordingPending)
+  const wording = computed(() => fetchResult.value?.wording)
+  const wordingFetchState = computed(() => fetchResult.value?.wordingfetchState)
+  return { fetchResult, wording, wordingFetchState }
 })
 
 // Initialize the store(s)
-const mockWordingResultStore = mockUseWordingResultStore()
+const mockWordingStore = mockUseWordingStore()
 
 /***********/
 /* 3.Build */
@@ -111,7 +111,7 @@ describe('NewsletterSignup', () => {
 
   afterEach(() => {
     // Reset the store(s) and module(s) state(s) to default to ensure a clean environment for each test
-    mockWordingResultStore.wordingFetchResult = mockWordingPendingResult
+    mockWordingStore.fetchResult = mockWordingPending
 
     // Reset function call count
     vi.clearAllMocks()
@@ -133,7 +133,7 @@ describe('NewsletterSignup', () => {
   describe('Data fetching "Rejected" state', () => {
     test('the error message is rendered', async () => {
       // Set the store wording fetching status to rejected
-      mockWordingResultStore.wordingFetchResult = mockWordingRejectedResult
+      mockWordingStore.fetchResult = mockWordingRejected
       await nextTick()
 
       // Assert the error message is rendered
@@ -145,8 +145,13 @@ describe('NewsletterSignup', () => {
   describe('Data fetching "Fulfilled" state', async () => {
     beforeEach(async () => {
       // Set the store wording fetching status to fulfilled
-      mockWordingResultStore.wordingFetchResult = mockWordingFulfilledResult
+      mockWordingStore.fetchResult = mockWordingFulfilled
       await nextTick()
+    })
+
+    test('renders the feature accessibility label', () => {
+      const section = wrapper.find("[data-testid='newsletter-signup']")
+      expect(section.attributes('aria-label')).toContain('Newsletter signup')
     })
 
     test('renders the title', () => {
@@ -223,8 +228,7 @@ describe('NewsletterSignup', () => {
 
         // Set the subscribeNewsletter mock status to error
         subscribeToNewsletter.mockResolvedValue({
-          success: false,
-          error: true,
+          status: 'error',
           message: mockMessage,
         })
 
@@ -247,8 +251,7 @@ describe('NewsletterSignup', () => {
 
         // Set the subscribeNewsletter mock status to success
         subscribeToNewsletter.mockResolvedValue({
-          success: true,
-          error: false,
+          status: 'success',
           message: mockMessage,
         })
 
