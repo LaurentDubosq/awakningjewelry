@@ -23,13 +23,13 @@ const { title, products, fetchState } = defineProps<{
         {{ title }}
       </h2>
       <hr class="product-listing__separator" />
-      <ul class="product-listing__list" aria-label="Products">
-        <template v-if="fetchState === 'fulfilled'">
+      <template v-if="fetchState === 'fulfilled'">
+        <ul class="product-listing__list" aria-label="Products">
           <ProductListingItem v-for="product in products" :product />
-        </template>
-        <LoadingComponent v-if="fetchState === 'pending'" />
-        <ErrorComponent v-if="fetchState === 'rejected'" />
-      </ul>
+        </ul>
+      </template>
+      <LoadingComponent v-if="fetchState === 'pending'" />
+      <ErrorComponent v-if="fetchState === 'rejected'" />
     </div>
   </section>
 </template>
