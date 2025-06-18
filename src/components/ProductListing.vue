@@ -28,8 +28,8 @@ const { title, products, fetchState } = defineProps<{
           <ProductListingItem v-for="product in products" :product />
         </ul>
       </template>
-      <LoadingComponent v-if="fetchState === 'pending'" />
-      <ErrorComponent v-if="fetchState === 'rejected'" />
+      <LoadingComponent v-else-if="fetchState === 'pending'" />
+      <ErrorComponent v-else-if="fetchState === 'rejected'" />
     </div>
   </section>
 </template>

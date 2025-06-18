@@ -35,8 +35,8 @@ const collections = computed(() => props.content?.collections)
           <CollectionListingItem v-for="collection in collections" :collection />
         </ul>
       </template>
-      <LoadingComponent v-if="contentFetchState === 'pending'" />
-      <ErrorComponent v-if="contentFetchState === 'rejected'" />
+      <LoadingComponent v-else-if="contentFetchState === 'pending'" />
+      <ErrorComponent v-else-if="contentFetchState === 'rejected'" />
     </div>
   </section>
 </template>

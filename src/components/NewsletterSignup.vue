@@ -100,8 +100,8 @@ const handleSubmit = async () => {
           >.
         </p>
       </template>
-      <LoadingComponent v-if="wordingFetchState === 'pending'" />
-      <ErrorComponent v-if="wordingFetchState === 'rejected'" />
+      <LoadingComponent v-else-if="wordingFetchState === 'pending'" />
+      <ErrorComponent v-else-if="wordingFetchState === 'rejected'" />
     </div>
   </section>
 </template>

@@ -45,8 +45,8 @@ function isDropdown(siteMenuItem: SiteMenuLink | SiteMenuDropdown): siteMenuItem
           <SiteNavDropdown :dropdown="siteMenuItem" v-else-if="isDropdown(siteMenuItem)" />
         </li>
       </template>
-      <LoadingComponent v-if="siteMenuFetchState === 'pending'" />
-      <ErrorComponent v-if="siteMenuFetchState === 'rejected'" />
+      <LoadingComponent v-else-if="siteMenuFetchState === 'pending'" />
+      <ErrorComponent v-else-if="siteMenuFetchState === 'rejected'" />
     </ul>
   </nav>
 </template>

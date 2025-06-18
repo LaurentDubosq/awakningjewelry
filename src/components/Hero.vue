@@ -38,7 +38,7 @@ const {
         </template>
       </Slideshow>
     </template>
-    <LoadingComponent v-if="fetchState === 'pending'" />
-    <ErrorComponent v-if="fetchState === 'rejected'" />
+    <LoadingComponent v-else-if="fetchState === 'pending'" />
+    <ErrorComponent v-else-if="fetchState === 'rejected'" />
   </section>
 </template>

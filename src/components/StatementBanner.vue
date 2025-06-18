@@ -40,8 +40,8 @@ const { wording, wordingFetchState } = defineProps<{
         data-testid="statement-banner__image"
       />
     </template>
-    <LoadingComponent v-if="wordingFetchState === 'pending'" />
-    <ErrorComponent v-if="wordingFetchState === 'rejected'" />
+    <LoadingComponent v-else-if="wordingFetchState === 'pending'" />
+    <ErrorComponent v-else-if="wordingFetchState === 'rejected'" />
   </section>
 </template>
 

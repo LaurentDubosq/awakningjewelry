@@ -43,8 +43,8 @@ const { content, contentFetchState } = defineProps<{
         >
       </div>
     </template>
-    <LoadingComponent v-if="contentFetchState === 'pending'" />
-    <ErrorComponent v-if="contentFetchState === 'rejected'" />
+    <LoadingComponent v-else-if="contentFetchState === 'pending'" />
+    <ErrorComponent v-else-if="contentFetchState === 'rejected'" />
   </section>
 </template>
 
