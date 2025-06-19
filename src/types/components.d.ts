@@ -14,7 +14,7 @@ export interface SiteMenuDropdown {
   id: number
   type: string
   button: SiteMenuDropdownButton
-  links: SiteMenuDropdownLinks
+  links: SiteMenuDropdownLink[]
 }
 export interface SiteMenuDropdownButton {
   text: string
@@ -25,10 +25,8 @@ export interface SiteMenuDropdownLink {
   text: string
   url: string
 }
-export type SiteMenuDropdownLinks = Array<SiteMenuDropdownLink>
 
 /* Hero */
-export type HeroSlides = Array<HeroSlideType>
 export interface HeroSlideType {
   id: number
   images: HeroSlideImages

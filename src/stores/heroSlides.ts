@@ -1,15 +1,15 @@
 import { ref, type Ref, type ComputedRef, computed, unref } from 'vue'
-import type { HeroSlides } from '@/types/components'
+import type { HeroSlideType } from '@/types/components'
 import type { UseFetchWithStateReturn, FetchState } from '@/types/fetch'
 import { defineStore } from 'pinia'
 import { getHeroSlides } from '@/data/dataFetchers'
 
 export const useHeroSlidesStore = defineStore('HeroSlides', () => {
   // States
-  const fetchResult: Ref<undefined | UseFetchWithStateReturn<HeroSlides>> = ref()
+  const fetchResult: Ref<undefined | UseFetchWithStateReturn<HeroSlideType[]>> = ref()
 
   // Computeds
-  const heroSlides: ComputedRef<HeroSlides | undefined> = computed(() =>
+  const heroSlides: ComputedRef<HeroSlideType[] | undefined> = computed(() =>
     unref(fetchResult.value?.data),
   )
   const heroSlidesLength: ComputedRef<number | undefined> = computed(() => heroSlides.value?.length)
