@@ -12,11 +12,7 @@ const { wording, wordingFetchState } = defineProps<{
 </script>
 
 <template>
-  <section
-    class="statement-banner"
-    aria-roledescription="statement banner"
-    aria-labelledby="statement-banner__title"
-  >
+  <section class="statement-banner">
     <template v-if="wordingFetchState === 'fulfilled'">
       <h2
         class="statement-banner__title"
