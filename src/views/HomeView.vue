@@ -7,7 +7,7 @@ import NewsletterSignup from '@/components/NewsletterSignup.vue'
 import QuoteBanner from '@/components/QuoteBanner.vue'
 import { storeToRefs } from 'pinia'
 import { useStatementMissionWordingResultStore } from '@/stores/statementMission'
-import { useFounderQuoteBannerContentResultStore } from '@/stores/quoteFounder'
+import { useFounderQuoteBannerContentStore } from '@/stores/founderQuoteBannerContent'
 import { useByGenderCollectionListingContentStore } from '@/stores/byGenderCollectionListingContent'
 import { usePromotionsProductListingContentStore } from '@/stores/promotionsProductListingContent'
 
@@ -15,7 +15,7 @@ import { usePromotionsProductListingContentStore } from '@/stores/promotionsProd
 const statementMissionWordingResultStore = useStatementMissionWordingResultStore()
 const byGenderCollectionListingContentStore = useByGenderCollectionListingContentStore()
 const promotionsProductListingContentStore = usePromotionsProductListingContentStore()
-const founderQuoteBannerContentResultStore = useFounderQuoteBannerContentResultStore()
+const founderQuoteBannerContentStore = useFounderQuoteBannerContentStore()
 
 // Get the store's states and computeds
 const { wording: statementMissionWording, wordingFetchState: statementMissionWordingFetchState } =
@@ -31,7 +31,7 @@ const {
 const {
   content: founderQuoteBannerContent,
   contentFetchState: founderQuoteBannerContentFetchState,
-} = storeToRefs(founderQuoteBannerContentResultStore)
+} = storeToRefs(founderQuoteBannerContentStore)
 </script>
 
 <template>

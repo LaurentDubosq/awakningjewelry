@@ -73,26 +73,26 @@ const mockProductsTitle = mockContent.title
 const mockProducts = mockContent.products
 const mockProductsLength = mockProducts.length
 
-const mockFounderQuoteBannerContentPendingResult = {
+const mockFounderQuoteBannerContentPending = {
   content: undefined,
   contentFetchState: 'pending',
 }
-const mockFounderQuoteBannerContentRejectedResult = {
+const mockFounderQuoteBannerContentRejected = {
   content: undefined,
   contentFetchState: 'rejected',
 }
-const mockFounderQuoteBannerContentFulfilledResult = {
+const mockFounderQuoteBannerContentFulfilled = {
   content: frontDataBase.founderQuoteBannerContent,
   contentFetchState: 'fulfilled',
 }
 const mockFounderQuoteBannerContent = frontDataBase.founderQuoteBannerContent
-const mockFounderQuoteBannerContentQuote = mockFounderQuoteBannerContent.quote
-const mockFounderQuoteBannerContentFounder = mockFounderQuoteBannerContent.author
-const mockFounderQuoteBannerContentFounderIMG = mockFounderQuoteBannerContent.authorIMG
-const mockFounderQuoteBannerContentFounderIMGAlt = mockFounderQuoteBannerContent.authorIMGAlt
-const mockFounderQuoteBannerContentFounderIMGTitle = mockFounderQuoteBannerContent.authorIMGTitle
-const mockFounderQuoteBannerContentLinkText = mockFounderQuoteBannerContent.linkText
-const mockFounderQuoteBannerContentLinkURL = mockFounderQuoteBannerContent.linkURL
+const mockFounderQuoteBannerQuote = mockFounderQuoteBannerContent.quote
+const mockFounderQuoteBannerFounder = mockFounderQuoteBannerContent.author
+const mockFounderQuoteBannerFounderIMG = mockFounderQuoteBannerContent.authorIMG
+const mockFounderQuoteBannerFounderIMGAlt = mockFounderQuoteBannerContent.authorIMGAlt
+const mockFounderQuoteBannerFounderIMGTitle = mockFounderQuoteBannerContent.authorIMGTitle
+const mockFounderQuoteBannerLinkText = mockFounderQuoteBannerContent.linkText
+const mockFounderQuoteBannerLinkURL = mockFounderQuoteBannerContent.linkURL
 
 /* Stores */
 
@@ -142,21 +142,18 @@ const mockUsePromotionsProductListingContentStore = defineStore(
   },
 )
 
-const mockUseFounderQuoteBannerContentResultStore = defineStore(
-  'FounderQuoteBannerContentResult',
-  () => {
-    const contentFetchResult = ref(mockFounderQuoteBannerContentPendingResult)
-    const content = computed(() => contentFetchResult.value?.content)
-    const contentFetchState = computed(() => contentFetchResult.value?.contentFetchState)
-    return { contentFetchResult, content, contentFetchState }
-  },
-)
+const mockUseFounderQuoteBannerContentStore = defineStore('FounderQuoteBannerContent', () => {
+  const fetchResult = ref(mockFounderQuoteBannerContentPending)
+  const content = computed(() => fetchResult.value?.content)
+  const contentFetchState = computed(() => fetchResult.value?.contentFetchState)
+  return { fetchResult, content, contentFetchState }
+})
 
 // Initialize the stores
 const mockStatementMissionWordingResultStore = mockUseStatementMissionWordingResultStore()
 const mockByGenderCollectionListingContentStore = mockUseByGenderCollectionListingContentStore()
 const mockPromotionsProductListingContentStore = mockUsePromotionsProductListingContentStore()
-const mockFounderQuoteBannerContentResultStore = mockUseFounderQuoteBannerContentResultStore()
+const mockFounderQuoteBannerContentStore = mockUseFounderQuoteBannerContentStore()
 
 /***********/
 /* 2.Build */
@@ -197,8 +194,7 @@ describe('HomeView.vue', () => {
       mockByGenderCollectionListingContentPending
     mockPromotionsProductListingContentStore.fetchResult =
       mockPromotionsProductListingContentPending
-    mockFounderQuoteBannerContentResultStore.contentFetchResult =
-      mockFounderQuoteBannerContentPendingResult
+    mockFounderQuoteBannerContentStore.fetchResult = mockFounderQuoteBannerContentPending
   })
 
   // Smoke test
@@ -252,8 +248,7 @@ describe('HomeView.vue', () => {
         mockByGenderCollectionListingContentRejected
       mockPromotionsProductListingContentStore.fetchResult =
         mockPromotionsProductListingContentRejected
-      mockFounderQuoteBannerContentResultStore.contentFetchResult =
-        mockFounderQuoteBannerContentRejectedResult
+      mockFounderQuoteBannerContentStore.fetchResult = mockFounderQuoteBannerContentRejected
       await nextTick()
 
       // Statement Banner
@@ -288,8 +283,7 @@ describe('HomeView.vue', () => {
         mockByGenderCollectionListingContentFulfilled
       mockPromotionsProductListingContentStore.fetchResult =
         mockPromotionsProductListingContentFulfilled
-      mockFounderQuoteBannerContentResultStore.contentFetchResult =
-        mockFounderQuoteBannerContentFulfilledResult
+      mockFounderQuoteBannerContentStore.fetchResult = mockFounderQuoteBannerContentFulfilled
       await nextTick()
     })
 
@@ -428,27 +422,31 @@ describe('HomeView.vue', () => {
     })
 
     test('Quote Founder is rendered with its necessary information', () => {
+      // Assert the feature label for accessibility is rendered
+      const section = wrapper.find("[data-testid='quote-banner']")
+      expect(section.attributes('aria-label')).toBe(`${mockFounderQuoteBannerFounder} quote`)
+
       // Assert the quote is rendered
       const quote = wrapper.find("[data-testid='quote-banner__quote']")
-      expect(quote.html()).toContain(mockFounderQuoteBannerContentQuote)
+      expect(quote.html()).toContain(mockFounderQuoteBannerQuote)
 
       // Assert the author's name
       const author = wrapper.find("[data-testid='quote-banner__author']")
-      expect(author.text()).toContain(mockFounderQuoteBannerContentFounder)
+      expect(author.text()).toContain(mockFounderQuoteBannerFounder)
 
       // Assert the author's photo
       const photo = wrapper.find("[data-testid='quote-banner__author-photo']")
       expect(photo.exists()).toBeTruthy()
-      expect(photo.attributes('src')).toContain(mockFounderQuoteBannerContentFounderIMG)
-      expect(photo.attributes('alt')).toContain(mockFounderQuoteBannerContentFounderIMGAlt)
-      expect(photo.attributes('title')).toContain(mockFounderQuoteBannerContentFounderIMGTitle)
+      expect(photo.attributes('src')).toContain(mockFounderQuoteBannerFounderIMG)
+      expect(photo.attributes('alt')).toContain(mockFounderQuoteBannerFounderIMGAlt)
+      expect(photo.attributes('title')).toContain(mockFounderQuoteBannerFounderIMGTitle)
 
       // Assert the link button
       const quoteBanner = wrapper.find("[data-testid='quote-banner']")
       const link = quoteBanner.findComponent(RouterLinkStub)
       expect(link.exists()).toBeTruthy()
-      expect(link.html()).toContain(mockFounderQuoteBannerContentLinkText)
-      expect(link.props('to')).toContain(mockFounderQuoteBannerContentLinkURL)
+      expect(link.html()).toContain(mockFounderQuoteBannerLinkText)
+      expect(link.props('to')).toContain(mockFounderQuoteBannerLinkURL)
     })
   })
 })

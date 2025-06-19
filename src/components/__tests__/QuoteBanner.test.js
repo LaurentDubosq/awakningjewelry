@@ -23,13 +23,13 @@ const mockContentFulfilledResult = {
   contentFetchState: 'fulfilled',
 }
 const mockContent = frontDataBase.founderQuoteBannerContent
-const mockContentQuote = mockContent.quote
-const mockContentAuthor = mockContent.author
-const mockContentAuthorIMG = mockContent.authorIMG
-const mockContentAuthorIMGAlt = mockContent.authorIMGAlt
-const mockContentAuthorIMGTitle = mockContent.authorIMGTitle
-const mockContentLinkText = mockContent.linkText
-const mockContentLinkURL = mockContent.linkURL
+const mockQuote = mockContent.quote
+const mockAuthor = mockContent.author
+const mockAuthorIMG = mockContent.authorIMG
+const mockAuthorIMGAlt = mockContent.authorIMGAlt
+const mockAuthorIMGTitle = mockContent.authorIMGTitle
+const mockLinkText = mockContent.linkText
+const mockLinkURL = mockContent.linkURL
 
 /***********/
 /* 2.Build */
@@ -95,29 +95,34 @@ describe('QuoteBanner', () => {
       wrapper = mountQuoteBanner(mockContentFulfilledResult)
     })
 
+    test('renders the feature accessibility label', () => {
+      const section = wrapper.find("[data-testid='quote-banner']")
+      expect(section.attributes('aria-label')).toBe(`${mockAuthor} quote`)
+    })
+
     test('renders the quote', () => {
       const quote = wrapper.find("[data-testid='quote-banner__quote']")
-      expect(quote.html()).toContain(mockContentQuote)
+      expect(quote.html()).toContain(mockQuote)
     })
 
     test("renders the author's name", () => {
       const author = wrapper.find("[data-testid='quote-banner__author']")
-      expect(author.text()).toContain(mockContentAuthor)
+      expect(author.text()).toContain(mockAuthor)
     })
 
     test("renders the author's photo", () => {
       const photo = wrapper.find("[data-testid='quote-banner__author-photo']")
       expect(photo.exists()).toBeTruthy()
-      expect(photo.attributes('src')).toContain(mockContentAuthorIMG)
-      expect(photo.attributes('alt')).toContain(mockContentAuthorIMGAlt)
-      expect(photo.attributes('title')).toContain(mockContentAuthorIMGTitle)
+      expect(photo.attributes('src')).toContain(mockAuthorIMG)
+      expect(photo.attributes('alt')).toContain(mockAuthorIMGAlt)
+      expect(photo.attributes('title')).toContain(mockAuthorIMGTitle)
     })
 
     test('renders the link button', () => {
       const link = wrapper.findComponent(RouterLinkStub)
       expect(link.exists()).toBeTruthy()
-      expect(link.html()).toContain(mockContentLinkText)
-      expect(link.props('to')).toBe(mockContentLinkURL)
+      expect(link.html()).toContain(mockLinkText)
+      expect(link.props('to')).toBe(mockLinkURL)
     })
   })
 })

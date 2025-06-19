@@ -68,10 +68,9 @@ export const getNewsletterSignupWording = (): UseFetchWithStateReturn<Newsletter
   return result
 }
 
-export const getFounderQuoteBannerContentAsyncResult =
-  (): UseFetchWithStateReturn<QuoteBannerContent> => {
-    const result: UseFetchWithStateReturn<QuoteBannerContent> = useFetchWithState(
-      founderQuoteBannerContentURL,
-    )
-    return result
-  }
+export const getFounderQuoteBannerContent = (): UseFetchWithStateReturn<QuoteBannerContent> => {
+  const result: UseFetchWithStateReturn<QuoteBannerContent> = useFetchWithState(
+    founderQuoteBannerContentURL,
+  )
+  return result
+}

@@ -33,7 +33,7 @@ describe('LoadingComponent.vue', async () => {
 
   test('the component has NOT been improperly modified', () => {
     expect(wrapper.html()).toMatchInlineSnapshot(
-      `"<div class="loader" role="status" aria-live="polite"><span class="loader__animation" aria-hidden="true" data-testid="loader__animation"></span><span class="loader__alternative-text sr-only" data-testid="loader__alternative-text">Loading, please wait...</span></div>"`,
+      `"<div data-v-9770a80b="" class="loader" role="status" aria-live="polite"><span data-v-9770a80b="" class="loader__animation" aria-hidden="true" data-testid="loader__animation"></span><span data-v-9770a80b="" class="loader__alternative-text sr-only" data-testid="loader__alternative-text">Loading, please wait...</span></div>"`,
     )
   })
 })

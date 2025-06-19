@@ -24,7 +24,7 @@ describe('ErrorComponent.vue', async () => {
 
   test('the component has NOT been improperly modified', () => {
     expect(wrapper.html()).toMatchInlineSnapshot(
-      `"<p class="error-message" role="alert" data-testid="error-message"> Loading error, please reload the page. </p>"`,
+      `"<p data-v-00bc1f96="" class="error-message" role="alert" data-testid="error-message"> Loading error, please reload the page. </p>"`,
     )
   })
 })

@@ -11,9 +11,9 @@ const { content, contentFetchState } = defineProps<{
 </script>
 
 <template>
-  <section class="quote-banner" aria-label="Founder Quote" data-testid="quote-banner">
+  <section class="quote-banner" :aria-label="`${content?.author} quote`" data-testid="quote-banner">
     <template v-if="contentFetchState === 'fulfilled'">
-      <div class="quote-banner__content">
+      <div class="quote-banner__inner-container">
         <figure class="quote-banner__figure">
           <blockquote class="quote-banner__blockquote">
             <p class="quote-banner__quote" data-testid="quote-banner__quote">
@@ -80,16 +80,13 @@ const { content, contentFetchState } = defineProps<{
       url('https://cdn.shopify.com/s/files/1/2275/5667/files/meditative-mountains-and-sunset-1600w.avif');
   }
 
-  &__content {
+  &__inner-container {
     margin: 0 auto;
     max-width: 800px;
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-
-  &__figure {
-    margin-bottom: 15px;
+    gap: 15px;
   }
 
   &__blockquote {
@@ -110,12 +107,11 @@ const { content, contentFetchState } = defineProps<{
 
   &__author {
     font-style: italic;
-    text-align: center;
   }
 
   &__link {
     background-color: $AwakningColorSecondary;
-    color: #1f2021;
+    color: $AwakningColorPrimary;
   }
 }
 </style>
