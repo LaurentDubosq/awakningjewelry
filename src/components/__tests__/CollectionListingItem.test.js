@@ -6,7 +6,7 @@ import frontDataBase from '../../../db.json'
 /* 1.Initialization */
 /********************/
 
-const mockCollection = frontDataBase.collectionListingByGender.collections[0]
+const mockCollection = frontDataBase.byGenderCollectionListingContent.collections[0]
 const mockCollectionURL = mockCollection.url
 const mockCollectionImageURL = mockCollection.image.url
 const mockCollectionTitle = mockCollection.title

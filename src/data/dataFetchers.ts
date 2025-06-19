@@ -1,7 +1,7 @@
 import type { PageMetaData } from '@/types/router.d.ts'
 import type { UseFetchWithStateReturn } from '@/types/fetch'
 import {
-  collectionListingByGenderURL,
+  byGenderCollectionListingContentURL,
   statementMissionWordingURL,
   heroSlidesURL,
   promotionsProductListingContentURL,
@@ -15,7 +15,7 @@ import type {
   StatementBannerWording,
   NewsletterSignupWording,
   QuoteBannerContent,
-  CollectionListing,
+  CollectionListingContent,
   HeroSlides,
 } from '@/types/components.d.ts'
 import type { ProductListingContent } from '@/types/components'
@@ -45,12 +45,13 @@ export const getStatementMissionWordingAsyncResult =
     return result
   }
 
-export const getCollectionListingByGender = (): UseFetchWithStateReturn<CollectionListing> => {
-  const result: UseFetchWithStateReturn<CollectionListing> = useFetchWithState(
-    collectionListingByGenderURL,
-  )
-  return result
-}
+export const getByGenderCollectionListingContent =
+  (): UseFetchWithStateReturn<CollectionListingContent> => {
+    const result: UseFetchWithStateReturn<CollectionListingContent> = useFetchWithState(
+      byGenderCollectionListingContentURL,
+    )
+    return result
+  }
 
 export const getPromotionsProductListingContent =
   (): UseFetchWithStateReturn<ProductListingContent> => {

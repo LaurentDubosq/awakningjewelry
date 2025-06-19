@@ -37,24 +37,24 @@ const mockStatementMissionWordingStatement = mockStatementMissionWording.stateme
 const mockStatementMissionWordingImageURL = mockStatementMissionWording.image.url
 const mockStatementMissionWordingImageAlt = mockStatementMissionWording.image.alt
 
-const mockCollectionListingByGenderPending = {
+const mockByGenderCollectionListingContentPending = {
   content: undefined,
   contentFetchState: 'pending',
 }
-const mockCollectionListingByGenderRejected = {
+const mockByGenderCollectionListingContentRejected = {
   content: undefined,
   contentFetchState: 'rejected',
 }
-const mockCollectionListingByGenderFulfilled = {
-  content: frontDataBase.collectionListingByGender,
+const mockByGenderCollectionListingContentFulfilled = {
+  content: frontDataBase.byGenderCollectionListingContent,
   contentFetchState: 'fulfilled',
 }
-const mockCollectionListingByGender = mockCollectionListingByGenderFulfilled.content
-const mockCollectionListingByGenderTitle = mockCollectionListingByGender.title
-const mockCollectionListingByGenderFeatureLabel = `Explore our collections ${mockCollectionListingByGenderTitle}`
-const mockCollectionListingByGenderCollections = mockCollectionListingByGender.collections
-const mockCollectionListingByGenderCollectionsLength =
-  mockCollectionListingByGenderCollections.length
+const mockByGenderCollectionListingContent = mockByGenderCollectionListingContentFulfilled.content
+const mockByGenderCollectionListingTitle = mockByGenderCollectionListingContent.title
+const mockByGenderCollectionListingFeatureLabel = `Collections ${mockByGenderCollectionListingTitle}`
+const mockByGenderCollectionListingCollections = mockByGenderCollectionListingContent.collections
+const mockByGenderCollectionListingCollectionsLength =
+  mockByGenderCollectionListingCollections.length
 
 const mockPromotionsProductListingContentPending = {
   content: undefined,
@@ -114,16 +114,19 @@ const mockUseStatementMissionWordingResultStore = defineStore(
   },
 )
 
-const mockUseCollectionListingByGenderStore = defineStore('CollectionListingByGender', () => {
-  const fetchResult = ref(mockCollectionListingByGenderPending)
-  const content = computed(() => fetchResult.value.content)
-  const contentFetchState = computed(() => fetchResult.value.contentFetchState)
-  return {
-    fetchResult,
-    content,
-    contentFetchState,
-  }
-})
+const mockUseByGenderCollectionListingContentStore = defineStore(
+  'ByGenderCollectionListingContent',
+  () => {
+    const fetchResult = ref(mockByGenderCollectionListingContentPending)
+    const content = computed(() => fetchResult.value.content)
+    const contentFetchState = computed(() => fetchResult.value.contentFetchState)
+    return {
+      fetchResult,
+      content,
+      contentFetchState,
+    }
+  },
+)
 
 const mockUsePromotionsProductListingContentStore = defineStore(
   'PromotionsProductListingContent',
@@ -151,7 +154,7 @@ const mockUseFounderQuoteBannerContentResultStore = defineStore(
 
 // Initialize the stores
 const mockStatementMissionWordingResultStore = mockUseStatementMissionWordingResultStore()
-const mockCollectionListingByGenderStore = mockUseCollectionListingByGenderStore()
+const mockByGenderCollectionListingContentStore = mockUseByGenderCollectionListingContentStore()
 const mockPromotionsProductListingContentStore = mockUsePromotionsProductListingContentStore()
 const mockFounderQuoteBannerContentResultStore = mockUseFounderQuoteBannerContentResultStore()
 
@@ -190,7 +193,8 @@ describe('HomeView.vue', () => {
     // Reset the store(s) state(s) to default to ensure a clean environment for each test
     mockStatementMissionWordingResultStore.wordingFetchResult =
       mockStatementMissionWordingPendingResult
-    mockCollectionListingByGenderStore.fetchResult = mockCollectionListingByGenderPending
+    mockByGenderCollectionListingContentStore.fetchResult =
+      mockByGenderCollectionListingContentPending
     mockPromotionsProductListingContentStore.fetchResult =
       mockPromotionsProductListingContentPending
     mockFounderQuoteBannerContentResultStore.contentFetchResult =
@@ -244,7 +248,8 @@ describe('HomeView.vue', () => {
       // Set the stores data fetching status to rejected
       mockStatementMissionWordingResultStore.wordingFetchResult =
         mockStatementMissionWordingRejectedResult
-      mockCollectionListingByGenderStore.fetchResult = mockCollectionListingByGenderRejected
+      mockByGenderCollectionListingContentStore.fetchResult =
+        mockByGenderCollectionListingContentRejected
       mockPromotionsProductListingContentStore.fetchResult =
         mockPromotionsProductListingContentRejected
       mockFounderQuoteBannerContentResultStore.contentFetchResult =
@@ -279,7 +284,8 @@ describe('HomeView.vue', () => {
       // Set the stores data fetching status to fulfilled
       mockStatementMissionWordingResultStore.wordingFetchResult =
         mockStatementMissionWordingFulfilledResult
-      mockCollectionListingByGenderStore.fetchResult = mockCollectionListingByGenderFulfilled
+      mockByGenderCollectionListingContentStore.fetchResult =
+        mockByGenderCollectionListingContentFulfilled
       mockPromotionsProductListingContentStore.fetchResult =
         mockPromotionsProductListingContentFulfilled
       mockFounderQuoteBannerContentResultStore.contentFetchResult =
@@ -313,11 +319,11 @@ describe('HomeView.vue', () => {
     test('collection listing is rendered with its necessary information', () => {
       // Assert the feature label for accessibility is rendered
       const section = wrapper.find("[data-testid='collection-listing']")
-      expect(section.attributes('aria-label')).toBe(mockCollectionListingByGenderFeatureLabel)
+      expect(section.attributes('aria-label')).toBe(mockByGenderCollectionListingFeatureLabel)
 
       // Assert the title is rendered
       const title = wrapper.find("[data-testid='collection-listing__title']")
-      expect(title.text()).toContain(mockCollectionListingByGenderTitle)
+      expect(title.text()).toContain(mockByGenderCollectionListingTitle)
 
       // Assert the title is not rendered for screen readers
       expect(title.attributes('aria-hidden')).toBe('true')
@@ -329,14 +335,14 @@ describe('HomeView.vue', () => {
       )
 
       // Assert that all collections are rendered
-      expect(collections).toHaveLength(mockCollectionListingByGenderCollectionsLength)
+      expect(collections).toHaveLength(mockByGenderCollectionListingCollectionsLength)
 
       // Assert any collection is rendered with necessary information
       collections.forEach((collection, index) => {
         const link = collection.findComponent(RouterLinkStub)
         const img = collection.find("[data-testid='collection-listing__item-img']")
         const title = collection.find("[data-testid='collection-listing__item-title']")
-        const mockCollection = mockCollectionListingByGenderCollections[index]
+        const mockCollection = mockByGenderCollectionListingCollections[index]
         const mockCollectionURL = mockCollection.url
         const mockCollectionImageURL = mockCollection.image.url
         const mockCollectionTitle = mockCollection.title

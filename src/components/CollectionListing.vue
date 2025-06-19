@@ -3,11 +3,11 @@ import CollectionListingItem from './CollectionListingItem.vue'
 import type { FetchState } from '@/types/fetch'
 import LoadingComponent from './LoadingComponent.vue'
 import ErrorComponent from './ErrorComponent.vue'
-import type { CollectionListing } from '@/types/components'
+import type { CollectionListingContent } from '@/types/components'
 import { computed } from 'vue'
 
 const props = defineProps<{
-  content?: CollectionListing
+  content?: CollectionListingContent
   contentFetchState?: FetchState
 }>()
 
@@ -18,7 +18,7 @@ const collections = computed(() => props.content?.collections)
 <template>
   <section
     class="collection-listing"
-    :aria-label="`Explore our collections ${title}`"
+    :aria-label="`Collections ${title}`"
     data-testid="collection-listing"
   >
     <div class="wrapper">
@@ -31,7 +31,7 @@ const collections = computed(() => props.content?.collections)
       </h2>
       <hr class="collection-listing__separator" />
       <template v-if="contentFetchState === 'fulfilled'">
-        <ul class="collection-listing__list" aria-label="Collections">
+        <ul class="collection-listing__list">
           <CollectionListingItem v-for="collection in collections" :collection />
         </ul>
       </template>
@@ -45,9 +45,9 @@ const collections = computed(() => props.content?.collections)
 @use '@/assets/styles/_constants.scss' as *;
 
 .collection-listing {
-  padding: 45px 0;
+  margin: 45px 0;
   @media screen and (min-width: $BreakpointDesktop) {
-    padding: 90px 0;
+    margin: 90px 0;
   }
 
   &__title {

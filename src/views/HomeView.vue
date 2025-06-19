@@ -8,12 +8,12 @@ import QuoteBanner from '@/components/QuoteBanner.vue'
 import { storeToRefs } from 'pinia'
 import { useStatementMissionWordingResultStore } from '@/stores/statementMission'
 import { useFounderQuoteBannerContentResultStore } from '@/stores/quoteFounder'
-import { useCollectionListingByGenderStore } from '@/stores/collectionsByGender'
+import { useByGenderCollectionListingContentStore } from '@/stores/byGenderCollectionListingContent'
 import { usePromotionsProductListingContentStore } from '@/stores/promotionsProductListingContent'
 
 // Get the stores instances
 const statementMissionWordingResultStore = useStatementMissionWordingResultStore()
-const collectionsByGenderStore = useCollectionListingByGenderStore()
+const byGenderCollectionListingContentStore = useByGenderCollectionListingContentStore()
 const promotionsProductListingContentStore = usePromotionsProductListingContentStore()
 const founderQuoteBannerContentResultStore = useFounderQuoteBannerContentResultStore()
 
@@ -21,9 +21,9 @@ const founderQuoteBannerContentResultStore = useFounderQuoteBannerContentResultS
 const { wording: statementMissionWording, wordingFetchState: statementMissionWordingFetchState } =
   storeToRefs(statementMissionWordingResultStore)
 const {
-  content: collectionsByGenderContent,
-  contentFetchState: collectionsByGenderContentFetchState,
-} = storeToRefs(collectionsByGenderStore)
+  content: byGenderCollectionListingContent,
+  contentFetchState: byGenderCollectionListingContentFetchState,
+} = storeToRefs(byGenderCollectionListingContentStore)
 const {
   content: promotionsProductListingContent,
   contentFetchState: promotionsProductListingContentFetchState,
@@ -42,8 +42,8 @@ const {
       :wordingFetchState="statementMissionWordingFetchState"
     />
     <CollectionListing
-      :content="collectionsByGenderContent"
-      :contentFetchState="collectionsByGenderContentFetchState"
+      :content="byGenderCollectionListingContent"
+      :contentFetchState="byGenderCollectionListingContentFetchState"
     />
     <ProductListing
       :content="promotionsProductListingContent"

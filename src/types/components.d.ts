@@ -56,7 +56,7 @@ export interface StatementBannerWordingImage {
 }
 
 /* CollectionListing */
-export interface CollectionListing {
+export interface CollectionListingContent {
   title: string
   collections: Collections
 }

@@ -17,12 +17,12 @@ const mockContentRejected = {
   contentFetchState: 'rejected',
 }
 const mockContentFulfilled = {
-  content: frontDataBase.collectionListingByGender,
+  content: frontDataBase.byGenderCollectionListingContent,
   contentFetchState: 'fulfilled',
 }
 const mockContent = mockContentFulfilled.content
 const mockContentTitle = mockContent.title
-const mockContentFeatureLabel = `Explore our collections ${mockContentTitle}`
+const mockContentFeatureLabel = `Collections ${mockContentTitle}`
 const mockContentCollections = mockContent.collections
 const mockContentCollectionsLength = mockContentCollections.length
 
