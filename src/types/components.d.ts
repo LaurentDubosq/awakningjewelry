@@ -1,9 +1,4 @@
-import type {
-  Collections,
-  Product,
-  InputSuccessResult,
-  InputErrorResult,
-} from '../types/global.d.js'
+import type { Collections, InputSuccessResult, InputErrorResult } from '../types/global.d.js'
 
 /* SiteMenu */
 export type SiteMenu = Array<SiteMenuLink | SiteMenuDropdown>
@@ -67,9 +62,20 @@ export interface CollectionListing {
 }
 
 /* ProductListing */
-export interface ProductListing {
+export interface ProductListingContent {
   title: string
-  products: Product[]
+  products: ProductListingProduct[]
+}
+export interface ProductListingProduct {
+  title: string
+  image: ProductListingProductImage
+  price: string
+  promotionalPrice: string
+  url: string
+}
+export interface ProductListingProductImage {
+  url: string
+  alt: string
 }
 
 /* Slideshow */

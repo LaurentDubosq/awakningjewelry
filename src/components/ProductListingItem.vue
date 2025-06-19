@@ -1,25 +1,23 @@
 <script setup lang="ts">
-import type { ProductSummary } from '@/types/global'
+import type { ProductListingProduct } from '@/types/components'
 
 const { product } = defineProps<{
-  product: ProductSummary
+  product: ProductListingProduct
 }>()
 </script>
 
 <template>
   <li class="product-listing__item" data-testid="product-listing__item">
     <RouterLink
-      :to="product.url"
       class="product-listing__item-link"
-      :aria-label="`Access the ${product.title} product page`"
-      :title="`Access the ${product.title} product page`"
+      :to="product.url"
       data-testid="product-listing__item-link"
     >
       <div class="product-listing__item-image-wrapper">
         <img
+          class="product-listing__item-image"
           :src="product.image.url"
           :alt="product.image.alt"
-          class="product-listing__item-image"
           data-testid="product-listing__item-image"
         />
       </div>

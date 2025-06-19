@@ -4,7 +4,7 @@ import {
   collectionListingByGenderURL,
   statementMissionWordingURL,
   heroSlidesURL,
-  promotionsURL,
+  promotionsProductListingContentURL,
   pagesMetaDataUrl,
   siteMenuUrl,
   newsletterSignupWordingURL,
@@ -18,7 +18,7 @@ import type {
   CollectionListing,
   HeroSlides,
 } from '@/types/components.d.ts'
-import type { ProductSummary } from '@/types/global.d.ts'
+import type { ProductListingContent } from '@/types/components'
 import { useFetch } from '@/composables/useFetch'
 import { useFetchWithState } from '@/composables/useFetchWithState'
 
@@ -52,10 +52,13 @@ export const getCollectionListingByGender = (): UseFetchWithStateReturn<Collecti
   return result
 }
 
-export const getPromotions = (): UseFetchWithStateReturn<ProductSummary[]> => {
-  const result: UseFetchWithStateReturn<ProductSummary[]> = useFetchWithState(promotionsURL)
-  return result
-}
+export const getPromotionsProductListingContent =
+  (): UseFetchWithStateReturn<ProductListingContent> => {
+    const result: UseFetchWithStateReturn<ProductListingContent> = useFetchWithState(
+      promotionsProductListingContentURL,
+    )
+    return result
+  }
 
 export const getNewsletterSignupWording = (): UseFetchWithStateReturn<NewsletterSignupWording> => {
   const result: UseFetchWithStateReturn<NewsletterSignupWording> = useFetchWithState(

@@ -56,20 +56,21 @@ const mockCollectionListingByGenderCollections = mockCollectionListingByGender.c
 const mockCollectionListingByGenderCollectionsLength =
   mockCollectionListingByGenderCollections.length
 
-const mockProductsTitle = 'Promotions'
-const mockProductsPending = {
-  products: undefined,
-  fetchState: 'pending',
+const mockPromotionsProductListingContentPending = {
+  content: undefined,
+  contentFetchState: 'pending',
 }
-const mockProductsRejected = {
-  products: undefined,
-  fetchState: 'rejected',
+const mockPromotionsProductListingContentRejected = {
+  content: undefined,
+  contentFetchState: 'rejected',
 }
-const mockProductsFulfilled = {
-  products: frontDataBase.promotions,
-  fetchState: 'fulfilled',
+const mockPromotionsProductListingContentFulfilled = {
+  content: frontDataBase.promotionsProductListingContent,
+  contentFetchState: 'fulfilled',
 }
-const mockProducts = mockProductsFulfilled.products
+const mockContent = mockPromotionsProductListingContentFulfilled.content
+const mockProductsTitle = mockContent.title
+const mockProducts = mockContent.products
 const mockProductsLength = mockProducts.length
 
 const mockFounderQuoteBannerContentPendingResult = {
@@ -124,20 +125,19 @@ const mockUseCollectionListingByGenderStore = defineStore('CollectionListingByGe
   }
 })
 
-const mockUsePromotionsResultStore = defineStore('PromotionsResult', () => {
-  const promotionsResult = ref(mockProductsPending)
-  const promotionsResultData = computed(() => promotionsResult.value.products)
-  const promotionsResultFetchState = computed(() => promotionsResult.value.fetchState)
-  const updatePromotionsResult = (newState) => {
-    promotionsResult.value = newState
-  }
-  return {
-    promotionsResult,
-    promotionsResultData,
-    promotionsResultFetchState,
-    updatePromotionsResult,
-  }
-})
+const mockUsePromotionsProductListingContentStore = defineStore(
+  'PromotionsProductListingContent',
+  () => {
+    const fetchResult = ref(mockPromotionsProductListingContentPending)
+    const content = computed(() => fetchResult.value.content)
+    const contentFetchState = computed(() => fetchResult.value.contentFetchState)
+    return {
+      fetchResult,
+      content,
+      contentFetchState,
+    }
+  },
+)
 
 const mockUseFounderQuoteBannerContentResultStore = defineStore(
   'FounderQuoteBannerContentResult',
@@ -152,7 +152,7 @@ const mockUseFounderQuoteBannerContentResultStore = defineStore(
 // Initialize the stores
 const mockStatementMissionWordingResultStore = mockUseStatementMissionWordingResultStore()
 const mockCollectionListingByGenderStore = mockUseCollectionListingByGenderStore()
-const mockPromotionsResultStore = mockUsePromotionsResultStore()
+const mockPromotionsProductListingContentStore = mockUsePromotionsProductListingContentStore()
 const mockFounderQuoteBannerContentResultStore = mockUseFounderQuoteBannerContentResultStore()
 
 /***********/
@@ -191,7 +191,8 @@ describe('HomeView.vue', () => {
     mockStatementMissionWordingResultStore.wordingFetchResult =
       mockStatementMissionWordingPendingResult
     mockCollectionListingByGenderStore.fetchResult = mockCollectionListingByGenderPending
-    mockPromotionsResultStore.promotionsResult = mockProductsPending
+    mockPromotionsProductListingContentStore.fetchResult =
+      mockPromotionsProductListingContentPending
     mockFounderQuoteBannerContentResultStore.contentFetchResult =
       mockFounderQuoteBannerContentPendingResult
   })
@@ -206,11 +207,6 @@ describe('HomeView.vue', () => {
     test('hero feature is rendered', async () => {
       const HeroComponent = wrapper.findComponent(Hero)
       expect(HeroComponent.exists()).toBeTruthy()
-    })
-
-    test('renders the product listing title', () => {
-      const title = wrapper.find("[data-testid='product-listing__title']")
-      expect(title.text()).toContain(mockProductsTitle)
     })
 
     test('newsletter signup feature is rendered', async () => {
@@ -249,7 +245,8 @@ describe('HomeView.vue', () => {
       mockStatementMissionWordingResultStore.wordingFetchResult =
         mockStatementMissionWordingRejectedResult
       mockCollectionListingByGenderStore.fetchResult = mockCollectionListingByGenderRejected
-      mockPromotionsResultStore.promotionsResult = mockProductsRejected
+      mockPromotionsProductListingContentStore.fetchResult =
+        mockPromotionsProductListingContentRejected
       mockFounderQuoteBannerContentResultStore.contentFetchResult =
         mockFounderQuoteBannerContentRejectedResult
       await nextTick()
@@ -283,7 +280,8 @@ describe('HomeView.vue', () => {
       mockStatementMissionWordingResultStore.wordingFetchResult =
         mockStatementMissionWordingFulfilledResult
       mockCollectionListingByGenderStore.fetchResult = mockCollectionListingByGenderFulfilled
-      mockPromotionsResultStore.promotionsResult = mockProductsFulfilled
+      mockPromotionsProductListingContentStore.fetchResult =
+        mockPromotionsProductListingContentFulfilled
       mockFounderQuoteBannerContentResultStore.contentFetchResult =
         mockFounderQuoteBannerContentFulfilledResult
       await nextTick()
@@ -366,7 +364,11 @@ describe('HomeView.vue', () => {
       })
     })
 
-    test('products are rendered with their necessary information', () => {
+    test('product listing is rendered with their necessary information', () => {
+      // Assert the title is rendered
+      const title = wrapper.find("[data-testid='product-listing__title']")
+      expect(title.text()).toContain(mockProductsTitle)
+
       // Find the elements
       const ProductListingComponent = wrapper.findComponent(ProductListing)
 

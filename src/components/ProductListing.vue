@@ -1,35 +1,34 @@
 <script setup lang="ts">
 import type { FetchState } from '@/types/fetch'
-import type { ProductSummary } from '@/types/global.d.ts'
+import type { ProductListingContent } from '@/types/components.d.ts'
 import ProductListingItem from './ProductListingItem.vue'
 import LoadingComponent from './LoadingComponent.vue'
 import ErrorComponent from './ErrorComponent.vue'
+import { computed } from 'vue'
 
-const { title, products, fetchState } = defineProps<{
-  title: string
-  products?: ProductSummary[]
-  fetchState?: FetchState
+const props = defineProps<{
+  content?: ProductListingContent
+  contentFetchState?: FetchState
 }>()
+
+const title = computed(() => props.content?.title)
+const products = computed(() => props.content?.products)
 </script>
 
 <template>
-  <section class="product-listing" aria-labelledby="product-listing-title">
+  <section class="product-listing">
     <div class="wrapper">
-      <h2
-        class="product-listing__title"
-        id="product-listing__title"
-        data-testid="product-listing__title"
-      >
+      <h2 class="product-listing__title" data-testid="product-listing__title">
         {{ title }}
       </h2>
       <hr class="product-listing__separator" />
-      <template v-if="fetchState === 'fulfilled'">
-        <ul class="product-listing__list" aria-label="Products">
+      <template v-if="contentFetchState === 'fulfilled'">
+        <ul class="product-listing__list">
           <ProductListingItem v-for="product in products" :product />
         </ul>
       </template>
-      <LoadingComponent v-else-if="fetchState === 'pending'" />
-      <ErrorComponent v-else-if="fetchState === 'rejected'" />
+      <LoadingComponent v-else-if="contentFetchState === 'pending'" />
+      <ErrorComponent v-else-if="contentFetchState === 'rejected'" />
     </div>
   </section>
 </template>
@@ -60,12 +59,12 @@ const { title, products, fetchState } = defineProps<{
   &__list {
     display: grid;
 
-    @media screen and (min-width: 600px) {
+    @media screen and (min-width: 590px) {
       grid-template-columns: repeat(2, 1fr);
       gap: 30px;
     }
 
-    @media screen and (min-width: 750px) {
+    @media screen and (min-width: $BreakpointDesktop) {
       grid-template-columns: repeat(3, 1fr);
     }
   }

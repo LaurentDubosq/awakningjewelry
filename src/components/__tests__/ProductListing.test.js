@@ -8,20 +8,20 @@ import frontDataBase from '../../../db.json'
 /* 1.Initialization */
 /********************/
 
-const mockTitle = 'Promotions'
 const mockProductsPending = {
-  products: undefined,
-  fetchState: 'pending',
+  content: undefined,
+  contentFetchState: 'pending',
 }
 const mockProductsRejected = {
-  products: undefined,
-  fetchState: 'rejected',
+  content: undefined,
+  contentFetchState: 'rejected',
 }
 const mockProductsFulfilled = {
-  products: frontDataBase.promotions,
-  fetchState: 'fulfilled',
+  content: frontDataBase.promotionsProductListingContent,
+  contentFetchState: 'fulfilled',
 }
-const mockProducts = mockProductsFulfilled.products
+const mockTitle = mockProductsFulfilled.content.title
+const mockProducts = mockProductsFulfilled.content.products
 const mockProductsLength = mockProducts.length
 
 /***********/
@@ -32,9 +32,8 @@ const mockProductsLength = mockProducts.length
 function mountProductListing(props) {
   return mount(ProductListing, {
     props: {
-      title: mockTitle,
-      products: mockProductsPending.products,
-      fetchState: mockProductsPending.fetchState,
+      content: mockProductsPending.content,
+      contentFetchState: mockProductsPending.contentFetchState,
       ...props,
     },
     global: { stubs: { RouterLink: RouterLinkStub } },
@@ -62,11 +61,6 @@ describe('ProductListing.vue', () => {
   })
 
   describe('Initial render - Data fetching "Pending" state', () => {
-    test('renders its title', () => {
-      const title = wrapper.find("[data-testid='product-listing__title']")
-      expect(title.text()).toContain(mockTitle)
-    })
-
     test('the loader animation is rendered', async () => {
       const loadingComponent = wrapper.findComponent(LoadingComponent)
       expect(loadingComponent.exists()).toBeTruthy()
@@ -85,10 +79,17 @@ describe('ProductListing.vue', () => {
   })
 
   describe('Data fetching "Fulfilled" state', () => {
-    test('renders all the products with necessary information', () => {
+    beforeEach(() => {
       // Mount the component (fulfilled state)
-      const wrapper = mountProductListing(mockProductsFulfilled)
+      wrapper = mountProductListing(mockProductsFulfilled)
+    })
 
+    test('renders its title', () => {
+      const title = wrapper.find("[data-testid='product-listing__title']")
+      expect(title.text()).toContain(mockTitle)
+    })
+
+    test('renders all the products with necessary information', () => {
       // Find the products elements
       const products = wrapper.findAll("[data-testid='product-listing__item']")
 

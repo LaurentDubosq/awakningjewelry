@@ -9,12 +9,12 @@ import { storeToRefs } from 'pinia'
 import { useStatementMissionWordingResultStore } from '@/stores/statementMission'
 import { useFounderQuoteBannerContentResultStore } from '@/stores/quoteFounder'
 import { useCollectionListingByGenderStore } from '@/stores/collectionsByGender'
-import { usePromotionsResultStore } from '@/stores/promotions'
+import { usePromotionsProductListingContentStore } from '@/stores/promotionsProductListingContent'
 
 // Get the stores instances
 const statementMissionWordingResultStore = useStatementMissionWordingResultStore()
 const collectionsByGenderStore = useCollectionListingByGenderStore()
-const promotionsStore = usePromotionsResultStore()
+const promotionsProductListingContentStore = usePromotionsProductListingContentStore()
 const founderQuoteBannerContentResultStore = useFounderQuoteBannerContentResultStore()
 
 // Get the store's states and computeds
@@ -24,7 +24,10 @@ const {
   content: collectionsByGenderContent,
   contentFetchState: collectionsByGenderContentFetchState,
 } = storeToRefs(collectionsByGenderStore)
-const { promotionsResultData, promotionsResultFetchState } = storeToRefs(promotionsStore)
+const {
+  content: promotionsProductListingContent,
+  contentFetchState: promotionsProductListingContentFetchState,
+} = storeToRefs(promotionsProductListingContentStore)
 const {
   content: founderQuoteBannerContent,
   contentFetchState: founderQuoteBannerContentFetchState,
@@ -43,9 +46,8 @@ const {
       :contentFetchState="collectionsByGenderContentFetchState"
     />
     <ProductListing
-      title="Promotions"
-      :products="promotionsResultData"
-      :fetchState="promotionsResultFetchState"
+      :content="promotionsProductListingContent"
+      :contentFetchState="promotionsProductListingContentFetchState"
     />
     <NewsletterSignup />
     <QuoteBanner

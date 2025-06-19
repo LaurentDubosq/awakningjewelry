@@ -15,8 +15,8 @@ export const statementMissionWordingURL: string = `${LAYOUT_API_BASE_URL}/statem
 /* CollectionListingByGender */
 export const collectionListingByGenderURL: string = `${LAYOUT_API_BASE_URL}/collectionListingByGender`
 
-/* Promotions */
-export const promotionsURL: string = `${LAYOUT_API_BASE_URL}/promotions`
+/* PromotionsProductListingContent */
+export const promotionsProductListingContentURL: string = `${LAYOUT_API_BASE_URL}/promotionsProductListingContent`
 
 /* NewsletterSignupWording */
 export const newsletterSignupWordingURL: string = `${LAYOUT_API_BASE_URL}/newsletterSignupWording`
