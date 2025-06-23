@@ -31,23 +31,23 @@ function isDropdown(siteMenuItem: SiteMenuLink | SiteMenuDropdown): siteMenuItem
 
 <template>
   <nav class="site-nav" aria-label="Website's desktop navigation bar" data-testid="site-nav">
-    <ul class="site-nav__list" aria-label="Website's desktop navigation bar">
-      <template v-if="siteMenuFetchState === 'fulfilled'">
+    <template v-if="siteMenuFetchState === 'fulfilled'">
+      <ul class="site-nav__list">
         <li class="site-nav__item" data-testid="site-nav__item" v-for="siteMenuItem in siteMenu">
           <SiteNavLink :link="siteMenuItem" v-if="isLink(siteMenuItem)">
             <IconPerson
               class="site-nav__item-icon"
-              v-if="isAccountLink(siteMenuItem)"
               width="27"
               aria-hidden="true"
+              v-if="isAccountLink(siteMenuItem)"
             />
           </SiteNavLink>
           <SiteNavDropdown :dropdown="siteMenuItem" v-else-if="isDropdown(siteMenuItem)" />
         </li>
-      </template>
-      <LoadingComponent v-else-if="siteMenuFetchState === 'pending'" />
-      <ErrorComponent v-else-if="siteMenuFetchState === 'rejected'" />
-    </ul>
+      </ul>
+    </template>
+    <LoadingComponent v-else-if="siteMenuFetchState === 'pending'" />
+    <ErrorComponent v-else-if="siteMenuFetchState === 'rejected'" />
   </nav>
 </template>
 
@@ -56,7 +56,6 @@ function isDropdown(siteMenuItem: SiteMenuLink | SiteMenuDropdown): siteMenuItem
 
 .site-nav__list {
   display: flex;
-  justify-content: space-between;
   align-items: center;
 }
 .site-nav__item {
