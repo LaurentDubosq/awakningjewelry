@@ -1,6 +1,6 @@
 import { mount, RouterLinkStub } from '@vue/test-utils'
 import SiteNavDropdownItem from '@/components/SiteNavDropdownItem.vue'
-import { closeSiteNavDropdownKey } from '@/utils/injectionkeys'
+import { closeDropdownKey } from '@/utils/injectionkeys'
 import frontDataBase from '../../../db.json'
 
 /********************/
@@ -22,7 +22,7 @@ function mountSiteNavDropdownItem() {
   return mount(SiteNavDropdownItem, {
     props: { link: mockLink },
     global: {
-      provide: { [closeSiteNavDropdownKey]: mockCloseSiteNavDropdown },
+      provide: { [closeDropdownKey]: mockCloseSiteNavDropdown },
       stubs: { RouterLink: RouterLinkStub },
     },
   })
@@ -54,6 +54,9 @@ describe('SiteNavDropdownItem.vue', () => {
 
     // Assert the link has the correct url
     expect(link.props('to')).toBe(mockLinkURL)
+
+    // Assert the link has the correct title
+    expect(link.attributes('title')).toBe(`Explore our ${mockLinkText}`)
 
     // Assert the link's text is well rendered
     expect(link.text()).toContain(mockLinkText)

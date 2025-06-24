@@ -12,7 +12,6 @@ const { links, id } = defineProps<{
   <ul
     class="site-nav__dropdown-list"
     :id="`site-nav__dropdown-list-${id.toLowerCase()}`"
-    :aria-labelledby="`site-nav__dropdown-button-${id.toLowerCase()}`"
     data-testid="site-nav__dropdown-list"
   >
     <SiteNavDropdownItem :link v-for="link in links" />
@@ -28,6 +27,5 @@ const { links, id } = defineProps<{
   padding: 10px 0;
   background: $AwakningColorSecondary;
   box-shadow: $AwakningBoxShadow;
-  font-style: italic;
 }
 </style>

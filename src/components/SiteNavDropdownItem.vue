@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import type { SiteMenuDropdownLink } from '@/types/components'
-import { closeSiteNavDropdownKey } from '@/utils/injectionkeys'
+import { closeDropdownKey } from '@/utils/injectionkeys'
 import { inject } from 'vue'
 
 const { link } = defineProps<{
   link: SiteMenuDropdownLink
 }>()
 
-const closeDropdown: (() => void) | undefined = inject(closeSiteNavDropdownKey)
+const closeDropdown: (() => void) | undefined = inject(closeDropdownKey)
 </script>
 
 <template>
@@ -28,5 +28,6 @@ const closeDropdown: (() => void) | undefined = inject(closeSiteNavDropdownKey)
   display: block;
   padding: 10px 15px;
   white-space: nowrap;
+  font-style: italic;
 }
 </style>

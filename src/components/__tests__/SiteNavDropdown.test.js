@@ -124,6 +124,9 @@ describe('SiteNavDropdown.vue', () => {
         // Assert the link has the correct url
         expect(link.attributes('href')).toBe(mockLinkURL)
 
+        // Assert the link has the correct title
+        expect(link.attributes('title')).toBe(`Explore our ${mockLinkText}`)
+
         // Assert the link text is well rendered
         expect(link.text()).toContain(mockLinkText)
       })
@@ -235,6 +238,29 @@ describe('SiteNavDropdown.vue', () => {
       // Assert the dropdown is open
       list = wrapper.find("[data-testid='site-nav__dropdown-list']")
       expect(list.exists()).toBeTruthy()
+    })
+
+    test('when the toggle button is touched, it open/close the dropdown', async () => {
+      let list
+
+      // Assert the dropdown is close
+      list = wrapper.find("[data-testid='site-nav__dropdown-list']")
+      expect(list.exists()).toBeFalsy()
+
+      // Touch the button
+      const button = wrapper.find("[data-testid='site-nav__dropdown-button']")
+      await button.trigger('touchend')
+
+      // Assert the dropdown is open
+      list = wrapper.find("[data-testid='site-nav__dropdown-list']")
+      expect(list.exists()).toBeTruthy()
+
+      // Touch the button again
+      await button.trigger('touchend')
+
+      // Assert the dropdown is close
+      list = wrapper.find("[data-testid='site-nav__dropdown-list']")
+      expect(list.exists()).toBeFalsy()
     })
 
     /*********/

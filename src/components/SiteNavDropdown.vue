@@ -2,7 +2,7 @@
 import type { SiteMenuDropdown } from '@/types/components'
 import { provide, ref, type Ref } from 'vue'
 import MyTransition from './MyTransition.vue'
-import { closeSiteNavDropdownKey } from '@/utils/injectionkeys'
+import { closeDropdownKey } from '@/utils/injectionkeys'
 import SiteNavDropdownButton from './SiteNavDropdownButton.vue'
 import SiteNavDropdownList from './SiteNavDropdownList.vue'
 import useExecuteOnFocusLeave from '@/composables/useExecuteOnFocusLeave'
@@ -19,9 +19,12 @@ function openDropdown() {
 function closeDropdown() {
   isDropdownOpen.value = false
 }
+function toggleDropdown() {
+  isDropdownOpen.value = !isDropdownOpen.value
+}
 
 /* Send "closeDropdown" function to the dropdown item component */
-provide(closeSiteNavDropdownKey, closeDropdown)
+provide(closeDropdownKey, closeDropdown)
 </script>
 
 <template>
@@ -33,8 +36,13 @@ provide(closeSiteNavDropdownKey, closeDropdown)
     @keydown.escape="closeDropdown"
     data-testid="site-nav__dropdown"
   >
-    <SiteNavDropdownButton v-bind="dropdown.button" :isDropdownOpen @open-dropdown="openDropdown" />
-    <MyTransition name="vertical-top-subtle-slide" :group="true">
+    <SiteNavDropdownButton
+      v-bind="dropdown.button"
+      :isDropdownOpen
+      @open-dropdown="openDropdown"
+      @toggle-dropdown="toggleDropdown"
+    />
+    <MyTransition name="vertical-top-subtle-slide" :group="false">
       <SiteNavDropdownList
         :links="dropdown.links"
         :id="dropdown.button.text"
