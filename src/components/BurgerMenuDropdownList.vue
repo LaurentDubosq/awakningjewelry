@@ -15,7 +15,6 @@ const idLowered = id.toLowerCase()
     <ul
       class="burger-menu__dropdown-list transition"
       :id="`burger-menu__dropdown-list-${idLowered}`"
-      :aria-labelledby="`burger-menu__dropdown-button-${idLowered}`"
       data-testid="burger-menu__dropdown-list"
     >
       <BurgerMenuDropdownItem :link v-for="link in links" />
