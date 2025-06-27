@@ -123,7 +123,7 @@ const hasSignupFailed = () => {
   background-color: $AwakningColorBackgroundMuted;
   padding: 30px 0;
 
-  @media screen and (min-width: $BreakpointDesktop) {
+  @media screen and (min-width: $breakpointDesktop) {
     padding: 60px 0;
   }
 
@@ -133,7 +133,7 @@ const hasSignupFailed = () => {
     text-align: center;
     margin-bottom: 15px;
 
-    @media screen and (min-width: $BreakpointDesktop) {
+    @media screen and (min-width: $breakpointDesktop) {
       margin-bottom: 12px;
     }
   }
@@ -143,7 +143,7 @@ const hasSignupFailed = () => {
     text-align: center;
     margin-bottom: 42px;
 
-    @media screen and (min-width: $BreakpointDesktop) {
+    @media screen and (min-width: $breakpointDesktop) {
       margin-bottom: 50px;
     }
   }

@@ -295,7 +295,7 @@ onMounted(() => {
   align-items: center;
   padding: 0 15px;
   position: relative;
-  @media screen and (min-width: $BreakpointDesktop) {
+  @media screen and (min-width: $breakpointDesktop) {
     padding: 0;
   }
 
@@ -313,7 +313,7 @@ onMounted(() => {
   z-index: 0;
   transition: opacity 1s ease;
   padding: 0 15px;
-  @media screen and (min-width: $BreakpointDesktop) {
+  @media screen and (min-width: $breakpointDesktop) {
     padding: 0;
   }
 }

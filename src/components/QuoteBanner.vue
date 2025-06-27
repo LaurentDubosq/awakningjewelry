@@ -61,20 +61,20 @@ const { content, contentFetchState } = defineProps<{
   background-size: cover;
   background-position: center;
 
-  @media screen and (min-width: $BreakpointMobileLandscape) {
+  @media screen and (min-width: $breakpointMobileLandscape) {
     background-image:
       linear-gradient(rgba(0, 0, 0, 0.651), rgba(0, 0, 0, 0.6)),
       url('https://cdn.shopify.com/s/files/1/2275/5667/files/meditative-mountains-and-sunset-768w.avif');
   }
 
-  @media screen and (min-width: $BreakpointDesktop) {
+  @media screen and (min-width: $breakpointDesktop) {
     padding: 45px 55px;
     background-image:
       linear-gradient(rgba(0, 0, 0, 0.651), rgba(0, 0, 0, 0.6)),
       url('https://cdn.shopify.com/s/files/1/2275/5667/files/meditative-mountains-and-sunset-1279w.avif');
   }
 
-  @media screen and (min-width: $BreakpointDesktopLarge) {
+  @media screen and (min-width: $breakpointDesktopLarge) {
     background-image:
       linear-gradient(rgba(0, 0, 0, 0.651), rgba(0, 0, 0, 0.6)),
       url('https://cdn.shopify.com/s/files/1/2275/5667/files/meditative-mountains-and-sunset-1600w.avif');

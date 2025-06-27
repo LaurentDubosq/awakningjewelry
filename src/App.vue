@@ -44,7 +44,7 @@ const { isBurgerMenuOpen } = storeToRefs(isBurgerMenuOpenStore)
   }
 }
 
-@media screen and (min-width: $BreakpointDesktop) {
+@media screen and (min-width: $breakpointDesktop) {
   .site-content {
     overflow: visible;
   }

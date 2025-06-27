@@ -38,7 +38,7 @@ const products = computed(() => props.content?.products)
 
 .product-listing {
   margin: 45px 0;
-  @media screen and (min-width: $BreakpointDesktop) {
+  @media screen and (min-width: $breakpointDesktop) {
     margin: 90px 0;
   }
 
@@ -51,7 +51,7 @@ const products = computed(() => props.content?.products)
 
   &__separator {
     margin-bottom: 30px;
-    @media screen and (min-width: $BreakpointDesktop) {
+    @media screen and (min-width: $breakpointDesktop) {
       margin-bottom: 50px;
     }
   }
@@ -64,7 +64,7 @@ const products = computed(() => props.content?.products)
       gap: 30px;
     }
 
-    @media screen and (min-width: $BreakpointDesktop) {
+    @media screen and (min-width: $breakpointDesktop) {
       grid-template-columns: repeat(3, 1fr);
     }
   }

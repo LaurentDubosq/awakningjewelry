@@ -1,7 +1,7 @@
 @use '@/assets/styles/_constants.scss' as *;
 
 :export {
-  BreakpointMobileLandscape: $BreakpointMobileLandscape;
-  BreakpointDesktop: $BreakpointDesktop;
-  BreakpointDesktopLarge: $BreakpointDesktopLarge;
+  breakpointMobileLandscape: $breakpointMobileLandscape;
+  breakpointDesktop: $breakpointDesktop;
+  breakpointDesktopLarge: $breakpointDesktopLarge;
 }

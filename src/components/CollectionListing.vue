@@ -46,7 +46,7 @@ const collections = computed(() => props.content?.collections)
 
 .collection-listing {
   margin: 45px 0;
-  @media screen and (min-width: $BreakpointDesktop) {
+  @media screen and (min-width: $breakpointDesktop) {
     margin: 90px 0;
   }
 
@@ -59,7 +59,7 @@ const collections = computed(() => props.content?.collections)
 
   &__separator {
     margin-bottom: 30px;
-    @media screen and (min-width: $BreakpointDesktop) {
+    @media screen and (min-width: $breakpointDesktop) {
       margin-bottom: 50px;
     }
   }

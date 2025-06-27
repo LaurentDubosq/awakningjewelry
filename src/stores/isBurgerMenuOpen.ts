@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { onMounted, onUnmounted, ref, type Ref } from 'vue'
-import SASSCONSTANTS from '@/assets/styles/_constants.module.scss'
+import sassConstants from '@/assets/styles/_constants.module.scss'
 
 export const useIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
   // States
@@ -24,12 +24,12 @@ export const useIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
   /***************************************************************/
 
   // Get the desktop breakpoint value from design system
-  const DESKTOPBREAKPOINT: number = Number(SASSCONSTANTS.BreakpointDesktop.slice(0, -2))
+  const breakpointDesktop: number = Number(sassConstants.breakpointDesktop.slice(0, -2))
 
   // Logic to close the burger menu when we resize the window width from mobile to desktop.
   function closeBurgerMenuOnDesktop() {
     if (
-      document.documentElement.clientWidth >= DESKTOPBREAKPOINT &&
+      document.documentElement.clientWidth >= breakpointDesktop &&
       isBurgerMenuOpen.value !== false
     ) {
       isBurgerMenuOpen.value = false

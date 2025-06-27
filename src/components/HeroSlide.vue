@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SASSCONSTANTS from '@/assets/styles/_constants.module.scss'
+import sassConstants from '@/assets/styles/_constants.module.scss'
 import type { HeroSlideType } from '@/types/components'
 
 const { slide, slidesLength, slideIndex, isActive } = defineProps<{
@@ -8,9 +8,9 @@ const { slide, slidesLength, slideIndex, isActive } = defineProps<{
   slideIndex: number
   isActive: boolean
 }>()
-const BREAKPOINTMOBILELANDSCAPE: string = SASSCONSTANTS.BreakpointMobileLandscape
-const BREAKPOINTDESKTOP: string = SASSCONSTANTS.BreakpointDesktop
-const BREAKPOINTDESKTOPLARGE: string = SASSCONSTANTS.BreakpointDesktopLarge
+const breakpointMobileLandscape: string = sassConstants.breakpointMobileLandscape
+const breakpointDesktop: string = sassConstants.breakpointDesktop
+const breakpointDesktopLarge: string = sassConstants.breakpointDesktopLarge
 </script>
 
 <template>
@@ -24,17 +24,17 @@ const BREAKPOINTDESKTOPLARGE: string = SASSCONSTANTS.BreakpointDesktopLarge
   >
     <picture class="hero__slide-picture">
       <source
-        :media="`(min-width: ${BREAKPOINTDESKTOPLARGE})`"
+        :media="`(min-width: ${breakpointDesktopLarge})`"
         :srcset="slide.images.desktopLarge"
         data-testid="hero__slide-image-desktop-large"
       />
       <source
-        :media="`(min-width: ${BREAKPOINTDESKTOP})`"
+        :media="`(min-width: ${breakpointDesktop})`"
         :srcset="slide.images.desktop"
         data-testid="hero__slide-image-desktop"
       />
       <source
-        :media="`(min-width: ${BREAKPOINTMOBILELANDSCAPE})`"
+        :media="`(min-width: ${breakpointMobileLandscape})`"
         :srcset="slide.images.mobileLandscape"
         data-testid="hero__slide-image-mobile-landscape"
       />
@@ -76,7 +76,7 @@ const BREAKPOINTDESKTOPLARGE: string = SASSCONSTANTS.BreakpointDesktopLarge
 
   &-picture {
     text-align: center;
-    @media screen and (min-width: $BreakpointDesktop) {
+    @media screen and (min-width: $breakpointDesktop) {
       width: 100%;
     }
   }
@@ -84,7 +84,7 @@ const BREAKPOINTDESKTOPLARGE: string = SASSCONSTANTS.BreakpointDesktopLarge
   &-image {
     width: 100%;
     max-width: 640px;
-    @media screen and (min-width: $BreakpointDesktop) {
+    @media screen and (min-width: $breakpointDesktop) {
       max-width: 100%;
     }
   }
@@ -93,7 +93,7 @@ const BREAKPOINTDESKTOPLARGE: string = SASSCONSTANTS.BreakpointDesktopLarge
     text-align: center;
     margin-top: 2rem;
     margin-bottom: 3rem;
-    @media screen and (min-width: $BreakpointDesktop) {
+    @media screen and (min-width: $breakpointDesktop) {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
@@ -107,7 +107,7 @@ const BREAKPOINTDESKTOPLARGE: string = SASSCONSTANTS.BreakpointDesktopLarge
     text-transform: uppercase;
     letter-spacing: 0.1em;
     line-height: 1.25;
-    @media screen and (min-width: $BreakpointDesktop) {
+    @media screen and (min-width: $breakpointDesktop) {
       font-size: 1.125rem;
     }
   }
@@ -116,7 +116,7 @@ const BREAKPOINTDESKTOPLARGE: string = SASSCONSTANTS.BreakpointDesktopLarge
     margin: 10px 0 20px 0;
     font-size: 3.125rem;
     line-height: 1.25;
-    @media screen and (min-width: $BreakpointDesktop) {
+    @media screen and (min-width: $breakpointDesktop) {
       font-size: 4rem;
     }
   }

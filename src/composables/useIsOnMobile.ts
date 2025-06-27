@@ -1,11 +1,11 @@
-import SASSCONSTANTS from '@/assets/styles/_constants.module.scss'
+import sassConstants from '@/assets/styles/_constants.module.scss'
 import { ref, type Ref, onMounted, onUnmounted } from 'vue'
 
 // Get the SCSS desktop breakpoint
-const BreakpointDesktop = parseFloat(SASSCONSTANTS.BreakpointDesktop)
+const breakpointDesktop = parseFloat(sassConstants.breakpointDesktop)
 
 // Check if the screen is in mobile mode
-const checkIsOnMobile = (): boolean => window.innerWidth < BreakpointDesktop
+const checkIsOnMobile = (): boolean => window.innerWidth < breakpointDesktop
 
 // Detects mobile/desktop environment at initial render
 const isOnMobile: Ref<boolean> = ref(checkIsOnMobile())

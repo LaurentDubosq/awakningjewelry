@@ -63,7 +63,7 @@ const {
 @use '@/assets/styles/_constants' as *;
 
 .home-view-container {
-  @media screen and (min-width: $BreakpointDesktop) {
+  @media screen and (min-width: $breakpointDesktop) {
     position: absolute;
     top: 0;
     width: 100%;

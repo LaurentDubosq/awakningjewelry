@@ -25,7 +25,7 @@
   fill: $AwakningColorPrimary;
 }
 
-@media screen and (min-width: $BreakpointDesktop) {
+@media screen and (min-width: $breakpointDesktop) {
   .site-logo {
     width: 115px;
   }
