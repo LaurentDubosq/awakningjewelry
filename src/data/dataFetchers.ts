@@ -2,7 +2,7 @@ import type { PageMetaData } from '@/types/router.d.ts'
 import type { UseFetchWithStateReturn } from '@/types/fetch'
 import {
   byGenderCollectionListingContentURL,
-  statementMissionWordingURL,
+  missionStatementBannerContentURL,
   heroSlidesURL,
   promotionsProductListingContentURL,
   pagesMetaDataUrl,
@@ -12,7 +12,7 @@ import {
 } from '@/data/dataFetchersURL'
 import type {
   SiteMenu,
-  StatementBannerWording,
+  StatementBannerContent,
   NewsletterSignupWording,
   QuoteBannerContent,
   CollectionListingContent,
@@ -37,10 +37,10 @@ export const getHeroSlides = (): UseFetchWithStateReturn<HeroSlideType[]> => {
   return result
 }
 
-export const getStatementMissionWordingAsyncResult =
-  (): UseFetchWithStateReturn<StatementBannerWording> => {
-    const result: UseFetchWithStateReturn<StatementBannerWording> = useFetchWithState(
-      statementMissionWordingURL,
+export const getMissionStatementBannerContent =
+  (): UseFetchWithStateReturn<StatementBannerContent> => {
+    const result: UseFetchWithStateReturn<StatementBannerContent> = useFetchWithState(
+      missionStatementBannerContentURL,
     )
     return result
   }

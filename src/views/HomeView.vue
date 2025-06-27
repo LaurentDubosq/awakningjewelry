@@ -6,20 +6,22 @@ import ProductListing from '@/components/ProductListing.vue'
 import NewsletterSignup from '@/components/NewsletterSignup.vue'
 import QuoteBanner from '@/components/QuoteBanner.vue'
 import { storeToRefs } from 'pinia'
-import { useStatementMissionWordingResultStore } from '@/stores/statementMission'
+import { useMissionStatementBannerContentStore } from '@/stores/statementMission'
 import { useFounderQuoteBannerContentStore } from '@/stores/founderQuoteBannerContent'
 import { useByGenderCollectionListingContentStore } from '@/stores/byGenderCollectionListingContent'
 import { usePromotionsProductListingContentStore } from '@/stores/promotionsProductListingContent'
 
 // Get the stores instances
-const statementMissionWordingResultStore = useStatementMissionWordingResultStore()
+const missionStatementBannerContentStore = useMissionStatementBannerContentStore()
 const byGenderCollectionListingContentStore = useByGenderCollectionListingContentStore()
 const promotionsProductListingContentStore = usePromotionsProductListingContentStore()
 const founderQuoteBannerContentStore = useFounderQuoteBannerContentStore()
 
 // Get the store's states and computeds
-const { wording: statementMissionWording, wordingFetchState: statementMissionWordingFetchState } =
-  storeToRefs(statementMissionWordingResultStore)
+const {
+  content: missionStatementBannerContent,
+  contentFetchState: missionStatementBannerContentFetchState,
+} = storeToRefs(missionStatementBannerContentStore)
 const {
   content: byGenderCollectionListingContent,
   contentFetchState: byGenderCollectionListingContentFetchState,
@@ -38,8 +40,8 @@ const {
   <div class="home-view-container">
     <Hero />
     <StatementBanner
-      :wording="statementMissionWording"
-      :wordingFetchState="statementMissionWordingFetchState"
+      :content="missionStatementBannerContent"
+      :contentFetchState="missionStatementBannerContentFetchState"
     />
     <CollectionListing
       :content="byGenderCollectionListingContent"

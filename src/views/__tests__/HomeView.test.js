@@ -19,23 +19,23 @@ import { computed, nextTick, ref } from 'vue'
 
 /* Data */
 
-const mockStatementMissionWordingPendingResult = {
-  wording: undefined,
-  wordingFetchState: 'pending',
+const mockMissionStatementBannerContentPending = {
+  content: undefined,
+  contentFetchState: 'pending',
 }
-const mockStatementMissionWordingRejectedResult = {
-  wording: undefined,
-  wordingFetchState: 'rejected',
+const mockMissionStatementBannerContentRejected = {
+  content: undefined,
+  contentFetchState: 'rejected',
 }
-const mockStatementMissionWordingFulfilledResult = {
-  wording: frontDataBase.statementMissionWording,
-  wordingFetchState: 'fulfilled',
+const mockMissionStatementBannerContentFulfilled = {
+  content: frontDataBase.missionStatementBannerContent,
+  contentFetchState: 'fulfilled',
 }
-const mockStatementMissionWording = mockStatementMissionWordingFulfilledResult.wording
-const mockStatementMissionWordingTitle = mockStatementMissionWording.title
-const mockStatementMissionWordingStatement = mockStatementMissionWording.statement
-const mockStatementMissionWordingImageURL = mockStatementMissionWording.image.url
-const mockStatementMissionWordingImageAlt = mockStatementMissionWording.image.alt
+const mockMissionStatementBannerContent = mockMissionStatementBannerContentFulfilled.content
+const mockMissionStatementBannerTitle = mockMissionStatementBannerContent.title
+const mockMissionStatementBannerStatement = mockMissionStatementBannerContent.statement
+const mockMissionStatementBannerImageURL = mockMissionStatementBannerContent.image.url
+const mockMissionStatementBannerImageAlt = mockMissionStatementBannerContent.image.alt
 
 const mockByGenderCollectionListingContentPending = {
   content: undefined,
@@ -100,16 +100,16 @@ const mockFounderQuoteBannerLinkURL = mockFounderQuoteBannerContent.linkURL
 const mockPinia = createTestingPinia({ stubActions: false })
 
 // Create the stores
-const mockUseStatementMissionWordingResultStore = defineStore(
-  'StatementMissionWordingResult',
+const mockUseMissionStatementBannerContentStore = defineStore(
+  'MissionStatementBannerContent',
   () => {
-    const wordingFetchResult = ref(mockStatementMissionWordingPendingResult)
-    const wording = computed(() => wordingFetchResult.value.wording)
-    const wordingFetchState = computed(() => wordingFetchResult.value.wordingFetchState)
+    const fetchResult = ref(mockMissionStatementBannerContentPending)
+    const content = computed(() => fetchResult.value.content)
+    const contentFetchState = computed(() => fetchResult.value.contentFetchState)
     return {
-      wordingFetchResult,
-      wording,
-      wordingFetchState,
+      fetchResult,
+      content,
+      contentFetchState,
     }
   },
 )
@@ -150,7 +150,7 @@ const mockUseFounderQuoteBannerContentStore = defineStore('FounderQuoteBannerCon
 })
 
 // Initialize the stores
-const mockStatementMissionWordingResultStore = mockUseStatementMissionWordingResultStore()
+const mockMissionStatementBannerContentStore = mockUseMissionStatementBannerContentStore()
 const mockByGenderCollectionListingContentStore = mockUseByGenderCollectionListingContentStore()
 const mockPromotionsProductListingContentStore = mockUsePromotionsProductListingContentStore()
 const mockFounderQuoteBannerContentStore = mockUseFounderQuoteBannerContentStore()
@@ -188,8 +188,7 @@ describe('HomeView.vue', () => {
 
   afterEach(() => {
     // Reset the store(s) state(s) to default to ensure a clean environment for each test
-    mockStatementMissionWordingResultStore.wordingFetchResult =
-      mockStatementMissionWordingPendingResult
+    mockMissionStatementBannerContentStore.fetchResult = mockMissionStatementBannerContentPending
     mockByGenderCollectionListingContentStore.fetchResult =
       mockByGenderCollectionListingContentPending
     mockPromotionsProductListingContentStore.fetchResult =
@@ -242,8 +241,7 @@ describe('HomeView.vue', () => {
   describe('Data fetching "Rejected" state', () => {
     test('the error messages are rendered', async () => {
       // Set the stores data fetching status to rejected
-      mockStatementMissionWordingResultStore.wordingFetchResult =
-        mockStatementMissionWordingRejectedResult
+      mockMissionStatementBannerContentStore.fetchResult = mockMissionStatementBannerContentRejected
       mockByGenderCollectionListingContentStore.fetchResult =
         mockByGenderCollectionListingContentRejected
       mockPromotionsProductListingContentStore.fetchResult =
@@ -277,8 +275,8 @@ describe('HomeView.vue', () => {
   describe('Data fetching "Fulfilled" state', () => {
     beforeEach(async () => {
       // Set the stores data fetching status to fulfilled
-      mockStatementMissionWordingResultStore.wordingFetchResult =
-        mockStatementMissionWordingFulfilledResult
+      mockMissionStatementBannerContentStore.fetchResult =
+        mockMissionStatementBannerContentFulfilled
       mockByGenderCollectionListingContentStore.fetchResult =
         mockByGenderCollectionListingContentFulfilled
       mockPromotionsProductListingContentStore.fetchResult =
@@ -295,19 +293,19 @@ describe('HomeView.vue', () => {
       const image = StatementBannerComponent.find("[data-testid='statement-banner__image']")
 
       // Assert its title is rendered
-      expect(title.text()).toContain(mockStatementMissionWordingTitle)
+      expect(title.text()).toContain(mockMissionStatementBannerTitle)
 
       // Assert its text is rendered
-      expect(statement.text()).toContain(mockStatementMissionWordingStatement)
+      expect(statement.text()).toContain(mockMissionStatementBannerStatement)
 
       // Assert the image is rendered
       expect(image.exists()).toBeTruthy()
 
       // Assert the image "src" attribute is well setted
-      expect(image.attributes('src')).toBe(mockStatementMissionWordingImageURL)
+      expect(image.attributes('src')).toBe(mockMissionStatementBannerImageURL)
 
       // Assert the image "alt" attribute is well setted
-      expect(image.attributes('alt')).toBe(mockStatementMissionWordingImageAlt)
+      expect(image.attributes('alt')).toBe(mockMissionStatementBannerImageAlt)
     })
 
     test('collection listing is rendered with its necessary information', () => {

@@ -42,13 +42,13 @@ export interface HeroSlideImages {
   alt: string
 }
 
-/* StatementBanner wording */
-export interface StatementBannerWording {
+/* StatementBanner */
+export interface StatementBannerContent {
   title: string
   statement: string
-  image: StatementBannerWordingImage
+  image: StatementBannerContentImage
 }
-export interface StatementBannerWordingImage {
+export interface StatementBannerContentImage {
   url: string
   alt: string
 }
@@ -82,7 +82,7 @@ export interface DisplaySlidePayload {
   focusable: boolean
 }
 
-/* NewsletterSignup wording */
+/* NewsletterSignup */
 export interface NewsletterSignupWording {
   title: string
   description: string
@@ -98,7 +98,7 @@ export interface NewsletterSignupWording {
 
 export type NewsletterSignupResponse = InputSuccessResult | InputErrorResult
 
-/* QuoteBanner content */
+/* QuoteBanner */
 export interface QuoteBannerContent {
   backgroundIMGMobile: string
   backgroundIMGMobileLandscape: string

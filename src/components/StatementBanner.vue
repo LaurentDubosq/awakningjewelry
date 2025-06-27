@@ -1,43 +1,39 @@
 <script setup lang="ts">
-import type { StatementBannerWording } from '@/types/components'
+import type { StatementBannerContent } from '@/types/components'
 import type { FetchState } from '@/types/fetch'
 import LoadingComponent from './LoadingComponent.vue'
 import ErrorComponent from './ErrorComponent.vue'
+import { computed } from 'vue'
 
 /* As the component can be used multiple times in the application, its parent has the responsibility to fetch the data */
-const { wording, wordingFetchState } = defineProps<{
-  wording?: StatementBannerWording
-  wordingFetchState?: FetchState
+const { content, contentFetchState } = defineProps<{
+  content?: StatementBannerContent
+  contentFetchState?: FetchState
 }>()
+
+const title = computed(() => content?.title)
+const statement = computed(() => content?.statement)
+const image = computed(() => content?.image)
 </script>
 
 <template>
   <section class="statement-banner">
-    <template v-if="wordingFetchState === 'fulfilled'">
-      <h2
-        class="statement-banner__title"
-        id="statement-banner__title"
-        aria-describedby="statement-banner__statement"
-        data-testid="statement-banner__title"
-      >
-        {{ wording?.title }}
+    <template v-if="contentFetchState === 'fulfilled'">
+      <h2 class="statement-banner__title" data-testid="statement-banner__title">
+        {{ title }}
       </h2>
-      <p
-        class="statement-banner__statement"
-        id="statement-banner__statement"
-        data-testid="statement-banner__statement"
-      >
-        {{ wording?.statement }}
+      <p class="statement-banner__statement" data-testid="statement-banner__statement">
+        {{ statement }}
       </p>
       <img
-        :src="wording?.image.url"
-        :alt="wording?.image.alt"
         class="statement-banner__image"
+        :src="image?.url"
+        :alt="image?.alt"
         data-testid="statement-banner__image"
       />
     </template>
-    <LoadingComponent v-else-if="wordingFetchState === 'pending'" />
-    <ErrorComponent v-else-if="wordingFetchState === 'rejected'" />
+    <LoadingComponent v-else-if="contentFetchState === 'pending'" />
+    <ErrorComponent v-else-if="contentFetchState === 'rejected'" />
   </section>
 </template>
 
