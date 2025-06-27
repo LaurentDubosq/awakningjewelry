@@ -42,6 +42,7 @@ const BREAKPOINTDESKTOPLARGE: string = SASSCONSTANTS.BreakpointDesktopLarge
         class="hero__slide-image"
         :src="slide.images.mobile"
         :alt="slide.images.alt"
+        loading="lazy"
         data-testid="hero__slide-image"
       />
     </picture>

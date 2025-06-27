@@ -18,6 +18,7 @@ const { product } = defineProps<{
           class="product-listing__item-image"
           :src="product.image.url"
           :alt="product.image.alt"
+          loading="lazy"
           data-testid="product-listing__item-image"
         />
       </div>

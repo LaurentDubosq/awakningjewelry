@@ -15,9 +15,10 @@ const { collection } = defineProps<{
       data-testid="collection-listing__link"
     >
       <img
+        class="collection-listing__item-img"
         :src="collection.image.url"
         alt=""
-        class="collection-listing__item-img"
+        loading="lazy"
         aria-hidden="true"
         data-testid="collection-listing__item-img"
       />

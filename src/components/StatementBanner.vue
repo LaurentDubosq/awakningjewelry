@@ -29,6 +29,7 @@ const image = computed(() => content?.image)
         class="statement-banner__image"
         :src="image?.url"
         :alt="image?.alt"
+        loading="lazy"
         data-testid="statement-banner__image"
       />
     </template>
