@@ -207,6 +207,11 @@ describe('Hero.vue', () => {
       })
     })
 
+    test('renders the slick slider button accessibility label', () => {
+      const div = wrapper.find("[data-testid='slideshow__slick-slider']")
+      expect(div.attributes('aria-label')).toContain('Slideshow navigation')
+    })
+
     test('render all the slideshow slick slider buttons with their necessary information', () => {
       const buttons = wrapper.findAll("[data-testid='slideshow__slick-slider-button']")
 
@@ -219,7 +224,10 @@ describe('Hero.vue', () => {
         expect(button.exists()).toBeTruthy()
 
         // Assert the "aria-label" has the correct value
-        expect(button.attributes('aria-label')).toBe(`Slide ${index + 1}`) // exceptionally we test an "aria-label" wai-aria attribut because the button has no text
+        expect(button.attributes('aria-label')).toBe(`Slide ${index + 1}`)
+
+        // Assert the "title" has the correct value
+        expect(button.attributes('title')).toBe(`Display slide ${index + 1}`)
 
         // Assert the active CSS class is used when necessary
         expect(button.classes('slideshow__slick-slider-button--active')).toBe(
@@ -343,6 +351,41 @@ describe('Hero.vue', () => {
 
         // Mouse leaves the slideshow
         await slideShow.trigger('mouseleave')
+
+        // Wait 3.5 seconds (Delay between two slides)
+        await new Promise((resolve) => setTimeout(resolve, 3500))
+
+        // Assert the autorotation has resume by asserting that the next (first/starting) slide is rendered
+        expect(ThirdHeroSlideComponent.attributes('class')).toContain('slideshow__slide--active')
+      }, 11000)
+
+      test('when the user hovers over the autorotation toggle button, the autorotation should resume, then when the mouse leaves the button, the autorotation should stop', async () => {
+        const button = wrapper.find("[data-testid='slideshow__autorotation-button']")
+        const HeroSlideComponents = wrapper.findAllComponents(HeroSlide)
+        const FirstHeroSlideComponent = HeroSlideComponents[0]
+        const SecondHeroSlideComponent = HeroSlideComponents[1]
+        const ThirdHeroSlideComponent = HeroSlideComponents[2]
+
+        // Assert the first/starting slide is showned at initial render
+        expect(FirstHeroSlideComponent.attributes('class')).toContain('slideshow__slide--active')
+
+        // Wait 3.5 seconds (Delay between two slides)
+        await new Promise((resolve) => setTimeout(resolve, 3500))
+
+        // Assert the autorotation is on by asserting that the second/last slide is rendered
+        expect(SecondHeroSlideComponent.attributes('class')).toContain('slideshow__slide--active')
+
+        // Hover the button
+        await button.trigger('mouseenter')
+
+        // Wait 3.5 seconds (Delay between two slides)
+        await new Promise((resolve) => setTimeout(resolve, 3500))
+
+        // Assert the autorotation has been stopped by asserting that the second/last slide is still rendered
+        expect(SecondHeroSlideComponent.attributes('class')).toContain('slideshow__slide--active')
+
+        // Mouse leaves the button
+        await button.trigger('mouseleave')
 
         // Wait 3.5 seconds (Delay between two slides)
         await new Promise((resolve) => setTimeout(resolve, 3500))

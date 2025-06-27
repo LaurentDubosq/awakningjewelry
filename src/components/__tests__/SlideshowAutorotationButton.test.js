@@ -73,13 +73,28 @@ describe('SlideshowAutorotationButton.vue', () => {
       expect(icon.exists()).toBeTruthy()
     })
 
+    test('when the mouse enter and leave the autoration toggle button, its commands the autorotation to toggle', async () => {
+      // The mouse enters the button
+      const button = wrapper.find("[data-testid='slideshow__autorotation-button']")
+      await button.trigger('mouseenter')
+
+      // Assert the custom event has been emitted
+      expect(wrapper.emitted('toggleAutoplay')).toHaveLength(1)
+
+      // The mouse leaves the button
+      await button.trigger('mouseleave')
+
+      // Assert the custom event has been emitted
+      expect(wrapper.emitted('toggleAutoplay')).toHaveLength(2)
+    })
+
     test('when the autoration toggle button is clicked, it commands the autorotation to pause or play', async () => {
       // Click the pause button
       const button = wrapper.find("[data-testid='slideshow__autorotation-button']")
       await button.trigger('click')
 
       // Assert the custom event has been emitted
-      expect(wrapper.emitted('stop-autoplay')).toHaveLength(1)
+      expect(wrapper.emitted('toggleAutoplayExplicitly')).toHaveLength(1)
     })
   })
 })

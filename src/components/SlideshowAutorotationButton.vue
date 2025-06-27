@@ -10,7 +10,9 @@ const { isPlaying } = defineProps<{
 <template>
   <button
     class="slideshow__autorotation-button"
-    @click="isPlaying ? $emit('stop-autoplay') : $emit('start-autoplay')"
+    @click="$emit('toggleAutoplayExplicitly')"
+    @mouseenter="$emit('toggleAutoplay')"
+    @mouseleave="$emit('toggleAutoplay')"
     @touchstart.stop
     @touchend.stop
     @focusin.stop

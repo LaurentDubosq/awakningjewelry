@@ -25,13 +25,13 @@ import type { DisplaySlidePayload } from '@/types/components'
 const { slidesLength } = defineProps<{
   slidesLength: number
 }>()
-// Get the environment to restrains the position calculation of slick slider to mobile
+// Get the environment to position the slick slider on mobile
 const isOnMobileStore = useIsOnMobileStore()
 const { isOnMobile } = storeToRefs(isOnMobileStore)
 
-/*******************/
-/* Reactive states */
-/*******************/
+/**********/
+/* States */
+/**********/
 
 // Store the index corresponding to the displayed slide
 const activeIndex: Ref<number> = ref(0)
@@ -44,7 +44,58 @@ const isPlayingExplicitly: Ref<boolean | null> = ref(null)
 /* Logic */
 /*********/
 
+/* Display Logic */
+
+let timer: ReturnType<typeof setInterval>
+
+const startAutoPlay = () => {
+  timer = setInterval(() => displayNextSlide(), 3500)
+  isPlaying.value = true
+}
+const stopAutoPlay = () => {
+  clearInterval(timer)
+  isPlaying.value = false
+}
+
+const stopAutoPlayExplicitly = () => {
+  // Stop Autorotation
+  stopAutoPlay()
+
+  // Store user explicit intention to stop autorotation
+  isPlayingExplicitly.value = false
+}
+const startAutoPlayExplicitly = () => {
+  // Start Autorotation
+  startAutoPlay()
+
+  // Store user explicit intention to start autorotation
+  isPlayingExplicitly.value = true
+}
+const toggleAutoPlayExplicitly = () => {
+  if (isPlaying.value) {
+    stopAutoPlayExplicitly()
+  } else {
+    startAutoPlayExplicitly()
+  }
+}
+
+const displayPrevSlide = () => {
+  if (activeIndex.value > 0) {
+    activeIndex.value--
+  } else {
+    activeIndex.value = slidesLength - 1
+  }
+}
+const displayNextSlide = () => {
+  if (activeIndex.value >= slidesLength - 1) {
+    activeIndex.value = 0
+  } else {
+    activeIndex.value++
+  }
+}
+
 /* Autoplaying Logic */
+
 onMounted(() => {
   // Get the dynamic OS/browser "reduced motion" user preference statut from store
   const isReducedMotionStore = useIsReducedMotionStore()
@@ -68,6 +119,7 @@ onUnmounted(() => {
 })
 
 /* Hover Logic */
+
 const handleMouseenter = () => {
   if (isPlayingExplicitly.value === null) {
     stopAutoPlay()
@@ -80,6 +132,7 @@ const handleMouseleave = () => {
 }
 
 /* Swipe Logic */
+
 let touchStartX: number
 let touchEndX: number
 
@@ -111,7 +164,8 @@ const handleTouchend = (e: TouchEvent) => {
   swipeSlide()
 }
 
-/* Slideshow focus logic */
+/* Focus logic */
+
 const handleFocusIn = () => {
   // If the user has chosen to pause or resume the carousel autorotation, we do nothing
   if (isPlayingExplicitly.value === true || isPlayingExplicitly.value === false) {
@@ -123,17 +177,22 @@ const handleFocusIn = () => {
 }
 
 /* Autorotation Button Logic */
-const handleStopAutoplay = () => {
-  // Stop autorotation explicitly
-  stopAutoPlayExplicitly()
-}
-const handleStartAutoplay = () => {
-  // Start autorotation explicitly
-  startAutoPlayExplicitly()
+
+const handleAutorotationButtonToggleAutoplay = () => {
+  if (isPlayingExplicitly.value !== null) {
+    return
+  }
+
+  if (isPlaying.value) {
+    stopAutoPlay()
+  } else {
+    startAutoPlay()
+  }
 }
 
-/* Slick Slider Buttons Logic */
-const focusCurrentSlickSliderButton = async () => {
+/* Slick Slider Logic */
+
+const focusActiveSlickSliderButton = async () => {
   if (slideshowElement.value) {
     await nextTick()
     const slickSliderButtonElement: HTMLElement | null =
@@ -152,48 +211,26 @@ const handleDisplaySlide = (event: DisplaySlidePayload) => {
 
   // Focus on the slide's slick slider button for keyboard navigation only
   if (event.focusable) {
-    focusCurrentSlickSliderButton()
+    focusActiveSlickSliderButton()
   }
 }
 
-/* Display Logic */
-let timer: ReturnType<typeof setInterval>
-
-const startAutoPlay = () => {
-  timer = setInterval(() => displayNextSlide(), 3500)
-  isPlaying.value = true
-}
-const stopAutoPlay = () => {
-  clearInterval(timer)
-  isPlaying.value = false
-}
-
-const displayPrevSlide = () => {
-  if (activeIndex.value > 0) {
-    activeIndex.value--
-  } else {
-    activeIndex.value = slidesLength - 1
-  }
-}
-const displayNextSlide = () => {
-  if (activeIndex.value >= slidesLength - 1) {
-    activeIndex.value = 0
-  } else {
-    activeIndex.value++
-  }
-}
+/***************/
+/* Positioning */
+/***************/
 
 /* Slick Slider Mobile Positioning */
+
 const slideshowElement: Ref<HTMLPictureElement | null> = ref(null)
 
 // Store the value used to position the slick slide from the top of its referent parent on mobile
-const slickSliderTopPosition: Ref<Ref<number> | null> = ref(null) // Nested refs necessary to have reactivity at intial render and during updates
+const slickSliderTopPosition: Ref<number | null> = ref(null) // Nested refs necessary to have reactivity at intial render and during updates
 
 // Compute the style object to improve template readability
 const slickSliderStyle: ComputedRef<object | undefined> = computed(() => {
-  if (slickSliderTopPosition?.value?.value) {
+  if (slickSliderTopPosition?.value) {
     return {
-      top: `${slickSliderTopPosition.value.value}px`,
+      top: `${slickSliderTopPosition.value}px`,
     }
   }
   return undefined
@@ -211,35 +248,19 @@ onMounted(() => {
     // Set the slick slider position only on mobile
     watch(clientHeight, () => {
       if (isOnMobile && isOnMobile.value) {
-        slickSliderTopPosition.value = clientHeight
+        slickSliderTopPosition.value = clientHeight.value
       } else {
         slickSliderTopPosition.value = null
       }
     })
   }
 })
-
-/* Utilities */
-const stopAutoPlayExplicitly = () => {
-  // Stop Autorotation
-  stopAutoPlay()
-
-  // Store user explicit intention to stop autorotation
-  isPlayingExplicitly.value = false
-}
-const startAutoPlayExplicitly = () => {
-  // Start Autorotation
-  startAutoPlay()
-
-  // Store user explicit intention to start autorotation
-  isPlayingExplicitly.value = true
-}
 </script>
 
 <template>
   <div
-    ref="slideshowElement"
     class="slideshow"
+    ref="slideshowElement"
     @mouseenter="handleMouseenter"
     @mouseleave="handleMouseleave"
     @touchstart.passive="handleTouchstart"
@@ -250,18 +271,18 @@ const startAutoPlayExplicitly = () => {
   >
     <div class="slideshow__controls wrapper">
       <SlideshowAutorotationButton
-        :isPlaying
-        @stopAutoplay="handleStopAutoplay"
-        @startAutoplay="handleStartAutoplay"
+        :is-playing
+        @toggle-autoplay="handleAutorotationButtonToggleAutoplay"
+        @toggle-autoplay-explicitly="toggleAutoPlayExplicitly"
       />
     </div>
     <SlideshowSlickSlider
-      :slidesLength
-      :activeIndex
-      @displaySlide="handleDisplaySlide"
+      :slides-length
+      :active-index
+      @display-slide="handleDisplaySlide"
       :style="slickSliderStyle"
     />
-    <slot :activeIndex />
+    <slot :active-index />
   </div>
 </template>
 
@@ -282,7 +303,6 @@ const startAutoPlayExplicitly = () => {
     position: absolute;
     bottom: 0;
     width: 100%;
-    line-height: 0;
     z-index: 2;
   }
 }

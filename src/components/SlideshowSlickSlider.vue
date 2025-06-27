@@ -2,46 +2,42 @@
 import type { DisplaySlidePayload } from '@/types/components'
 import { ref, type Ref } from 'vue'
 
-const props = defineProps<{
+const { slidesLength, activeIndex } = defineProps<{
   slidesLength: number
   activeIndex: number
 }>()
 const emit = defineEmits<{
-  'display-slide': [DisplaySlidePayload]
+  displaySlide: [DisplaySlidePayload]
 }>()
 
 const isSlickSliderFocused: Ref<boolean> = ref(false)
 
+const getNextIndex = () => (activeIndex < slidesLength - 1 ? activeIndex + 1 : 0)
+
+const getPreviousIndex = () => (activeIndex > 0 ? activeIndex - 1 : slidesLength - 1)
+
 const handleKeydown = (event: KeyboardEvent) => {
-  if (event.key === 'ArrowLeft') {
-    let payload
+  let index: number | undefined
 
-    if (props.activeIndex > 0) {
-      payload = { index: props.activeIndex - 1, focusable: true }
-    } else {
-      payload = { index: props.slidesLength - 1, focusable: true }
-    }
+  switch (event.key) {
+    case 'ArrowLeft':
+      index = getPreviousIndex()
+      break
+    case 'ArrowRight':
+      index = getNextIndex()
+      break
+    case 'Home':
+      event.preventDefault() // old method because .prevent on the element blocks the tab sequence on the element
+      index = 0
+      break
+    case 'End':
+      event.preventDefault() // old method because .prevent on the element blocks the tab sequence on the element
+      index = slidesLength - 1
+      break
+  }
 
-    emit('display-slide', payload)
-  } else if (event.key === 'ArrowRight') {
-    let payload
-
-    if (props.activeIndex < props.slidesLength - 1) {
-      payload = { index: props.activeIndex + 1, focusable: true }
-    } else {
-      payload = { index: 0, focusable: true }
-    }
-
-    emit('display-slide', payload)
-  } else if (event.key === 'Home') {
-    event.preventDefault() // old method because .prevent on the element blocks the tab sequence on the element
-    emit('display-slide', { index: 0, focusable: true })
-  } else if (event.key === 'End') {
-    event.preventDefault() // old method because .prevent on the element blocks the tab sequence on the element
-    emit('display-slide', {
-      index: props.slidesLength - 1,
-      focusable: true,
-    })
+  if (index !== undefined) {
+    emit('displaySlide', { index, focusable: true })
   }
 }
 </script>
@@ -61,9 +57,9 @@ const handleKeydown = (event: KeyboardEvent) => {
       :class="{
         'slideshow__slick-slider-button--active': index === activeIndex,
       }"
-      v-for="(slide, index) in slidesLength"
+      v-for="(_, index) in slidesLength"
       @mousedown.prevent
-      @click="$emit('display-slide', { index, focusable: false })"
+      @click="$emit('displaySlide', { index, focusable: false })"
       @keydown="handleKeydown"
       @focus="isSlickSliderFocused = true"
       @blur="isSlickSliderFocused = false"
@@ -92,7 +88,6 @@ const handleKeydown = (event: KeyboardEvent) => {
   }
 
   &-button {
-    display: block;
     width: 10px;
     height: 10px;
     border: 2px solid $AwakningColorPrimary;

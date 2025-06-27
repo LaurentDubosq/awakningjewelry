@@ -40,6 +40,11 @@ describe('SlideshowSlickSlider.vue', () => {
     expect(wrapper.exists()).toBeTruthy()
   })
 
+  test('renders the feature accessibility label', () => {
+    const div = wrapper.find("[data-testid='slideshow__slick-slider']")
+    expect(div.attributes('aria-label')).toContain('Slideshow navigation')
+  })
+
   test('render all the buttons with their necessary information', () => {
     const buttons = wrapper.findAll("[data-testid='slideshow__slick-slider-button']")
 
@@ -52,7 +57,10 @@ describe('SlideshowSlickSlider.vue', () => {
       expect(button.exists()).toBeTruthy()
 
       // Assert the "aria-label" has the correct value
-      expect(button.attributes('aria-label')).toBe(`Slide ${index + 1}`) // exceptionally we test an "aria-label" wai-aria attribut because the button has no text
+      expect(button.attributes('aria-label')).toBe(`Slide ${index + 1}`)
+
+      // Assert the "title" has the correct value
+      expect(button.attributes('title')).toBe(`Display slide ${index + 1}`)
 
       // Assert the active CSS class is used when necessary
       expect(button.classes('slideshow__slick-slider-button--active')).toBe(
@@ -73,11 +81,11 @@ describe('SlideshowSlickSlider.vue', () => {
         // Click the button
         await buttons[index].trigger('click')
 
-        // Assert the "display-slide" custom event has been emitted
-        expect(wrapper.emitted('display-slide')).toHaveLength(index + 1)
+        // Assert the "displaySlide" custom event has been emitted
+        expect(wrapper.emitted('displaySlide')).toHaveLength(index + 1)
 
         // Assert its payload has the correct value
-        expect(wrapper.emitted('display-slide')[index][0]).toStrictEqual(mockPayload)
+        expect(wrapper.emitted('displaySlide')[index][0]).toStrictEqual(mockPayload)
       }
     })
 
@@ -98,11 +106,11 @@ describe('SlideshowSlickSlider.vue', () => {
           code: 'ArrowLeft',
         })
 
-        // Assert the "display-slide" custom event has been emitted
-        expect(wrapper.emitted('display-slide')).toHaveLength(index + 1)
+        // Assert the "displaySlide" custom event has been emitted
+        expect(wrapper.emitted('displaySlide')).toHaveLength(index + 1)
 
         // Assert its payload has the correct value
-        expect(wrapper.emitted('display-slide')[index][0]).toStrictEqual(mockPayload)
+        expect(wrapper.emitted('displaySlide')[index][0]).toStrictEqual(mockPayload)
 
         // Update the activeIndex prop for the next iteration
         await wrapper.setProps({ activeIndex: index === 0 ? mockSlidesLength - 1 : index - 1 })
@@ -126,11 +134,11 @@ describe('SlideshowSlickSlider.vue', () => {
           code: 'ArrowRight',
         })
 
-        // Assert the "display-slide" custom event has been emitted
-        expect(wrapper.emitted('display-slide')).toHaveLength(index + 1)
+        // Assert the "displaySlide" custom event has been emitted
+        expect(wrapper.emitted('displaySlide')).toHaveLength(index + 1)
 
         // Assert its payload has the correct value
-        expect(wrapper.emitted('display-slide')[index][0]).toStrictEqual(mockPayload)
+        expect(wrapper.emitted('displaySlide')[index][0]).toStrictEqual(mockPayload)
 
         // Update the activeIndex prop for the next iteration
         await wrapper.setProps({ activeIndex: index === mockSlidesLength - 1 ? 0 : index + 1 })
@@ -154,11 +162,11 @@ describe('SlideshowSlickSlider.vue', () => {
           code: 'Home',
         })
 
-        // Assert the "display-slide" custom event has been emitted
-        expect(wrapper.emitted('display-slide')).toHaveLength(index + 1)
+        // Assert the "displaySlide" custom event has been emitted
+        expect(wrapper.emitted('displaySlide')).toHaveLength(index + 1)
 
         // Assert its payload has the correct value
-        expect(wrapper.emitted('display-slide')[index][0]).toStrictEqual(mockPayload)
+        expect(wrapper.emitted('displaySlide')[index][0]).toStrictEqual(mockPayload)
       }
     })
 
@@ -179,11 +187,11 @@ describe('SlideshowSlickSlider.vue', () => {
           code: 'End',
         })
 
-        // Assert the "display-slide" custom event has been emitted
-        expect(wrapper.emitted('display-slide')).toHaveLength(index + 1)
+        // Assert the "displaySlide" custom event has been emitted
+        expect(wrapper.emitted('displaySlide')).toHaveLength(index + 1)
 
         // Assert its payload has the correct value
-        expect(wrapper.emitted('display-slide')[index][0]).toStrictEqual(mockPayload)
+        expect(wrapper.emitted('displaySlide')[index][0]).toStrictEqual(mockPayload)
       }
     })
 
