@@ -13,7 +13,7 @@ const id = text.toLowerCase()
 <template>
   <button
     class="burger-menu__dropdown-button burger-menu__link"
-    @click="$emit('toggle-dropdown')"
+    @click="$emit('toggleDropdown')"
     :aria-expanded="isDropdownOpen ? 'true' : 'false'"
     :aria-controls="`burger-menu__dropdown-list-${id}`"
     data-testid="burger-menu__dropdown-button"

@@ -41,20 +41,20 @@ const {
     <Hero />
     <StatementBanner
       :content="missionStatementBannerContent"
-      :contentFetchState="missionStatementBannerContentFetchState"
+      :content-fetch-state="missionStatementBannerContentFetchState"
     />
     <CollectionListing
       :content="byGenderCollectionListingContent"
-      :contentFetchState="byGenderCollectionListingContentFetchState"
+      :content-fetch-state="byGenderCollectionListingContentFetchState"
     />
     <ProductListing
       :content="promotionsProductListingContent"
-      :contentFetchState="promotionsProductListingContentFetchState"
+      :content-fetch-state="promotionsProductListingContentFetchState"
     />
     <NewsletterSignup />
     <QuoteBanner
       :content="founderQuoteBannerContent"
-      :contentFetchState="founderQuoteBannerContentFetchState"
+      :content-fetch-state="founderQuoteBannerContentFetchState"
     />
   </div>
 </template>

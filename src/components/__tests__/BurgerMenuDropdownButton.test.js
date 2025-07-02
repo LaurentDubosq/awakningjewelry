@@ -99,7 +99,7 @@ describe('BurgerMenuDropdownButton.vue', () => {
       await button.trigger('click')
 
       // Assert the order to open/close the button has been emitted
-      expect(wrapper.emitted('toggle-dropdown')).toHaveLength(1)
+      expect(wrapper.emitted('toggleDropdown')).toHaveLength(1)
     })
   })
 })

@@ -16,7 +16,7 @@ const isDropdownOpen: Ref<boolean> = ref(true)
   <div class="burger-menu__dropdown" data-testid="burger-menu__dropdown">
     <BurgerMenuDropdownButton
       :text="dropdown.button.text"
-      :isDropdownOpen
+      :is-dropdown-open
       @toggle-dropdown="isDropdownOpen = !isDropdownOpen"
     />
     <MyTransition name="vertical-top-slide" :group="false" :duration="300">

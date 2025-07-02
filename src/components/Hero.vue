@@ -25,15 +25,15 @@ const {
     data-testid="hero"
   >
     <template v-if="fetchState === 'fulfilled'">
-      <Slideshow :slidesLength v-if="slidesLength" v-slot="{ activeIndex }">
+      <Slideshow :slides-length v-if="slidesLength" v-slot="{ activeIndex }">
         <template v-for="(slide, index) in slides" :key="slide.id">
           <HeroSlide
             class="slideshow__slide"
             :class="{ 'slideshow__slide--active': index === activeIndex }"
             :slide
-            :slidesLength
-            :slideIndex="index"
-            :isActive="index === activeIndex"
+            :slides-length
+            :slide-index="index"
+            :is-active="index === activeIndex"
           />
         </template>
       </Slideshow>

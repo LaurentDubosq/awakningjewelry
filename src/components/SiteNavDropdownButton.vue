@@ -12,8 +12,8 @@ const id = text.toLowerCase()
   <button
     class="site-nav__dropdown-button site-nav__link--text"
     :class="{ 'site-nav__dropdown-button--open': isDropdownOpen }"
-    @focus="$emit('open-dropdown')"
-    @touchend="$emit('toggle-dropdown')"
+    @focus="$emit('openDropdown')"
+    @touchend="$emit('toggleDropdown')"
     :aria-expanded="isDropdownOpen ? 'true' : 'false'"
     :aria-controls="`site-nav__dropdown-list-${id}`"
     :title="title"

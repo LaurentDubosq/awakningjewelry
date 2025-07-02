@@ -38,7 +38,7 @@ provide(closeDropdownKey, closeDropdown)
   >
     <SiteNavDropdownButton
       v-bind="dropdown.button"
-      :isDropdownOpen
+      :is-dropdown-open
       @open-dropdown="openDropdown"
       @toggle-dropdown="toggleDropdown"
     />

@@ -27,7 +27,7 @@ const { link } = defineProps<{
       {{ link.text }}
     </template>
     <template v-else-if="link.type === 'iconLink'">
-      <SiteHeaderIcon :alternativeText="link.text">
+      <SiteHeaderIcon :alternative-text="link.text">
         <slot />
       </SiteHeaderIcon>
     </template>

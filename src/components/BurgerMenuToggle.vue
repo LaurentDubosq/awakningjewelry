@@ -50,7 +50,7 @@ async function handleClick(event: MouseEvent | KeyboardEvent) {
     aria-controls="burger-menu"
     data-testid="burger-menu-toggle-button"
   >
-    <SiteHeaderIcon :alternativeText="isBurgerMenuOpen ? 'Close burger menu' : 'Open burger menu'">
+    <SiteHeaderIcon :alternative-text="isBurgerMenuOpen ? 'Close burger menu' : 'Open burger menu'">
       <KeepAlive>
         <component
           class="burger-menu-toggle-button__icon"

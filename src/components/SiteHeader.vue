@@ -45,12 +45,12 @@ const { isOnMobile } = storeToRefs(isOnMobileStore)
             data-testid="site-header__account-link"
             v-if="isOnMobile"
           >
-            <SiteHeaderIcon alternativeText="Account">
+            <SiteHeaderIcon alternative-text="Account">
               <IconPerson class="site-header__icon" width="27" aria-hidden="true" />
             </SiteHeaderIcon>
           </RouterLink>
           <RouterLink to="/cart" title="Go to cart" data-testid="site-header__cart-link">
-            <SiteHeaderIcon alternativeText="Cart">
+            <SiteHeaderIcon alternative-text="Cart">
               <IconCart class="site-header__icon" width="27" aria-hidden="true" />
             </SiteHeaderIcon>
           </RouterLink>

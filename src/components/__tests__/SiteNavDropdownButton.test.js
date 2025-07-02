@@ -88,7 +88,7 @@ describe('SiteNavDropdownButton.vue', () => {
       await button.trigger('focus')
 
       // Assert the order to open the dropdown has been emitted
-      expect(wrapper.emitted('open-dropdown')).toHaveLength(1)
+      expect(wrapper.emitted('openDropdown')).toHaveLength(1)
     })
 
     test('when the toggle button is touched, it commands the dropdown to open/close', async () => {
@@ -97,7 +97,7 @@ describe('SiteNavDropdownButton.vue', () => {
       await button.trigger('touchend')
 
       // Assert the order to open the dropdown has been emitted
-      expect(wrapper.emitted('toggle-dropdown')).toHaveLength(1)
+      expect(wrapper.emitted('toggleDropdown')).toHaveLength(1)
     })
   })
 })
