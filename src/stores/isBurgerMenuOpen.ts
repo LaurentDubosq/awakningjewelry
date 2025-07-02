@@ -33,6 +33,7 @@ export const useIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
       isBurgerMenuOpen.value !== false
     ) {
       isBurgerMenuOpen.value = false
+      document.body.style.overflow = 'visible'
     }
   }
 
