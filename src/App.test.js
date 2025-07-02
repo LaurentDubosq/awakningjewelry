@@ -32,11 +32,11 @@ const mockRouter = createRouter({
 
 const mockSiteMenuPending = {
   data: undefined,
-  status: 'pending',
+  state: 'pending',
 }
 const mockSiteMenuFulfilled = {
   data: frontDataBase.siteMenu,
-  status: 'fulfilled',
+  state: 'fulfilled',
 }
 
 /* Stores */
@@ -59,7 +59,7 @@ const mockUseIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
 const mockUseSiteMenuStore = defineStore('SiteMenu', () => {
   const siteMenuResult = ref(mockSiteMenuPending)
   const siteMenu = computed(() => siteMenuResult.value.data)
-  const siteMenuFetchState = computed(() => siteMenuResult.value.status)
+  const siteMenuFetchState = computed(() => siteMenuResult.value.state)
   return {
     siteMenuResult,
     siteMenu,
@@ -96,9 +96,9 @@ function mountApp() {
 
 // WARNING : The component has 2 states regarding the environment state. Mobile or desktop. There is none used by default.
 
-// WARNING : The component has 2 states regarding the burger menu status. Open or close. The state by default is close.
+// WARNING : The component has 2 states regarding the burger menu state. Open or close. The state by default is close.
 
-// WARNING : The component has 3 states regarding the data fetching status. "Pending", "Rejected" and "Fulfilled". The state by default is "Pending".
+// WARNING : The component has 3 states regarding the data fetching state. "Pending", "Rejected" and "Fulfilled". The state by default is "Pending".
 
 describe('App.vue', () => {
   let wrapper
@@ -142,7 +142,7 @@ describe('App.vue', () => {
       // Set the environment to mobile
       mockIsOnMobileStore.isOnMobile = true
 
-      // Set the store data fetching status to "fulfilled"
+      // Set the store data fetching state to "fulfilled"
       mockSiteMenuStore.siteMenuResult = mockSiteMenuFulfilled
       await nextTick()
     })
@@ -175,7 +175,7 @@ describe('App.vue', () => {
       // Set the environment to mobile
       mockIsOnMobileStore.isOnMobile = true
 
-      // Set the store data fetching status to "fulfilled"
+      // Set the store data fetching state to "fulfilled"
       mockSiteMenuStore.siteMenuResult = mockSiteMenuFulfilled
       await nextTick()
     })

@@ -55,7 +55,7 @@ function mountBurgerMenuDropdown() {
 /* 3.Test */
 /**********/
 
-// WARNING : The component has 2 states regarding its dropdown opening status. Open or close. The state by default is open.
+// WARNING : The component has 2 states regarding its dropdown opening state. Open or close. The state by default is open.
 
 describe('BurgerMenuDropdown.vue', () => {
   let wrapper
@@ -181,16 +181,16 @@ describe('BurgerMenuDropdown.vue', () => {
       const links = list.findAllComponents(RouterLinkStub)
 
       for (let index = 0; index < links.length; index++) {
-        // Reset the burger menu status to open
+        // Reset the burger menu state to open
         mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
 
-        // Assert the burger menu status is open
+        // Assert the burger menu state is open
         expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
 
         // Touch the link
         await links[index].trigger('click')
 
-        // Assert the burger menu status is close
+        // Assert the burger menu state is close
         expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
       }
     })

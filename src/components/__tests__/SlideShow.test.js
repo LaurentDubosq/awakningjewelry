@@ -99,9 +99,9 @@ function mountSlideshow() {
 /* 4.Test */
 /**********/
 
-// WARNING : The component has 2 states regarding the slideshow playing status. True or false. The state by default is true.
+// WARNING : The component has 2 states regarding the slideshow playing state. True or false. The state by default is true.
 
-// WARNING : The component has 2 states regarding the reduce motion status. True or false. The state by default is false.
+// WARNING : The component has 2 states regarding the reduce motion state. True or false. The state by default is false.
 
 describe('Slideshow.vue', () => {
   let wrapper

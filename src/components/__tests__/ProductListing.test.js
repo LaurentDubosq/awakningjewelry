@@ -44,7 +44,7 @@ function mountProductListing(props) {
 /* 3.Test */
 /**********/
 
-// WARNING : The component has 3 states regarding the data fetching status. "Pending", "Rejected" and "Fulfilled". The state by default is "Pending".
+// WARNING : The component has 3 states regarding the data fetching state. "Pending", "Rejected" and "Fulfilled". The state by default is "Pending".
 
 describe('ProductListing.vue', () => {
   let wrapper

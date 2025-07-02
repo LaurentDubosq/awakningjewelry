@@ -99,7 +99,7 @@ function mountNewsletterSignup() {
 /* 4.Test */
 /**********/
 
-// WARNING : The component has 3 states regarding the wording fetching status. "Pending", "Rejected" and "Fulfilled". The state by default is "Pending".
+// WARNING : The component has 3 states regarding the wording fetching state. "Pending", "Rejected" and "Fulfilled". The state by default is "Pending".
 
 describe('NewsletterSignup', () => {
   let wrapper
@@ -132,7 +132,7 @@ describe('NewsletterSignup', () => {
 
   describe('Data fetching "Rejected" state', () => {
     test('the error message is rendered', async () => {
-      // Set the store wording fetching status to rejected
+      // Set the store wording fetching state to rejected
       mockWordingStore.fetchResult = mockWordingRejected
       await nextTick()
 
@@ -144,7 +144,7 @@ describe('NewsletterSignup', () => {
 
   describe('Data fetching "Fulfilled" state', async () => {
     beforeEach(async () => {
-      // Set the store wording fetching status to fulfilled
+      // Set the store wording fetching state to fulfilled
       mockWordingStore.fetchResult = mockWordingFulfilled
       await nextTick()
     })

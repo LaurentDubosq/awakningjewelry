@@ -88,11 +88,11 @@ function mountHero() {
 /* 4.Test */
 /**********/
 
-// WARNING : The component has 3 states regarding the data fetching status. "Pending", "Rejected" and "Fulfilled". The state by default is "Pending".
+// WARNING : The component has 3 states regarding the data fetching state. "Pending", "Rejected" and "Fulfilled". The state by default is "Pending".
 
-// WARNING : The component has 2 states regarding the slideshow playing status. True or false. The state by default is true.
+// WARNING : The component has 2 states regarding the slideshow playing state. True or false. The state by default is true.
 
-// WARNING : The component has 2 states regarding the reduce motion status. True or false. The state by default is false.
+// WARNING : The component has 2 states regarding the reduce motion state. True or false. The state by default is false.
 
 describe('Hero.vue', () => {
   let wrapper
@@ -123,7 +123,7 @@ describe('Hero.vue', () => {
 
   describe('Data fetching "Rejected" state', () => {
     test('the error message is rendered', async () => {
-      // Set the store data fetching status to rejected
+      // Set the store data fetching state to rejected
       mockHeroSlidesStore.fetchResult = mockHeroSlidesRejected
       await nextTick()
 
@@ -135,7 +135,7 @@ describe('Hero.vue', () => {
 
   describe('Data fetching "Fulfilled" state - Slideshow playing state is true - Reduce motion state is false', async () => {
     beforeEach(async () => {
-      // Set the store data fetching status to fulfilled
+      // Set the store data fetching state to fulfilled
       mockHeroSlidesStore.fetchResult = mockHeroSlidesFulfilled
       await nextTick()
     })

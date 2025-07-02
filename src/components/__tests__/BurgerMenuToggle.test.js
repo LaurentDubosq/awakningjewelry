@@ -38,7 +38,7 @@ function mountBurgerMenuToggle() {
 /* 3.Test */
 /**********/
 
-// WARNING : The component has 2 states regarding the burger menu status. Open or close. The state by default is close.
+// WARNING : The component has 2 states regarding the burger menu state. Open or close. The state by default is close.
 
 describe('BurgerMenuToggle.vue', () => {
   let wrapper
@@ -84,7 +84,7 @@ describe('BurgerMenuToggle.vue', () => {
 
   describe('Burger menu open state', () => {
     test('renders the toggle button with necessary information', async () => {
-      // Set the burger menu status as open
+      // Set the burger menu state as open
       mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
       await nextTick()
 
@@ -114,7 +114,7 @@ describe('BurgerMenuToggle.vue', () => {
     /*****************************/
 
     test('when the toggle button is touched 2 times, it commands the burger menu to open and close', async () => {
-      // Assert the burger menu status is close
+      // Assert the burger menu state is close
       expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
 
       // Find the button
@@ -123,25 +123,25 @@ describe('BurgerMenuToggle.vue', () => {
       // Touch on the button
       await button.trigger('click')
 
-      // Assert the burger menu status is open
+      // Assert the burger menu state is open
       expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
 
       // Touch on the button again
       await button.trigger('click')
 
-      // Assert the burger menu status is close
+      // Assert the burger menu state is close
       expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
     })
 
     test('when we press the "Enter" key on the opening button, it commands the burger menu to open, then it commands the focus on the first burger menu focusable element', async () => {
-      // Assert the burger menu status is close
+      // Assert the burger menu state is close
       expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
 
       // Commands the burger menu to open by pressing the "enter" key
       const button = wrapper.find("[data-testid='burger-menu-toggle-button']")
       await button.element.dispatchEvent(clickEventTriggeredByEnter)
 
-      // Assert the burger menu status is open
+      // Assert the burger menu state is open
       expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
 
       // Assert the commands to focus the first focusable burger menu element has been ordered
@@ -149,17 +149,17 @@ describe('BurgerMenuToggle.vue', () => {
     })
 
     test('when we press the "Enter" key on the closing button, it commands the burger menu to close', async () => {
-      // Set the burger menu status as open
+      // Set the burger menu state as open
       mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
 
-      // Assert the burger menu status is open
+      // Assert the burger menu state is open
       expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
 
       // Commands the burger menu to close by pressing the "enter" key
       const button = wrapper.find("[data-testid='burger-menu-toggle-button']")
       await button.element.dispatchEvent(clickEventTriggeredByEnter)
 
-      // Assert the burger menu status is close
+      // Assert the burger menu state is close
       expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
     })
   })

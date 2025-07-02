@@ -14,7 +14,7 @@ export const useFounderQuoteBannerContentStore = defineStore('FounderQuoteBanner
   )
 
   const contentFetchState: ComputedRef<FetchState | undefined> = computed(() =>
-    unref(fetchResult.value?.status),
+    unref(fetchResult.value?.state),
   )
 
   // API Call - Data fetching with data caching

@@ -33,15 +33,15 @@ const mockRouter = createRouter({
 
 const mockSiteMenuPending = {
   data: undefined,
-  status: 'pending',
+  state: 'pending',
 }
 const mockSiteMenuRejected = {
   data: undefined,
-  status: 'rejected',
+  state: 'rejected',
 }
 const mockSiteMenuFulfilled = {
   data: frontDataBase.siteMenu,
-  status: 'fulfilled',
+  state: 'fulfilled',
 }
 const mockSiteMenu = mockSiteMenuFulfilled.data
 const mockSiteMenuLength = mockSiteMenu.length
@@ -62,7 +62,7 @@ const mockUseIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
 const mockUseSiteMenuStore = defineStore('SiteMenu', () => {
   const siteMenuResult = ref(mockSiteMenuPending)
   const siteMenu = computed(() => siteMenuResult.value.data)
-  const siteMenuFetchState = computed(() => siteMenuResult.value.status)
+  const siteMenuFetchState = computed(() => siteMenuResult.value.state)
   return {
     siteMenuResult,
     siteMenu,
@@ -101,9 +101,9 @@ function mountBurgerMenu() {
 /* 3.Test */
 /**********/
 
-// WARNING : The component has 3 states regarding the store data fetching status. "Pending", "Rejected" and "Fulfilled". The state by default is "Pending".
+// WARNING : The component has 3 states regarding the store data fetching state. "Pending", "Rejected" and "Fulfilled". The state by default is "Pending".
 
-// WARNING : The component has 2 states regarding its dropdown opening status. Open or close. The state by default is open.
+// WARNING : The component has 2 states regarding its dropdown opening state. Open or close. The state by default is open.
 
 describe('BurgerMenu.vue', () => {
   let wrapper
@@ -134,7 +134,7 @@ describe('BurgerMenu.vue', () => {
 
   describe('Data fetching "Rejected" state', () => {
     test('the error message is rendered', async () => {
-      // Set the store data fetching status to rejected
+      // Set the store data fetching state to rejected
       mockSiteMenuStore.siteMenuResult = mockSiteMenuRejected
       await nextTick()
 
@@ -146,7 +146,7 @@ describe('BurgerMenu.vue', () => {
 
   describe('Data fetching "Fulfilled" state - Dropdown open state', async () => {
     beforeEach(async () => {
-      // Set the store data fetching status to fulfilled
+      // Set the store data fetching state to fulfilled
       mockSiteMenuStore.siteMenuResult = mockSiteMenuFulfilled
       await nextTick()
     })
@@ -270,24 +270,24 @@ describe('BurgerMenu.vue', () => {
             /* when the link is touched, it commands the burger menu to close */
             /******************************************************************/
 
-            // Set the burger menu status to open
+            // Set the burger menu state to open
             mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
 
-            // Assert the burger menu status is open
+            // Assert the burger menu state is open
             expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
 
             // Touch the link
             link = items[index].find("[data-testid='burger-menu__link']")
             await link.trigger('click')
 
-            // Assert the burger menu status is close
+            // Assert the burger menu state is close
             expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
 
             /************************************************************************************************/
             /* when the link is focused and we press the "escape key", it commands the burger menu to close */
             /************************************************************************************************/
 
-            // Set the burger menu status to open
+            // Set the burger menu state to open
             mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
 
             // Focus the link
@@ -297,7 +297,7 @@ describe('BurgerMenu.vue', () => {
             // Press the "escape" key
             await link.trigger('keydown.escape')
 
-            // Assert the burger menu status is close
+            // Assert the burger menu state is close
             expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
           } else if (isDropdown(items[index])) {
             const dropdown = items[index].find("[data-testid='burger-menu__dropdown']")
@@ -341,7 +341,7 @@ describe('BurgerMenu.vue', () => {
             /* when the dropdown toggle button is focused and we press the "escape key", it commands the burger menu to close */
             /******************************************************************************************************************/
 
-            // Set the burger menu status to open
+            // Set the burger menu state to open
             mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
 
             // Focus the button
@@ -351,30 +351,30 @@ describe('BurgerMenu.vue', () => {
             // Press the "escape" key
             await button.trigger('keydown.escape')
 
-            // Assert the burger menu status is close
+            // Assert the burger menu state is close
             expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
 
             /****************************************************************************/
             /* when each dropdown link is touched, it commands the burger menu to close */
             /****************************************************************************/
 
-            // Set the burger menu status to open
+            // Set the burger menu state to open
             mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
 
             // Find the links
             links = dropdown.findAll("[data-testid='burger-menu__dropdown-item-link']")
 
             for (let index = 0; index < links.length; index++) {
-              // Set the burger menu status to open
+              // Set the burger menu state to open
               mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
 
-              // Assert the burger menu status is open
+              // Assert the burger menu state is open
               expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
 
               // Touch the link
               await links[index].trigger('click')
 
-              // Assert the burger menu status is close
+              // Assert the burger menu state is close
               expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
             }
 
@@ -382,17 +382,17 @@ describe('BurgerMenu.vue', () => {
             /* when each dropdown link is focused and we press the "escape key", it commands the burger menu to close */
             /**********************************************************************************************************/
 
-            // Set the burger menu status to open
+            // Set the burger menu state to open
             mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
 
             // Find the links
             links = dropdown.findAll("[data-testid='burger-menu__dropdown-item-link']")
 
             for (let index = 0; index < links.length; index++) {
-              // Set the burger menu status to open
+              // Set the burger menu state to open
               mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
 
-              // Assert the burger menu status is open
+              // Assert the burger menu state is open
               expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
 
               // Focus the link
@@ -401,7 +401,7 @@ describe('BurgerMenu.vue', () => {
               // Press the "escape" key
               await links[index].trigger('keydown.escape')
 
-              // Assert the burger menu status is close
+              // Assert the burger menu state is close
               expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
             }
           } else {

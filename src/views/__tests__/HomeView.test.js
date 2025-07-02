@@ -176,7 +176,7 @@ function mountHomeview() {
 /* 3.Test */
 /**********/
 
-// WARNING : The component has 3 states regarding the data fetching status for all child components. "Pending", "Rejected" and "Fulfilled". The state by default is "Pending".
+// WARNING : The component has 3 states regarding the data fetching state for all child components. "Pending", "Rejected" and "Fulfilled". The state by default is "Pending".
 
 describe('HomeView.vue', () => {
   let wrapper
@@ -240,7 +240,7 @@ describe('HomeView.vue', () => {
 
   describe('Data fetching "Rejected" state', () => {
     test('the error messages are rendered', async () => {
-      // Set the stores data fetching status to rejected
+      // Set the stores data fetching state to rejected
       mockMissionStatementBannerContentStore.fetchResult = mockMissionStatementBannerContentRejected
       mockByGenderCollectionListingContentStore.fetchResult =
         mockByGenderCollectionListingContentRejected
@@ -274,7 +274,7 @@ describe('HomeView.vue', () => {
 
   describe('Data fetching "Fulfilled" state', () => {
     beforeEach(async () => {
-      // Set the stores data fetching status to fulfilled
+      // Set the stores data fetching state to fulfilled
       mockMissionStatementBannerContentStore.fetchResult =
         mockMissionStatementBannerContentFulfilled
       mockByGenderCollectionListingContentStore.fetchResult =

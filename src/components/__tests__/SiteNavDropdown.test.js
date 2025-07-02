@@ -51,7 +51,7 @@ function mountSiteNavDropdown() {
 /* 3.Test */
 /**********/
 
-// WARNING : The component has 2 states regarding its opening status. Open or close. The state by default is close.
+// WARNING : The component has 2 states regarding its opening state. Open or close. The state by default is close.
 
 describe('SiteNavDropdown.vue', () => {
   let wrapper

@@ -55,7 +55,7 @@ function mountQuoteBanner(props) {
 /* 3.Test */
 /**********/
 
-// WARNING : The component has 3 states regarding the content fetching status. "Pending", "Rejected" and "Fulfilled". The state by default is "Pending".
+// WARNING : The component has 3 states regarding the content fetching state. "Pending", "Rejected" and "Fulfilled". The state by default is "Pending".
 
 describe('QuoteBanner', () => {
   let wrapper

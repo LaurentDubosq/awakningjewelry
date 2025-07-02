@@ -86,17 +86,17 @@ describe('BurgerMenuDropdownItem.vue', () => {
 
   describe('Behaviors:', () => {
     test('when the link is touched, it commands the dropdown to close', async () => {
-      // Set the burger menu status to open
+      // Set the burger menu state to open
       mockIsBurgerMenuOpenStore.isBurgerMenuOpen = true
 
-      // Assert the burger menu status is open
+      // Assert the burger menu state is open
       expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(true)
 
       // Touch the link
       const link = wrapper.findComponent(RouterLinkStub)
       await link.trigger('click')
 
-      // Assert the burger menu status is close
+      // Assert the burger menu state is close
       expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
     })
   })

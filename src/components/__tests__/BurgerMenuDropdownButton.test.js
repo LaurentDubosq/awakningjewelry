@@ -29,7 +29,7 @@ function mountBurgerMenuDropdownButton(propsOptions = {}) {
 /* 3.Test */
 /**********/
 
-// WARNING : The component has 2 states regarding its opening status. Open or close. The state by default is open.
+// WARNING : The component has 2 states regarding its opening state. Open or close. The state by default is open.
 
 describe('BurgerMenuDropdownButton.vue', () => {
   let wrapper

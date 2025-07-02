@@ -8,7 +8,7 @@ export const useFetchWithState = <T>(
   options?: RequestInit,
 ): UseFetchWithStateReturn<T> => {
   const data: Ref<T | undefined> = ref()
-  const status: Ref<FetchState> = ref('pending')
+  const state: Ref<FetchState> = ref('pending')
 
   const fetchData = async () => {
     try {
@@ -16,13 +16,13 @@ export const useFetchWithState = <T>(
 
       if (response.ok) {
         data.value = await response.json()
-        status.value = 'fulfilled'
+        state.value = 'fulfilled'
       } else {
         const errorMessage = `${response.status} - ${response.statusText}`
         throw new Error(errorMessage)
       }
     } catch (error) {
-      status.value = 'rejected'
+      state.value = 'rejected'
       if (error instanceof TypeError) {
         console.log('Network error: Please check your internet connection or the request URL.')
       } else {
@@ -32,5 +32,5 @@ export const useFetchWithState = <T>(
   }
   fetchData()
 
-  return { data, status }
+  return { data, state }
 }

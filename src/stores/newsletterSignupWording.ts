@@ -13,7 +13,7 @@ export const useNewsletterSignupWordingStore = defineStore('NewsletterSignupWord
     unref(fetchResult.value?.data),
   )
   const wordingFetchState: ComputedRef<FetchState | undefined> = computed(() =>
-    unref(fetchResult.value?.status),
+    unref(fetchResult.value?.state),
   )
 
   // Data fetching with data caching

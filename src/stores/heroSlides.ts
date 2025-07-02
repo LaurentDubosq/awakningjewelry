@@ -14,7 +14,7 @@ export const useHeroSlidesStore = defineStore('HeroSlides', () => {
   )
   const heroSlidesLength: ComputedRef<number | undefined> = computed(() => heroSlides.value?.length)
   const heroSlidesFetchState: ComputedRef<FetchState | undefined> = computed(() =>
-    unref(fetchResult.value?.status),
+    unref(fetchResult.value?.state),
   )
 
   // API Call - Data fetching with data caching

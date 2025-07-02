@@ -16,7 +16,7 @@ const mountSlideshowAutorotationButton = (props = {}) => {
 /* 2.Test */
 /**********/
 
-// WARNING : The component has 2 states regarding the slideshow playing status. True or false. The state by default is true.
+// WARNING : The component has 2 states regarding the slideshow playing state. True or false. The state by default is true.
 
 describe('SlideshowAutorotationButton.vue', () => {
   let wrapper

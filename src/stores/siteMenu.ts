@@ -15,7 +15,7 @@ export const useSiteMenuStore = defineStore('SiteMenu', () => {
   )
 
   const siteMenuFetchState: ComputedRef<FetchState | undefined> = computed(() =>
-    unref(siteMenuResult.value?.status),
+    unref(siteMenuResult.value?.state),
   )
 
   // API Call - Data fetching with data caching
