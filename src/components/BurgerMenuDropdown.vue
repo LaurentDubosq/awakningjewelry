@@ -19,7 +19,7 @@ const isDropdownOpen: Ref<boolean> = ref(true)
       :isDropdownOpen
       @toggle-dropdown="isDropdownOpen = !isDropdownOpen"
     />
-    <MyTransition name="vertical-top-slide" :group="true" :duration="300">
+    <MyTransition name="vertical-top-slide" :group="false" :duration="300">
       <BurgerMenuDropdownList
         :links="dropdown.links"
         :id="dropdown.button.text"
