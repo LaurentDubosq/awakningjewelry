@@ -270,6 +270,10 @@ describe('SiteNav.vue', () => {
 
           // Reset(close) the dropdown for following assertions
           await dropdown.trigger('mouseleave')
+        } else {
+          throw new Error(
+            `Unknown site navigation item type at index ${index}: ${JSON.stringify(items[index])}`,
+          )
         }
       }
     })
@@ -433,6 +437,10 @@ describe('SiteNav.vue', () => {
             // Assert the dropdown is close
             list = wrapper.find("[data-testid='site-nav__dropdown-list']")
             expect(list.exists()).toBeFalsy()
+          } else {
+            throw new Error(
+              `Unknown site navigation item type at index ${index}: ${JSON.stringify(items[index])}`,
+            )
           }
         }
       })

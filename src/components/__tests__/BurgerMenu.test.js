@@ -248,6 +248,10 @@ describe('BurgerMenu.vue', () => {
 
           // Reset(open) the dropdown for following assertions
           await button.trigger('click')
+        } else {
+          throw new Error(
+            `Unknown burger menu item type at index ${index}: ${JSON.stringify(items[index])}`,
+          )
         }
       }
     })
@@ -400,6 +404,10 @@ describe('BurgerMenu.vue', () => {
               // Assert the burger menu status is close
               expect(mockIsBurgerMenuOpenStore.isBurgerMenuOpen).toBe(false)
             }
+          } else {
+            throw new Error(
+              `Unknown burger menu item type at index ${index}: ${JSON.stringify(items[index])}`,
+            )
           }
         }
       })
