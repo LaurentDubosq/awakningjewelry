@@ -1,6 +1,7 @@
 import { ref, type Ref, onUnmounted } from 'vue'
 
-/* This composable return the reduced motion statut of the user operating system and/or the browser */
+/* Composable to use to return the reduced motion status of the user operating system and/or the browser */
+
 export default function useIsReducedMotion() {
   // Get the reduce motion preference object
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -17,7 +18,7 @@ export default function useIsReducedMotion() {
     }
   }
 
-  // Listen to the user preference toggle and update the controlled Vue variable
+  // Listen to the user preference toggle and update the controlled Vue variable when toggled
   prefersReducedMotion.addEventListener('change', updateIsActivated)
 
   // Remove the listener when the component that use it is unmounted
@@ -25,6 +26,5 @@ export default function useIsReducedMotion() {
     prefersReducedMotion.removeEventListener('change', updateIsActivated)
   })
 
-  // Return the dynamic preference's statut
   return isActivated
 }
