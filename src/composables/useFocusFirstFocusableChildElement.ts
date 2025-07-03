@@ -1,11 +1,11 @@
-/* Utility functions to focus */
+/* Composables used for focus */
 
 /**
  * Checks if an HTML element is focusable.
  * @param element - The element to test.
  * @returns true if the element is focusable, false otherwise.
  */
-export const isFocusable = (element: HTMLElement): boolean => {
+const isFocusable = (element: HTMLElement): boolean => {
   const tagName = element.tagName.toLowerCase()
 
   // Natively focusable tags

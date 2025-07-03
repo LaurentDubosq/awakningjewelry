@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { nextTick } from 'vue'
-import { useFocusFirstFocusableChildElement } from '@/composables/useFocusElement'
+import { useFocusFirstFocusableChildElement } from '@/composables/useFocusFirstFocusableChildElement'
 import SiteHeaderIcon from './SiteHeaderIcon.vue'
 import IconBurger from './icons/IconBurger.vue'
 import IconCross from './icons/IconCross.vue'
