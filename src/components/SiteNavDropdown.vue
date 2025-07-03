@@ -5,7 +5,7 @@ import MyTransition from './MyTransition.vue'
 import { closeDropdownKey } from '@/utils/injectionkeys'
 import SiteNavDropdownButton from './SiteNavDropdownButton.vue'
 import SiteNavDropdownList from './SiteNavDropdownList.vue'
-import useExecuteOnFocusLeave from '@/composables/useExecuteOnFocusLeave'
+import useExecuteWhenFocusMovesOutside from '@/composables/useExecuteWhenFocusMovesOutside'
 
 const { dropdown } = defineProps<{
   dropdown: SiteMenuDropdown
@@ -32,7 +32,7 @@ provide(closeDropdownKey, closeDropdown)
     class="site-nav__dropdown"
     @mouseenter="openDropdown"
     @mouseleave="closeDropdown"
-    @focusout="(event) => useExecuteOnFocusLeave(event, closeDropdown)"
+    @focusout="(event) => useExecuteWhenFocusMovesOutside(event, closeDropdown)"
     @keydown.escape="closeDropdown"
     data-testid="site-nav__dropdown"
   >
