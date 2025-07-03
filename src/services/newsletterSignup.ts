@@ -1,10 +1,10 @@
 import type { NewsletterSignupResult } from '@/types/global'
-const LAYOUT_API_BASE_URL = import.meta.env.VITE_LAYOUT_API_URL
+const SITE_DATA_API_BASE_URL = import.meta.env.VITE_SITE_DATA_API_URL
 
 // Logic to add email to newsletter list
 export const subscribeToNewsletter = async (email: string): Promise<NewsletterSignupResult> => {
   try {
-    const response = await fetch(`${LAYOUT_API_BASE_URL}/newsletterSubscribers`, {
+    const response = await fetch(`${SITE_DATA_API_BASE_URL}/newsletterSubscribers`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
