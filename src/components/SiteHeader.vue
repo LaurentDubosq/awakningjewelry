@@ -7,8 +7,8 @@ import SiteLogo from './SiteLogo.vue'
 import SiteHeaderIcon from './SiteHeaderIcon.vue'
 import IconPerson from './icons/IconPerson.vue'
 import IconCart from './icons/IconCart.vue'
-import useGetAsyncComponent from '@/composables/useGetAsyncComponent'
-const SiteNav = defineAsyncComponent(useGetAsyncComponent('SiteNav')) // Async import because mobile environment doesn't need the siteNav
+import useAsyncComponentConfig from '@/composables/useAsyncComponentConfig'
+const SiteNav = defineAsyncComponent(useAsyncComponentConfig('SiteNav')) // Async import because mobile environment doesn't need the siteNav
 
 /* Get the current display platform (mobile/desktop) to condition the asynchronous component imports. It also provides a more
 readable code and the possibility of testing the renders according to environments */

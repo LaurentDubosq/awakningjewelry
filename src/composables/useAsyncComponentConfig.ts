@@ -1,8 +1,8 @@
 import LoadingComponent from '@/components/LoadingComponent.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
 
-// Composable handling asynchronous import state
-export default function useGetAsyncComponent(name: string) {
+// Composable for handling asynchronous component imports
+export default function useAsyncComponentConfig(name: string) {
   return {
     // Loader component function
     loader: () => import(`@/components/${name}.vue`),
