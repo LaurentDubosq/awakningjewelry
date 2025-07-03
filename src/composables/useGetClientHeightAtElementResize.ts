@@ -1,5 +1,7 @@
 import { onUnmounted, ref, type Ref } from 'vue'
 
+// Composable to use to get element's clientHeight at element resize
+
 /* The call of this composable must be executed in onMounted hook */
 export function useGetClientHeightAtElementResize(element: HTMLElement): Ref<number> {
   const clientHeight: Ref<number> = ref(0)
@@ -12,7 +14,7 @@ export function useGetClientHeightAtElementResize(element: HTMLElement): Ref<num
   // Execution
   resizeObserver.observe(element)
 
-  // Disconnect the oberver at unMounting
+  // Disconnect the observer at unMounting
   onUnmounted(() => {
     resizeObserver.disconnect()
   })
