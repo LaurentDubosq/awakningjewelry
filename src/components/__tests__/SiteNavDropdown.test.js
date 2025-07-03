@@ -96,7 +96,7 @@ describe('SiteNavDropdown.vue', () => {
     test('renders the dropdown toggle button with necessary information', () => {
       // Assert the dropdown is open
       const list = wrapper.find("[data-testid='site-nav__dropdown-list']")
-      expect(list.exists()).toBeTruthy()
+      expect(list.isVisible()).toBeTruthy()
 
       // Assert the open icon is rendered
       const button = wrapper.find("[data-testid='site-nav__dropdown-button']")
@@ -106,7 +106,7 @@ describe('SiteNavDropdown.vue', () => {
     test('renders all links with their necessary information', async () => {
       // Assert the dropdown is open
       const list = wrapper.find("[data-testid='site-nav__dropdown-list']")
-      expect(list.exists()).toBeTruthy()
+      expect(list.isVisible()).toBeTruthy()
 
       // Assert all links are rendered
       const links = list.findAll("[data-testid='site-nav__dropdown-item-link']")
@@ -143,7 +143,7 @@ describe('SiteNavDropdown.vue', () => {
       const list = wrapper.find("[data-testid='site-nav__dropdown-list']")
 
       // Assert the dropdown is close
-      expect(list.exists()).toBeFalsy()
+      expect(list.isVisible()).toBeFalsy()
     })
 
     test('when the mouse enters and leaves the dropdown, it open/close the dropdown', async () => {
@@ -152,7 +152,7 @@ describe('SiteNavDropdown.vue', () => {
 
       // Assert the dropdown is close
       list = wrapper.find("[data-testid='site-nav__dropdown-list']")
-      expect(list.exists()).toBeFalsy()
+      expect(list.isVisible()).toBeFalsy()
 
       // Mouse enters the dropdown
       dropdown = wrapper.find("[data-testid='site-nav__dropdown']")
@@ -160,14 +160,14 @@ describe('SiteNavDropdown.vue', () => {
 
       // Assert the dropdown is open
       list = wrapper.find("[data-testid='site-nav__dropdown-list']")
-      expect(list.exists()).toBeTruthy()
+      expect(list.isVisible()).toBeTruthy()
 
       // Mouse leaves the dropdown
       await dropdown.trigger('mouseleave')
 
       // Assert the dropdown is close
       list = wrapper.find("[data-testid='site-nav__dropdown-list']")
-      expect(list.exists()).toBeFalsy()
+      expect(list.isVisible()).toBeFalsy()
     })
 
     test('when we navigate through the dropdown using keyboard and focus on external element of the dropdown, it closes the dropdown', async () => {
@@ -179,7 +179,7 @@ describe('SiteNavDropdown.vue', () => {
 
       // Assert the dropdown is open
       list = wrapper.find("[data-testid='site-nav__dropdown-list']")
-      expect(list.exists()).toBeTruthy()
+      expect(list.isVisible()).toBeTruthy()
 
       // Focus the last link
       const links = list.findAll("[data-testid='site-nav__dropdown-item-link']")
@@ -192,7 +192,7 @@ describe('SiteNavDropdown.vue', () => {
 
       // Assert the dropdown is close
       list = wrapper.find("[data-testid='site-nav__dropdown-list']")
-      expect(list.exists()).toBeFalsy()
+      expect(list.isVisible()).toBeFalsy()
     })
 
     test('when we navigate through the dropdown using keyboard and press the "Escape" key, it closes the dropdown', async () => {
@@ -205,7 +205,7 @@ describe('SiteNavDropdown.vue', () => {
 
       // Assert the dropdown is open
       list = wrapper.find("[data-testid='site-nav__dropdown-list']")
-      expect(list.exists()).toBeTruthy()
+      expect(list.isVisible()).toBeTruthy()
 
       // Focus the first link
       const links = list.findAll("[data-testid='site-nav__dropdown-item-link']")
@@ -217,7 +217,7 @@ describe('SiteNavDropdown.vue', () => {
 
       // Assert the dropdown is close
       list = wrapper.find("[data-testid='site-nav__dropdown-list']")
-      expect(list.exists()).toBeFalsy()
+      expect(list.isVisible()).toBeFalsy()
     })
 
     /**************************/
@@ -229,7 +229,7 @@ describe('SiteNavDropdown.vue', () => {
 
       // Assert the dropdown is close
       list = wrapper.find("[data-testid='site-nav__dropdown-list']")
-      expect(list.exists()).toBeFalsy()
+      expect(list.isVisible()).toBeFalsy()
 
       // Focus the button
       const button = wrapper.find("[data-testid='site-nav__dropdown-button']")
@@ -237,7 +237,7 @@ describe('SiteNavDropdown.vue', () => {
 
       // Assert the dropdown is open
       list = wrapper.find("[data-testid='site-nav__dropdown-list']")
-      expect(list.exists()).toBeTruthy()
+      expect(list.isVisible()).toBeTruthy()
     })
 
     test('when the toggle button is touched, it open/close the dropdown', async () => {
@@ -245,7 +245,7 @@ describe('SiteNavDropdown.vue', () => {
 
       // Assert the dropdown is close
       list = wrapper.find("[data-testid='site-nav__dropdown-list']")
-      expect(list.exists()).toBeFalsy()
+      expect(list.isVisible()).toBeFalsy()
 
       // Touch the button
       const button = wrapper.find("[data-testid='site-nav__dropdown-button']")
@@ -253,14 +253,14 @@ describe('SiteNavDropdown.vue', () => {
 
       // Assert the dropdown is open
       list = wrapper.find("[data-testid='site-nav__dropdown-list']")
-      expect(list.exists()).toBeTruthy()
+      expect(list.isVisible()).toBeTruthy()
 
       // Touch the button again
       await button.trigger('touchend')
 
       // Assert the dropdown is close
       list = wrapper.find("[data-testid='site-nav__dropdown-list']")
-      expect(list.exists()).toBeFalsy()
+      expect(list.isVisible()).toBeFalsy()
     })
 
     /*********/
@@ -277,7 +277,7 @@ describe('SiteNavDropdown.vue', () => {
 
       // Assert the dropdown is open
       list = wrapper.find("[data-testid='site-nav__dropdown-list']")
-      expect(list.exists()).toBeTruthy()
+      expect(list.isVisible()).toBeTruthy()
 
       // Find the dropdown and the links
       dropdown = wrapper.find("[data-testid='site-nav__dropdown']")
@@ -290,14 +290,14 @@ describe('SiteNavDropdown.vue', () => {
 
         // Assert the dropdown is open
         list = wrapper.find("[data-testid='site-nav__dropdown-list']")
-        expect(list.exists()).toBeTruthy()
+        expect(list.isVisible()).toBeTruthy()
 
         // Click on the link
         await links[index].trigger('click')
 
         // Assert the dropdown is close
         list = wrapper.find("[data-testid='site-nav__dropdown-list']")
-        expect(list.exists()).toBeFalsy()
+        expect(list.isVisible()).toBeFalsy()
       }
     })
   })

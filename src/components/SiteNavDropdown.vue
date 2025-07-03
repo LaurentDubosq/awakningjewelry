@@ -46,7 +46,7 @@ provide(closeDropdownKey, closeDropdown)
       <SiteNavDropdownList
         :links="dropdown.links"
         :id="dropdown.button.text"
-        v-if="isDropdownOpen && dropdown.links"
+        v-show="isDropdownOpen && dropdown.links"
       />
     </MyTransition>
   </div>
