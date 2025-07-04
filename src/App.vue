@@ -19,7 +19,7 @@ const { isBurgerMenuOpen } = storeToRefs(isBurgerMenuOpenStore)
       <BurgerMenu v-show="isBurgerMenuOpen" />
     </MyTransition>
     <div class="site-content">
-      <div class="site-content-container">
+      <div class="site-content-inner-container">
         <SiteHeader />
         <main>
           <RouterView />
@@ -39,7 +39,7 @@ const { isBurgerMenuOpen } = storeToRefs(isBurgerMenuOpenStore)
   flex: 1;
   overflow: hidden;
 
-  &-container {
+  &-inner-container {
     min-width: $BreakpointMobileMinWidth; // Allow the content to be overflowing on mobile when burger menu is open
   }
 }

@@ -382,7 +382,7 @@ describe('App.vue', () => {
             <burger-menu-stub data-v-7a7a37b1="" style="display: none;"></burger-menu-stub>
           </transition-stub>
           <div data-v-7a7a37b1="" class="site-content">
-            <div data-v-7a7a37b1="" class="site-content-container">
+            <div data-v-7a7a37b1="" class="site-content-inner-container">
               <site-header-stub data-v-7a7a37b1=""></site-header-stub>
               <main data-v-7a7a37b1="">
                 <router-view-stub data-v-7a7a37b1="" name="default"></router-view-stub>
