@@ -3,7 +3,7 @@ import CollectionListingItem from './CollectionListingItem.vue'
 import type { FetchState } from '@/types/fetch'
 import LoadingComponent from './LoadingComponent.vue'
 import ErrorComponent from './ErrorComponent.vue'
-import type { CollectionListingContent } from '@/types/components'
+import type { CollectionListingContent } from '@/types/features'
 import { computed } from 'vue'
 
 const props = defineProps<{

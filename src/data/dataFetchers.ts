@@ -18,7 +18,7 @@ import type {
   CollectionListingContent,
   HeroSlideType,
   ProductListingContent,
-} from '@/types/components.d.ts'
+} from '@/types/features'
 import { useFetch } from '@/composables/useFetch'
 import { useFetchWithState } from '@/composables/useFetchWithState'
 

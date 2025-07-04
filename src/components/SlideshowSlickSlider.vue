@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DisplaySlidePayload } from '@/types/components'
+import type { DisplaySlidePayload } from '@/types/features'
 import { ref, type Ref } from 'vue'
 
 const { slidesLength, activeIndex } = defineProps<{

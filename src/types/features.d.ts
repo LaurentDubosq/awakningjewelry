@@ -1,6 +1,6 @@
-import type { Collections, InputSuccessResult, InputErrorResult } from '../types/global.d.js'
+import type { Collections } from './global.js'
 
-/* SiteMenu */
+/* SiteNav & BurgerMenu */
 export type SiteMenu = Array<SiteMenuLink | SiteMenuDropdown>
 export interface SiteMenuLink {
   id: number
@@ -95,8 +95,6 @@ export interface NewsletterSignupWording {
   unsubscriptionNote: string
   unsubscriptionNoteLinkText: string
 }
-
-export type NewsletterSignupResponse = InputSuccessResult | InputErrorResult
 
 /* QuoteBanner */
 export interface QuoteBannerContent {

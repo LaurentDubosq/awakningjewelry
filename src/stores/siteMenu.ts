@@ -1,5 +1,5 @@
 import { getSiteMenu } from '@/data/dataFetchers'
-import type { SiteMenu } from '@/types/components'
+import type { SiteMenu } from '@/types/features'
 import type { FetchState } from '@/types/fetch'
 import type { UseFetchWithStateReturn } from '@/types/fetch'
 import { defineStore } from 'pinia'

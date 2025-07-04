@@ -1,5 +1,5 @@
 import { ref, type Ref, type ComputedRef, computed, unref } from 'vue'
-import type { QuoteBannerContent } from '@/types/components'
+import type { QuoteBannerContent } from '@/types/features'
 import type { UseFetchWithStateReturn, FetchState } from '@/types/fetch'
 import { defineStore } from 'pinia'
 import { getFounderQuoteBannerContent } from '@/data/dataFetchers'

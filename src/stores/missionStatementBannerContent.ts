@@ -1,5 +1,5 @@
 import { ref, type Ref, type ComputedRef, computed, unref } from 'vue'
-import type { StatementBannerContent } from '@/types/components'
+import type { StatementBannerContent } from '@/types/features'
 import type { UseFetchWithStateReturn, FetchState } from '@/types/fetch'
 import { defineStore } from 'pinia'
 import { getMissionStatementBannerContent } from '@/data/dataFetchers'

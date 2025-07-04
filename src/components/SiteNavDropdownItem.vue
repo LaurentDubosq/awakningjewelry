@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SiteMenuDropdownLink } from '@/types/components'
+import type { SiteMenuDropdownLink } from '@/types/features'
 import { closeDropdownKey } from '@/utils/injectionkeys'
 import { inject } from 'vue'
 

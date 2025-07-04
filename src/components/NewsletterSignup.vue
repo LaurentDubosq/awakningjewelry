@@ -5,7 +5,7 @@ import { useNewsletterSignupWordingStore } from '@/stores/newsletterSignupWordin
 import { storeToRefs } from 'pinia'
 import { ref, type Ref } from 'vue'
 import { subscribeToNewsletter } from '@/services/newsletterSignup'
-import type { NewsletterSignupResult } from '@/types/global'
+import type { NewsletterSignupResult } from '@/types/services'
 
 /* Component Data Fetching */
 const newsletterSignupWordingStore = useNewsletterSignupWordingStore()

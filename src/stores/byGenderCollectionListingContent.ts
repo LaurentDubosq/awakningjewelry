@@ -2,7 +2,7 @@ import { ref, type Ref, type ComputedRef, computed, unref } from 'vue'
 import type { UseFetchWithStateReturn, FetchState } from '@/types/fetch'
 import { defineStore } from 'pinia'
 import { getByGenderCollectionListingContent } from '@/data/dataFetchers'
-import type { CollectionListingContent } from '@/types/components'
+import type { CollectionListingContent } from '@/types/features'
 
 export const useByGenderCollectionListingContentStore = defineStore(
   'ByGenderCollectionListingContent',

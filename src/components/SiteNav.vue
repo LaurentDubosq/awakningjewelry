@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SiteMenuDropdown, SiteMenuLink } from '@/types/components'
+import type { SiteMenuDropdown, SiteMenuLink } from '@/types/features'
 import IconPerson from './icons/IconPerson.vue'
 import SiteNavLink from './SiteNavLink.vue'
 import SiteNavDropdown from './SiteNavDropdown.vue'

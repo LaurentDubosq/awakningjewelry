@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { StatementBannerContent } from '@/types/components'
+import type { StatementBannerContent } from '@/types/features'
 import type { FetchState } from '@/types/fetch'
 import LoadingComponent from './LoadingComponent.vue'
 import ErrorComponent from './ErrorComponent.vue'

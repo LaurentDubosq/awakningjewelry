@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SiteMenuDropdown } from '@/types/components'
+import type { SiteMenuDropdown } from '@/types/features'
 import { ref, type Ref } from 'vue'
 import BurgerMenuDropdownButton from './BurgerMenuDropdownButton.vue'
 import BurgerMenuDropdownList from './BurgerMenuDropdownList.vue'

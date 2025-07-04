@@ -1,5 +1,5 @@
 import { ref, type Ref, type ComputedRef, computed, unref } from 'vue'
-import type { NewsletterSignupWording } from '@/types/components'
+import type { NewsletterSignupWording } from '@/types/features'
 import type { UseFetchWithStateReturn, FetchState } from '@/types/fetch'
 import { defineStore } from 'pinia'
 import { getNewsletterSignupWording } from '@/data/dataFetchers'

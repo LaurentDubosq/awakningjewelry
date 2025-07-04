@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FetchState } from '@/types/fetch'
-import type { ProductListingContent } from '@/types/components.d.ts'
+import type { ProductListingContent } from '@/types/features'
 import ProductListingItem from './ProductListingItem.vue'
 import LoadingComponent from './LoadingComponent.vue'
 import ErrorComponent from './ErrorComponent.vue'

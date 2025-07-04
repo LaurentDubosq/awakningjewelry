@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import sassConstants from '@/assets/styles/_constants.module.scss'
-import type { HeroSlideType } from '@/types/components'
+import type { HeroSlideType } from '@/types/features'
 
 const { slide, slidesLength, slideIndex, isActive } = defineProps<{
   slide: HeroSlideType

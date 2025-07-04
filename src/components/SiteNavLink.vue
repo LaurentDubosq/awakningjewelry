@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SiteMenuLink } from '@/types/components'
+import type { SiteMenuLink } from '@/types/features'
 import SiteHeaderIcon from './SiteHeaderIcon.vue'
 
 const { link } = defineProps<{

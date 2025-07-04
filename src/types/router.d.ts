@@ -4,7 +4,6 @@ export interface Routes {
     description: string
   }
 }
-
 export interface PageMetaData {
   name: string
   title: string

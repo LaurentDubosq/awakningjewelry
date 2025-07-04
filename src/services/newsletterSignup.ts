@@ -1,4 +1,4 @@
-import type { NewsletterSignupResult } from '@/types/global'
+import type { NewsletterSignupResult } from '@/types/services'
 const SITE_DATA_API_BASE_URL = import.meta.env.VITE_SITE_DATA_API_URL
 
 // Logic to add email to newsletter list

@@ -1,5 +1,5 @@
 import { ref, type Ref, type ComputedRef, computed, unref } from 'vue'
-import type { HeroSlideType } from '@/types/components'
+import type { HeroSlideType } from '@/types/features'
 import type { UseFetchWithStateReturn, FetchState } from '@/types/fetch'
 import { defineStore } from 'pinia'
 import { getHeroSlides } from '@/data/dataFetchers'

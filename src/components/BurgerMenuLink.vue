@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useIsBurgerMenuOpenStore } from '@/stores/isBurgerMenuOpen'
-import type { SiteMenuLink } from '@/types/components'
+import type { SiteMenuLink } from '@/types/features'
 
 const { link } = defineProps<{
   link: SiteMenuLink
