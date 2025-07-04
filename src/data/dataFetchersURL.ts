@@ -1,25 +1,27 @@
-export const SITE_DATA_API_BASE_URL = import.meta.env.VITE_SITE_DATA_API_URL
+export const SITE_DATA_API_BASE_URL: string = import.meta.env.VITE_SITE_DATA_API_URL
 
-/* Router */
-export const pagesMetaDataUrl: string = `${SITE_DATA_API_BASE_URL}/pagesMetaData`
+const endpoint = (path: string): string => `${SITE_DATA_API_BASE_URL}/${path}`
 
-/* SiteNav & BurgerMenu */
-export const siteMenuUrl: string = `${SITE_DATA_API_BASE_URL}/siteMenu`
+/* PagesMetaData */
+export const pagesMetaDataUrl = endpoint('pagesMetaData')
+
+/* SiteMenu */
+export const siteMenuUrl = endpoint('siteMenu')
 
 /* HeroSlides */
-export const heroSlidesURL: string = `${SITE_DATA_API_BASE_URL}/heroSlides`
+export const heroSlidesUrl = endpoint('heroSlides')
 
-/* MissionStatementBannerContentURL */
-export const missionStatementBannerContentURL: string = `${SITE_DATA_API_BASE_URL}/missionStatementBannerContent`
+/* MissionStatementBannerContent */
+export const missionStatementBannerContentUrl = endpoint('missionStatementBannerContent')
 
 /* ByGenderCollectionListingContent */
-export const byGenderCollectionListingContentURL: string = `${SITE_DATA_API_BASE_URL}/byGenderCollectionListingContent`
+export const byGenderCollectionListingContentUrl = endpoint('byGenderCollectionListingContent')
 
 /* PromotionsProductListingContent */
-export const promotionsProductListingContentURL: string = `${SITE_DATA_API_BASE_URL}/promotionsProductListingContent`
+export const promotionsProductListingContentUrl = endpoint('promotionsProductListingContent')
 
 /* NewsletterSignupWording */
-export const newsletterSignupWordingURL: string = `${SITE_DATA_API_BASE_URL}/newsletterSignupWording`
+export const newsletterSignupWordingUrl = endpoint('newsletterSignupWording')
 
 /* FounderQuoteBannerContent */
-export const founderQuoteBannerContentURL: string = `${SITE_DATA_API_BASE_URL}/founderQuoteBannerContent`
+export const founderQuoteBannerContentUrl = endpoint('founderQuoteBannerContent')

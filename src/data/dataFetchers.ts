@@ -1,15 +1,15 @@
 import type { PageMetaData } from '@/types/router.d.ts'
 import type { UseFetchWithStateReturn } from '@/types/fetch'
 import {
-  byGenderCollectionListingContentURL,
-  missionStatementBannerContentURL,
-  heroSlidesURL,
-  promotionsProductListingContentURL,
+  byGenderCollectionListingContentUrl,
+  missionStatementBannerContentUrl,
+  heroSlidesUrl,
+  promotionsProductListingContentUrl,
   pagesMetaDataUrl,
   siteMenuUrl,
-  newsletterSignupWordingURL,
-  founderQuoteBannerContentURL,
-} from '@/data/dataFetchersURL'
+  newsletterSignupWordingUrl,
+  founderQuoteBannerContentUrl,
+} from '@/data/dataFetchersUrl'
 import type {
   SiteMenu,
   StatementBannerContent,
@@ -28,22 +28,22 @@ export const getPagesMetaData = async (): Promise<PageMetaData[] | undefined> =>
 export const getSiteMenu = (): UseFetchWithStateReturn<SiteMenu> => useFetchWithState(siteMenuUrl)
 
 export const getHeroSlides = (): UseFetchWithStateReturn<HeroSlideType[]> =>
-  useFetchWithState(heroSlidesURL)
+  useFetchWithState(heroSlidesUrl)
 
 export const getMissionStatementBannerContent =
   (): UseFetchWithStateReturn<StatementBannerContent> =>
-    useFetchWithState(missionStatementBannerContentURL)
+    useFetchWithState(missionStatementBannerContentUrl)
 
 export const getByGenderCollectionListingContent =
   (): UseFetchWithStateReturn<CollectionListingContent> =>
-    useFetchWithState(byGenderCollectionListingContentURL)
+    useFetchWithState(byGenderCollectionListingContentUrl)
 
 export const getPromotionsProductListingContent =
   (): UseFetchWithStateReturn<ProductListingContent> =>
-    useFetchWithState(promotionsProductListingContentURL)
+    useFetchWithState(promotionsProductListingContentUrl)
 
 export const getNewsletterSignupWording = (): UseFetchWithStateReturn<NewsletterSignupWording> =>
-  useFetchWithState(newsletterSignupWordingURL)
+  useFetchWithState(newsletterSignupWordingUrl)
 
 export const getFounderQuoteBannerContent = (): UseFetchWithStateReturn<QuoteBannerContent> =>
-  useFetchWithState(founderQuoteBannerContentURL)
+  useFetchWithState(founderQuoteBannerContentUrl)
