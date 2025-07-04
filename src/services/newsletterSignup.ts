@@ -26,8 +26,8 @@ export const subscribeToNewsletter = async (email: string): Promise<NewsletterSi
       const message = 'Unable to register your email. Please avoid using special characters !'
       throw new Error(message)
     }
-  } catch (error) {
-    let message
+  } catch (error: unknown) {
+    let message: string
 
     if (error instanceof TypeError) {
       message = 'Network error: Please check your internet connection.'

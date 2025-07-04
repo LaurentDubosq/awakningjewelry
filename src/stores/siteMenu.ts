@@ -24,7 +24,6 @@ export const useSiteMenuStore = defineStore('SiteMenu', () => {
   }
 
   return {
-    siteMenuResult,
     siteMenu,
     siteMenuFetchState,
   }
