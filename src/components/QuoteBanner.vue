@@ -106,6 +106,7 @@ const { content, contentFetchState } = defineProps<{
   }
 
   &__author {
+    text-align: center;
     font-style: italic;
   }
 
