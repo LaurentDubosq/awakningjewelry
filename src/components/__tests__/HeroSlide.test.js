@@ -22,7 +22,7 @@ const mockSlideLinkURL = mockSlide.url
 /***********/
 
 // Component Factory (Neutral environment state)
-function mountHeroSlide() {
+const mountHeroSlide = () => {
   return mount(HeroSlide, {
     props: {
       slide: mockSlide,

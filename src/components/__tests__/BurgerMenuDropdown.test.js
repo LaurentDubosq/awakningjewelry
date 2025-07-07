@@ -38,7 +38,7 @@ const mockIsBurgerMenuOpenStore = mockUseIsBurgerMenuOpenStore()
 /***********/
 
 // Component Factory (Dropdown open state)
-function mountBurgerMenuDropdown() {
+const mountBurgerMenuDropdown = () => {
   return mount(BurgerMenuDropdown, {
     attachTo: document.body,
     props: { dropdown: mockDropdown },

@@ -18,7 +18,7 @@ const mockCloseSiteNavDropdown = vi.fn()
 /***********/
 
 // Component Factory
-function mountSiteNavDropdownItem() {
+const mountSiteNavDropdownItem = () => {
   return mount(SiteNavDropdownItem, {
     props: { link: mockLink },
     global: {

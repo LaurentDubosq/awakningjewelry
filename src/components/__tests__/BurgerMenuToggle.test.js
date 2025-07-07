@@ -28,7 +28,7 @@ const mockIsBurgerMenuOpenStore = mockUseIsBurgerMenuOpenStore()
 /***********/
 
 // Component factory (Burger menu close state)
-function mountBurgerMenuToggle() {
+const mountBurgerMenuToggle = () => {
   return mount(BurgerMenuToggle, {
     plugins: [mockPinia],
   })

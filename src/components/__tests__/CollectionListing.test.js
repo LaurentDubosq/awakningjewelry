@@ -31,7 +31,7 @@ const mockContentCollectionsLength = mockContentCollections.length
 /***********/
 
 // Component Factory (Data fetching "Pending" state)
-function mountCollectionListing(props) {
+const mountCollectionListing = (props) => {
   return mount(CollectionListing, {
     props: {
       content: mockContentPending.content,

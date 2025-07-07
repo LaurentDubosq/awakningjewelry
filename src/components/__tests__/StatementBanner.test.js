@@ -31,7 +31,7 @@ const mockContentImageAlt = mockContent.image.alt
 /***********/
 
 // Component Factory (Data fetching "Pending" state)
-function mountStatementBanner(props) {
+const mountStatementBanner = (props) => {
   return mount(StatementBanner, {
     props: {
       content: mockContentPendingResult.content,

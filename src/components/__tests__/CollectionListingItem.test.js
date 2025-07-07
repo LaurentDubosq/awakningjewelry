@@ -16,7 +16,7 @@ const mockCollectionTitle = mockCollection.title
 /***********/
 
 // Component Factory
-function mountCollectionListingItem() {
+const mountCollectionListingItem = () => {
   return mount(CollectionListingItem, {
     props: {
       collection: mockCollection,

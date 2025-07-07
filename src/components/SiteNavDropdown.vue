@@ -13,13 +13,13 @@ const { dropdown } = defineProps<{
 
 const isDropdownOpen: Ref<boolean> = ref(false)
 
-function openDropdown() {
+const openDropdown = () => {
   isDropdownOpen.value = true
 }
-function closeDropdown() {
+const closeDropdown = () => {
   isDropdownOpen.value = false
 }
-function toggleDropdown() {
+const toggleDropdown = () => {
   isDropdownOpen.value = !isDropdownOpen.value
 }
 

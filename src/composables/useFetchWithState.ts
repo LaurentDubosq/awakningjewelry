@@ -3,10 +3,7 @@ import type { UseFetchWithStateReturn } from '@/types/fetch'
 import type { FetchState } from '@/types/fetch'
 
 // Composable to fetch external data returning them with a dynamic request statut
-export const useFetchWithState = <T>(
-  url: string,
-  options?: RequestInit,
-): UseFetchWithStateReturn<T> => {
+const useFetchWithState = <T>(url: string, options?: RequestInit): UseFetchWithStateReturn<T> => {
   const data: Ref<T | undefined> = ref()
   const state: Ref<FetchState> = ref('pending')
 
@@ -34,3 +31,4 @@ export const useFetchWithState = <T>(
 
   return { data, state }
 }
+export default useFetchWithState

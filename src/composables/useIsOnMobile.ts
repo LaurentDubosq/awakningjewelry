@@ -17,7 +17,7 @@ const updateIsOnMobile = () => {
   isOnMobile.value = checkIsOnMobile()
 }
 
-export const useIsOnMobile = (): Ref<boolean> => {
+const useIsOnMobile = (): Ref<boolean> => {
   onMounted(() => {
     window.addEventListener('resize', updateIsOnMobile)
   })
@@ -28,3 +28,4 @@ export const useIsOnMobile = (): Ref<boolean> => {
 
   return isOnMobile
 }
+export default useIsOnMobile

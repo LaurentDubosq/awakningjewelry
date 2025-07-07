@@ -24,7 +24,7 @@ const mockLinkTypeIconAlternativeText = mockLinkTypeIcon.text
 /***********/
 
 // Component Factory (Neutral type variant)
-function mountSiteNavLink(options) {
+const mountSiteNavLink = (options) => {
   return mount(SiteNavLink, {
     global: {
       stubs: { RouterLink: RouterLinkStub },

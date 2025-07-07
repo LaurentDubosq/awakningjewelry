@@ -76,10 +76,10 @@ const mockSiteMenuStore = mockUseSiteMenuStore()
 
 /* Utilities */
 
-function isLink(item) {
+const isLink = (item) => {
   return item.findComponent(BurgerMenuLink).exists()
 }
-function isDropdown(item) {
+const isDropdown = (item) => {
   return item.findComponent(BurgerMenuDropdown).exists()
 }
 
@@ -88,7 +88,7 @@ function isDropdown(item) {
 /***********/
 
 // Component Factory (Data fetching "Pending" state - Dropdown open state)
-function mountBurgerMenu() {
+const mountBurgerMenu = () => {
   return mount(BurgerMenu, {
     attachTo: document.body,
     global: {

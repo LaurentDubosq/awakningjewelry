@@ -38,7 +38,7 @@ const mockIsBurgerMenuOpenStore = mockUseIsBurgerMenuOpenStore()
 /***********/
 
 // Component Factory
-function mountBurgerMenuDropdownItem() {
+const mountBurgerMenuDropdownItem = () => {
   return mount(BurgerMenuDropdownItem, {
     props: { link: mockLink },
     global: {

@@ -27,7 +27,7 @@ export const useIsBurgerMenuOpenStore = defineStore('IsBurgerMenuOpen', () => {
   const breakpointDesktop: number = Number(sassConstants.breakpointDesktop.slice(0, -2))
 
   // Logic to close the burger menu when we resize the window width from mobile to desktop.
-  function closeBurgerMenuOnDesktop() {
+  const closeBurgerMenuOnDesktop = () => {
     if (
       document.documentElement.clientWidth >= breakpointDesktop &&
       isBurgerMenuOpen.value !== false

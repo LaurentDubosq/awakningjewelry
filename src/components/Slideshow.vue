@@ -14,7 +14,7 @@ import { useIsReducedMotionStore } from '@/stores/isReducedMotion'
 import { storeToRefs } from 'pinia'
 import SlideshowAutorotationButton from './SlideshowAutorotationButton.vue'
 import SlideshowSlickSlider from './SlideshowSlickSlider.vue'
-import { useGetClientHeightAtElementResize } from '@/composables/useGetClientHeightAtElementResize'
+import useGetClientHeightAtElementResize from '@/composables/useGetClientHeightAtElementResize'
 import type { DisplaySlidePayload } from '@/types/features'
 
 /****************/

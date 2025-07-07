@@ -15,16 +15,18 @@ const siteMenuStore = useSiteMenuStore()
 const { siteMenu, siteMenuFetchState } = storeToRefs(siteMenuStore)
 
 // Utilities
-function isLink(siteMenuItem: SiteMenuLink | SiteMenuDropdown): siteMenuItem is SiteMenuLink {
+const isLink = (siteMenuItem: SiteMenuLink | SiteMenuDropdown): siteMenuItem is SiteMenuLink => {
   return ['textLink', 'iconLink'].includes(siteMenuItem.type)
 }
-function isAccountLink(siteMenuItem: SiteMenuLink | SiteMenuDropdown): boolean {
+const isAccountLink = (siteMenuItem: SiteMenuLink | SiteMenuDropdown): boolean => {
   if (isLink(siteMenuItem)) {
     return siteMenuItem.name === 'account'
   }
   return false
 }
-function isDropdown(siteMenuItem: SiteMenuLink | SiteMenuDropdown): siteMenuItem is SiteMenuLink {
+const isDropdown = (
+  siteMenuItem: SiteMenuLink | SiteMenuDropdown,
+): siteMenuItem is SiteMenuLink => {
   return siteMenuItem.type === 'dropdown'
 }
 </script>

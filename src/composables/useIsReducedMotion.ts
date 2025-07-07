@@ -1,8 +1,7 @@
 import { ref, type Ref, onUnmounted } from 'vue'
 
 /* Composable to use to return the reduced motion status of the user operating system and/or the browser */
-
-export default function useIsReducedMotion() {
+const useIsReducedMotion = () => {
   // Get the reduce motion preference object
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
 
@@ -28,3 +27,4 @@ export default function useIsReducedMotion() {
 
   return isActivated
 }
+export default useIsReducedMotion

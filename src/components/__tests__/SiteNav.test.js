@@ -65,13 +65,13 @@ const mockSiteMenuStore = mockUseSiteMenuStore()
 
 /* Utilities */
 
-function isTextLink(item) {
+const isTextLink = (item) => {
   return item.find("[data-testid='site-nav__link--text']").exists()
 }
-function isIconLink(item) {
+const isIconLink = (item) => {
   return item.find("[data-testid='site-nav__link--icon']").exists()
 }
-function isDropdown(item) {
+const isDropdown = (item) => {
   return item.find("[data-testid='site-nav__dropdown']").exists()
 }
 
@@ -80,7 +80,7 @@ function isDropdown(item) {
 /***********/
 
 // Component Factory (Data fetching "Pending" state - Dropdown open state)
-function mountSiteNav() {
+const mountSiteNav = () => {
   return mount(SiteNav, {
     attachTo: document.body,
     global: {

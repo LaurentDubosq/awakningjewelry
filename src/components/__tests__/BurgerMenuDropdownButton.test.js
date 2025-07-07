@@ -14,7 +14,7 @@ const mockDropdownText = mockDropdown.button.text
 /***********/
 
 // Component Factory (Dropdown open state)
-function mountBurgerMenuDropdownButton(propsOptions = {}) {
+const mountBurgerMenuDropdownButton = (propsOptions = {}) => {
   return mount(BurgerMenuDropdownButton, {
     attachTo: document.body,
     props: {

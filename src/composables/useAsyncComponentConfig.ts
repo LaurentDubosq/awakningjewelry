@@ -2,7 +2,7 @@ import LoadingComponent from '@/components/LoadingComponent.vue'
 import ErrorComponent from '@/components/ErrorComponent.vue'
 
 // Composable for handling asynchronous component imports
-export default function useAsyncComponentConfig(name: string) {
+const useAsyncComponentConfig = (name: string) => {
   return {
     // Loader component function
     loader: () => import(`@/components/${name}.vue`),
@@ -19,3 +19,4 @@ export default function useAsyncComponentConfig(name: string) {
     timeout: 5000, // 5 seconds
   }
 }
+export default useAsyncComponentConfig

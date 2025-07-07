@@ -19,8 +19,8 @@ import type {
   HeroSlideType,
   ProductListingContent,
 } from '@/types/features'
-import { useFetch } from '@/composables/useFetch'
-import { useFetchWithState } from '@/composables/useFetchWithState'
+import useFetch from '@/composables/useFetch'
+import useFetchWithState from '@/composables/useFetchWithState'
 
 export const getPagesMetaData = async (): Promise<PageMetaData[] | undefined> =>
   await useFetch(pagesMetaDataUrl)

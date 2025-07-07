@@ -28,7 +28,7 @@ const mockIsOnMobileStore = mockUseIsOnMobileStore()
 /***********/
 
 // Component Factory (Neutral environment state)
-function mountSiteHeader() {
+const mountSiteHeader = () => {
   return mount(SiteHeader, {
     global: {
       plugins: [mockPinia],

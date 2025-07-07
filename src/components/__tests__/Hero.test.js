@@ -15,7 +15,7 @@ import { createTestingPinia } from '@pinia/testing'
 // Mock the "useGetClientHeightAtElementResize" composable
 vi.mock('@/composables/useGetClientHeightAtElementResize', () => {
   return {
-    useGetClientHeightAtElementResize: vi.fn().mockReturnValue(ref(100)),
+    default: vi.fn().mockReturnValue(ref(100)),
   }
 })
 
@@ -74,7 +74,7 @@ mockUseIsOnMobileStore()
 /***********/
 
 // Component Factory (Data fetching "Pending" state - Slideshow playing state is true - Reduce motion state is false)
-function mountHero() {
+const mountHero = () => {
   return mount(Hero, {
     attachTo: document.body,
     global: {

@@ -72,7 +72,7 @@ const getFirstFocusableChildElement = (element: HTMLElement): HTMLElement | null
   return null
 }
 
-export const useFocusFirstFocusableChildElement = (element: HTMLElement) => {
+const useFocusFirstFocusableChildElement = (element: HTMLElement) => {
   // Get the child focusable element
   const focusableElement = getFirstFocusableChildElement(element)
 
@@ -81,3 +81,4 @@ export const useFocusFirstFocusableChildElement = (element: HTMLElement) => {
     focusableElement.focus()
   }
 }
+export default useFocusFirstFocusableChildElement

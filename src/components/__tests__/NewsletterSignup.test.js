@@ -86,7 +86,7 @@ const mockWordingStore = mockUseWordingStore()
 /***********/
 
 // Component factory (Data fetching "Pending" state)
-function mountNewsletterSignup() {
+const mountNewsletterSignup = () => {
   return mount(NewsletterSignup, {
     attachTo: document.body,
     global: {

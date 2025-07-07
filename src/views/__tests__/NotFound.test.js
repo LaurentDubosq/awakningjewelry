@@ -6,7 +6,7 @@ import NotFound from '../NotFound.vue'
 /***********/
 
 // Component Factory
-function mountNotFound() {
+const mountNotFound = () => {
   return mount(NotFound, {
     global: {
       stubs: {

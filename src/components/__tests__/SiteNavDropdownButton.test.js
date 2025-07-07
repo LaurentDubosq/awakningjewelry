@@ -15,7 +15,7 @@ const mockDropdownTitle = mockDropdown.button.title
 /***********/
 
 // Component Factory (Dropdown close state)
-function mountSiteNavDropdownButton(propsOptions = {}) {
+const mountSiteNavDropdownButton = (propsOptions = {}) => {
   return mount(SiteNavDropdownButton, {
     props: {
       text: mockDropdownText,

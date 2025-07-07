@@ -160,7 +160,7 @@ const mockFounderQuoteBannerContentStore = mockUseFounderQuoteBannerContentStore
 /***********/
 
 // Component Factory (Data fetching "Pending" state)
-function mountHomeview() {
+const mountHomeview = () => {
   return mount(HomeView, {
     global: {
       stubs: {

@@ -17,12 +17,12 @@ const { siteMenu, siteMenuFetchState } = storeToRefs(siteMenuStore)
 const { toggleBurgerMenu } = isBurgerMenuOpenStore
 
 // Utilities
-function isLink(siteMenuItem: SiteMenuLink | SiteMenuDropdown): siteMenuItem is SiteMenuLink {
+const isLink = (siteMenuItem: SiteMenuLink | SiteMenuDropdown): siteMenuItem is SiteMenuLink => {
   return ['textLink', 'iconLink'].includes(siteMenuItem.type)
 }
-function isDropdown(
+const isDropdown = (
   siteMenuItem: SiteMenuLink | SiteMenuDropdown,
-): siteMenuItem is SiteMenuDropdown {
+): siteMenuItem is SiteMenuDropdown => {
   return siteMenuItem.type === 'dropdown'
 }
 </script>

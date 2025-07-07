@@ -77,7 +77,7 @@ const mockSiteMenuStore = mockUseSiteMenuStore()
 /***********/
 
 // Component Factory (Neutral environment state - Burger menu close state - Data fetching "Pending" state)
-function mountApp() {
+const mountApp = () => {
   return mount(App, {
     attachTo: document.body,
     global: {

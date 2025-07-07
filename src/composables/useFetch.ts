@@ -1,5 +1,5 @@
 // Composable to fetch external data
-export const useFetch = async <T>(url: string, options?: RequestInit): Promise<T | undefined> => {
+const useFetch = async <T>(url: string, options?: RequestInit): Promise<T | undefined> => {
   try {
     const response = await fetch(url, options)
     if (response.ok) {
@@ -17,3 +17,4 @@ export const useFetch = async <T>(url: string, options?: RequestInit): Promise<T
     }
   }
 }
+export default useFetch

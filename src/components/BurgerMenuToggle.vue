@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { nextTick } from 'vue'
-import { useFocusFirstFocusableChildElement } from '@/composables/useFocusFirstFocusableChildElement'
+import useFocusFirstFocusableChildElement from '@/composables/useFocusFirstFocusableChildElement'
 import SiteHeaderIcon from './SiteHeaderIcon.vue'
 import IconBurger from './icons/IconBurger.vue'
 import IconCross from './icons/IconCross.vue'
@@ -14,7 +14,7 @@ const isBurgerMenuOpenStore = useIsBurgerMenuOpenStore()
 const { isBurgerMenuOpen } = storeToRefs(isBurgerMenuOpenStore)
 const { toggleBurgerMenu } = isBurgerMenuOpenStore
 
-async function handleClick(event: MouseEvent | KeyboardEvent) {
+const handleClick = async (event: MouseEvent | KeyboardEvent) => {
   // When the keyboard has generated the event
   if (event.detail === 0) {
     // Toggle the burger menu

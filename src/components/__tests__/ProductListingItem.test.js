@@ -19,7 +19,7 @@ const mockProductDiscountedPrice = mockProduct.promotionalPrice
 /***********/
 
 // Component Factory
-function mountProductListingItem() {
+const mountProductListingItem = () => {
   return mount(ProductListingItem, {
     props: { product: mockProduct },
     global: {

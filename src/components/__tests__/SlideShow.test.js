@@ -14,7 +14,7 @@ import { defineStore } from 'pinia'
 // Mock the "useGetClientHeightAtElementResize" composable used to position the slick slider on mobile
 vi.mock('@/composables/useGetClientHeightAtElementResize', () => {
   return {
-    useGetClientHeightAtElementResize: vi.fn().mockReturnValue(ref(100)),
+    default: vi.fn().mockReturnValue(ref(100)),
   }
 })
 
@@ -81,7 +81,7 @@ mockUseIsOnMobileStore()
 /***********/
 
 // Component Factory (Playing state is true - Reduce motion state is false)
-function mountSlideshow() {
+const mountSlideshow = () => {
   return mount(Slideshow, {
     attachTo: document.body,
     props: { slidesLength: mockSlidesLength },

@@ -1,5 +1,5 @@
 // Composable to execute the callback when the next focused element will be out of the current
-export default function useExecuteWhenFocusMovesOutside(event: FocusEvent, action: () => void) {
+const useExecuteWhenFocusMovesOutside = (event: FocusEvent, action: () => void) => {
   // Get the current element (the one that has the @focusout directive)
   const element = event.currentTarget as HTMLElement
 
@@ -11,3 +11,4 @@ export default function useExecuteWhenFocusMovesOutside(event: FocusEvent, actio
     action()
   }
 }
+export default useExecuteWhenFocusMovesOutside

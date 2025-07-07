@@ -37,7 +37,7 @@ const mockDropdownLinks = mockDropdown.links
 /***********/
 
 // Component Factory (Dropdown close state)
-function mountSiteNavDropdown() {
+const mountSiteNavDropdown = () => {
   return mount(SiteNavDropdown, {
     attachTo: document.body,
     props: { dropdown: mockDropdown },

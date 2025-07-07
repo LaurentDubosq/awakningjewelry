@@ -16,7 +16,7 @@ const mockLinkAlternativeText = mockLink.text
 /***********/
 
 // Component Factory (Utility component)
-function mountSiteHeaderIcon() {
+const mountSiteHeaderIcon = () => {
   return mount(SiteHeaderIcon, {
     props: { alternativeText: mockLinkAlternativeText },
     slots: { default: IconPerson },

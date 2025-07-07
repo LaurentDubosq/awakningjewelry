@@ -36,7 +36,7 @@ const mockLinkURL = mockContent.linkURL
 /***********/
 
 // Component factory (Content fetching "Pending" state)
-function mountQuoteBanner(props) {
+const mountQuoteBanner = (props) => {
   return mount(QuoteBanner, {
     props: {
       content: mockContentPendingResult.content,

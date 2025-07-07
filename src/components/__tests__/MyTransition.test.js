@@ -39,7 +39,7 @@ const mockBurgerMenuDropdownListAnimationOptionsProps =
 /***********/
 
 // Component Factory (Neutral built-in component) (Utility component)
-function mountComponent({ slot, props, stubs }) {
+const mountComponent = ({ slot, props, stubs }) => {
   return mount(MyTransition, {
     slots: { default: slot },
     props,
