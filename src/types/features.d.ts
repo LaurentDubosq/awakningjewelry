@@ -30,6 +30,7 @@ export interface SiteMenuDropdownLink {
 export interface HeroSlideType {
   id: number
   images: HeroSlideImages
+  imageAlt: string
   subtitle: string
   title: string
   url: string

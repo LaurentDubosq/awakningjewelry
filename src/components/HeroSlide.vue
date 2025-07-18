@@ -42,7 +42,7 @@ const breakpointDesktopLarge: string = sassConstants.breakpointDesktopLarge
         <img
           class="hero__slide-image"
           :src="slide.images.mobile"
-          :alt="slide.images.alt"
+          :alt="slide.imageAlt"
           data-testid="hero__slide-image"
         />
       </picture>
