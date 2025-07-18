@@ -67,6 +67,7 @@ const { product } = defineProps<{
     margin: 0 auto;
     max-width: 300px;
     width: 100%;
+    aspect-ratio: 1/1;
     @media screen and (min-width: 600px) {
       max-width: 350px;
     }

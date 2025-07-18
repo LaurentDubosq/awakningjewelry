@@ -42,3 +42,18 @@ const {
     <ErrorComponent v-else-if="fetchState === 'rejected'" />
   </section>
 </template>
+
+<style scoped lang="scss">
+@use '@/assets/styles/_constants.scss' as *;
+
+.hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 548px;
+  @media screen and (min-width: $breakpointDesktop) {
+    min-height: 0;
+    aspect-ratio: 1600/900;
+  }
+}
+</style>

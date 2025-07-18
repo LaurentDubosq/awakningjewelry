@@ -22,30 +22,31 @@ const breakpointDesktopLarge: string = sassConstants.breakpointDesktopLarge
     :id="`slideshow-${slideIndex + 1}`"
     data-testid="hero__slide"
   >
-    <picture class="hero__slide-picture">
-      <source
-        :media="`(min-width: ${breakpointDesktopLarge})`"
-        :srcset="slide.images.desktopLarge"
-        data-testid="hero__slide-image-desktop-large"
-      />
-      <source
-        :media="`(min-width: ${breakpointDesktop})`"
-        :srcset="slide.images.desktop"
-        data-testid="hero__slide-image-desktop"
-      />
-      <source
-        :media="`(min-width: ${breakpointMobileLandscape})`"
-        :srcset="slide.images.mobileLandscape"
-        data-testid="hero__slide-image-mobile-landscape"
-      />
-      <img
-        class="hero__slide-image"
-        :src="slide.images.mobile"
-        :alt="slide.images.alt"
-        loading="lazy"
-        data-testid="hero__slide-image"
-      />
-    </picture>
+    <div class="hero__slide-picture-wrapper">
+      <picture class="hero__slide-picture">
+        <source
+          :media="`(min-width: ${breakpointDesktopLarge})`"
+          :srcset="slide.images.desktopLarge"
+          data-testid="hero__slide-image-desktop-large"
+        />
+        <source
+          :media="`(min-width: ${breakpointDesktop})`"
+          :srcset="slide.images.desktop"
+          data-testid="hero__slide-image-desktop"
+        />
+        <source
+          :media="`(min-width: ${breakpointMobileLandscape})`"
+          :srcset="slide.images.mobileLandscape"
+          data-testid="hero__slide-image-mobile-landscape"
+        />
+        <img
+          class="hero__slide-image"
+          :src="slide.images.mobile"
+          :alt="slide.images.alt"
+          data-testid="hero__slide-image"
+        />
+      </picture>
+    </div>
     <div class="hero__slide-inner-content">
       <h3 class="hero__slide-subtitle" data-testid="hero__slide-subtitle">
         {{ slide.subtitle }}
@@ -74,6 +75,16 @@ const breakpointDesktopLarge: string = sassConstants.breakpointDesktopLarge
   align-items: center;
   width: 100%;
 
+  &-picture-wrapper {
+    display: inline-flex;
+    justify-content: center;
+    width: 100%;
+    aspect-ratio: 640/640;
+    @media screen and (min-width: $breakpointDesktop) {
+      aspect-ratio: 1600/900;
+    }
+  }
+
   &-picture {
     text-align: center;
     @media screen and (min-width: $breakpointDesktop) {
@@ -83,9 +94,11 @@ const breakpointDesktopLarge: string = sassConstants.breakpointDesktopLarge
 
   &-image {
     width: 100%;
+    aspect-ratio: 1/1;
     max-width: 640px;
     @media screen and (min-width: $breakpointDesktop) {
       max-width: 100%;
+      aspect-ratio: auto;
     }
   }
 

@@ -47,6 +47,8 @@ const { collection } = defineProps<{
 
   &-img {
     display: block;
+    width: 100%;
+    aspect-ratio: 1/1;
     filter: brightness(25%);
   }
 

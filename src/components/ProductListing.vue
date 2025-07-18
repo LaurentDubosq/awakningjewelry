@@ -17,19 +17,19 @@ const products = computed(() => props.content?.products)
 
 <template>
   <section class="product-listing">
-    <div class="wrapper">
-      <h2 class="product-listing__title" data-testid="product-listing__title">
-        {{ title }}
-      </h2>
-      <hr class="product-listing__separator" />
-      <template v-if="contentFetchState === 'fulfilled'">
+    <template v-if="contentFetchState === 'fulfilled'">
+      <div class="wrapper">
+        <h2 class="product-listing__title" data-testid="product-listing__title">
+          {{ title }}
+        </h2>
+        <hr class="product-listing__separator" />
         <ul class="product-listing__list">
           <ProductListingItem v-for="product in products" :product />
         </ul>
-      </template>
-      <LoadingComponent v-else-if="contentFetchState === 'pending'" />
-      <ErrorComponent v-else-if="contentFetchState === 'rejected'" />
-    </div>
+      </div>
+    </template>
+    <LoadingComponent v-else-if="contentFetchState === 'pending'" />
+    <ErrorComponent v-else-if="contentFetchState === 'rejected'" />
   </section>
 </template>
 
@@ -37,9 +37,14 @@ const products = computed(() => props.content?.products)
 @use '@/assets/styles/_constants.scss' as *;
 
 .product-listing {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin: 45px 0;
+  min-height: 930px;
   @media screen and (min-width: $breakpointDesktop) {
     margin: 90px 0;
+    min-height: 453px;
   }
 
   &__title {

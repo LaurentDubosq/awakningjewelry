@@ -30,8 +30,8 @@ const hasSignupFailed = () => {
 
 <template>
   <section class="newsletter-signup" aria-label="Newsletter signup" data-testid="newsletter-signup">
-    <div class="wrapper">
-      <template v-if="wordingFetchState === 'fulfilled'">
+    <template v-if="wordingFetchState === 'fulfilled'">
+      <div class="wrapper">
         <h2 class="newsletter-signup__title" data-testid="newsletter-signup__title">
           {{ wording?.title }}
         </h2>
@@ -109,10 +109,10 @@ const hasSignupFailed = () => {
             >{{ wording?.unsubscriptionNoteLinkText }}</RouterLink
           >.
         </p>
-      </template>
-      <LoadingComponent v-else-if="wordingFetchState === 'pending'" />
-      <ErrorComponent v-else-if="wordingFetchState === 'rejected'" />
-    </div>
+      </div>
+    </template>
+    <LoadingComponent v-else-if="wordingFetchState === 'pending'" />
+    <ErrorComponent v-else-if="wordingFetchState === 'rejected'" />
   </section>
 </template>
 
@@ -120,11 +120,15 @@ const hasSignupFailed = () => {
 @use '@/assets/styles/_constants.scss' as *;
 
 .newsletter-signup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: $AwakningColorBackgroundMuted;
   padding: 30px 0;
-
+  min-height: 299px;
   @media screen and (min-width: $breakpointDesktop) {
     padding: 60px 0;
+    min-height: 279px;
   }
 
   &__title {

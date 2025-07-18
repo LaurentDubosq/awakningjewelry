@@ -56,14 +56,22 @@ const isDropdown = (
 <style scoped lang="scss">
 @use '@/assets/styles/_constants' as *;
 
-.site-nav__list {
+.site-nav {
   display: flex;
+  justify-content: center;
   align-items: center;
-}
-.site-nav__item {
-  position: relative;
+  min-width: 551px;
 
-  &-icon {
+  &__list {
+    display: flex;
+    align-items: center;
+  }
+
+  &__item {
+    position: relative;
+  }
+
+  &__item-icon {
     fill: $AwakningColorPrimary;
   }
 }

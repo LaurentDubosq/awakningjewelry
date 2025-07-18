@@ -42,13 +42,15 @@ const image = computed(() => content?.image)
 @use '@/assets/styles/_constants.scss' as *;
 
 .statement-banner {
-  background-color: $AwakningColorPrimary;
-  padding: 30px 15px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
+  background-color: $AwakningColorPrimary;
+  padding: 30px 15px;
   color: $AwakningColorSecondary;
   font-family: $AwakningFontArapey;
+  min-height: 123px;
 
   &__title {
     font-family: $AwakningFontArapey;
@@ -65,6 +67,7 @@ const image = computed(() => content?.image)
   &__image {
     margin-top: 10px;
     width: 32px;
+    aspect-ratio: 1/1;
   }
 }
 </style>

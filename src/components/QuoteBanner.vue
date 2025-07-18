@@ -30,6 +30,7 @@ const { content, contentFetchState } = defineProps<{
               :alt="content?.authorIMGAlt"
               :title="content?.authorIMGTitle"
               width="100"
+              height="100"
               loading="lazy"
               data-testid="quote-banner__author-photo"
             />
@@ -52,6 +53,9 @@ const { content, contentFetchState } = defineProps<{
 @use '@/assets/styles/_constants.scss' as *;
 
 .quote-banner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 30px 55px;
   color: $AwakningColorSecondary;
   background-color: #59574f;
@@ -60,6 +64,7 @@ const { content, contentFetchState } = defineProps<{
     url('https://cdn.shopify.com/s/files/1/2275/5667/files/meditative-mountains-and-sunset-480w.avif');
   background-size: cover;
   background-position: center;
+  min-height: 322px;
 
   @media screen and (min-width: $breakpointMobileLandscape) {
     background-image:

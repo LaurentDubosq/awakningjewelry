@@ -21,23 +21,23 @@ const collections = computed(() => props.content?.collections)
     :aria-label="`Collections ${title}`"
     data-testid="collection-listing"
   >
-    <div class="wrapper">
-      <h2
-        class="collection-listing__title"
-        aria-hidden="true"
-        data-testid="collection-listing__title"
-      >
-        {{ title }}
-      </h2>
-      <hr class="collection-listing__separator" />
-      <template v-if="contentFetchState === 'fulfilled'">
+    <template v-if="contentFetchState === 'fulfilled'">
+      <div class="wrapper">
+        <h2
+          class="collection-listing__title"
+          aria-hidden="true"
+          data-testid="collection-listing__title"
+        >
+          {{ title }}
+        </h2>
+        <hr class="collection-listing__separator" />
         <ul class="collection-listing__list">
           <CollectionListingItem v-for="collection in collections" :collection />
         </ul>
-      </template>
-      <LoadingComponent v-else-if="contentFetchState === 'pending'" />
-      <ErrorComponent v-else-if="contentFetchState === 'rejected'" />
-    </div>
+      </div>
+    </template>
+    <LoadingComponent v-else-if="contentFetchState === 'pending'" />
+    <ErrorComponent v-else-if="contentFetchState === 'rejected'" />
   </section>
 </template>
 
@@ -45,9 +45,14 @@ const collections = computed(() => props.content?.collections)
 @use '@/assets/styles/_constants.scss' as *;
 
 .collection-listing {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin: 45px 0;
+  min-height: 227px;
   @media screen and (min-width: $breakpointDesktop) {
     margin: 90px 0;
+    min-height: 482px;
   }
 
   &__title {
