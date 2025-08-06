@@ -64,10 +64,9 @@ const {
 
 .home-view-container {
   @media screen and (min-width: $breakpointDesktop) {
-    position: absolute;
-    top: 0;
+    position: relative;
+    margin-top: -129px;
     width: 100%;
-    z-index: -1;
   }
 }
 </style>

@@ -9,3 +9,11 @@ export interface CollectionImage {
   alt: string
 }
 export type Collections = Array<Collection>
+
+/* Payment solutions */
+export interface PaymentSolution {
+  id: string
+  url: string
+  alt: string
+  title: string
+}

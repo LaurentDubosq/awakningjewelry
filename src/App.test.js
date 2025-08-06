@@ -3,6 +3,7 @@ import { mount } from '@vue/test-utils'
 import App from '@/App.vue'
 import BurgerMenu from '@/components/BurgerMenu.vue'
 import SiteHeader from '@/components/SiteHeader.vue'
+import SiteFooter from '@/components/SiteFooter.vue'
 import SiteNav from '@/components/SiteNav.vue'
 import { RouterView } from 'vue-router'
 import { nextTick, ref, computed, defineComponent } from 'vue'
@@ -134,6 +135,11 @@ describe('App.vue', () => {
     test('implements RouterView built-in component', () => {
       const RouterViewComponent = wrapper.findComponent(RouterView)
       expect(RouterViewComponent.exists()).toBeTruthy()
+    })
+
+    test('renders the site footer', () => {
+      const SiteFooterComponent = wrapper.findComponent(SiteFooter)
+      expect(SiteFooterComponent.exists()).toBeTruthy()
     })
   })
 
@@ -368,10 +374,12 @@ describe('App.vue', () => {
       // Remount the component to focus on App.vue structure only (by excluding all child components)
       const wrapper = mount(App, {
         global: {
+          plugins: [mockRouter],
           stubs: {
             BurgerMenu: true,
             SiteHeader: true,
             'router-view': true,
+            SiteFooter: true,
           },
         },
       })
@@ -383,10 +391,11 @@ describe('App.vue', () => {
           </transition-stub>
           <div data-v-7a7a37b1="" class="site-content">
             <div data-v-7a7a37b1="" class="site-content-inner-container">
-              <site-header-stub data-v-7a7a37b1=""></site-header-stub>
-              <main data-v-7a7a37b1="">
+              <site-header-stub data-v-7a7a37b1="" class="site-header"></site-header-stub>
+              <main data-v-7a7a37b1="" style="min-height: 100vh;">
                 <router-view-stub data-v-7a7a37b1="" name="default"></router-view-stub>
               </main>
+              <site-footer-stub data-v-7a7a37b1=""></site-footer-stub>
             </div>
           </div>
         </div>"

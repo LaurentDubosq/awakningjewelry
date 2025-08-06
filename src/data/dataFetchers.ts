@@ -9,7 +9,9 @@ import {
   siteMenuUrl,
   newsletterSignupWordingUrl,
   founderQuoteBannerContentUrl,
-} from '@/data/dataFetchersUrl'
+  siteFooterUrl,
+  paymentSolutionsUrl,
+} from '@/data/dataFetchersURL'
 import type {
   SiteMenu,
   StatementBannerContent,
@@ -18,9 +20,11 @@ import type {
   CollectionListingContent,
   HeroSlideType,
   ProductListingContent,
+  SiteFooter,
 } from '@/types/features'
 import useFetch from '@/composables/useFetch'
 import useFetchWithState from '@/composables/useFetchWithState'
+import type { PaymentSolution } from '@/types/global'
 
 export const getPagesMetaData = async (): Promise<PageMetaData[] | undefined> =>
   await useFetch(pagesMetaDataUrl)
@@ -47,3 +51,9 @@ export const getNewsletterSignupWording = (): UseFetchWithStateReturn<Newsletter
 
 export const getFounderQuoteBannerContent = (): UseFetchWithStateReturn<QuoteBannerContent> =>
   useFetchWithState(founderQuoteBannerContentUrl)
+
+export const getSiteFooter = (): UseFetchWithStateReturn<SiteFooter> =>
+  useFetchWithState(siteFooterUrl)
+
+export const getPaymentSolutions = (): UseFetchWithStateReturn<PaymentSolution[]> =>
+  useFetchWithState(paymentSolutionsUrl)

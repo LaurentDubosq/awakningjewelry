@@ -111,3 +111,21 @@ export interface QuoteBannerContent {
   linkText: string
   linkURL: string
 }
+
+/* SiteFooter */
+export interface SiteFooter {
+  links: SiteFooterLink[]
+  socialLinks: SiteFooterSocialLink[]
+  copyright: SiteFooterCopyright
+  technologyProvider: SiteFooterTechnologyProdiver
+  paymentSolutions: PaymentSolution[]
+}
+
+export interface SiteFooterLink {
+  id: string
+  logo?: string
+  text: string
+  url: string
+  alt?: string
+  title?: string
+}

@@ -25,3 +25,9 @@ export const newsletterSignupWordingUrl = endpoint('newsletterSignupWording')
 
 /* FounderQuoteBannerContent */
 export const founderQuoteBannerContentUrl = endpoint('founderQuoteBannerContent')
+
+/* SiteFooter */
+export const siteFooterUrl = endpoint('siteFooter')
+
+/* PaymentSolutions */
+export const paymentSolutionsUrl = endpoint('paymentSolutions')

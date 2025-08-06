@@ -192,5 +192,94 @@
     "authorIMGTitle": "Photo of Laurent Dubosq with Kinkaku-ji temple in the background, in Kyoto, Japan.",
     "linkText": "Read our story",
     "linkURL": "pages/about-us"
-  }
+  },
+  "siteFooter": {
+    "links": [
+      { "id": "1", "text": "About Us", "url": "/pages/about-us" },
+      {
+        "id": "2",
+        "text": "Legal Notice",
+        "url": "/pages/terms-and-conditions-of-sale#legalNotice"
+      },
+      { "id": "3", "text": "FAQs", "url": "/pages/help-center" },
+      { "id": "4", "text": "Contact Us", "url": "/pages/contact-us" },
+      { "id": "5", "text": "Track my Parcel", "url": "/pages/trackorder" },
+      { "id": "6", "text": "GDPR Control Panel", "url": "/pages/gdpr-compliance" },
+      {
+        "id": "7",
+        "text": "Return Policy",
+        "url": "/pages/terms-and-conditions-of-sale#rightWithdrawal"
+      },
+      {
+        "id": "8",
+        "text": "Refund Policy",
+        "url": "/pages/terms-and-conditions-of-sale#rightWithdrawal"
+      },
+      { "id": "9", "text": "Privacy Policy", "url": "/pages/privacy-policy" },
+      { "id": "10", "text": "Cookie Policy", "url": "/pages/privacy-policy#howCookies" },
+      {
+        "id": "11",
+        "text": "Terms and Conditions of Sale",
+        "url": "/pages/terms-and-conditions-of-sale"
+      },
+      { "id": "12", "text": "Terms of Service", "url": "/pages/terms-of-service" },
+      { "id": "13", "text": "Refund policy", "url": "/pages/refund-policy" }
+    ],
+    "socialLinks": [
+      {
+        "id": "1",
+        "logo": "facebook",
+        "text": "Facebook",
+        "url": "https://www.facebook.com/Awakning-Jewelry-732469844136573",
+        "alt": "Awakning Buddhist Jewelry Facebook's Page",
+        "title": "Awakning Buddhist Jewelry Facebook's Page"
+      }
+    ]
+  },
+  "paymentSolutions": [
+    {
+      "id": "1",
+      "url": "/payment-badges/american-express.svg",
+      "alt": "American Express",
+      "title": "American Express"
+    },
+    {
+      "id": "2",
+      "url": "/payment-badges/apple-pay.svg",
+      "alt": "Apple Pay",
+      "title": "Apple Pay"
+    },
+    {
+      "id": "3",
+      "url": "/payment-badges/diners-club.svg",
+      "alt": "Diners Club",
+      "title": "Diners Club"
+    },
+    {
+      "id": "4",
+      "url": "/payment-badges/discover.svg",
+      "alt": "Discover",
+      "title": "Discover"
+    },
+    {
+      "id": "5",
+      "url": "/payment-badges/google-pay.svg",
+      "alt": "Google Pay",
+      "title": "Google Pay"
+    },
+    { "id": "6", "url": "/payment-badges/jcb.svg", "alt": "JCB", "title": "JCB" },
+    {
+      "id": "7",
+      "url": "/payment-badges/mastercard.svg",
+      "alt": "Mastercard",
+      "title": "Mastercard"
+    },
+    {
+      "id": "8",
+      "url": "/payment-badges/paypal.svg",
+      "alt": "Paypal",
+      "title": "Paypal"
+    },
+    { "id": "9", "url": "/payment-badges/visa.svg", "alt": "Visa", "title": "Visa" }
+  ]
 }

@@ -311,7 +311,6 @@ onMounted(() => {
 :slotted(.slideshow__slide) {
   position: absolute;
   opacity: 0;
-  z-index: 0;
   transition: opacity 1s ease;
   padding: 0 15px;
   @media screen and (min-width: $breakpointDesktop) {
