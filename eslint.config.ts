@@ -1,12 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import pluginVue from 'eslint-plugin-vue'
 import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
 import pluginVitest from '@vitest/eslint-plugin'
 import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
-
-// To allow more languages other than `ts` in `.vue` files, uncomment the following lines:
-// import { configureVueProject } from '@vue/eslint-config-typescript'
-// configureVueProject({ scriptLangs: ['ts', 'tsx'] })
-// More info at https://github.com/vuejs/eslint-config-typescript/#advanced-setup
 
 export default defineConfigWithVueTs(
   {
@@ -19,7 +15,7 @@ export default defineConfigWithVueTs(
     ignores: ['**/dist/**', '**/dist-ssr/**', '**/coverage/**'],
   },
 
-  pluginVue.configs['flat/essential'],
+  pluginVue.configs['flat/essential'] as any,
   vueTsConfigs.recommended,
 
   {
@@ -32,13 +28,13 @@ export default defineConfigWithVueTs(
       'vue/multi-word-component-names': [
         'error',
         {
-          ignores: ['Hero', 'Slideshow'], // add component names here to exclude them from the multi-word name check
+          ignores: ['Hero', 'Slideshow'],
         },
       ],
-      'vue/require-v-for-key': 'off', // disables the rule for detecting :key in v-for loops
-      'vue/valid-v-for': 'off', // disables the rule for requiring :key in v-for loops
+      'vue/require-v-for-key': 'off',
+      'vue/valid-v-for': 'off',
     },
   },
 
-  skipFormatting,
+  skipFormatting as any,
 )
