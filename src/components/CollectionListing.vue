@@ -32,7 +32,11 @@ const collections = computed(() => props.content?.collections)
         </h2>
         <hr class="collection-listing__separator" />
         <ul class="collection-listing__list">
-          <CollectionListingItem v-for="collection in collections" :collection />
+          <CollectionListingItem
+            v-for="collection in collections"
+            :collection
+            :key="collection.id"
+          />
         </ul>
       </div>
     </template>

@@ -24,7 +24,7 @@ const products = computed(() => props.content?.products)
         </h2>
         <hr class="product-listing__separator" />
         <ul class="product-listing__list">
-          <ProductListingItem v-for="product in products" :product />
+          <ProductListingItem v-for="product in products" :product :key="product.id" />
         </ul>
       </div>
     </template>

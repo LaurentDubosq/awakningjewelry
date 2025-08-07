@@ -115,6 +115,7 @@
     "title": "By gender",
     "collections": [
       {
+        "id": 1,
         "image": {
           "url": "https://laurentdubosq.com/awk/images/woman-model-urban-adventurer.avif",
           "alt": ""
@@ -123,6 +124,7 @@
         "url": "/collections/women"
       },
       {
+        "id": 2,
         "image": {
           "url": "https://laurentdubosq.com/awk/images/man-model-urban.avif",
           "alt": ""
@@ -136,6 +138,7 @@
     "title": "Promotions",
     "products": [
       {
+        "id": 1,
         "title": "Infinite Wisdom of the Tree of Life Charm Bracelet",
         "image": {
           "url": "https://laurentdubosq.com/awk/images/infinite-wisdom-of-tree-of-life-charm-bracelet-of-awakning-buddhist-jewelry.avif",
@@ -146,6 +149,7 @@
         "url": "/collections/women-buddhist-charm-bracelets/products/infinite-wisdom-of-the-tree-of-life-silver-plated-charm-bracelet"
       },
       {
+        "id": 2,
         "title": "Eternal True Love Elegance Bracelet",
         "image": {
           "url": "https://laurentdubosq.com/awk/images/eternal-true-love-elegance-bracelet-of-awakning-buddhist-jewelry.avif",
@@ -156,6 +160,7 @@
         "url": "/collections/women-buddhist-elegance-bracelets/products/eternal-true-love-925-silver-plated-elegance-bracelet"
       },
       {
+        "id": 3,
         "title": "Clarity of Mind of Life Tree 108 Unisex Mala Beads",
         "image": {
           "url": "https://laurentdubosq.com/awk/images/clarity-of-mind-of-life-tree-108-beads-mala-of-awakning-buddhist-jewelry.avif",

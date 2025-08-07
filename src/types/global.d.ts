@@ -1,5 +1,6 @@
 /* Collection */
 export interface Collection {
+  id: number
   image: CollectionImage
   title: string
   url: string
@@ -8,7 +9,6 @@ export interface CollectionImage {
   url: string
   alt: string
 }
-export type Collections = Array<Collection>
 
 /* Payment solutions */
 export interface PaymentSolution {

@@ -1,4 +1,4 @@
-import type { Collections } from './global.js'
+import type { Collection } from './global.js'
 
 /* SiteNav & BurgerMenu */
 export type SiteMenu = Array<SiteMenuLink | SiteMenuDropdown>
@@ -57,7 +57,7 @@ export interface StatementBannerContentImage {
 /* CollectionListing */
 export interface CollectionListingContent {
   title: string
-  collections: Collections
+  collections: Collection[]
 }
 
 /* ProductListing */
@@ -66,6 +66,7 @@ export interface ProductListingContent {
   products: ProductListingProduct[]
 }
 export interface ProductListingProduct {
+  id: number
   title: string
   image: ProductListingProductImage
   price: string
