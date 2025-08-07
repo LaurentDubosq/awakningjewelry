@@ -165,8 +165,9 @@ const hasSignupFailed = () => {
 
   &__form-input {
     padding: 8px 10px;
-    min-width: 1px;
-    flex-grow: 1;
+    flex: 1;
+    width: 0;
+    min-width: 0;
   }
 
   &__form-message {
