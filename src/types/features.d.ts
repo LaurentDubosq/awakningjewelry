@@ -1,7 +1,7 @@
 import type { Collection } from './global.js'
 
 /* SiteNav & BurgerMenu */
-export type SiteMenu = Array<SiteMenuLink | SiteMenuDropdown>
+export type SiteMenu = (SiteMenuLink | SiteMenuDropdown)[]
 export interface SiteMenuLink {
   id: number
   type: 'textLink' | 'iconLink'
