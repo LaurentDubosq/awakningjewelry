@@ -175,10 +175,12 @@
   "newsletterSignupWording": {
     "title": "Subscribe To Our Newsletter",
     "description": "Be notified of our private promotions, sales and new products",
-    "inputPlaceholder": "Your email",
-    "inputTitle": "Your email",
-    "label": "Your email (required)",
-    "buttonText": "subscribe",
+    "form": {
+      "inputPlaceholder": "Your email",
+      "inputTitle": "Your email",
+      "label": "Your email (required)",
+      "buttonText": "subscribe"
+    },
     "consentNote": "By clicking the \"Subscribe\" button, you agree to our ",
     "consentNoteLinkText": "privacy policy",
     "unsubscriptionNote": "Unsubscribe at any time by using the unsubscribe links at the bottom of our emails or by ",

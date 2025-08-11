@@ -88,14 +88,17 @@ export interface DisplaySlidePayload {
 export interface NewsletterSignupWording {
   title: string
   description: string
-  inputPlaceholder: string
-  inputTitle: string
-  label: string
-  buttonText: string
+  form: NewsletterSignupForm
   consentNote: string
   consentNoteLinkText: string
   unsubscriptionNote: string
   unsubscriptionNoteLinkText: string
+}
+export interface NewsletterSignupForm {
+  inputPlaceholder: string
+  inputTitle: string
+  label: string
+  buttonText: string
 }
 
 /* QuoteBanner */
