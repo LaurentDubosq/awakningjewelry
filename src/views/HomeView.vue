@@ -10,6 +10,7 @@ import { useMissionStatementBannerContentStore } from '@/stores/missionStatement
 import { useFounderQuoteBannerContentStore } from '@/stores/founderQuoteBannerContent'
 import { useByGenderCollectionListingContentStore } from '@/stores/byGenderCollectionListingContent'
 import { usePromotionsProductListingContentStore } from '@/stores/promotionsProductListingContent'
+const SITE_BRAND_NAME = import.meta.env.VITE_SITE_BRAND_NAME
 
 // Get the stores instances
 const missionStatementBannerContentStore = useMissionStatementBannerContentStore()
@@ -38,7 +39,7 @@ const {
 
 <template>
   <div class="home-view-container">
-    <h1 class="sr-only">Homepage - Awakning Buddhist Jewelry</h1>
+    <h1 class="sr-only">Homepage - {{ SITE_BRAND_NAME }}</h1>
     <Hero />
     <StatementBanner
       :content="missionStatementBannerContent"

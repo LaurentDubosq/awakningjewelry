@@ -7,6 +7,7 @@ import type { SiteFooter, SiteFooterLink } from '@/types/features'
 import type { UseFetchWithStateReturn } from '@/types/fetch'
 import SiteFooterList from './SiteFooterList.vue'
 import PaymentSolutions from './PaymentSolutions.vue'
+const SITE_BRAND_NAME = import.meta.env.VITE_SITE_BRAND_NAME
 
 const { data: footer, state: footerFetchState }: UseFetchWithStateReturn<SiteFooter> =
   getSiteFooter()
@@ -41,9 +42,9 @@ const groupedLinks: ComputedRef<SiteFooterLink[][]> = computed(() => [
           <div class="site-footer__content-right">
             <p class="site-footer__copyright" data-testid="site-footer__copyright">
               © {{ currentYear }},
-              <RouterLink to="/" data-testid="site-footer__copyright-brand-link"
-                >Awakning Buddhist Jewelry</RouterLink
-              >
+              <RouterLink to="/" data-testid="site-footer__copyright-brand-link">{{
+                SITE_BRAND_NAME
+              }}</RouterLink>
             </p>
             <p
               class="site-footer__technology-provider"
