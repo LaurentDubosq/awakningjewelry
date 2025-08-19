@@ -1,4 +1,4 @@
-# App
+# SiteFooter feature
 
 ## Badges (Payment Solutions) and Facebook logo
 
