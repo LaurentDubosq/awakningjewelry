@@ -43,7 +43,6 @@ const handleTouch = () => {
     @touchstart.prevent="handleTouch"
     @click="handleScreenReaderClick"
     :aria-expanded="isBurgerMenuOpen ? true : false"
-    aria-controls="burger-menu"
     data-testid="burger-menu-toggle-button"
   >
     <SiteHeaderIcon :alternative-text="isBurgerMenuOpen ? 'Close burger menu' : 'Open burger menu'">
