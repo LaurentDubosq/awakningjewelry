@@ -66,8 +66,10 @@ watch(
   }
 }
 .site-header {
-  position: relative;
-  z-index: 2;
+  @media screen and (min-width: $breakpointDesktop) {
+    position: relative;
+    z-index: 1;
+  }
 }
 
 @media screen and (min-width: $breakpointDesktop) {

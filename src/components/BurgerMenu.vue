@@ -31,7 +31,7 @@ const isDropdown = (
   <nav
     class="burger-menu"
     @keydown.escape="toggleBurgerMenu"
-    aria-label="Website's mobile navigation burger menu"
+    aria-label="Site menu"
     id="burger-menu"
   >
     <ul class="burger-menu__list">

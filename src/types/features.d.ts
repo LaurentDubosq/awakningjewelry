@@ -95,14 +95,13 @@ export interface NewsletterSignupWording {
   unsubscriptionNoteLinkText: string
 }
 export interface NewsletterSignupForm {
-  inputPlaceholder: string
-  inputTitle: string
   label: string
   buttonText: string
 }
 
 /* QuoteBanner */
 export interface QuoteBannerContent {
+  featureLabel: string
   backgroundIMGMobile: string
   backgroundIMGMobileLandscape: string
   backgroundIMGDesktop: string

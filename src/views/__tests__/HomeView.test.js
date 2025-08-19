@@ -51,7 +51,6 @@ const mockByGenderCollectionListingContentFulfilled = {
 }
 const mockByGenderCollectionListingContent = mockByGenderCollectionListingContentFulfilled.content
 const mockByGenderCollectionListingTitle = mockByGenderCollectionListingContent.title
-const mockByGenderCollectionListingFeatureLabel = `Collections ${mockByGenderCollectionListingTitle}`
 const mockByGenderCollectionListingCollections = mockByGenderCollectionListingContent.collections
 const mockByGenderCollectionListingCollectionsLength =
   mockByGenderCollectionListingCollections.length
@@ -86,6 +85,7 @@ const mockFounderQuoteBannerContentFulfilled = {
   contentFetchState: 'fulfilled',
 }
 const mockFounderQuoteBannerContent = frontDataBase.founderQuoteBannerContent
+const mockFounderQuoteBannerFeatureLabel = mockFounderQuoteBannerContent.featureLabel
 const mockFounderQuoteBannerQuote = mockFounderQuoteBannerContent.quote
 const mockFounderQuoteBannerFounder = mockFounderQuoteBannerContent.author
 const mockFounderQuoteBannerFounderIMG = mockFounderQuoteBannerContent.authorIMG
@@ -309,16 +309,9 @@ describe('HomeView.vue', () => {
     })
 
     test('collection listing is rendered with its necessary information', () => {
-      // Assert the feature label for accessibility is rendered
-      const section = wrapper.find("[data-testid='collection-listing']")
-      expect(section.attributes('aria-label')).toBe(mockByGenderCollectionListingFeatureLabel)
-
       // Assert the title is rendered
       const title = wrapper.find("[data-testid='collection-listing__title']")
       expect(title.text()).toContain(mockByGenderCollectionListingTitle)
-
-      // Assert the title is not rendered for screen readers
-      expect(title.attributes('aria-hidden')).toBe('true')
 
       // Find the collections elements
       const CollectionListingComponent = wrapper.findComponent(CollectionListing)
@@ -422,7 +415,7 @@ describe('HomeView.vue', () => {
     test('Quote Founder is rendered with its necessary information', () => {
       // Assert the feature label for accessibility is rendered
       const section = wrapper.find("[data-testid='quote-banner']")
-      expect(section.attributes('aria-label')).toBe(`${mockFounderQuoteBannerFounder} quote`)
+      expect(section.attributes('aria-label')).toBe(mockFounderQuoteBannerFeatureLabel)
 
       // Assert the quote is rendered
       const quote = wrapper.find("[data-testid='quote-banner__quote']")

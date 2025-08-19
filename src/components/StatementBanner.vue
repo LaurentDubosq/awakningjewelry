@@ -17,9 +17,13 @@ const image = computed(() => content?.image)
 </script>
 
 <template>
-  <section class="statement-banner">
+  <section class="statement-banner" aria-labelledby="statement-banner__title">
     <template v-if="contentFetchState === 'fulfilled'">
-      <h2 class="statement-banner__title" data-testid="statement-banner__title">
+      <h2
+        class="statement-banner__title"
+        id="statement-banner__title"
+        data-testid="statement-banner__title"
+      >
         {{ title }}
       </h2>
       <p class="statement-banner__statement" data-testid="statement-banner__statement">

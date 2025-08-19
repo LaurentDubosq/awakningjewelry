@@ -11,7 +11,7 @@ const { content, contentFetchState } = defineProps<{
 </script>
 
 <template>
-  <section class="quote-banner" :aria-label="`${content?.author} quote`" data-testid="quote-banner">
+  <section class="quote-banner" :aria-label="content?.featureLabel" data-testid="quote-banner">
     <template v-if="contentFetchState === 'fulfilled'">
       <div class="quote-banner__inner-container">
         <figure class="quote-banner__figure">

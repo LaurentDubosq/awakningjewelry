@@ -142,7 +142,7 @@ describe('Hero.vue', () => {
 
     test('renders the feature accessibility label', () => {
       const section = wrapper.find("[data-testid='hero']")
-      expect(section.attributes('aria-label')).toContain('Highlighted our product categories')
+      expect(section.attributes('aria-label')).toContain('Product categories')
     })
 
     test('the slideshow slides are rendered', () => {

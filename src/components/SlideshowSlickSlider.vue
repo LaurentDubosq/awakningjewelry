@@ -67,6 +67,7 @@ const handleKeydown = (event: KeyboardEvent) => {
       :aria-label="`Slide ${index + 1}`"
       :aria-selected="index === activeIndex ? 'true' : 'false'"
       :aria-controls="`slideshow-${index + 1}`"
+      :aria-describedby="`slideshow-${index + 1}`"
       :tabindex="index === activeIndex ? undefined : -1"
       :title="`Display slide ${index + 1}`"
       data-testid="slideshow__slick-slider-button"
@@ -78,7 +79,7 @@ const handleKeydown = (event: KeyboardEvent) => {
 @use '@/assets/styles/_constants' as *;
 
 .slideshow__slick-slider {
-  z-index: 2;
+  z-index: 1;
   position: absolute;
   padding: 4px;
   display: flex;

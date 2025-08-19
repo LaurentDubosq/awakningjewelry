@@ -16,13 +16,17 @@ const products = computed(() => props.content?.products)
 </script>
 
 <template>
-  <section class="product-listing">
+  <section class="product-listing" aria-labelledby="product-listing__title">
     <template v-if="contentFetchState === 'fulfilled'">
       <div class="wrapper">
-        <h2 class="product-listing__title" data-testid="product-listing__title">
+        <h2
+          class="product-listing__title"
+          id="product-listing__title"
+          data-testid="product-listing__title"
+        >
           {{ title }}
         </h2>
-        <hr class="product-listing__separator" />
+        <hr class="product-listing__separator" aria-hidden="true" />
         <ul class="product-listing__list">
           <ProductListingItem v-for="product in products" :product :key="product.id" />
         </ul>

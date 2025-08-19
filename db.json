@@ -1,14 +1,14 @@
 {
   "siteMenu": [
     {
-      "id": 1,
+      "id": "1",
       "type": "textLink",
       "text": "About",
       "url": "/pages/about-us",
       "title": "Discover us"
     },
     {
-      "id": 2,
+      "id": "2",
       "type": "dropdown",
       "button": {
         "text": "Shop",
@@ -33,21 +33,21 @@
       ]
     },
     {
-      "id": 3,
+      "id": "3",
       "type": "textLink",
       "text": "Promotions",
       "url": "/collections/private-promotions",
       "title": "Acces current promotions"
     },
     {
-      "id": 4,
+      "id": "4",
       "type": "textLink",
       "text": "Faqs & Contact",
       "url": "/pages/faq-and-contact",
       "title": "Get help"
     },
     {
-      "id": 5,
+      "id": "5",
       "type": "iconLink",
       "name": "account",
       "text": "Account",
@@ -59,12 +59,13 @@
     {
       "name": "home",
       "title": "Innovante Buddhist Jewelry Brand - AwakningJewelry.com",
-      "description": "Draw energy from your Eastern values to live your spirituality and find well-being in our Western world by wearing our Bracelets tailored to your dress codes &amp; 108 Malas Beads adapted to your Meditation &amp; Yoga sessions."
+      "description": "Draw energy from your Eastern values to live your spirituality and find well-being in our Western world by wearing our Bracelets tailored to your dress codes &amp; 108 Malas Beads adapted to your Meditation &amp; Yoga sessions.",
+      "id": "c74c"
     }
   ],
   "heroSlides": [
     {
-      "id": 1,
+      "id": "1",
       "images": {
         "mobile": "https://laurentdubosq.com/awk/images/inclusiveness-true-love-charm-bracelet-of-awakning-buddhist-jewelry-480w.avif",
         "mobileLandscape": "https://laurentdubosq.com/awk/images/inclusiveness-true-love-charm-bracelet-of-awakning-buddhist-jewelry-640w.avif",
@@ -77,7 +78,7 @@
       "url": "/collections/women-buddhist-charm-bracelets"
     },
     {
-      "id": 2,
+      "id": "2",
       "images": {
         "mobile": "https://laurentdubosq.com/awk/images/buddha-courage-108-mala-beads-of-awakning-buddhist-jewelry-480w.avif",
         "mobileLandscape": "https://laurentdubosq.com/awk/images/buddha-courage-108-mala-beads-of-awakning-buddhist-jewelry-640w.avif",
@@ -90,7 +91,7 @@
       "url": "/collections/108-unisex-mala-beads"
     },
     {
-      "id": 3,
+      "id": "3",
       "images": {
         "mobile": "https://laurentdubosq.com/awk/images/supreme-serenity-of-life-s-tree-of-awakning-buddhist-jewelry-480w.avif",
         "mobileLandscape": "https://laurentdubosq.com/awk/images/supreme-serenity-of-life-s-tree-of-awakning-buddhist-jewelry-640w.avif",
@@ -104,7 +105,7 @@
     }
   ],
   "missionStatementBannerContent": {
-    "title": "Our mission:",
+    "title": "Our mission",
     "statement": "Make you feel empowered and stimulated by connecting you to your spiritual values",
     "image": {
       "url": "./favicon-white-transparent.png",
@@ -112,7 +113,7 @@
     }
   },
   "byGenderCollectionListingContent": {
-    "title": "By gender",
+    "title": "Collections by gender",
     "collections": [
       {
         "id": 1,
@@ -142,7 +143,7 @@
         "title": "Infinite Wisdom of the Tree of Life Charm Bracelet",
         "image": {
           "url": "https://laurentdubosq.com/awk/images/infinite-wisdom-of-tree-of-life-charm-bracelet-of-awakning-buddhist-jewelry.avif",
-          "alt": "Infinite Wisdom of Tree of Life Charm Bracelet from above showcasing brilliant charms on the theme of nature and the tree of life"
+          "alt": "This bracelet from above showcasing brilliant charms on the theme of nature and the tree of life"
         },
         "price": "$28.99",
         "promotionalPrice": "$23.19",
@@ -153,7 +154,7 @@
         "title": "Eternal True Love Elegance Bracelet",
         "image": {
           "url": "https://laurentdubosq.com/awk/images/eternal-true-love-elegance-bracelet-of-awakning-buddhist-jewelry.avif",
-          "alt": "Eternal True Love Elegance Bracelet showcasing from front an elegent hearts and eternal decorative links on a thin chain"
+          "alt": "This bracelet showcasing from front an elegent hearts and eternal decorative links on a thin chain"
         },
         "price": "$31.99",
         "promotionalPrice": "$28.99",
@@ -164,7 +165,7 @@
         "title": "Clarity of Mind of Life Tree 108 Unisex Mala Beads",
         "image": {
           "url": "https://laurentdubosq.com/awk/images/clarity-of-mind-of-life-tree-108-beads-mala-of-awakning-buddhist-jewelry.avif",
-          "alt": "Clarity of Mind of Life Tree 108 Beads Mala showcasing from front a well-strung bracelet with various beads colors reminiscent of the different colours of wood and nature adorned with a tree of life pendant"
+          "alt": "This mala showcasing from front a well-strung bracelet with various beads colors reminiscent of the different colours of wood and nature adorned with a tree of life pendant"
         },
         "price": "$37.99",
         "promotionalPrice": "$30.39",
@@ -176,9 +177,7 @@
     "title": "Subscribe To Our Newsletter",
     "description": "Be notified of our private promotions, sales and new products",
     "form": {
-      "inputPlaceholder": "Your email",
-      "inputTitle": "Your email",
-      "label": "Your email (required)",
+      "label": "Your email",
       "buttonText": "subscribe"
     },
     "consentNote": "By clicking the \"Subscribe\" button, you agree to our ",
@@ -186,8 +185,45 @@
     "unsubscriptionNote": "Unsubscribe at any time by using the unsubscribe links at the bottom of our emails or by ",
     "unsubscriptionNoteLinkText": "contacting us"
   },
-  "newsletterSubscribers": [],
+  "newsletterSubscribers": [
+    {
+      "id": "0504",
+      "email": "to@fdf.fr",
+      "subscribedAt": "2025-08-18T10:32:48.193Z"
+    },
+    {
+      "id": "546d",
+      "email": "gdsfdsfs@fds.fds",
+      "subscribedAt": "2025-08-18T10:34:04.969Z"
+    },
+    {
+      "id": "12ab",
+      "email": "toto@free.fr",
+      "subscribedAt": "2025-08-18T10:34:33.016Z"
+    },
+    {
+      "id": "2e0b",
+      "email": "totodsfs@free.fr",
+      "subscribedAt": "2025-08-18T10:35:11.010Z"
+    },
+    {
+      "id": "823b",
+      "email": "totofds@fs.fds",
+      "subscribedAt": "2025-08-18T10:37:01.962Z"
+    },
+    {
+      "id": "e782",
+      "email": "totofds@fds",
+      "subscribedAt": "2025-08-18T10:37:20.025Z"
+    },
+    {
+      "id": "33ed",
+      "email": "fdsfs@ds.Fsd",
+      "subscribedAt": "2025-08-18T10:37:38.325Z"
+    }
+  ],
   "founderQuoteBannerContent": {
+    "featureLabel": "Founder's quote",
     "backgroundIMGMobile": "https://www.awakningjewelry.com/cdn/shop/files/meditative-mountains-and-sunset-480w.avif",
     "backgroundIMGMobileLandscape": "https://www.awakningjewelry.com/cdn/shop/files/meditative-mountains-and-sunset-768w.avif",
     "backgroundIMGDesktop": "https://www.awakningjewelry.com/cdn/shop/files/meditative-mountains-and-sunset-1279w.avif",
@@ -195,23 +231,43 @@
     "quote": "\"The goal of Awakning is to put you in touch with the deep values you share with Buddhism and related philosophies to draw the strength you need to be yourself, to fulfill yourself and to live your life fully.\"",
     "author": "Laurent Dubosq, founder & CEO of Awakning",
     "authorIMG": "https://laurentdubosq.com/awk/images/laurent-dubosq-small-portrait.png?v=1623852936",
-    "authorIMGAlt": "Photo of Laurent Dubosq, founder of Awakning Jewelry, with Kinkaku-ji temple in the background, in Kyoto, Japan.",
+    "authorIMGAlt": "Photo of Laurent Dubosq with Kinkaku-ji temple in the background, in Kyoto, Japan.",
     "authorIMGTitle": "Photo of Laurent Dubosq with Kinkaku-ji temple in the background, in Kyoto, Japan.",
     "linkText": "Read our story",
     "linkURL": "pages/about-us"
   },
   "siteFooter": {
     "links": [
-      { "id": "1", "text": "About Us", "url": "/pages/about-us" },
+      {
+        "id": "1",
+        "text": "About Us",
+        "url": "/pages/about-us"
+      },
       {
         "id": "2",
         "text": "Legal Notice",
         "url": "/pages/terms-and-conditions-of-sale#legalNotice"
       },
-      { "id": "3", "text": "FAQs", "url": "/pages/help-center" },
-      { "id": "4", "text": "Contact Us", "url": "/pages/contact-us" },
-      { "id": "5", "text": "Track my Parcel", "url": "/pages/trackorder" },
-      { "id": "6", "text": "GDPR Control Panel", "url": "/pages/gdpr-compliance" },
+      {
+        "id": "3",
+        "text": "FAQs",
+        "url": "/pages/help-center"
+      },
+      {
+        "id": "4",
+        "text": "Contact Us",
+        "url": "/pages/contact-us"
+      },
+      {
+        "id": "5",
+        "text": "Track my Parcel",
+        "url": "/pages/trackorder"
+      },
+      {
+        "id": "6",
+        "text": "GDPR Control Panel",
+        "url": "/pages/gdpr-compliance"
+      },
       {
         "id": "7",
         "text": "Return Policy",
@@ -222,15 +278,31 @@
         "text": "Refund Policy",
         "url": "/pages/terms-and-conditions-of-sale#rightWithdrawal"
       },
-      { "id": "9", "text": "Privacy Policy", "url": "/pages/privacy-policy" },
-      { "id": "10", "text": "Cookie Policy", "url": "/pages/privacy-policy#howCookies" },
+      {
+        "id": "9",
+        "text": "Privacy Policy",
+        "url": "/pages/privacy-policy"
+      },
+      {
+        "id": "10",
+        "text": "Cookie Policy",
+        "url": "/pages/privacy-policy#howCookies"
+      },
       {
         "id": "11",
         "text": "Terms and Conditions of Sale",
         "url": "/pages/terms-and-conditions-of-sale"
       },
-      { "id": "12", "text": "Terms of Service", "url": "/pages/terms-of-service" },
-      { "id": "13", "text": "Refund policy", "url": "/pages/refund-policy" }
+      {
+        "id": "12",
+        "text": "Terms of Service",
+        "url": "/pages/terms-of-service"
+      },
+      {
+        "id": "13",
+        "text": "Refund policy",
+        "url": "/pages/refund-policy"
+      }
     ],
     "socialLinks": [
       {
@@ -274,7 +346,12 @@
       "alt": "Google Pay",
       "title": "Google Pay"
     },
-    { "id": "6", "url": "/payment-badges/jcb.svg", "alt": "JCB", "title": "JCB" },
+    {
+      "id": "6",
+      "url": "/payment-badges/jcb.svg",
+      "alt": "JCB",
+      "title": "JCB"
+    },
     {
       "id": "7",
       "url": "/payment-badges/mastercard.svg",
@@ -287,6 +364,11 @@
       "alt": "Paypal",
       "title": "Paypal"
     },
-    { "id": "9", "url": "/payment-badges/visa.svg", "alt": "Visa", "title": "Visa" }
+    {
+      "id": "9",
+      "url": "/payment-badges/visa.svg",
+      "alt": "Visa",
+      "title": "Visa"
+    }
   ]
 }

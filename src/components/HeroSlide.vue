@@ -2,9 +2,8 @@
 import sassConstants from '@/assets/styles/_constants.module.scss'
 import type { HeroSlideType } from '@/types/features'
 
-const { slide, slidesLength, slideIndex, isActive } = defineProps<{
+const { slide, slideIndex, isActive } = defineProps<{
   slide: HeroSlideType
-  slidesLength: number
   slideIndex: number
   isActive: boolean
 }>()
@@ -18,51 +17,46 @@ const breakpointDesktopLarge: string = sassConstants.breakpointDesktopLarge
     class="hero__slide"
     role="tabpanel"
     aria-roledescription="slide"
-    :aria-label="`Slide ${slideIndex + 1} of ${slidesLength}`"
     :id="`slideshow-${slideIndex + 1}`"
     data-testid="hero__slide"
   >
-    <div class="hero__slide-picture-wrapper">
-      <picture class="hero__slide-picture">
-        <source
-          :media="`(min-width: ${breakpointDesktopLarge})`"
-          :srcset="slide.images.desktopLarge"
-          data-testid="hero__slide-image-desktop-large"
-        />
-        <source
-          :media="`(min-width: ${breakpointDesktop})`"
-          :srcset="slide.images.desktop"
-          data-testid="hero__slide-image-desktop"
-        />
-        <source
-          :media="`(min-width: ${breakpointMobileLandscape})`"
-          :srcset="slide.images.mobileLandscape"
-          data-testid="hero__slide-image-mobile-landscape"
-        />
-        <img
-          class="hero__slide-image"
-          :src="slide.images.mobile"
-          :alt="slide.imageAlt"
-          data-testid="hero__slide-image"
-        />
-      </picture>
-    </div>
-    <div class="hero__slide-inner-content">
-      <h3 class="hero__slide-subtitle" data-testid="hero__slide-subtitle">
-        {{ slide.subtitle }}
-      </h3>
-      <h2 class="hero__slide-title" data-testid="hero__slide-title">
-        {{ slide.title }}
-      </h2>
-      <RouterLink
-        class="btn btn--primary"
-        :to="slide.url"
-        :tabindex="isActive ? undefined : -1"
-        data-testid="hero__slide-link"
-      >
-        explore now
-      </RouterLink>
-    </div>
+    <h2 class="hero__slide-title" data-testid="hero__slide-title">
+      {{ slide.title }}
+    </h2>
+    <h3 class="hero__slide-subtitle" data-testid="hero__slide-subtitle">
+      {{ slide.subtitle }}
+    </h3>
+    <picture class="hero__slide-picture">
+      <source
+        :media="`(min-width: ${breakpointDesktopLarge})`"
+        :srcset="slide.images.desktopLarge"
+        data-testid="hero__slide-image-desktop-large"
+      />
+      <source
+        :media="`(min-width: ${breakpointDesktop})`"
+        :srcset="slide.images.desktop"
+        data-testid="hero__slide-image-desktop"
+      />
+      <source
+        :media="`(min-width: ${breakpointMobileLandscape})`"
+        :srcset="slide.images.mobileLandscape"
+        data-testid="hero__slide-image-mobile-landscape"
+      />
+      <img
+        class="hero__slide-image"
+        :src="slide.images.mobile"
+        :alt="slide.imageAlt"
+        data-testid="hero__slide-image"
+      />
+    </picture>
+    <RouterLink
+      class="hero__slide-link btn btn--primary"
+      :to="slide.url"
+      :tabindex="isActive ? undefined : -1"
+      data-testid="hero__slide-link"
+    >
+      explore now
+    </RouterLink>
   </div>
 </template>
 
@@ -74,63 +68,64 @@ const breakpointDesktopLarge: string = sassConstants.breakpointDesktopLarge
   flex-direction: column;
   align-items: center;
   width: 100%;
-
-  &-picture-wrapper {
-    display: inline-flex;
+  padding: 0 15px;
+  @media screen and (min-width: $breakpointDesktop) {
     justify-content: center;
-    width: 100%;
-    aspect-ratio: 640/640;
+    aspect-ratio: 1600/900;
+  }
+
+  &-title {
+    text-align: center;
+    margin: 10px 0 20px 0;
+    font-size: 3.125rem;
+    line-height: 1.25;
+    order: 2;
     @media screen and (min-width: $breakpointDesktop) {
-      aspect-ratio: 1600/900;
+      position: relative;
+      z-index: 1;
+      font-size: 4rem;
+    }
+  }
+
+  &-subtitle {
+    text-align: center;
+    font-size: 0.9375rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    line-height: 1.25;
+    order: 1;
+    margin-top: 2rem;
+    @media screen and (min-width: $breakpointDesktop) {
+      position: relative;
+      z-index: 1;
+      font-size: 1.125rem;
     }
   }
 
   &-picture {
-    text-align: center;
+    aspect-ratio: 640/640;
+    order: 0;
     @media screen and (min-width: $breakpointDesktop) {
+      position: absolute;
       width: 100%;
+      aspect-ratio: 1600/900;
     }
   }
 
   &-image {
     width: 100%;
-    aspect-ratio: 1/1;
     max-width: 640px;
     @media screen and (min-width: $breakpointDesktop) {
       max-width: 100%;
-      aspect-ratio: auto;
     }
   }
 
-  &-inner-content {
-    text-align: center;
-    margin-top: 2rem;
+  &-link {
     margin-bottom: 3rem;
+    order: 3;
     @media screen and (min-width: $breakpointDesktop) {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      margin: 0;
-      padding: 0;
-    }
-  }
-
-  &-subtitle {
-    font-size: 0.9375rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    line-height: 1.25;
-    @media screen and (min-width: $breakpointDesktop) {
-      font-size: 1.125rem;
-    }
-  }
-
-  &-title {
-    margin: 10px 0 20px 0;
-    font-size: 3.125rem;
-    line-height: 1.25;
-    @media screen and (min-width: $breakpointDesktop) {
-      font-size: 4rem;
+      position: relative;
+      z-index: 1;
     }
   }
 }

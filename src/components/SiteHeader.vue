@@ -31,7 +31,7 @@ const { isOnMobile } = storeToRefs(isOnMobileStore)
           <RouterLink
             class="site-header__logo-link"
             to="/"
-            title="Return to homepage"
+            title="Go to homepage"
             data-testid="site-header__logo-link"
           >
             <SiteLogo />

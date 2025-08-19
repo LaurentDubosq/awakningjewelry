@@ -20,8 +20,8 @@ const {
 <template>
   <section
     class="hero"
+    aria-label="Product categories"
     aria-roledescription="carousel"
-    aria-label="Highlighted our product categories"
     data-testid="hero"
   >
     <template v-if="fetchState === 'fulfilled'">

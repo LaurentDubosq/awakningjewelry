@@ -32,7 +32,7 @@ const isDropdown = (
 </script>
 
 <template>
-  <nav class="site-nav" aria-label="Website's desktop navigation bar" data-testid="site-nav">
+  <nav class="site-nav" aria-label="Site menu" data-testid="site-nav">
     <template v-if="siteMenuFetchState === 'fulfilled'">
       <ul class="site-nav__list">
         <li class="site-nav__item" data-testid="site-nav__item" v-for="siteMenuItem in siteMenu">

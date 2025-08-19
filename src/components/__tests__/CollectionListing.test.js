@@ -22,7 +22,6 @@ const mockContentFulfilled = {
 }
 const mockContent = mockContentFulfilled.content
 const mockContentTitle = mockContent.title
-const mockContentFeatureLabel = `Collections ${mockContentTitle}`
 const mockContentCollections = mockContent.collections
 const mockContentCollectionsLength = mockContentCollections.length
 
@@ -86,19 +85,9 @@ describe('CollectionListing.vue', () => {
       wrapper = mountCollectionListing(mockContentFulfilled)
     })
 
-    test('renders the feature label for accessibility', () => {
-      const section = wrapper.find("[data-testid='collection-listing']")
-      expect(section.attributes('aria-label')).toBe(mockContentFeatureLabel)
-    })
-
     test('renders its title', () => {
       const title = wrapper.find("[data-testid='collection-listing__title']")
       expect(title.text()).toContain(mockContentTitle)
-    })
-
-    test("don't renders the title for screen readers", () => {
-      const title = wrapper.find("[data-testid='collection-listing__title']")
-      expect(title.attributes('aria-hidden')).toBe('true')
     })
 
     test('renders all collections with necessary information', () => {

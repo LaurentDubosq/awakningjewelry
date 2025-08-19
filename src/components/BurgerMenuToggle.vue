@@ -14,38 +14,34 @@ const isBurgerMenuOpenStore = useIsBurgerMenuOpenStore()
 const { isBurgerMenuOpen } = storeToRefs(isBurgerMenuOpenStore)
 const { toggleBurgerMenu } = isBurgerMenuOpenStore
 
-const handleClick = async (event: MouseEvent | KeyboardEvent) => {
-  // When the keyboard has generated the event
-  if (event.detail === 0) {
-    // Toggle the burger menu
-    toggleBurgerMenu()
+const handleScreenReaderClick = async () => {
+  toggleBurgerMenu()
 
-    /* Focus the first item on burger menu opening */
-    if (isBurgerMenuOpen.value) {
-      // Wait after the burger menu has been opened
-      await nextTick()
+  /* Focus the first item on burger menu opening */
+  if (isBurgerMenuOpen.value) {
+    // Wait after the burger menu has been opened
+    await nextTick()
 
-      // Find the first item
-      const item = document.querySelector("[data-testid='burger-menu__item']") as HTMLElement | null
+    // Find the first item
+    const item = document.querySelector("[data-testid='burger-menu__item']") as HTMLElement | null
 
-      // Focus its focusable element
-      if (item) {
-        useFocusFirstFocusableChildElement(item)
-      }
+    // Focus its focusable element
+    if (item) {
+      useFocusFirstFocusableChildElement(item)
     }
   }
+}
 
-  // When the mouse has generated the event
-  if (event.detail === 1) {
-    toggleBurgerMenu()
-  }
+const handleTouch = () => {
+  toggleBurgerMenu()
 }
 </script>
 
 <template>
   <button
     class="burger-menu-toggle-button"
-    @click="handleClick"
+    @touchstart.prevent="handleTouch"
+    @click="handleScreenReaderClick"
     :aria-expanded="isBurgerMenuOpen ? true : false"
     aria-controls="burger-menu"
     data-testid="burger-menu-toggle-button"

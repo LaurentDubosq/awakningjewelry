@@ -23,6 +23,7 @@ const mockContentFulfilledResult = {
   contentFetchState: 'fulfilled',
 }
 const mockContent = frontDataBase.founderQuoteBannerContent
+const mockFeatureLabel = mockContent.featureLabel
 const mockQuote = mockContent.quote
 const mockAuthor = mockContent.author
 const mockAuthorIMG = mockContent.authorIMG
@@ -97,7 +98,7 @@ describe('QuoteBanner', () => {
 
     test('renders the feature accessibility label', () => {
       const section = wrapper.find("[data-testid='quote-banner']")
-      expect(section.attributes('aria-label')).toBe(`${mockAuthor} quote`)
+      expect(section.attributes('aria-label')).toBe(mockFeatureLabel)
     })
 
     test('renders the quote', () => {

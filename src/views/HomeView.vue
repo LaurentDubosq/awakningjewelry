@@ -38,6 +38,7 @@ const {
 
 <template>
   <div class="home-view-container">
+    <h1 class="sr-only">Homepage - Awakning Buddhist Jewelry</h1>
     <Hero />
     <StatementBanner
       :content="missionStatementBannerContent"

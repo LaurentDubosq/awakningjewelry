@@ -145,7 +145,7 @@ describe('SiteNav.vue', () => {
 
     test('renders the feature accessibility label', () => {
       const nav = wrapper.find("[data-testid='site-nav']")
-      expect(nav.attributes('aria-label')).toBe("Website's desktop navigation bar")
+      expect(nav.attributes('aria-label')).toBe('Site menu')
     })
 
     test('renders all navigation items with necessary information', async () => {

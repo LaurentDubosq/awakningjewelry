@@ -18,19 +18,19 @@ const collections = computed(() => props.content?.collections)
 <template>
   <section
     class="collection-listing"
-    :aria-label="`Collections ${title}`"
+    aria-labelledby="collection-listing__title"
     data-testid="collection-listing"
   >
     <template v-if="contentFetchState === 'fulfilled'">
       <div class="wrapper">
         <h2
           class="collection-listing__title"
-          aria-hidden="true"
+          id="collection-listing__title"
           data-testid="collection-listing__title"
         >
           {{ title }}
         </h2>
-        <hr class="collection-listing__separator" />
+        <hr class="collection-listing__separator" aria-hidden="true" />
         <ul class="collection-listing__list">
           <CollectionListingItem
             v-for="collection in collections"

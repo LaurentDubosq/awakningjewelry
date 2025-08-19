@@ -13,6 +13,9 @@ const { product } = defineProps<{
       :to="product.url"
       data-testid="product-listing__item-link"
     >
+      <h3 class="product-listing__item-title" data-testid="product-listing__item-title">
+        {{ product.title }}
+      </h3>
       <div class="product-listing__item-image-wrapper">
         <img
           class="product-listing__item-image"
@@ -22,24 +25,17 @@ const { product } = defineProps<{
           data-testid="product-listing__item-image"
         />
       </div>
-      <div class="product-listing__item-details">
-        <h3 class="product-listing__item-title" data-testid="product-listing__item-title">
-          {{ product.title }}
-        </h3>
-        <p class="product-listing__item-price" data-testid="product-listing__item-price">
-          <del
-            aria-description="Original price"
-            data-testid="product-listing__item-original-price"
-            >{{ product.price }}</del
-          >
-          <span
-            class="product-listing__item-price-discounted"
-            aria-description="Discounted price"
-            data-testid="product-listing__item-discounted-price"
-            >{{ product.promotionalPrice }}</span
-          >
-        </p>
-      </div>
+      <p class="product-listing__item-price" data-testid="product-listing__item-price">
+        <del aria-description="Original price" data-testid="product-listing__item-original-price">{{
+          product.price
+        }}</del>
+        <span
+          class="product-listing__item-price-discounted"
+          aria-description="Discounted price"
+          data-testid="product-listing__item-discounted-price"
+          >{{ product.promotionalPrice }}</span
+        >
+      </p>
     </RouterLink>
   </li>
 </template>
@@ -52,10 +48,28 @@ const { product } = defineProps<{
   flex-direction: column;
   align-items: stretch;
 
+  &-link {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &-title {
+    color: $AwakningColorPrimary;
+    font-family: $AwakningFontArapey;
+    font-size: 1.25rem;
+    font-style: italic;
+    font-weight: 500;
+    line-height: 1.4;
+    text-align: center;
+    margin-top: 13px;
+    order: 1;
+  }
+
   &-image-wrapper {
     width: 100%;
     background-color: $AwakningColorBackgroundMuted;
     padding: 20px 0;
+    order: 0;
     @media screen and (min-width: 600px) {
       width: auto;
       padding: 0;
@@ -73,25 +87,13 @@ const { product } = defineProps<{
     }
   }
 
-  &-details {
-    margin: 13px 0;
-  }
-
-  &-title {
-    color: $AwakningColorPrimary;
-    font-family: $AwakningFontArapey;
-    font-size: 1.25rem;
-    font-style: italic;
-    font-weight: 500;
-    line-height: 1.4;
-    text-align: center;
-  }
-
   &-price {
     font-family: $AwakningFontMontserrat;
     font-weight: 400;
     letter-spacing: 0.1rem;
     text-align: center;
+    margin-bottom: 13px;
+    order: 2;
   }
 
   &-price-discounted {

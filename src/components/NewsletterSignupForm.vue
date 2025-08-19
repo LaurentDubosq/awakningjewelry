@@ -22,6 +22,7 @@ const hasSignupReturnedMessage: ComputedRef<boolean> = computed(() => {
 })
 
 const handleSubmit = async () => {
+  signupResult.value = undefined
   signupResult.value = await subscribeToNewsletter(email.value)
 }
 </script>
@@ -33,31 +34,30 @@ const handleSubmit = async () => {
     data-testid="newsletter-signup__form"
   >
     <div
-      class="newsletter-signup__form-inner-container"
+      class="newsletter-signup__form-inner-wrapper"
       v-if="signupResult === undefined || hasSignupFailed"
-      data-testid="newsletter-signup__form-inner-container"
+      data-testid="newsletter-signup__form-inner-wrapper"
     >
-      <label
-        class="sr-only"
-        for="newsletter-signup__form-input"
-        data-testid="newsletter-signup__form-label"
-        >{{ form.label }}</label
-      >
-      <input
-        class="newsletter-signup__form-input"
-        id="newsletter-signup__form-input"
-        type="email"
-        v-model="email"
-        :placeholder="form.inputPlaceholder"
-        :title="form.inputTitle"
-        :aria-invalid="hasSignupFailed"
-        :aria-describedby="hasSignupReturnedMessage ? 'newsletter-signup__form-message' : undefined"
-        autocorrect="off"
-        autocapitalize="off"
-        autocomplete="email"
-        required
-        data-testid="newsletter-signup__form-input"
-      />
+      <div class="newsletter-signup__form-input-container">
+        <label
+          class="newsletter-signup__form-label"
+          for="newsletter-signup__form-input"
+          data-testid="newsletter-signup__form-label"
+          >{{ form.label }}</label
+        >
+        <input
+          class="newsletter-signup__form-input"
+          id="newsletter-signup__form-input"
+          type="email"
+          v-model="email"
+          :aria-invalid="hasSignupFailed"
+          autocorrect="off"
+          autocapitalize="off"
+          autocomplete="email"
+          required
+          data-testid="newsletter-signup__form-input"
+        />
+      </div>
       <button
         class="newsletter-signup__form-button btn btn--primary"
         type="submit"
@@ -91,15 +91,27 @@ const handleSubmit = async () => {
   max-width: 520px;
   margin: 0 auto 30px;
 
-  &-inner-container {
+  &-inner-wrapper {
     display: flex;
+  }
+
+  &-input-container {
+    position: relative;
+    width: 100%;
+  }
+
+  &-label {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    font-style: italic;
+    font-size: 1.3125rem;
   }
 
   &-input {
     padding: 8px 10px;
-    flex: 1;
-    width: 0;
-    min-width: 0;
+    width: 100%;
   }
 
   &-message {

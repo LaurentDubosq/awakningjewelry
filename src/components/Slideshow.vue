@@ -266,10 +266,9 @@ onMounted(() => {
     @touchstart.passive="handleTouchstart"
     @touchend="handleTouchend"
     @focusin="handleFocusIn"
-    :aria-live="isPlaying ? 'off' : 'polite'"
     data-testid="slideshow"
   >
-    <div class="slideshow__controls wrapper">
+    <div class="slideshow__autorotation-button-wrapper wrapper">
       <SlideshowAutorotationButton
         :is-playing
         @toggle-autoplay="handleAutorotationButtonToggleAutoplay"
@@ -277,12 +276,15 @@ onMounted(() => {
       />
     </div>
     <SlideshowSlickSlider
+      class="slideshow__slick-slider"
       :slides-length
       :active-index
       @display-slide="handleDisplaySlide"
       :style="slickSliderStyle"
     />
-    <slot :active-index />
+    <div class="slideshow__slides">
+      <slot :active-index />
+    </div>
   </div>
 </template>
 
@@ -291,37 +293,34 @@ onMounted(() => {
 
 .slideshow {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 15px;
   position: relative;
-  @media screen and (min-width: $breakpointDesktop) {
-    padding: 0;
-  }
 
-  &__controls {
+  &__autorotation-button-wrapper {
     position: absolute;
     bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
     width: 100%;
-    z-index: 2;
+    z-index: 1;
+  }
+
+  &__slick-slider {
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 
 :slotted(.slideshow__slide) {
   position: absolute;
+  top: 0;
   opacity: 0;
   transition: opacity 1s ease;
-  padding: 0 15px;
-  @media screen and (min-width: $breakpointDesktop) {
-    padding: 0;
-  }
+  z-index: -1;
 }
 
 :slotted(.slideshow__slide--active) {
-  position: static;
+  position: relative;
   opacity: 1;
-  z-index: 1;
-  padding: 0;
+  z-index: 0;
 }
 </style>

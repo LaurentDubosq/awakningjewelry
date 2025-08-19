@@ -16,7 +16,7 @@ const { isPlaying } = defineProps<{
     @touchstart.stop
     @touchend.stop
     @focusin.stop
-    :title="isPlaying ? 'Stop automatic slide show' : 'Start automatic slide show'"
+    :title="isPlaying ? 'Stop the slide show' : 'Start the slide show'"
     :aria-label="isPlaying ? 'Stop automatic slide show' : 'Start automatic slide show'"
     data-testid="slideshow__autorotation-button"
   >

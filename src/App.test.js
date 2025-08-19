@@ -154,7 +154,7 @@ describe('App.vue', () => {
     })
 
     describe('Burger menu close state - Data fetching "Fulfilled" state', () => {
-      test("don't renders the burger menu", () => {
+      test("don't render the burger menu", () => {
         // Asser the burger menu is rendered
         const BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
         expect(BurgerMenuComponent.isVisible()).toBeFalsy()
