@@ -104,6 +104,7 @@ const breakpointDesktopLarge: string = sassConstants.breakpointDesktopLarge
 
   &-picture {
     aspect-ratio: 640/640;
+    width: 100%;
     order: 0;
     @media screen and (min-width: $breakpointDesktop) {
       position: absolute;
