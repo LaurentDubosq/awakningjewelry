@@ -19,7 +19,6 @@ const { collection } = defineProps<{
         :src="collection.image.url"
         alt=""
         loading="lazy"
-        aria-hidden="true"
         data-testid="collection-listing__item-img"
       />
       <h3 class="collection-listing__item-title" data-testid="collection-listing__item-title">
