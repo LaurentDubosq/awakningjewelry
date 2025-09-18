@@ -1,3 +1,5 @@
+<!-- This component has attached documentation. This concerns Facebook logo path. Find it at docs/features/SiteFooter.md -->
+
 <script setup lang="ts">
 import type { SiteFooterLink } from '@/types/features'
 

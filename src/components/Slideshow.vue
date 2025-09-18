@@ -1,21 +1,15 @@
+<!-- This component has attached documentation. This concerns explicit user will, phantom events,
+ INP problem, slide reading perimeter, unability to read slide, same slide read twice.
+ Find it at docs/features/Slideshow.md -->
+
 <script setup lang="ts">
-import {
-  computed,
-  nextTick,
-  onMounted,
-  onUnmounted,
-  ref,
-  watch,
-  type ComputedRef,
-  type Ref,
-} from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch, type ComputedRef, type Ref } from 'vue'
 import { useIsOnMobileStore } from '@/stores/isOnMobile'
 import { useIsReducedMotionStore } from '@/stores/isReducedMotion'
 import { storeToRefs } from 'pinia'
 import SlideshowAutorotationButton from './SlideshowAutorotationButton.vue'
 import SlideshowSlickSlider from './SlideshowSlickSlider.vue'
 import useGetClientHeightAtElementResize from '@/composables/useGetClientHeightAtElementResize'
-import type { DisplaySlidePayload } from '@/types/features'
 
 /****************/
 /* Dependencies */
@@ -35,49 +29,61 @@ const { isOnMobile } = storeToRefs(isOnMobileStore)
 
 // Store the index corresponding to the displayed slide
 const activeIndex: Ref<number> = ref(0)
-// Store the autorotation slideshow statut
+// Store the autorotation slideshow state
 const isPlaying: Ref<boolean> = ref(true)
 // Stores the user's command to stop auto-rotation
 const isPlayingExplicitly: Ref<boolean | null> = ref(null)
+// Prevent screen reader reading outside of slideshow
+const isSlideSRReadable: Ref<boolean | undefined> = ref()
+// Store touch event to avoid touch events triggering mouse events
+const isTouched: Ref<boolean | undefined> = ref()
+// Handle slide label screen reader readability
+const isSlideLabelSRReadable: Ref<boolean | undefined> = ref()
+// Store whether keyboard navigation should disable transition for JAWS auto-rotation button reading
+const isKeyboardNavigation: Ref<boolean | undefined> = ref()
+// Store active index defered to delay slide display and allow screen reader reads slide content when new slick slider button is focused
+const deferredActiveIndex: Ref<number> = ref(activeIndex.value)
 
 /*********/
 /* Logic */
 /*********/
 
-/* Display Logic */
+/* Autorotation Logic */
 
 let timer: ReturnType<typeof setInterval>
 
-const startAutoPlay = () => {
+const startAutoplay = () => {
   timer = setInterval(() => displayNextSlide(), 3500)
   isPlaying.value = true
 }
-const stopAutoPlay = () => {
+const stopAutoplay = () => {
   clearInterval(timer)
   isPlaying.value = false
 }
 
-const stopAutoPlayExplicitly = () => {
+const stopAutoplayExplicitly = () => {
   // Stop Autorotation
-  stopAutoPlay()
+  stopAutoplay()
 
   // Store user explicit intention to stop autorotation
   isPlayingExplicitly.value = false
 }
-const startAutoPlayExplicitly = () => {
+const startAutoplayExplicitly = () => {
   // Start Autorotation
-  startAutoPlay()
+  startAutoplay()
 
   // Store user explicit intention to start autorotation
   isPlayingExplicitly.value = true
 }
-const toggleAutoPlayExplicitly = () => {
+const toggleAutoplayExplicitly = () => {
   if (isPlaying.value) {
-    stopAutoPlayExplicitly()
+    stopAutoplayExplicitly()
   } else {
-    startAutoPlayExplicitly()
+    startAutoplayExplicitly()
   }
 }
+
+/* Display Logic */
 
 const displayPrevSlide = () => {
   if (activeIndex.value > 0) {
@@ -94,41 +100,28 @@ const displayNextSlide = () => {
   }
 }
 
-/* Autoplaying Logic */
-
-onMounted(() => {
-  // Get the dynamic OS/browser "reduced motion" user preference statut from store
-  const isReducedMotionStore = useIsReducedMotionStore()
-  const { isReducedMotion } = storeToRefs(isReducedMotionStore)
-
-  // Watch its value to toggle the animation in live
-  watch(
-    isReducedMotion,
-    () => {
-      if (isReducedMotion.value) {
-        stopAutoPlayExplicitly()
-      } else {
-        startAutoPlay()
-      }
-    },
-    { immediate: true },
-  )
-})
-onUnmounted(() => {
-  stopAutoPlay()
-})
-
 /* Hover Logic */
 
 const handleMouseenter = () => {
+  // Avoid touch events triggering mouse events
+  if (isTouched.value) return
+
+  // Pause autorotation
   if (isPlayingExplicitly.value === null) {
-    stopAutoPlay()
+    stopAutoplay()
   }
 }
 const handleMouseleave = () => {
+  // Avoid touch events triggering mouse events
+  if (isTouched.value) return
+
+  // Replay autorotation
   if (isPlayingExplicitly.value === null) {
-    startAutoPlay()
+    startAutoplay()
   }
+
+  // Reset isTouched state for future events
+  isTouched.value = undefined
 }
 
 /* Swipe Logic */
@@ -150,8 +143,11 @@ const swipeSlide = () => {
   }
 }
 const handleTouchstart = (e: TouchEvent) => {
+  // Avoid touch events triggering mouse events
+  isTouched.value = true
+
   // Stop autorotation explicitly
-  stopAutoPlayExplicitly()
+  stopAutoplayExplicitly()
 
   // Store the touchStart position
   touchStartX = e.changedTouches[0].screenX // "screenX" avoid conflit when scrolling at the same time versus "clientX"
@@ -164,56 +160,110 @@ const handleTouchend = (e: TouchEvent) => {
   swipeSlide()
 }
 
-/* Focus logic */
-
-const handleFocusIn = () => {
-  // If the user has chosen to pause or resume the carousel autorotation, we do nothing
-  if (isPlayingExplicitly.value === true || isPlayingExplicitly.value === false) {
-    return
-  }
-
-  // Any slideshow element focus stop the autorotation explicitly
-  stopAutoPlay()
-}
-
 /* Autorotation Button Logic */
 
-const handleAutorotationButtonToggleAutoplay = () => {
-  if (isPlayingExplicitly.value !== null) {
-    return
-  }
+const isAutorotationButtonFocused: Ref<boolean | undefined> = ref()
 
-  if (isPlaying.value) {
-    stopAutoPlay()
-  } else {
-    startAutoPlay()
-  }
+const handleAutorotationButtonFocus = () => {
+  // Deactivate slide transition for Jaws
+  isKeyboardNavigation.value = true
+
+  // Help to display hero slide label
+  isAutorotationButtonFocused.value = true
+
+  // Allow screen reader to read the slide content
+  isSlideSRReadable.value = true
 }
+
+const handleAutorotationButtonBlur = async () => {
+  // Help to hide hero slide label
+  isAutorotationButtonFocused.value = false
+
+  // Disallow screen reader to read the slide content
+  isSlideSRReadable.value = false
+
+  // Active slide transition for no assistive technologies
+  isKeyboardNavigation.value = false
+}
+
+// Active hero slide label SR reading when autorotation button is focused and autorotation is playing
+watch([deferredActiveIndex, isAutorotationButtonFocused], async () => {
+  if (isAutorotationButtonFocused.value && isPlaying.value) {
+    // Display hero slide label
+    isSlideLabelSRReadable.value = true
+  } else {
+    // Hide hero slide label for screen reader
+    isSlideLabelSRReadable.value = false
+  }
+})
+watch(isPlaying, () => {
+  // Deactivate hero slide label when autorotation is paused
+  if (!isPlaying.value) {
+    // Hide hero slide label for screen reader
+    isSlideLabelSRReadable.value = false
+  }
+})
 
 /* Slick Slider Logic */
 
-const focusActiveSlickSliderButton = async () => {
-  if (slideshowElement.value) {
-    await nextTick()
-    const slickSliderButtonElement: HTMLElement | null =
-      slideshowElement.value.querySelector("[aria-selected='true']")
-    if (slickSliderButtonElement) {
-      slickSliderButtonElement.focus()
-    }
-  }
-}
-const handleDisplaySlide = (event: DisplaySlidePayload) => {
+const handleSlickSliderDisplaySlide = (index: number) => {
   // Stop autorotation explicitly
-  stopAutoPlayExplicitly()
+  stopAutoplayExplicitly()
 
   // Display the expected slide
-  activeIndex.value = event.index
-
-  // Focus on the slide's slick slider button for keyboard navigation only
-  if (event.focusable) {
-    focusActiveSlickSliderButton()
-  }
+  activeIndex.value = index
 }
+
+const handleSlickSliderFocus = () => {
+  // Stop autorotation explicitly
+  stopAutoplayExplicitly()
+
+  // Deactivate slide transition for Jaws
+  isKeyboardNavigation.value = true
+
+  // Allow screen reader to read the slide content
+  isSlideSRReadable.value = true
+}
+
+const handleSlickSliderBlur = () => {
+  // Disallow screen reader to read the slide content
+  isSlideSRReadable.value = false
+
+  // Active slide transition no assistive technologies
+  isKeyboardNavigation.value = false
+}
+
+/* A11y Logic */
+
+// Allow or disallow automatic rotation according to OS/browser "reduced motion" user preference
+onMounted(() => {
+  // Get the dynamic OS/browser "reduced motion" user preference statut from store
+  const isReducedMotionStore = useIsReducedMotionStore()
+  const { isReducedMotion } = storeToRefs(isReducedMotionStore)
+
+  // Watch its value to toggle the animation in live
+  watch(
+    isReducedMotion,
+    () => {
+      if (isReducedMotion.value) {
+        stopAutoplayExplicitly()
+      } else {
+        startAutoplay()
+      }
+    },
+    { immediate: true },
+  )
+})
+onUnmounted(() => {
+  stopAutoplay()
+})
+
+// Delay slide display to allow screen reader reads slide content when new slick slider button is focused
+watch(activeIndex, () => {
+  setTimeout(() => {
+    deferredActiveIndex.value = activeIndex.value
+  }, 200)
+})
 
 /***************/
 /* Positioning */
@@ -265,25 +315,33 @@ onMounted(() => {
     @mouseleave="handleMouseleave"
     @touchstart.passive="handleTouchstart"
     @touchend="handleTouchend"
-    @focusin="handleFocusIn"
     data-testid="slideshow"
   >
     <div class="slideshow__autorotation-button-wrapper wrapper">
       <SlideshowAutorotationButton
         :is-playing
-        @toggle-autoplay="handleAutorotationButtonToggleAutoplay"
-        @toggle-autoplay-explicitly="toggleAutoPlayExplicitly"
+        @toggle-autoplay-explicitly="toggleAutoplayExplicitly"
+        @handleFocus="handleAutorotationButtonFocus"
+        @handleBlur="handleAutorotationButtonBlur"
       />
     </div>
     <SlideshowSlickSlider
       class="slideshow__slick-slider"
       :slides-length
       :active-index
-      @display-slide="handleDisplaySlide"
+      @display-slide="handleSlickSliderDisplaySlide"
+      @stop-autoplay-explicitly="stopAutoplayExplicitly"
+      @handle-focus="handleSlickSliderFocus"
+      @handle-blur="handleSlickSliderBlur"
       :style="slickSliderStyle"
     />
-    <div class="slideshow__slides">
-      <slot :active-index />
+    <div
+      class="slideshow__slides"
+      @focusin="stopAutoplayExplicitly"
+      :aria-live="isSlideSRReadable ? 'polite' : 'off'"
+      data-testid="slideshow__slides"
+    >
+      <slot :deferred-active-index :is-slide-label-s-r-readable :is-keyboard-navigation />
     </div>
   </div>
 </template>
@@ -314,13 +372,22 @@ onMounted(() => {
   position: absolute;
   top: 0;
   opacity: 0;
-  transition: opacity 1s ease;
+  visibility: hidden;
+  transition:
+    opacity 1s ease,
+    visibility 0s linear 1s; /* delay visibility change */
   z-index: -1;
+}
+:slotted(.slideshow__slide--no-transition) {
+  transition: all 0s ease 0s;
 }
 
 :slotted(.slideshow__slide--active) {
   position: relative;
+  top: 0;
   opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
   z-index: 0;
 }
 </style>

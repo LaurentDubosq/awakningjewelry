@@ -1,3 +1,5 @@
+<!-- This component has attached documentation. This concerns footer shift problem. Find it at docs/features/App.md -->
+
 <script setup lang="ts">
 import { RouterView, useRoute } from 'vue-router'
 import SiteHeader from './components/SiteHeader.vue'

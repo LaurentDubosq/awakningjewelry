@@ -224,42 +224,45 @@ describe('SiteNavDropdown.vue', () => {
     /* Dropdown toggle button */
     /**************************/
 
-    test('when the toggle button is focused, it open the dropdown', async () => {
-      let list
+    test('when the toggle button is clicked or enter/space keys are pressed, it open/close the dropdown', async () => {
+      const button = wrapper.find("[data-testid='site-nav__dropdown-button']")
+      const list = wrapper.find("[data-testid='site-nav__dropdown-list']")
 
       // Assert the dropdown is close
-      list = wrapper.find("[data-testid='site-nav__dropdown-list']")
       expect(list.isVisible()).toBeFalsy()
 
-      // Focus the button
-      const button = wrapper.find("[data-testid='site-nav__dropdown-button']")
-      await button.trigger('focus')
+      // Click the button
+      await button.trigger('click')
 
       // Assert the dropdown is open
-      list = wrapper.find("[data-testid='site-nav__dropdown-list']")
       expect(list.isVisible()).toBeTruthy()
+
+      // Click the button again
+      await button.trigger('click')
+
+      // Assert the dropdown is close again
+      expect(list.isVisible()).toBeFalsy()
     })
 
     test('when the toggle button is touched, it open/close the dropdown', async () => {
-      let list
+      const button = wrapper.find("[data-testid='site-nav__dropdown-button']")
+      const list = wrapper.find("[data-testid='site-nav__dropdown-list']")
 
       // Assert the dropdown is close
-      list = wrapper.find("[data-testid='site-nav__dropdown-list']")
       expect(list.isVisible()).toBeFalsy()
 
       // Touch the button
-      const button = wrapper.find("[data-testid='site-nav__dropdown-button']")
+      await button.trigger('touchstart')
       await button.trigger('touchend')
 
       // Assert the dropdown is open
-      list = wrapper.find("[data-testid='site-nav__dropdown-list']")
       expect(list.isVisible()).toBeTruthy()
 
       // Touch the button again
+      await button.trigger('touchstart')
       await button.trigger('touchend')
 
-      // Assert the dropdown is close
-      list = wrapper.find("[data-testid='site-nav__dropdown-list']")
+      // Assert the dropdown is close again
       expect(list.isVisible()).toBeFalsy()
     })
 

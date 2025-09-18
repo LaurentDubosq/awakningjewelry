@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, type ComputedRef, type Ref } from 'vue'
+import { computed, ref, watch, type ComputedRef, type Ref } from 'vue'
 import { subscribeToNewsletter } from '@/services/newsletterSignup'
 import type { NewsletterSignupResult } from '@/types/services'
 import type { NewsletterSignupForm } from '@/types/features'
@@ -10,6 +10,7 @@ const { form } = defineProps<{
 
 const email: Ref<string> = ref('')
 const signupResult: Ref<undefined | NewsletterSignupResult> = ref()
+const isLabelDisplayed: Ref<boolean> = ref(true)
 
 const hasSignupSucceeded: ComputedRef<boolean> = computed(() => {
   return signupResult.value?.status === 'success'
@@ -25,6 +26,15 @@ const handleSubmit = async () => {
   signupResult.value = undefined
   signupResult.value = await subscribeToNewsletter(email.value)
 }
+
+// Show or hide the label depending on the email value
+watch(email, () => {
+  if (email.value.length > 0) {
+    isLabelDisplayed.value = false
+  } else {
+    isLabelDisplayed.value = true
+  }
+})
 </script>
 
 <template>
@@ -43,18 +53,19 @@ const handleSubmit = async () => {
           class="newsletter-signup__form-label"
           for="newsletter-signup__form-input"
           data-testid="newsletter-signup__form-label"
+          v-show="isLabelDisplayed"
           >{{ form.label }}</label
         >
         <input
           class="newsletter-signup__form-input"
           id="newsletter-signup__form-input"
           type="email"
-          v-model="email"
-          :aria-invalid="hasSignupFailed"
           autocorrect="off"
           autocapitalize="off"
           autocomplete="email"
+          v-model="email"
           required
+          :aria-invalid="hasSignupFailed"
           data-testid="newsletter-signup__form-input"
         />
       </div>

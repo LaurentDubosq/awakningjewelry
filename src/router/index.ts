@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { getPagesMetaData } from '@/data/dataFetchers'
 import type { PageMetaData } from '@/types/router'
 import type { Routes } from '../types/router'
+const SITE_BRAND_NAME = import.meta.env.VITE_SITE_BRAND_NAME
 
 const pagesMetaData: PageMetaData[] | undefined = await getPagesMetaData()
 const routes: Routes = {}
@@ -45,7 +46,7 @@ router.beforeEach((to) => {
   if (to.meta.title) {
     document.title = String(to.meta.title)
   } else {
-    document.title = 'Innovante Buddhist Jewelry Brand - AwakningJewelry.com'
+    document.title = SITE_BRAND_NAME
   }
 
   if (!metaDescriptionElement) {

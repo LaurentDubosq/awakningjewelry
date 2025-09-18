@@ -1,3 +1,5 @@
+<!-- This component has attached documentation. This concerns a11y label reading. Find it at docs/features/HeroSlide.md -->
+
 <script setup lang="ts">
 import sassConstants from '@/assets/styles/_constants.module.scss'
 import type { HeroSlideType } from '@/types/features'
@@ -5,7 +7,9 @@ import type { HeroSlideType } from '@/types/features'
 const { slide, slideIndex, isActive } = defineProps<{
   slide: HeroSlideType
   slideIndex: number
+  slidesLength: number
   isActive: boolean
+  isSlideLabelSRReadable?: boolean
 }>()
 const breakpointMobileLandscape: string = sassConstants.breakpointMobileLandscape
 const breakpointDesktop: string = sassConstants.breakpointDesktop
@@ -16,10 +20,18 @@ const breakpointDesktopLarge: string = sassConstants.breakpointDesktopLarge
   <div
     class="hero__slide"
     role="tabpanel"
-    aria-roledescription="slide"
+    aria-labelledby="hero__slide-title hero__slide-subtitle"
+    :aria-roledescription="`Slide ${slideIndex + 1} of ${slidesLength}`"
     :id="`slideshow-${slideIndex + 1}`"
     data-testid="hero__slide"
   >
+    <div
+      class="hero__slide-a11y-label sr-only"
+      v-show="isSlideLabelSRReadable"
+      data-testid="hero__slide-a11y-label"
+    >
+      Slide {{ slideIndex + 1 }} of {{ slidesLength }}
+    </div>
     <h2 class="hero__slide-title" data-testid="hero__slide-title">
       {{ slide.title }}
     </h2>
@@ -52,6 +64,8 @@ const breakpointDesktopLarge: string = sassConstants.breakpointDesktopLarge
     <RouterLink
       class="hero__slide-link btn btn--primary"
       :to="slide.url"
+      @touchstart.stop
+      @touchend.stop
       :tabindex="isActive ? undefined : -1"
       data-testid="hero__slide-link"
     >

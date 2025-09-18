@@ -20,20 +20,28 @@ const {
 <template>
   <section
     class="hero"
-    aria-label="Product categories"
+    aria-label="Highlighted product categories"
     aria-roledescription="carousel"
     data-testid="hero"
   >
     <template v-if="fetchState === 'fulfilled'">
-      <Slideshow :slides-length v-if="slidesLength" v-slot="{ activeIndex }">
+      <Slideshow
+        :slides-length
+        v-if="slidesLength"
+        v-slot="{ deferredActiveIndex, isSlideLabelSRReadable, isKeyboardNavigation }"
+      >
         <template v-for="(slide, index) in slides" :key="slide.id">
           <HeroSlide
             class="slideshow__slide"
-            :class="{ 'slideshow__slide--active': index === activeIndex }"
+            :class="{
+              'slideshow__slide--active': index === deferredActiveIndex,
+              'slideshow__slide--no-transition': isKeyboardNavigation,
+            }"
             :slide
             :slides-length
             :slide-index="index"
-            :is-active="index === activeIndex"
+            :is-active="index === deferredActiveIndex"
+            :isSlideLabelSRReadable
           />
         </template>
       </Slideshow>

@@ -8,6 +8,7 @@ import frontDataBase from '../../../db.json'
 /********************/
 
 const mockSlide = frontDataBase.heroSlides[0]
+const mockA11yLabel = `Slide 1 of 1`
 const mockSlideImageMobileURL = mockSlide.images.mobile
 const mockSlideImageMobileLandscapeURL = mockSlide.images.mobileLandscape
 const mockSlideImageDesktopURL = mockSlide.images.desktop
@@ -29,6 +30,7 @@ const mountHeroSlide = () => {
       slidesLength: 1,
       slideIndex: 0,
       isActive: true,
+      isSlideLabelSRReadable: false,
     },
     global: {
       stubs: { RouterLink: RouterLinkStub },
@@ -58,6 +60,7 @@ describe('HeroSlide.vue', () => {
   })
 
   test('renders the slide with necessary information', () => {
+    const a11yLabel = wrapper.find("[data-testid='hero__slide-a11y-label']")
     const img = wrapper.find("[data-testid='hero__slide-image']")
     const sourceMobileLandscape = wrapper.find("[data-testid='hero__slide-image-mobile-landscape']")
     const sourceDesktop = wrapper.find("[data-testid='hero__slide-image-desktop']")
@@ -65,6 +68,9 @@ describe('HeroSlide.vue', () => {
     const subtitle = wrapper.find("[data-testid='hero__slide-subtitle']")
     const title = wrapper.find("[data-testid='hero__slide-title']")
     const link = wrapper.findComponent(RouterLinkStub)
+
+    // Assert the accessible name is rendered
+    expect(a11yLabel.text()).toContain(mockA11yLabel)
 
     // Assert the mobile image is rendered
     expect(img.exists()).toBeTruthy()
@@ -79,11 +85,11 @@ describe('HeroSlide.vue', () => {
     expect(sourceMobileLandscape.exists()).toBeTruthy()
     expect(sourceMobileLandscape.attributes('srcset')).toBe(mockSlideImageMobileLandscapeURL)
 
-    // Assert the dekstop image is rendered
+    // Assert the desktop image is rendered
     expect(sourceDesktop.exists()).toBeTruthy()
     expect(sourceDesktop.attributes('srcset')).toBe(mockSlideImageDesktopURL)
 
-    // Assert the dekstop large image is rendered
+    // Assert the desktop large image is rendered
     expect(sourceDesktopLarge.exists()).toBeTruthy()
     expect(sourceDesktopLarge.attributes('srcset')).toBe(mockSlideImageDesktopLargeURL)
 

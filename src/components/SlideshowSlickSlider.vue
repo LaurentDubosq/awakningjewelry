@@ -1,16 +1,22 @@
+<!-- This component has attached documentation. This concerns NVDA reading interruption,
+ focus event side effect, peripheric displaying permission, feature's label reading ability.
+ Find it at docs/features/SlideshowSlickSlider.md -->
+
 <script setup lang="ts">
-import type { DisplaySlidePayload } from '@/types/features'
-import { ref, type Ref } from 'vue'
+import { ref, watch, type Ref } from 'vue'
 
 const { slidesLength, activeIndex } = defineProps<{
   slidesLength: number
   activeIndex: number
 }>()
 const emit = defineEmits<{
-  displaySlide: [DisplaySlidePayload]
+  displaySlide: [number]
+  handleFocus: []
+  handleBlur: []
 }>()
 
-const isSlickSliderFocused: Ref<boolean> = ref(false)
+const buttons: Ref<HTMLButtonElement[] | null> = ref(null)
+const isKeyboardNavigation: Ref<boolean> = ref(false)
 
 const getNextIndex = () => (activeIndex < slidesLength - 1 ? activeIndex + 1 : 0)
 
@@ -37,41 +43,68 @@ const handleKeydown = (event: KeyboardEvent) => {
   }
 
   if (index !== undefined) {
-    emit('displaySlide', { index, focusable: true })
+    emit('displaySlide', index)
   }
 }
+
+const handleFocus = () => {
+  // Add the slick slider focuses for keyboard navigation only
+  isKeyboardNavigation.value = true
+
+  // Emit the custom event
+  emit('handleFocus')
+}
+
+const handleBlur = () => {
+  // Remove the slick slider focuses for keyboard navigation only
+  isKeyboardNavigation.value = false
+
+  // Emit the custom event
+  emit('handleBlur')
+}
+
+// Focus any new selected button for keyboard navigation only
+watch(
+  () => activeIndex,
+  () => {
+    if (buttons.value && isKeyboardNavigation.value) {
+      buttons.value[activeIndex].focus()
+    }
+  },
+)
 </script>
 
-<!-- The following 'mousedown.prevent' listener prevents the 'focus-visible' CSS class
- from being activated by a mouse event, while allowing keyboard events to activate it -->
 <template>
   <div
     class="slideshow__slick-slider"
-    :class="{ 'focus-visible': isSlickSliderFocused }"
-    role="tablist"
-    aria-label="Slideshow navigation"
+    :class="{ 'focus-visible': isKeyboardNavigation }"
+    role="group"
+    aria-label="Manual slideshow navigation"
     data-testid="slideshow__slick-slider"
   >
-    <button
-      class="slideshow__slick-slider-button"
-      :class="{
-        'slideshow__slick-slider-button--active': index === activeIndex,
-      }"
-      v-for="(_, index) in slidesLength"
-      @mousedown.prevent
-      @click="$emit('displaySlide', { index, focusable: false })"
-      @keydown="handleKeydown"
-      @focus="isSlickSliderFocused = true"
-      @blur="isSlickSliderFocused = false"
-      role="tab"
-      :aria-label="`Slide ${index + 1}`"
-      :aria-selected="index === activeIndex ? 'true' : 'false'"
-      :aria-controls="`slideshow-${index + 1}`"
-      :aria-describedby="`slideshow-${index + 1}`"
-      :tabindex="index === activeIndex ? undefined : -1"
-      :title="`Display slide ${index + 1}`"
-      data-testid="slideshow__slick-slider-button"
-    />
+    <div class="slideshow__slick-slider-role" role="tablist">
+      <button
+        class="slideshow__slick-slider-button"
+        :class="{
+          'slideshow__slick-slider-button--active': index === activeIndex,
+        }"
+        ref="buttons"
+        v-for="(_, index) in slidesLength"
+        @mousedown.prevent
+        @click="$emit('displaySlide', index)"
+        @touchend.prevent
+        @keydown="handleKeydown"
+        @focus="handleFocus"
+        @blur="handleBlur"
+        role="tab"
+        :aria-label="`Slide ${index + 1}`"
+        :aria-selected="index === activeIndex && isKeyboardNavigation ? 'true' : 'false'"
+        :aria-controls="`slideshow-${index + 1}`"
+        :tabindex="index === activeIndex ? undefined : -1"
+        :title="`Display slide ${index + 1}`"
+        data-testid="slideshow__slick-slider-button"
+      />
+    </div>
   </div>
 </template>
 
@@ -81,11 +114,15 @@ const handleKeydown = (event: KeyboardEvent) => {
 .slideshow__slick-slider {
   z-index: 1;
   position: absolute;
-  padding: 4px;
-  display: flex;
-  gap: 10px;
+
   @media screen and (min-width: $breakpointDesktop) {
     bottom: 20px;
+  }
+
+  &-role {
+    padding: 4px;
+    display: flex;
+    gap: 10px;
   }
 
   &-button {

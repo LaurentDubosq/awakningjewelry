@@ -82,18 +82,19 @@ describe('SiteNavDropdownButton.vue', () => {
       expect(wrapper.text()).toContain('▼')
     })
 
-    test('when the toggle button is focused, it commands the dropdown to open', async () => {
-      // Focus the button
+    test('when the toggle button is clicked or enter/space keys are pressed, it commands the dropdown to open/close', async () => {
+      // Click the button
       const button = wrapper.find("[data-testid='site-nav__dropdown-button']")
-      await button.trigger('focus')
+      await button.trigger('click')
 
       // Assert the order to open the dropdown has been emitted
-      expect(wrapper.emitted('openDropdown')).toHaveLength(1)
+      expect(wrapper.emitted('toggleDropdown')).toHaveLength(1)
     })
 
     test('when the toggle button is touched, it commands the dropdown to open/close', async () => {
       // Touch the button
       const button = wrapper.find("[data-testid='site-nav__dropdown-button']")
+      await button.trigger('touchstart')
       await button.trigger('touchend')
 
       // Assert the order to open the dropdown has been emitted

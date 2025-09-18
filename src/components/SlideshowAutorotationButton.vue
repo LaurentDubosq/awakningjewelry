@@ -5,17 +5,25 @@ import IconPlay from './icons/IconPlay.vue'
 const { isPlaying } = defineProps<{
   isPlaying: boolean
 }>()
+const emit = defineEmits<{
+  toggleAutoplayExplicitly: []
+  handleFocus: []
+  handleBlur: []
+}>()
+
+const handleToggleAutoplayExplictly = () => {
+  emit('toggleAutoplayExplicitly')
+}
 </script>
 
 <template>
   <button
     class="slideshow__autorotation-button"
-    @click="$emit('toggleAutoplayExplicitly')"
-    @mouseenter="$emit('toggleAutoplay')"
-    @mouseleave="$emit('toggleAutoplay')"
-    @touchstart.stop
-    @touchend.stop
-    @focusin.stop
+    @click="handleToggleAutoplayExplictly"
+    @touchstart.prevent.stop="handleToggleAutoplayExplictly"
+    @touchend.prevent.stop
+    @focus="$emit('handleFocus')"
+    @blur="$emit('handleBlur')"
     :title="isPlaying ? 'Stop the slide show' : 'Start the slide show'"
     :aria-label="isPlaying ? 'Stop automatic slide show' : 'Start automatic slide show'"
     data-testid="slideshow__autorotation-button"

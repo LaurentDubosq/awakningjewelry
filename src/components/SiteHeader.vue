@@ -1,3 +1,5 @@
+<!-- This component has attached documentation. This concerns components naming. Find it at docs/features/SiteHeader.md -->
+
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue'
 import { useIsOnMobileStore } from '@/stores/isOnMobile'

@@ -43,7 +43,13 @@ describe('SlideshowAutorotationButton.vue', () => {
       // Assert the "pause" icon is rendered
       expect(icon.exists()).toBeTruthy()
 
-      // Assert the "aria-label" is rendered with the correct value. A11y exceptional test because there is no text for the button otherwise
+      // Assert the "pause" icon doesn't exist for screen readers
+      expect(icon.attributes('aria-hidden')).toBe('true')
+
+      // Assert the title is rendered with the correct value
+      expect(button.attributes('title')).toBe('Stop the slide show')
+
+      // Assert the "aria-label" is rendered with the correct value
       expect(button.attributes('aria-label')).toBe('Stop automatic slide show')
     })
   })
@@ -53,12 +59,20 @@ describe('SlideshowAutorotationButton.vue', () => {
       // Component mounting (Playing state is false)
       wrapper = mountSlideshowAutorotationButton({ isPlaying: false })
 
-      // Assert the "play" icon is rendered
+      // Find elements
+      const button = wrapper.find("[data-testid='slideshow__autorotation-button']")
       const icon = wrapper.find("[data-testid='icon-play']")
+
+      // Assert the "play" icon is rendered
       expect(icon.exists()).toBeTruthy()
 
-      // Assert the "aria-label" is rendered with the correct value. A11y exceptional test because there is no text for the button otherwise
-      const button = wrapper.find("[data-testid='slideshow__autorotation-button']")
+      // Assert the "play" icon doesn't exist for screen readers
+      expect(icon.attributes('aria-hidden')).toBe('true')
+
+      // Assert the title is rendered with the correct value
+      expect(button.attributes('title')).toBe('Start the slide show')
+
+      // Assert the "aria-label" is rendered with the correct value
       expect(button.attributes('aria-label')).toBe('Start automatic slide show')
     })
   })
@@ -73,21 +87,6 @@ describe('SlideshowAutorotationButton.vue', () => {
       expect(icon.exists()).toBeTruthy()
     })
 
-    test('when the mouse enter and leave the autoration toggle button, its commands the autorotation to toggle', async () => {
-      // The mouse enters the button
-      const button = wrapper.find("[data-testid='slideshow__autorotation-button']")
-      await button.trigger('mouseenter')
-
-      // Assert the custom event has been emitted
-      expect(wrapper.emitted('toggleAutoplay')).toHaveLength(1)
-
-      // The mouse leaves the button
-      await button.trigger('mouseleave')
-
-      // Assert the custom event has been emitted
-      expect(wrapper.emitted('toggleAutoplay')).toHaveLength(2)
-    })
-
     test('when the autoration toggle button is clicked, it commands the autorotation to pause or play', async () => {
       // Click the pause button
       const button = wrapper.find("[data-testid='slideshow__autorotation-button']")
@@ -95,6 +94,34 @@ describe('SlideshowAutorotationButton.vue', () => {
 
       // Assert the custom event has been emitted
       expect(wrapper.emitted('toggleAutoplayExplicitly')).toHaveLength(1)
+    })
+
+    test('when the autoration toggle button is touched, it commands the autorotation to pause or play', async () => {
+      // Touch the pause button
+      const button = wrapper.find("[data-testid='slideshow__autorotation-button']")
+      await button.trigger('touchstart')
+      await button.trigger('touchend')
+
+      // Assert the custom event has been emitted
+      expect(wrapper.emitted('toggleAutoplayExplicitly')).toHaveLength(1)
+    })
+
+    test('when the autoration toggle button is focused, it allows screen readers to read slides', async () => {
+      // Focused the pause button
+      const button = wrapper.find("[data-testid='slideshow__autorotation-button']")
+      await button.trigger('focus')
+
+      // Assert the custom event has been emitted
+      expect(wrapper.emitted('handleFocus')).toHaveLength(1)
+    })
+
+    test('when the autoration toggle button is focusout, it disallows screen readers to read slides', async () => {
+      // Focused the pause button
+      const button = wrapper.find("[data-testid='slideshow__autorotation-button']")
+      await button.trigger('blur')
+
+      // Assert the custom event has been emitted
+      expect(wrapper.emitted('handleBlur')).toHaveLength(1)
     })
   })
 })

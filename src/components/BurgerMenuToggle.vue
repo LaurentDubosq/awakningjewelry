@@ -1,3 +1,5 @@
+<!-- This component has attached documentation. This concerns events. Find it at docs/features/BurgerMenuToggle.md -->
+
 <script setup lang="ts">
 import { nextTick } from 'vue'
 import useFocusFirstFocusableChildElement from '@/composables/useFocusFirstFocusableChildElement'
@@ -43,6 +45,7 @@ const handleTouch = () => {
     @touchstart.prevent="handleTouch"
     @click="handleScreenReaderClick"
     :aria-expanded="isBurgerMenuOpen ? true : false"
+    aria-controls="burger-menu"
     data-testid="burger-menu-toggle-button"
   >
     <SiteHeaderIcon :alternative-text="isBurgerMenuOpen ? 'Close burger menu' : 'Open burger menu'">

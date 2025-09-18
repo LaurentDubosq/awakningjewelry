@@ -78,12 +78,6 @@ export interface ProductListingProductImage {
   alt: string
 }
 
-/* Slideshow */
-export interface DisplaySlidePayload {
-  index: number
-  focusable: boolean
-}
-
 /* NewsletterSignup */
 export interface NewsletterSignupWording {
   title: string

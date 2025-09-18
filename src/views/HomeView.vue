@@ -39,7 +39,7 @@ const {
 
 <template>
   <div class="home-view-container">
-    <h1 class="sr-only">Homepage - {{ SITE_BRAND_NAME }}</h1>
+    <h1 class="sr-only">{{ SITE_BRAND_NAME }}</h1>
     <Hero />
     <StatementBanner
       :content="missionStatementBannerContent"

@@ -42,7 +42,7 @@ describe('SlideshowSlickSlider.vue', () => {
 
   test('renders the feature accessibility label', () => {
     const div = wrapper.find("[data-testid='slideshow__slick-slider']")
-    expect(div.attributes('aria-label')).toContain('Slideshow navigation')
+    expect(div.attributes('aria-label')).toContain('Manual slideshow navigation')
   })
 
   test('render all the buttons with their necessary information', () => {
@@ -62,7 +62,7 @@ describe('SlideshowSlickSlider.vue', () => {
       // Assert the "title" has the correct value
       expect(button.attributes('title')).toBe(`Display slide ${index + 1}`)
 
-      // Assert the active CSS class is used when necessary
+      // Assert the button is completely black when active and empty when inactive
       expect(button.classes('slideshow__slick-slider-button--active')).toBe(
         index === mockActiveIndex,
       )
@@ -76,7 +76,7 @@ describe('SlideshowSlickSlider.vue', () => {
 
       // Assert the order to display the corresponding slide has been emitted
       for (let index = 0; index < buttons.length; index++) {
-        const mockPayload = { index: index, focusable: false }
+        const mockPayload = index
 
         // Click the button
         await buttons[index].trigger('click')
@@ -89,16 +89,27 @@ describe('SlideshowSlickSlider.vue', () => {
       }
     })
 
+    test('when each button is touched, nothing happen', async () => {
+      // Find the buttons
+      const buttons = wrapper.findAll("[data-testid='slideshow__slick-slider-button']")
+
+      // Assert the order to display the corresponding slide has been emitted
+      for (let index = 0; index < buttons.length; index++) {
+        // Touch the button
+        await buttons[index].trigger('touchstart')
+        await buttons[index].trigger('touchend')
+      }
+      // Assert the "displaySlide" custom event has not been emitted
+      expect(wrapper.emitted()).not.toHaveProperty('displaySlide')
+    })
+
     test('when the left arrow key is pressed on each button, it commands the previous slide to be displayed', async () => {
       // Find the buttons
       const buttons = wrapper.findAll("[data-testid='slideshow__slick-slider-button']")
 
       // Assert the order to display the corresponding slide has been emitted
       for (let index = 0; index < buttons.length; index++) {
-        const mockPayload = {
-          index: index === 0 ? mockSlidesLength - 1 : index - 1,
-          focusable: true,
-        }
+        const mockPayload = index === 0 ? mockSlidesLength - 1 : index - 1
 
         // Press the left arrow key
         await buttons[index].trigger('keydown', {
@@ -123,10 +134,7 @@ describe('SlideshowSlickSlider.vue', () => {
 
       // Assert the order to display the corresponding slide has been emitted
       for (let index = 0; index < buttons.length; index++) {
-        const mockPayload = {
-          index: index === mockSlidesLength - 1 ? 0 : index + 1,
-          focusable: true,
-        }
+        const mockPayload = index === mockSlidesLength - 1 ? 0 : index + 1
 
         // Press the right arrow key
         await buttons[index].trigger('keydown', {
@@ -151,10 +159,7 @@ describe('SlideshowSlickSlider.vue', () => {
 
       // Assert the order to display the corresponding slide has been emitted
       for (let index = 0; index < buttons.length; index++) {
-        const mockPayload = {
-          index: 0,
-          focusable: true,
-        }
+        const mockPayload = 0
 
         // Press the "home" key
         await buttons[index].trigger('keydown', {
@@ -176,10 +181,7 @@ describe('SlideshowSlickSlider.vue', () => {
 
       // Assert the order to display the corresponding slide has been emitted
       for (let index = 0; index < buttons.length; index++) {
-        const mockPayload = {
-          index: mockSlidesLength - 1,
-          focusable: true,
-        }
+        const mockPayload = mockSlidesLength - 1
 
         // Press the "end" key
         await buttons[index].trigger('keydown', {

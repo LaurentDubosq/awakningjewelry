@@ -6,6 +6,8 @@ const { text, isDropdownOpen } = defineProps<{
   text: string
   isDropdownOpen: boolean
 }>()
+
+const id = text.toLowerCase()
 </script>
 
 <template>
@@ -13,7 +15,7 @@ const { text, isDropdownOpen } = defineProps<{
     class="burger-menu__dropdown-button burger-menu__link"
     @click="$emit('toggleDropdown')"
     :aria-expanded="isDropdownOpen ? 'true' : 'false'"
-    aria-haspopup="menu"
+    :aria-controls="`burger-menu__dropdown-list-${id}`"
     data-testid="burger-menu__dropdown-button"
   >
     {{ text }}

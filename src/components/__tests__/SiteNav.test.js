@@ -303,44 +303,63 @@ describe('SiteNav.vue', () => {
             // Assert the dropdown is close at initial render
             expect(list.isVisible()).toBeFalsy()
 
-            /*********************************************************************/
-            /* when the dropdown toggle button is focused, it opens the dropdown */
-            /*********************************************************************/
+            /*************************************************************************************************/
+            /* when the toggle button is clicked or enter/space keys are pressed, it open/close the dropdown */
+            /*************************************************************************************************/
 
             // Assert the dropdown is close
-            list = dropdown.find("[data-testid='site-nav__dropdown-list']")
             expect(list.isVisible()).toBeFalsy()
 
-            // Focus the button
-            await button.trigger('focus')
+            // Click the button
+            await button.trigger('click')
 
             // Assert the dropdown is open
-            list = dropdown.find("[data-testid='site-nav__dropdown-list']")
             expect(list.isVisible()).toBeTruthy()
 
-            // Reset(close) the dropdown for following assertions
-            await dropdown.trigger('mouseleave')
+            // Click the button again
+            await button.trigger('click')
+
+            // Assert the dropdown is close again
+            expect(list.isVisible()).toBeFalsy()
+
+            /*****************************************************************/
+            /* when the toggle button is touched, it open/close the dropdown */
+            /*****************************************************************/
+
+            // Assert the dropdown is close
+            expect(list.isVisible()).toBeFalsy()
+
+            // Touch the button
+            await button.trigger('touchstart')
+            await button.trigger('touchend')
+
+            // Assert the dropdown is open
+            expect(list.isVisible()).toBeTruthy()
+
+            // Touch the button again
+            await button.trigger('touchstart')
+            await button.trigger('touchend')
+
+            // Assert the dropdown is close again
+            expect(list.isVisible()).toBeFalsy()
 
             /*******************************************************************************************/
             /* when the mouse enters and leaves the dropdown toggle button, it open/close the dropdown */
             /*******************************************************************************************/
 
             // Assert the dropdown is close
-            list = dropdown.find("[data-testid='site-nav__dropdown-list']")
             expect(list.isVisible()).toBeFalsy()
 
             // Mouse enters the dropdown
             await dropdown.trigger('mouseenter')
 
             // Assert the dropdown is open
-            list = dropdown.find("[data-testid='site-nav__dropdown-list']")
             expect(list.isVisible()).toBeTruthy()
 
             // Mouse leaves the dropdown
             await dropdown.trigger('mouseleave')
 
             // Assert the dropdown is close
-            list = dropdown.find("[data-testid='site-nav__dropdown-list']")
             expect(list.isVisible()).toBeFalsy()
 
             /*************************************************************/
@@ -348,31 +367,26 @@ describe('SiteNav.vue', () => {
             /*************************************************************/
 
             // Assert the dropdown is close
-            list = dropdown.find("[data-testid='site-nav__dropdown-list']")
             expect(list.isVisible()).toBeFalsy()
 
             // Open the dropdown
             await dropdown.trigger('mouseenter')
 
             // Assert the dropdown is open
-            list = dropdown.find("[data-testid='site-nav__dropdown-list']")
             expect(list.isVisible()).toBeTruthy()
 
             // Finds the links
-            list = dropdown.find("[data-testid='site-nav__dropdown-list']")
             links = list.findAll("[data-testid='site-nav__dropdown-item-link']")
 
             // Assert each dropdown link close the dropdown
             for (let index = 0; index < links.length; index++) {
               // Assert the dropdown is open
-              list = dropdown.find("[data-testid='site-nav__dropdown-list']")
               expect(list.isVisible()).toBeTruthy()
 
               // Click on the link
               await links[index].trigger('click')
 
               // Assert the dropdown is close
-              list = dropdown.find("[data-testid='site-nav__dropdown-list']")
               expect(list.isVisible()).toBeFalsy()
 
               // Reset the dropdown to open for next loop iterations
@@ -387,20 +401,17 @@ describe('SiteNav.vue', () => {
             /**********************************************************************************************************/
 
             // Assert the dropdown is close
-            list = dropdown.find("[data-testid='site-nav__dropdown-list']")
             expect(list.isVisible()).toBeFalsy()
 
             // Open the dropdown
-            await button.trigger('focus')
+            await button.trigger('click')
 
             // Assert the dropdown is open
-            list = dropdown.find("[data-testid='site-nav__dropdown-list']")
             expect(list.isVisible()).toBeTruthy()
 
             // Focus the last link
-            list = dropdown.find("[data-testid='site-nav__dropdown-list']")
-            links = list.findAll("[data-testid='site-nav__dropdown-item-link']")
             links[links.length - 1].element.focus()
+            expect(document.activeElement).toStrictEqual(links[links.length - 1].element)
 
             // Focusout the last link element to focus on external element
             await dropdown.trigger('focusout', {
@@ -416,26 +427,23 @@ describe('SiteNav.vue', () => {
             /**************************************************************************************************************/
 
             // Assert the dropdown is close
-            list = dropdown.find("[data-testid='site-nav__dropdown-list']")
             expect(list.isVisible()).toBeFalsy()
 
             // Open the dropdown
-            await button.trigger('focus')
+            await button.trigger('click')
 
             // Assert the dropdown is open
-            list = dropdown.find("[data-testid='site-nav__dropdown-list']")
             expect(list.isVisible()).toBeTruthy()
 
             // Focus the first link
-            list = dropdown.find("[data-testid='site-nav__dropdown-list']")
             firstLink = list.find("[data-testid='site-nav__dropdown-item-link']")
             firstLink.element.focus()
+            expect(document.activeElement).toStrictEqual(firstLink.element)
 
             // Press the "Escape" key
             await firstLink.trigger('keydown.escape')
 
             // Assert the dropdown is close
-            list = wrapper.find("[data-testid='site-nav__dropdown-list']")
             expect(list.isVisible()).toBeFalsy()
           } else {
             throw new Error(

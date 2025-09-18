@@ -37,7 +37,7 @@
       "type": "textLink",
       "text": "Promotions",
       "url": "/collections/private-promotions",
-      "title": "Acces current promotions"
+      "title": "Access current promotions"
     },
     {
       "id": "4",
@@ -58,7 +58,7 @@
   "pagesMetaData": [
     {
       "name": "home",
-      "title": "Innovante Buddhist Jewelry Brand - AwakningJewelry.com",
+      "title": "Awakning Buddhist Jewelry",
       "description": "Draw energy from your Eastern values to live your spirituality and find well-being in our Western world by wearing our Bracelets tailored to your dress codes &amp; 108 Malas Beads adapted to your Meditation &amp; Yoga sessions.",
       "id": "c74c"
     }
@@ -187,44 +187,34 @@
   },
   "newsletterSubscribers": [
     {
-      "id": "0504",
-      "email": "to@fdf.fr",
-      "subscribedAt": "2025-08-18T10:32:48.193Z"
-    },
-    {
-      "id": "546d",
-      "email": "gdsfdsfs@fds.fds",
-      "subscribedAt": "2025-08-18T10:34:04.969Z"
-    },
-    {
-      "id": "12ab",
+      "id": "81b6",
       "email": "toto@free.fr",
-      "subscribedAt": "2025-08-18T10:34:33.016Z"
+      "subscribedAt": "2025-09-17T15:50:06.085Z"
     },
     {
-      "id": "2e0b",
-      "email": "totodsfs@free.fr",
-      "subscribedAt": "2025-08-18T10:35:11.010Z"
+      "id": "1253",
+      "email": "ggd@free.fr",
+      "subscribedAt": "2025-09-17T16:05:50.638Z"
     },
     {
-      "id": "823b",
-      "email": "totofds@fs.fds",
-      "subscribedAt": "2025-08-18T10:37:01.962Z"
+      "id": "d891",
+      "email": "fdsfds@fre.Fr",
+      "subscribedAt": "2025-09-17T16:06:17.929Z"
     },
     {
-      "id": "e782",
-      "email": "totofds@fds",
-      "subscribedAt": "2025-08-18T10:37:20.025Z"
-    },
-    {
-      "id": "33ed",
-      "email": "fdsfs@ds.Fsd",
-      "subscribedAt": "2025-08-18T10:37:38.325Z"
-    },
-    {
-      "id": "3437",
+      "id": "c04b",
       "email": "toto@free.fr",
-      "subscribedAt": "2025-08-19T09:10:16.394Z"
+      "subscribedAt": "2025-09-18T14:06:08.158Z"
+    },
+    {
+      "id": "6d93",
+      "email": "fds@fre.fr",
+      "subscribedAt": "2025-09-18T14:07:46.311Z"
+    },
+    {
+      "id": "821b",
+      "email": "gdddgfd@frg.fr",
+      "subscribedAt": "2025-09-18T14:10:06.934Z"
     }
   ],
   "founderQuoteBannerContent": {

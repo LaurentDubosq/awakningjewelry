@@ -1,3 +1,5 @@
+<!-- This component has attached documentation. This concerns payment solution logos path. Find it at docs/features/SiteFooter.md -->
+
 <script setup lang="ts">
 import { getPaymentSolutions } from '@/data/dataFetchers'
 import type { UseFetchWithStateReturn } from '@/types/fetch'
