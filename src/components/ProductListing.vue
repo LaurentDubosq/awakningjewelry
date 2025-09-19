@@ -67,6 +67,7 @@ const products = computed(() => props.content?.products)
 
   &__list {
     display: grid;
+    gap: 3px; // allow bottom focus indicator display
 
     @media screen and (min-width: 590px) {
       grid-template-columns: repeat(2, 1fr);

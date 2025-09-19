@@ -39,6 +39,12 @@ const id = text.toLowerCase()
   display: flex;
   align-items: center;
 
+  // Allow bottom focus indicator display
+  &:focus {
+    position: relative;
+    z-index: 1;
+  }
+
   &--open {
     background-color: $AwakningColorSecondary;
     box-shadow: $AwakningBoxShadow;
