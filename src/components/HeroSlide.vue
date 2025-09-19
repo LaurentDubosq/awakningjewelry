@@ -117,6 +117,7 @@ const breakpointDesktopLarge: string = sassConstants.breakpointDesktopLarge
   }
 
   &-picture {
+    text-align: center;
     aspect-ratio: 640/640;
     width: 100%;
     order: 0;
