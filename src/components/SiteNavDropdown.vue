@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { SiteMenuDropdown } from '@/types/features'
-import { provide, ref, type Ref } from 'vue'
+import { provide, ref, watch, type Ref } from 'vue'
 import MyTransition from './MyTransition.vue'
 import { closeDropdownKey } from '@/utils/injectionkeys'
 import SiteNavDropdownButton from './SiteNavDropdownButton.vue'
@@ -12,6 +12,7 @@ const { dropdown } = defineProps<{
 }>()
 
 const isDropdownOpen: Ref<boolean> = ref(false)
+const rootElement: Ref<HTMLDivElement | null> = ref(null)
 
 const openDropdown = () => {
   isDropdownOpen.value = true
@@ -25,10 +26,26 @@ const toggleDropdown = () => {
 
 /* Send "closeDropdown" function to the dropdown item component */
 provide(closeDropdownKey, closeDropdown)
+
+/* Close the dropdown when touching outside */
+function handleTouchOutside(event: TouchEvent) {
+  // Close the dropdown if the touched element is not in the dropdown
+  if (!rootElement.value?.contains(event.target as Node)) {
+    isDropdownOpen.value = false
+  }
+}
+watch(isDropdownOpen, () => {
+  if (isDropdownOpen.value) {
+    document.addEventListener('touchstart', handleTouchOutside)
+  } else {
+    document.removeEventListener('touchstart', handleTouchOutside)
+  }
+})
 </script>
 
 <template>
   <div
+    ref="rootElement"
     class="site-nav__dropdown"
     @mouseenter="openDropdown"
     @mouseleave="closeDropdown"
