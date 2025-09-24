@@ -89,7 +89,7 @@ const { product } = defineProps<{
 
   &-price {
     font-family: $AwakningFontMontserrat;
-    font-weight: 400;
+    font-weight: 500;
     letter-spacing: 0.1rem;
     text-align: center;
     margin-bottom: 13px;

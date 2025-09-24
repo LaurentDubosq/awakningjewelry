@@ -126,3 +126,8 @@ export interface SiteFooterLink {
   alt?: string
   title?: string
 }
+
+/* AnnouncementBar */
+export interface AnnouncementBarWording {
+  announcement: string
+}

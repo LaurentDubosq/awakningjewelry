@@ -41,6 +41,7 @@ const { link } = defineProps<{
 .site-nav__link--text {
   padding: $siteNavLinkPaddingX;
   font-family: $AwakningFontMontserrat;
+  font-weight: 500;
   font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;

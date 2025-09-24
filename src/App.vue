@@ -9,6 +9,7 @@ import { useIsBurgerMenuOpenStore } from './stores/isBurgerMenuOpen'
 import { storeToRefs } from 'pinia'
 import SiteFooter from './components/SiteFooter.vue'
 import { ref, watch, type Ref } from 'vue'
+import AnnouncementBar from './components/AnnouncementBar.vue'
 
 /* Burger menu */
 
@@ -34,6 +35,9 @@ watch(
   () => (minHeight.value = getRouteMinHeight()),
   { immediate: true },
 )
+
+/* Announcement bar */
+const isAnnouncementBarDisplayed: Ref<boolean> = ref(true)
 </script>
 
 <template>
@@ -43,6 +47,12 @@ watch(
     </MyTransition>
     <div class="site-content">
       <div class="site-content-inner-container">
+        <MyTransition name="vertical-top-slide" :group="false">
+          <AnnouncementBar
+            @close-announcement-bar="isAnnouncementBarDisplayed = false"
+            v-if="isAnnouncementBarDisplayed"
+          />
+        </MyTransition>
         <SiteHeader class="site-header" />
         <main :style="{ 'min-height': minHeight }">
           <RouterView />

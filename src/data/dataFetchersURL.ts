@@ -31,3 +31,6 @@ export const siteFooterUrl = endpoint('siteFooter')
 
 /* PaymentSolutions */
 export const paymentSolutionsUrl = endpoint('paymentSolutions')
+
+/* AnnouncementBarWording */
+export const announcementBarWordingUrl = endpoint('announcementBarWording')

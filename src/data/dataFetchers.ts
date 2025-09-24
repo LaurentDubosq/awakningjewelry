@@ -11,6 +11,7 @@ import {
   founderQuoteBannerContentUrl,
   siteFooterUrl,
   paymentSolutionsUrl,
+  announcementBarWordingUrl,
 } from '@/data/dataFetchersURL'
 import type {
   SiteMenu,
@@ -21,6 +22,7 @@ import type {
   HeroSlideType,
   ProductListingContent,
   SiteFooter,
+  AnnouncementBarWording,
 } from '@/types/features'
 import useFetch from '@/composables/useFetch'
 import useFetchWithState from '@/composables/useFetchWithState'
@@ -57,3 +59,6 @@ export const getSiteFooter = (): UseFetchWithStateReturn<SiteFooter> =>
 
 export const getPaymentSolutions = (): UseFetchWithStateReturn<PaymentSolution[]> =>
   useFetchWithState(paymentSolutionsUrl)
+
+export const getAnnouncementBarWording = (): UseFetchWithStateReturn<AnnouncementBarWording> =>
+  useFetchWithState(announcementBarWordingUrl)

@@ -26,7 +26,7 @@ const mockBurgerMenuAnimationOptionsProps = mockBurgerMenuAnimationOptions.props
 const mockBurgerMenuDropdownListAnimationOptions = {
   slot: mockSlotComponent,
   props: {
-    name: 'vertical-top-slide',
+    name: 'nested-vertical-top-slide',
     group: true,
     duration: 300,
   },

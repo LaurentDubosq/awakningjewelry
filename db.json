@@ -185,38 +185,7 @@
     "unsubscriptionNote": "Unsubscribe at any time by using the unsubscribe links at the bottom of our emails or by ",
     "unsubscriptionNoteLinkText": "contacting us"
   },
-  "newsletterSubscribers": [
-    {
-      "id": "81b6",
-      "email": "toto@free.fr",
-      "subscribedAt": "2025-09-17T15:50:06.085Z"
-    },
-    {
-      "id": "1253",
-      "email": "ggd@free.fr",
-      "subscribedAt": "2025-09-17T16:05:50.638Z"
-    },
-    {
-      "id": "d891",
-      "email": "fdsfds@fre.Fr",
-      "subscribedAt": "2025-09-17T16:06:17.929Z"
-    },
-    {
-      "id": "c04b",
-      "email": "toto@free.fr",
-      "subscribedAt": "2025-09-18T14:06:08.158Z"
-    },
-    {
-      "id": "6d93",
-      "email": "fds@fre.fr",
-      "subscribedAt": "2025-09-18T14:07:46.311Z"
-    },
-    {
-      "id": "821b",
-      "email": "gdddgfd@frg.fr",
-      "subscribedAt": "2025-09-18T14:10:06.934Z"
-    }
-  ],
+  "newsletterSubscribers": [],
   "founderQuoteBannerContent": {
     "featureLabel": "Founder's quote",
     "backgroundIMGMobile": "https://www.awakningjewelry.com/cdn/shop/files/meditative-mountains-and-sunset-480w.avif",
@@ -365,5 +334,8 @@
       "alt": "Visa",
       "title": "Visa"
     }
-  ]
+  ],
+  "announcementBarWording": {
+    "announcement": "<strong>Free Shipping Worldwide</strong> for orders <strong>over $40</strong>"
+  }
 }

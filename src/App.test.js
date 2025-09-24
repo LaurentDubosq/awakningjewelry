@@ -10,10 +10,60 @@ import { nextTick, ref, computed, defineComponent } from 'vue'
 import { defineStore } from 'pinia'
 import { createRouter, createWebHistory } from 'vue-router'
 import frontDataBase from '../db.json'
+import { getAnnouncementBarWording, getSiteFooter, getPaymentSolutions } from '@/data/dataFetchers'
+
+/**************/
+/* 1.Hoisting */
+/**************/
+
+// Mock the data fetchers
+vi.mock('@/data/dataFetchers', () => {
+  return {
+    getAnnouncementBarWording: vi.fn(),
+    getSiteFooter: vi.fn(),
+    getPaymentSolutions: vi.fn(),
+  }
+})
 
 /*********************/
-/* 1.Initializations */
+/* 2.Initializations */
 /*********************/
+
+/* Data */
+
+// Site footer
+const mockSiteFooterPending = {
+  data: undefined,
+  state: 'pending',
+}
+const mockSiteFooterFulfilled = {
+  data: { value: frontDataBase.siteFooter },
+  state: 'fulfilled',
+}
+const mockPaymentSolutionsFulfilled = {
+  data: frontDataBase.paymentSolutions,
+  state: 'fulfilled',
+}
+
+// Announcement bar
+const mockAnnouncementPending = {
+  data: ref(undefined),
+  state: ref('pending'),
+}
+const mockAnnouncementFulfilled = {
+  data: ref(frontDataBase.announcementBarWording),
+  state: ref('fulfilled'),
+}
+
+// Site menu
+const mockSiteMenuPending = {
+  data: undefined,
+  state: 'pending',
+}
+const mockSiteMenuFulfilled = {
+  data: frontDataBase.siteMenu,
+  state: 'fulfilled',
+}
 
 /* Router */
 
@@ -28,17 +78,6 @@ const mockRouter = createRouter({
     },
   ],
 })
-
-/* Data */
-
-const mockSiteMenuPending = {
-  data: undefined,
-  state: 'pending',
-}
-const mockSiteMenuFulfilled = {
-  data: frontDataBase.siteMenu,
-  state: 'fulfilled',
-}
 
 /* Stores */
 
@@ -74,7 +113,7 @@ const mockIsBurgerMenuOpenStore = mockUseIsBurgerMenuOpenStore()
 const mockSiteMenuStore = mockUseSiteMenuStore()
 
 /***********/
-/* 2.Build */
+/* 3.Build */
 /***********/
 
 // Component Factory (Neutral environment state - Burger menu close state - Data fetching "Pending" state)
@@ -92,7 +131,7 @@ const mountApp = () => {
 }
 
 /**********/
-/* 3.Test */
+/* 4.Test */
 /**********/
 
 // WARNING : The component has 2 states regarding the environment state. Mobile or desktop. There is none used by default.
@@ -106,6 +145,12 @@ describe('App.vue', () => {
   let clickEventTriggeredByEnter
 
   beforeEach(async () => {
+    // Set the getAnnouncementBarWording fetcher mock state to pending
+    getAnnouncementBarWording.mockReturnValue(mockAnnouncementPending)
+
+    // Set the getSiteFooter fetcher mock state to pending
+    getSiteFooter.mockReturnValue(mockSiteFooterPending)
+
     // Component mounting (Neutral environment state - Burger menu close state - Data fetching "Pending" state)
     wrapper = mountApp()
   })
@@ -155,7 +200,7 @@ describe('App.vue', () => {
 
     describe('Burger menu close state - Data fetching "Fulfilled" state', () => {
       test("don't render the burger menu", () => {
-        // Asser the burger menu is rendered
+        // Asser the burger menu is not rendered
         const BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
         expect(BurgerMenuComponent.isVisible()).toBeFalsy()
       })
@@ -183,7 +228,38 @@ describe('App.vue', () => {
 
       // Set the store data fetching state to "fulfilled"
       mockSiteMenuStore.siteMenuResult = mockSiteMenuFulfilled
-      await nextTick()
+
+      // Set the getAnnouncementBarWording fetcher mock state to fulfilled
+      getAnnouncementBarWording.mockReturnValue(mockAnnouncementFulfilled)
+
+      // Set the getSiteFooter fetcher mock state to fulfilled
+      getSiteFooter.mockReturnValue(mockSiteFooterFulfilled)
+
+      // Set the getPaymentSolutions fetcher mock state to fulfilled
+      getPaymentSolutions.mockReturnValue(mockPaymentSolutionsFulfilled)
+
+      // Remount the component with the state updated
+      wrapper = mountApp()
+    })
+
+    /********************/
+    /* Announcement bar */
+    /********************/
+
+    test('When the close button is clicked, it closes the announcement bar', async () => {
+      let bar
+
+      // Assert the announcement bar is rendered
+      bar = wrapper.find("[data-testid='announcement-bar']")
+      expect(bar.isVisible()).toBeTruthy()
+
+      // Click/touch the close button
+      const button = wrapper.find("[data-testid='announcement-bar__button']")
+      await button.trigger('click')
+
+      // Assert the announcement bar is not rendered
+      bar = wrapper.find("[data-testid='announcement-bar']")
+      expect(bar.exists()).toBeFalsy()
     })
 
     /***************/
@@ -377,6 +453,7 @@ describe('App.vue', () => {
           plugins: [mockRouter],
           stubs: {
             BurgerMenu: true,
+            AnnouncementBar: true,
             SiteHeader: true,
             'router-view': true,
             SiteFooter: true,
@@ -391,6 +468,9 @@ describe('App.vue', () => {
           </transition-stub>
           <div data-v-7a7a37b1="" class="site-content">
             <div data-v-7a7a37b1="" class="site-content-inner-container">
+              <transition-stub data-v-7a7a37b1="" name="vertical-top-slide" appear="false" persisted="false" css="true">
+                <announcement-bar-stub data-v-7a7a37b1=""></announcement-bar-stub>
+              </transition-stub>
               <site-header-stub data-v-7a7a37b1="" class="site-header"></site-header-stub>
               <main data-v-7a7a37b1="" style="min-height: 100vh;">
                 <router-view-stub data-v-7a7a37b1="" name="default"></router-view-stub>
