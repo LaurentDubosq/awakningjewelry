@@ -28,6 +28,7 @@
 ## REFACTOS
 
 - [ ] Refacto / création d’un `SlideShowSlickSliderButton` pour la feature `SlideShowSlickSlider`.
+- [ ] MyTransition : refacto pour continuer d'utiliser name, mais en passant en props les informations nécessaire pour les CSS afin de découpler les CSS actuels des éléments sur lesquelles elles sont utilisées.
 
 ## TYPES
 
