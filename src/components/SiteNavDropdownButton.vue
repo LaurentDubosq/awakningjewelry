@@ -38,6 +38,7 @@ const id = text.toLowerCase()
 .site-nav__dropdown-button {
   display: flex;
   align-items: center;
+  cursor: pointer;
 
   // Allow bottom focus indicator display
   &:focus {

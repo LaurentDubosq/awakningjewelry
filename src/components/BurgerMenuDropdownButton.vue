@@ -38,6 +38,7 @@ const id = text.toLowerCase()
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  cursor: pointer;
 
   &-icon {
     fill: $AwakningColorSecondary;

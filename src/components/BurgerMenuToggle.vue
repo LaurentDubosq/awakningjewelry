@@ -64,7 +64,11 @@ const handleTouch = () => {
 <style scoped lang="scss">
 @use '@/assets/styles/_constants.scss' as *;
 
-.burger-menu-toggle-button__icon {
-  fill: $AwakningColorPrimary;
+.burger-menu-toggle-button {
+  cursor: pointer;
+
+  &__icon {
+    fill: $AwakningColorPrimary;
+  }
 }
 </style>
