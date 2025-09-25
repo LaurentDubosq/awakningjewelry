@@ -48,7 +48,7 @@ const id = text.toLowerCase()
 
   &--open {
     background-color: $AwakningColorSecondary;
-    box-shadow: $AwakningBoxShadow;
+    box-shadow: $AwakningSideBoxShadow;
 
     &::after {
       content: '';

@@ -22,6 +22,9 @@ $AwakningFontOldStandardTT: 'Old Standard TT', serif;
 
 /* Shadow */
 $AwakningBoxShadow: 0 10px 20px #00000017;
+$AwakningSideBoxShadow:
+  10px 0 20px -10px rgba(0, 0, 0, 0.09),
+  -10px 0 20px -10px rgba(0, 0, 0, 0.09);
 
 /* Site Nav */
 $siteNavLinkPaddingX: 15px; // required to calculate the width of the site nav dropdown header underline when the site nav dropdown is open
