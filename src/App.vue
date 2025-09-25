@@ -1,4 +1,4 @@
-<!-- This component has attached documentation. This concerns footer shift problem. Find it at docs/features/App.md -->
+<!-- This component has attached documentation. This concerns footer shift problem, unclickable area when the burger menu is open. Find it at docs/features/App.md -->
 
 <script setup lang="ts">
 import { RouterView, useRoute } from 'vue-router'
@@ -45,7 +45,7 @@ const isAnnouncementBarDisplayed: Ref<boolean> = ref(true)
     <MyTransition name="horizontal-left-slide" :group="false">
       <BurgerMenu v-show="isBurgerMenuOpen" />
     </MyTransition>
-    <div class="site-content">
+    <div class="site-content" :style="{ 'pointer-events': isBurgerMenuOpen ? 'none' : undefined }">
       <div class="site-content-inner-container">
         <MyTransition name="vertical-top-slide" :group="false">
           <AnnouncementBar
