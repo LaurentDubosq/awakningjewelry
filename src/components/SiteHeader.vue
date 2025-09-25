@@ -35,7 +35,6 @@ const { isOnMobile } = storeToRefs(isOnMobileStore)
             to="/"
             title="Go to homepage"
             data-testid="site-header__logo-link"
-            @touchstart="console.log('helo')"
           >
             <SiteLogo />
           </RouterLink>
