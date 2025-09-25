@@ -1,3 +1,5 @@
+<!-- This component has attached documentation. This concerns event propagation. Find it at docs/features/BurgerMenuDropdownItem.md -->
+
 <script setup lang="ts">
 import { useIsBurgerMenuOpenStore } from '@/stores/isBurgerMenuOpen'
 import type { SiteMenuDropdownLink } from '@/types/features'
