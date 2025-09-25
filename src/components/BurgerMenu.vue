@@ -32,23 +32,19 @@ const isDropdown = (
   return siteMenuItem.type === 'dropdown'
 }
 
-/* Close the dropdown when touching outside */
-function handleTouchOutside(event: TouchEvent) {
-  // Close the dropdown if the touched element is outside the burger menu
+/* Close the dropdown when touching/clicking outside */
+function handleClickOutside(event: TouchEvent | MouseEvent) {
+  // Close the dropdown if the touched/clicked element is outside the burger menu
   if (!rootElement.value?.contains(event.target as Node)) {
-    // Prevent ghost/phantom clicks triggered after touch
-    // More information in BurgerMenu.md (documentation)
-    event.preventDefault()
-
     // Close the dropdown
     toggleBurgerMenu()
   }
 }
 watch(isBurgerMenuOpen, () => {
   if (isBurgerMenuOpen.value) {
-    document.addEventListener('touchend', handleTouchOutside)
+    document.addEventListener('click', handleClickOutside)
   } else {
-    document.removeEventListener('touchend', handleTouchOutside)
+    document.removeEventListener('click', handleClickOutside)
   }
 })
 </script>

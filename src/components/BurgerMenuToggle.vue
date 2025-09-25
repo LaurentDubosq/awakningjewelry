@@ -42,8 +42,8 @@ const handleTouch = () => {
 <template>
   <button
     class="burger-menu-toggle-button"
-    @touchend.stop.prevent="handleTouch"
-    @click="handleScreenReaderClick"
+    @touchend.prevent="handleTouch"
+    @click.stop="handleScreenReaderClick"
     :aria-expanded="isBurgerMenuOpen ? true : false"
     aria-controls="burger-menu"
     data-testid="burger-menu-toggle-button"

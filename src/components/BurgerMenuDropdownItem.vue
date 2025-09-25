@@ -18,7 +18,7 @@ const { toggleBurgerMenu } = isBurgerMenuOpenStore
     <RouterLink
       class="burger-menu__dropdown-item-link burger-menu__link"
       :to="link.url"
-      @click="toggleBurgerMenu"
+      @click.stop="toggleBurgerMenu"
       data-testid="burger-menu__dropdown-item-link"
       >{{ link.text }}</RouterLink
     >
