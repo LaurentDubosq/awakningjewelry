@@ -2,7 +2,7 @@
 
 <script setup lang="ts">
 import { nextTick } from 'vue'
-import useFocusFirstFocusableChildElement from '@/composables/useFocusFirstFocusableChildElement'
+import { useFocusFirstFocusableChildElement } from '@/composables/useFocus'
 import SiteHeaderIcon from './SiteHeaderIcon.vue'
 import IconBurger from './icons/IconBurger.vue'
 import IconCross from './icons/IconCross.vue'

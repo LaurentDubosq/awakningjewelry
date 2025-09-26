@@ -10,6 +10,7 @@ import { defineStore } from 'pinia'
 import { computed, ref, defineComponent, nextTick } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { afterEach, beforeEach } from 'vitest'
+import { getFocusableChildElements } from '@/composables/useFocus'
 
 /********************/
 /* 1.Initialization */
@@ -410,6 +411,38 @@ describe('BurgerMenu.vue', () => {
             )
           }
         }
+      })
+
+      test('when Tab is pressed when the focus is on the last element, the next focus should be on the first element', async () => {
+        // Get all the focusable elements
+        const focusableElements = getFocusableChildElements(wrapper.element)
+
+        // Focus the last element
+        const lastElement = focusableElements[focusableElements.length - 1]
+        lastElement.focus()
+        expect(document.activeElement).toBe(focusableElements[focusableElements.length - 1])
+
+        // Press Tab
+        await wrapper.trigger('keydown', { key: 'Tab' })
+
+        // Assert the first element is focused
+        expect(document.activeElement).toBe(focusableElements[0])
+      })
+
+      test('when Tab + Shift is pressed when the focus is on the first element, the next focus should be on the last element', async () => {
+        // Get all the focusable elements
+        const focusableElements = getFocusableChildElements(wrapper.element)
+
+        // Focus the first element
+        const firstElement = focusableElements[0]
+        firstElement.focus()
+        expect(document.activeElement).toBe(focusableElements[0])
+
+        // Press Tab
+        await wrapper.trigger('keydown', { key: 'Tab', shiftKey: true })
+
+        // Assert the last element is focused
+        expect(document.activeElement).toBe(focusableElements[focusableElements.length - 1])
       })
     })
   })

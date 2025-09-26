@@ -300,6 +300,10 @@ describe('App.vue', () => {
         // Assert the burger menu is close
         BurgerMenuComponent = wrapper.findComponent(BurgerMenu)
         expect(BurgerMenuComponent.isVisible()).toBeFalsy()
+
+        // Assert the toggle burger menu button is focused
+        const toggleBurgerMenuButton = wrapper.find("[data-testid='burger-menu-toggle-button']")
+        expect(document.activeElement).toStrictEqual(toggleBurgerMenuButton.element)
       }
     })
 

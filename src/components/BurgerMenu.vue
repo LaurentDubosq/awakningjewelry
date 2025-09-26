@@ -9,7 +9,8 @@ import ErrorComponent from './ErrorComponent.vue'
 import { useSiteMenuStore } from '@/stores/siteMenu'
 import { useIsBurgerMenuOpenStore } from '@/stores/isBurgerMenuOpen'
 import { storeToRefs } from 'pinia'
-import { ref, watch, type Ref } from 'vue'
+import { nextTick, onMounted, onUnmounted, ref, watch, type Ref } from 'vue'
+import { useFocusTrap } from '@/composables/useFocus'
 
 const rootElement: Ref<HTMLElementTagNameMap['nav'] | null> = ref(null)
 
@@ -32,7 +33,7 @@ const isDropdown = (
   return siteMenuItem.type === 'dropdown'
 }
 
-/* Close the dropdown when touching/clicking outside */
+/* Touching/clicking outside logic */
 function handleClickOutside(event: TouchEvent | MouseEvent) {
   // Close the dropdown if the touched/clicked element is outside the burger menu
   if (!rootElement.value?.contains(event.target as Node)) {
@@ -47,15 +48,57 @@ watch(isBurgerMenuOpen, () => {
     document.removeEventListener('click', handleClickOutside)
   }
 })
+
+// A11y handlers
+const handleKeydownEscape = async () => {
+  // Close the burger menu
+  toggleBurgerMenu()
+
+  /* Focus back the toggle burger menu button */
+
+  // Wait after the burger menu has been closed
+  await nextTick()
+
+  // Find the toggle burger menu first item
+  const item = document.querySelector(
+    "[data-testid='burger-menu-toggle-button']",
+  ) as HTMLElement | null
+
+  // Focus its focusable element
+  item?.focus()
+}
+
+/* A11y focus trap */
+let UseFocusTrapRemoveListener: () => void
+
+onMounted(() => {
+  watch(siteMenu, async () => {
+    // Continue if site menu has been downloaded
+    if (!siteMenu.value) return
+
+    // Wait after the DOM update
+    await nextTick()
+
+    // Enable focus trap
+    if (rootElement.value) {
+      UseFocusTrapRemoveListener = useFocusTrap(rootElement.value)
+    }
+  })
+})
+
+onUnmounted(() => {
+  UseFocusTrapRemoveListener?.()
+})
 </script>
 
 <template>
   <nav
     ref="rootElement"
     class="burger-menu"
-    @keydown.escape="toggleBurgerMenu"
+    @keydown.escape="handleKeydownEscape"
     aria-label="Site menu"
     id="burger-menu"
+    data-testid="burger-menu"
   >
     <ul class="burger-menu__list">
       <template v-if="siteMenuFetchState === 'fulfilled'">
