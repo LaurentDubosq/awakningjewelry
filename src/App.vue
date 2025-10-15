@@ -10,6 +10,7 @@ import { storeToRefs } from 'pinia'
 import SiteFooter from './components/SiteFooter.vue'
 import { ref, watch, type Ref } from 'vue'
 import AnnouncementBar from './components/AnnouncementBar.vue'
+import BackToTop from './components/BackToTop.vue'
 
 /* Burger menu */
 
@@ -60,6 +61,7 @@ const isAnnouncementBarDisplayed: Ref<boolean> = ref(true)
         <SiteFooter />
       </div>
     </div>
+    <BackToTop />
   </div>
 </template>
 

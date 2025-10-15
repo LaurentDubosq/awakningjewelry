@@ -3,6 +3,7 @@ import { TransitionGroup, Transition } from 'vue'
 
 const { name, group } = defineProps<{
   name:
+    | 'fade'
     | 'vertical-top-subtle-slide'
     | 'horizontal-left-slide'
     | 'nested-vertical-top-slide'
@@ -18,6 +19,17 @@ const { name, group } = defineProps<{
 
 <style lang="scss">
 @use '@/assets/styles/_constants' as *;
+
+/* Basic fade */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 
 /* Vertical subtle slide (top edge) */
 .vertical-top-subtle-slide-enter-active {

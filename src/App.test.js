@@ -461,6 +461,7 @@ describe('App.vue', () => {
             SiteHeader: true,
             'router-view': true,
             SiteFooter: true,
+            BackToTop: true,
           },
         },
       })
@@ -482,6 +483,7 @@ describe('App.vue', () => {
               <site-footer-stub data-v-7a7a37b1=""></site-footer-stub>
             </div>
           </div>
+          <back-to-top-stub data-v-7a7a37b1=""></back-to-top-stub>
         </div>"
       `)
     })
