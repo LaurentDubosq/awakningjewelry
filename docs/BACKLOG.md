@@ -18,6 +18,7 @@
 - [ ] Écrire tests pour les API (Postman)
 - [ ] Écrire tests pour le router
 - [ ] Remplacer `exists` par `isVisible`
+- [ ] Structurer les tests en 3 parties : Smoke Test ; Renders ; Behaviors
 
 ## DOCUMENTATION
 
